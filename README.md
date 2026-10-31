@@ -15,7 +15,7 @@ Restano solo sul telefono. Usa **Salva backup** in *Programma → App e dati* pr
 ## Come si pubblica una nuova versione
 1. Modifica `web/app.html` (l'app) o `web/android.js` (collegamento con Android).
 2. Scrivi le novità in `NOVITA.md`.
-3. Crea un tag `vX.Y.Z` (es. `v1.0.1`) e fai push: GitHub Actions compila, firma e pubblica l'APK nelle Releases.
+3. Aumenta il numero nel file `VERSION` (es. da `1.0.0` a `1.0.1`) e fai push su `main`: GitHub Actions compila, firma e pubblica l'APK nelle Releases.
 
 La firma usa due secret: `KEYSTORE_BASE64` e `KEYSTORE_PASSWORD`. La chiave non è nel repository: senza la stessa chiave gli aggiornamenti non si installano sopra la versione esistente.
 

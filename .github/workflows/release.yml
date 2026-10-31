@@ -2,7 +2,8 @@ name: Pubblica APK
 
 on:
   push:
-    tags: ["v*"]
+    branches: [main]
+    paths: ["VERSION"]
   workflow_dispatch:
 
 permissions:
@@ -40,21 +41,16 @@ jobs:
           KEY_ALIAS: ripresa
           KEY_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
-          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then V="${GITHUB_REF_NAME#v}"; else V="0.0.${GITHUB_RUN_NUMBER}"; fi
+          V="$(tr -d ' \r\n' < VERSION)"
           echo "VERSION=$V" >> "$GITHUB_ENV"
           gradle assembleRelease -PversionName="$V" --no-daemon --stacktrace
           cp app/build/outputs/apk/release/app-release.apk "TrainUP-$V.apk"
 
       - name: Pubblica la release
-        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ env.VERSION }}
+          name: TrainUP ${{ env.VERSION }}
+          target_commitish: ${{ github.sha }}
           files: TrainUP-${{ env.VERSION }}.apk
           body_path: NOVITA.md
-
-      - name: Salva l'APK (prova manuale)
-        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: apk
-          path: TrainUP-*.apk
