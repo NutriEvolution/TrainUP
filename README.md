@@ -25,4 +25,4 @@ La firma usa due secret: `KEYSTORE_BASE64` e `KEYSTORE_PASSWORD`. La chiave non 
 - `tools/build_www.py`: unisce i due file in `app/src/main/assets/www/index.html`
 - `app/`: contenitore Android (Kotlin, WebView)
 
-Carattere: Geist (SIL Open Font License, vedi `app/src/main/assets/www/fonts/OFL.txt`).
+Caratteri: Karla e Fraunces (SIL Open Font License, vedi i file OFL in `app/src/main/assets/www/fonts/`).

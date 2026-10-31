@@ -10,8 +10,12 @@ src = re.sub(r'<meta name="claude:[^>]*>\s*', "", src)
 src = re.sub(r"<title>.*?</title>", "<title>TrainUP</title>", src, count=1)
 
 fonts = """<style>
-@font-face{font-family:"Geist";src:url("fonts/Geist-Variable.woff2") format("woff2");font-weight:100 900;font-display:swap}
-@font-face{font-family:"Geist Mono";src:url("fonts/GeistMono-Variable.woff2") format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Karla";src:url("fonts/karla-latin-400-normal.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Karla";src:url("fonts/karla-latin-500-normal.woff2") format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Karla";src:url("fonts/karla-latin-600-normal.woff2") format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Karla";src:url("fonts/karla-latin-700-normal.woff2") format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Fraunces";src:url("fonts/fraunces-latin-500-normal.woff2") format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Fraunces";src:url("fonts/fraunces-latin-600-normal.woff2") format("woff2");font-weight:600;font-display:swap}
 </style>
 """
 i = src.index('<div id="app">')

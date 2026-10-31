@@ -1,4 +1,5 @@
-Novità della 1.3.0
-- Stallo: se un esercizio resta allo stesso peso per alcune sedute senza progressi, l'app propone di ripartire dal 10% in meno e risalire, oppure di cambiarlo
-- Varianti automatiche: nei cicli pari (2, 4, ...) alcuni complementari cambiano da soli per variare; gli esercizi dei test restano sempre uguali
-- Rimossa la nota sulla pallavolo
+Novità della 1.4.0
+- Nuovo aspetto con i colori e i caratteri di NutriEvolution (verde e avorio, blu notte in modalità scura)
+- Home rifatta in stile aperto: seduta di oggi, settimana, grafico del massimale stimato, prossimi allenamenti
+- Pagina Progressi nuova: periodo selezionabile, massimale stimato per esercizio, allenamenti a settimana, serie per muscolo, record recenti
+- Nuovo campo "Il tuo nome" in Programma, per il saluto nella home
