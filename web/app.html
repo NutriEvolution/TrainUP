@@ -813,10 +813,10 @@ function renderOggi(){
     <div class="stack-sm"><span class="eyebrow">${doneToday ? "Prossima seduta" : "Seduta di oggi"}</span><h1 class="todaytitle">${esc(dn(sess))}</h1></div>
     <div class="meta"><span><b>~${estMinutes(sess.blocks, true)}</b> min</span><span><b>${sess.blocks.reduce((a,b)=>a+b.items.length,0)}</b> esercizi</span><span><b>${countSets(sess.blocks)}</b> serie</span></div>
     ${note ? `<div class="hint warn small">${esc(note)}</div>` : ""}
+    <button class="btn primary big" data-act="start">${svgI.play} ${draft ? "Riprendi allenamento" : "Inizia allenamento"}</button>
     ${homeExpand ? `<div>${exRowsHtml(sess)}</div>` : `<ul class="exlist">${preview.map(it => `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}"><span class="gdot" style="background:${grp(it.ex).c}"></span><span class="t"><span class="n">${esc(EX[it.ex].n)}</span><span class="p">${esc(shortP(it.p, EX[it.ex]))}</span></span><span class="chev">${svgI.chev}</span></button></li>`).join("")}</ul>`}
     <button class="btn ghost sm" data-act="homeExpand" style="align-self:flex-start">${homeExpand ? "Mostra meno" : `Vedi la seduta completa${S.settings.posture !== false ? ", con la parte posturale" : ""}`}</button>
     <label class="switch"><input type="checkbox" id="deloadToggle"><span><b>Settimana di scarico</b><br><span class="small muted">Metà delle serie, pesi -15%</span></span></label>
-    <button class="btn primary big" data-act="start">${svgI.play} ${draft ? "Riprendi allenamento" : "Inizia allenamento"}</button>
   </div>`;
   h += `<div class="tiles">
     <div class="tile"><b>${st.thisWeek}<small>/${Math.max(st.planned, st.thisWeek, 3)}</small></b><span>questa settimana</span></div>
