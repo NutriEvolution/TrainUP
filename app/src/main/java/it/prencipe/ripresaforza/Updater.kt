@@ -11,7 +11,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 object Updater {
-  const val REPO = "NutriEvolution/TrainingEvolution"
+  const val REPO = "NutriEvolution/TrainUP"
 
   private fun newer(remote: String, local: String): Boolean {
     val r = remote.trimStart('v', 'V').split(".").map { it.takeWhile(Char::isDigit).toIntOrNull() ?: 0 }
