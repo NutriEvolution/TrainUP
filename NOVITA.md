@@ -1,2 +1,4 @@
-Novità della 1.2.2
-- I pesi stimati dai test (8RM) e il massimale stimato ora usano la tabella percentuale-ripetizioni del manuale NSCA: per le serie da 12 il peso consigliato è un po' più prudente
+Novità della 1.3.0
+- Stallo: se un esercizio resta allo stesso peso per alcune sedute senza progressi, l'app propone di ripartire dal 10% in meno e risalire, oppure di cambiarlo
+- Varianti automatiche: nei cicli pari (2, 4, ...) alcuni complementari cambiano da soli per variare; gli esercizi dei test restano sempre uguali
+- Rimossa la nota sulla pallavolo

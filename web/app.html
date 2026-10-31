@@ -573,7 +573,7 @@ function buildSession(pos, s){
       .concat(blocks)
       .concat([single("alzateProno", P.range(2,10,15,"",60)), single("alzateY", P.range(1,10,15,"",60)), single("wallSlide", P.range(2,10,15,"",30))]);
   }
-  return applySwaps({code, title, kind:k, phase:PHASES[k], blocks}, s);
+  return applyVariants(applySwaps({code, title, kind:k, phase:PHASES[k], blocks}, s), pos);
 }
 
 /* ============ esercizi alternativi ============ */
@@ -599,13 +599,25 @@ const PAT = [
 ];
 const ALT_NOTE = {
   tricipitiOverheadCavo:"consigliato: tricipite in allungamento", tricipitiOverheadManubrio:"consigliato: tricipite in allungamento",
-  legCurlSeduto:"consigliato: femorali in allungamento", hackSquat:"macchina, simile allo squat", pressa:"meno tecnica e più rapida; per il salto lo squat rende di più",
+  legCurlSeduto:"consigliato: femorali in allungamento", hackSquat:"macchina, simile allo squat", pressa:"meno tecnica e più rapida da impostare",
   rowMachine:"con appoggio al petto", gobletSquat:"più leggero, per imparare"
 };
 function altOf(k){
   const out = [];
   for(const g of PAT) if(g.includes(k)) for(const x of g) if(x !== k && EX[x] && !out.includes(x)) out.push(x);
   return out;
+}
+const baseEx = it => it.orig || it.variantOf || it.ex;
+// Varianti automatiche nei cicli pari (2, 4, ...): cambiano solo alcuni complementari, mai gli esercizi dei test.
+const VARIANT = {latMachine:"latPresaStretta", pulley:"rowMachine", rematoreManubrio:"rowMachine", alzateLaterali:"alzateLateraliCavo",
+  curlManubri:"curlCavo", curlMartello:"curlScott", pushdown:"tricipitiOverheadCavo", crociCavi:"pecDeck", chestPress:"pancaManubri",
+  shoulderPress:"lentoManubri", crunch:"crunchInverso", plank:"deadBug"};
+function applyVariants(sess, pos){
+  const c = (pos && pos.cycle) || 1;
+  if(c < 2 || c % 2 !== 0) return sess;
+  const used = new Set(sess.blocks.flatMap(b => b.items.map(it => it.ex)));
+  sess.blocks.forEach(b => b.items.forEach(it => { const v = VARIANT[it.ex]; if(!it.orig && v && EX[v] && !used.has(v) && !TESTED.includes(it.ex)){ it.variantOf = it.ex; it.ex = v; used.add(v); } }));
+  return sess;
 }
 const slotKey = (kind, code, orig) => kind + "|" + code + "|" + orig;
 function applySwaps(sess, s){
@@ -674,6 +686,24 @@ function history(exKey){ // [{date, entry}]
   return out;
 }
 function last8RM(exKey){ const h = history(exKey).filter(x => x.e.p && x.e.p.t==="test" && x.e.kg8); return h.length ? h[h.length-1].e.kg8 : null; }
+// Stallo: stesso peso per più sedute senza progressi. Regola pratica: riparti dal 10% in meno e risali.
+function stallInfo(h, kind){
+  const done = sets => sets.filter(z => z.kg != null);
+  const rows = h.filter(x => kind === "fixed" ? (x.e.p.t === "fixed" || x.e.p.t === "emom") : x.e.p.t === "range").map(x => { const st = done(x.e.sets); return st.length ? {kg:Math.max(...st.map(z => z.kg)), reps:st.reduce((a,z) => a + (z.reps||0), 0), e:x.e} : null; }).filter(Boolean);
+  if(!rows.length) return null;
+  const last = rows[rows.length-1];
+  let streak = [];
+  for(let i=rows.length-1;i>=0 && rows[i].kg === last.kg;i--) streak.unshift(rows[i]);
+  const need = kind === "fixed" ? 2 : 3;
+  if(streak.length < need) return null;
+  const win = streak.slice(-need);
+  if(win[win.length-1].reps > win[0].reps) return null; // le ripetizioni stanno salendo: è ancora progresso
+  if(kind === "range"){ // se ti restavano più ripetizioni dell'obiettivo non sei bloccato: ti sei fermato prima
+    const rirs = last.e.sets.map(z => z.rir).filter(v => v != null && v !== "").map(Number); const tg = rirTarget(last.e.p);
+    if(tg && rirs.length && Math.min(...rirs) > tg.hi) return null;
+  }
+  return {kg:last.kg, n:streak.length};
+}
 function suggest(exKey, p, deload){
   const ex = EX[exKey];
   if(!ex || ex.bw) return null;
@@ -689,6 +719,8 @@ function suggest(exKey, p, deload){
       const kg = Math.max(...sets.map(z => z.kg));
       const ok = lastF.e.p.t === "emom" ? lastF.e.sets.every(z => z.ok) : (sets.length >= lastF.e.p.sets && sets.every(z => z.reps >= lastF.e.p.reps));
       if(ok){ const nk = roundStep(Math.max(kg*1.05, kg + (ex.step||0)), ex.step); return {kg: roundStep(nk*mult, ex.step), why:`l'ultima volta hai chiuso tutto con ${fmtKg(kg)} kg: +5%`}; }
+      const stF = stallInfo(same, "fixed");
+      if(stF) return {kg: roundStep(Math.max(ex.step, kg*0.9)*mult, ex.step), stall:true, why:`sei fermo a ${fmtKg(kg)} kg da ${stF.n} sedute: riparti dal 10% in meno e risali, oppure cambia esercizio`};
       return {kg: roundStep(kg*mult, ex.step), why:`l'ultima volta con ${fmtKg(kg)} kg non hai chiuso tutte le serie: riprova lo stesso peso`};
     }
     return fromRM(p.rm);
@@ -704,6 +736,8 @@ function suggest(exKey, p, deload){
       const tg = rirTarget(lastR.e.p);
       if(!top && tg && rirs.length === sets.length && Math.min(...rirs) >= tg.hi + 2) return {kg: roundStep((kg + ex.inc)*mult, ex.step), why:`l'ultima volta con ${fmtKg(kg)} kg ti restavano molte ripetizioni in tutte le serie: aumenta`};
       if(top) return {kg: roundStep((kg + ex.inc)*mult, ex.step), why:`l'ultima volta hai fatto il massimo delle ripetizioni con ${fmtKg(kg)} kg: aumenta`};
+      const stR = stallInfo(same, "range");
+      if(stR) return {kg: roundStep(Math.max(ex.step, kg*0.9)*mult, ex.step), stall:true, why:`sei fermo a ${fmtKg(kg)} kg da ${stR.n} sedute senza guadagnare ripetizioni: riparti dal 10% in meno e risali, oppure cambia esercizio`};
       return {kg: roundStep(kg*mult, ex.step), why:`l'ultima volta: ${fmtKg(kg)} kg. Aumenterai quando farai ${lastR.e.p.rmax} ripetizioni in tutte le serie`};
     }
     const any = h[h.length-1];
@@ -841,7 +875,7 @@ function exRowsHtml(sess, kind){
   const groups = [];
   sess.blocks.forEach(b => { const sec = secOf(b, kind); let g = groups[groups.length-1]; if(!g || g.sec !== sec){ g = {sec, blocks:[]}; groups.push(g); } g.blocks.push(b); });
   return groups.map(g => `<div class="sect ${SECT[g.sec].cls}"><h3>${SECT[g.sec].n}</h3><span class="tiny muted">~${estMinutes(g.blocks, false)} min</span></div>
-    <ul class="exlist">${g.blocks.map(b => b.items.map((it, i) => { const ex = EX[it.ex]; const r = restShort(it.p); return `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}" data-slot="${esc(slotKey(sess.kind, sess.code, it.orig || it.ex))}"><span class="gdot" style="background:${grp(it.ex).c}"></span><span class="t"><span class="n">${b.type==="js" ? `<span class="pairtag">coppia ${i===0?"1":"2"}</span>` : ""}${esc(ex.n)}${it.orig ? ' <span class="swaptag">cambiato</span>' : ""}</span><span class="p">${esc(shortP(it.p, ex))}${r ? " · rec " + r : ""}</span></span><span class="chev">${svgI.chev}</span></button></li>`; }).join("")).join("")}</ul>`).join("");
+    <ul class="exlist">${g.blocks.map(b => b.items.map((it, i) => { const ex = EX[it.ex]; const r = restShort(it.p); return `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}" data-slot="${esc(slotKey(sess.kind, sess.code, baseEx(it)))}"><span class="gdot" style="background:${grp(it.ex).c}"></span><span class="t"><span class="n">${b.type==="js" ? `<span class="pairtag">coppia ${i===0?"1":"2"}</span>` : ""}${esc(ex.n)}${it.orig ? ' <span class="swaptag">cambiato</span>' : it.variantOf ? ' <span class="swaptag">variante</span>' : ""}</span><span class="p">${esc(shortP(it.p, ex))}${r ? " · rec " + r : ""}</span></span><span class="chev">${svgI.chev}</span></button></li>`; }).join("")).join("")}</ul>`).join("");
 }
 
 /* ============ Oggi ============ */
@@ -909,7 +943,7 @@ function renderOggi(){
     <div class="meta"><span><b>~${estMinutes(sess.blocks, true)}</b> min</span><span><b>${sess.blocks.reduce((a,b)=>a+b.items.length,0)}</b> esercizi</span><span><b>${countSets(sess.blocks)}</b> serie</span></div>
     ${note ? `<div class="hint warn small">${esc(note)}</div>` : ""}
     <button class="btn primary big" data-act="start">${svgI.play} ${draft ? "Riprendi allenamento" : "Inizia allenamento"}</button>
-    ${homeExpand ? `<div>${exRowsHtml(sess)}</div>` : `<ul class="exlist">${preview.map(it => `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}" data-slot="${esc(slotKey(sess.kind, sess.code, it.orig || it.ex))}"><span class="gdot" style="background:${grp(it.ex).c}"></span><span class="t"><span class="n">${esc(EX[it.ex].n)}${it.orig ? ' <span class="swaptag">cambiato</span>' : ""}</span><span class="p">${esc(shortP(it.p, EX[it.ex]))}</span></span><span class="chev">${svgI.chev}</span></button></li>`).join("")}</ul>`}
+    ${homeExpand ? `<div>${exRowsHtml(sess)}</div>` : `<ul class="exlist">${preview.map(it => `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}" data-slot="${esc(slotKey(sess.kind, sess.code, baseEx(it)))}"><span class="gdot" style="background:${grp(it.ex).c}"></span><span class="t"><span class="n">${esc(EX[it.ex].n)}${it.orig ? ' <span class="swaptag">cambiato</span>' : it.variantOf ? ' <span class="swaptag">variante</span>' : ""}</span><span class="p">${esc(shortP(it.p, EX[it.ex]))}</span></span><span class="chev">${svgI.chev}</span></button></li>`).join("")}</ul>`}
     <button class="btn ghost sm" data-act="homeExpand" style="align-self:flex-start">${homeExpand ? "Mostra meno" : `Vedi la seduta completa${S.settings.posture !== false ? ", con la parte posturale" : ""}`}</button>
     <label class="switch"><input type="checkbox" id="deloadToggle"><span><b>Settimana di scarico</b><br><span class="small muted">Metà delle serie, pesi -15%</span></span></label>
   </div>`;
@@ -1044,10 +1078,10 @@ function setSwap(slot, to){
 }
 function runSwapSheet(ii){
   const it = R.blocks[R.bi].items[ii];
-  const orig = it.orig || it.ex;
+  const orig = baseEx(it);
   showSheet(`<div class="grab"></div><div class="stack">
     <div class="row between"><h2>Cambia esercizio</h2><button class="btn icon ghost" data-act="closeSheet" aria-label="Chiudi">${svgI.close}</button></div>
-    <p class="small muted">Adesso: <b>${esc(EX[it.ex].n)}</b>${it.orig ? ` (al posto di ${esc(EX[orig].n)})` : ""}. Serie, ripetizioni e recupero restano gli stessi.</p>
+    <p class="small muted">Adesso: <b>${esc(EX[it.ex].n)}</b>${it.orig ? ` (al posto di ${esc(EX[orig].n)})` : it.variantOf ? ` (variante del ciclo al posto di ${esc(EX[orig].n)})` : ""}. Serie, ripetizioni e recupero restano gli stessi.</p>
     ${swapWarnHtml(orig)}
     ${it.orig ? `<button class="btn sm ghost" data-act="swapRun" data-ii="${ii}" data-to="${orig}" data-mode="always" style="align-self:flex-start">Torna a ${esc(EX[orig].n)}</button>` : ""}
     ${altListHtml(orig, a => a === it.ex ? `<span class="pill acc">in uso</span>` : `<button class="btn sm" data-act="swapRun" data-ii="${ii}" data-to="${a}" data-mode="today">Solo oggi</button><button class="btn sm primary" data-act="swapRun" data-ii="${ii}" data-to="${a}" data-mode="always">Da ora in poi</button>`)}
@@ -1150,8 +1184,8 @@ function renderProgramma(){
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--accent)"></span><span class="t"><span class="n">Cedimento</span><span class="p">Non serve arrivarci. Fondamentali con 1-3 ripetizioni in canna, complementari più vicini al limite. <span class="cite">Refalo 2023, ACSM 2026</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--accent)"></span><span class="t"><span class="n">Carichi</span><span class="p">Pesi leggeri e pesanti fanno crescere in modo simile, ma la forza massima cresce di più con pesi alti: da qui le serie da 3-5 e da 8 nelle fasi avanzate. <span class="cite">Schoenfeld 2017, ACSM 2026</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-back)"></span><span class="t"><span class="n">Macchine o pesi liberi</span><span class="p">Stessa crescita. La forza migliora soprattutto nell'esercizio che alleni: per diventare forte su squat e panca, tieni il bilanciere su quelli; per il resto scegli liberamente. <span class="cite">Haugen 2023</span></span></span></div></li>
-      <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-legs)"></span><span class="t"><span class="n">Pallavolo</span><span class="p">Gli esercizi in piedi con il bilanciere (squat, stacco) assomigliano di più al salto e si trasferiscono meglio della pressa: per questo lo squat resta l'esercizio principale. La pressa va bene come complementare o quando serve fare in fretta. <span class="cite">NSCA</span></span></span></div></li>
-      <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-back)"></span><span class="t"><span class="n">Cambiare esercizi</span><span class="p">Variare gli esercizi dà gli stessi risultati di tenerli fissi. L'unico limite: se cambi un esercizio dei test, il confronto con i test precedenti salta. <span class="cite">Kassiano 2024</span></span></span></div></li>
+      <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-legs)"></span><span class="t"><span class="n">Stallo</span><span class="p">Quando un esercizio resta fermo per alcune sedute, l'app propone di ripartire dal 10% in meno e risalire, oppure di cambiarlo. È una regola pratica degli allenatori, non un dato di ricerca: serve a non insistere su un peso che non sale.</span></span></div></li>
+      <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-back)"></span><span class="t"><span class="n">Cambiare esercizi</span><span class="p">Variare gli esercizi dà gli stessi risultati di tenerli fissi. Nei cicli pari (2, 4, …) l'app cambia da sola alcuni complementari per variare, mai gli esercizi dei test. L'unico limite: se cambi un esercizio dei test, il confronto con i test precedenti salta. <span class="cite">Kassiano 2024</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-legs)"></span><span class="t"><span class="n">Muscolo allungato</span><span class="p">Gli esercizi che lavorano il muscolo in allungamento (leg curl da seduto, estensioni dei tricipiti sopra la testa) sembrano dare un po' più crescita, ma le prove sono poche e non tutte concordano. Il programma li preferisce perché non costano nulla; se manca la macchina, l'alternativa va bene. <span class="cite">Maeo 2021-22, Wolf 2025, Varovic 2024</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-legs)"></span><span class="t"><span class="n">Ampiezza del movimento</span><span class="p">Meglio il movimento completo, soprattutto per la forza. Le differenze con le ripetizioni parziali sono piccole. <span class="cite">Wolf 2023, ACSM 2026</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--muted)"></span><span class="t"><span class="n">Riscaldamento</span><span class="p">Bastano pochi minuti di movimenti dinamici e qualche serie leggera sul primo esercizio. Lo stretching statico breve (meno di 60 secondi per muscolo) cambia poco; tenute più lunghe riducono un po' la forza. <span class="cite">Behm 2016, Ribeiro 2021</span></span></span></div></li>
@@ -1257,7 +1291,7 @@ function wuHtml(it, bi){
 }
 let R = null;
 let tick = null, audioCtx = null, wakeLock = null;
-function cloneBlocks(blocks, deload){ return blocks.map(b => ({type:b.type, rest:b.rest, items:b.items.map(it => ({ex:it.ex, orig:it.orig, p: deload && !EXG[it.ex]?.startsWith("post") && EXG[it.ex] !== "post" ? deloadP(it.p) : it.p}))})); }
+function cloneBlocks(blocks, deload){ return blocks.map(b => ({type:b.type, rest:b.rest, items:b.items.map(it => ({ex:it.ex, orig:it.orig, variantOf:it.variantOf, p: deload && !EXG[it.ex]?.startsWith("post") && EXG[it.ex] !== "post" ? deloadP(it.p) : it.p}))})); }
 function startSession(){
   const t = todayStr();
   const {pos} = nextPosition(t);
@@ -1358,6 +1392,7 @@ function sugHtml(exKey, p){
   const ex = EX[exKey];
   if(ex.bw) return `<div class="hint small">A corpo libero: annota solo ripetizioni o secondi.</div>`;
   const s = suggest(exKey, p, R.deload);
+  if(s && s.stall) return `<div class="hint warn"><b>Peso consigliato: ${fmtKg(s.kg)} kg</b>${ex.unit.includes("manubri") ? " (un manubrio)" : ""}<br><span class="small">${esc(s.why)}. Capita a tutti: ripartire un po' più leggeri di solito sblocca la situazione in poche sedute. Se preferisci, tocca "Cambia" per passare a un esercizio simile.</span></div>`;
   if(s) return `<div class="hint"><b>Peso consigliato: ${fmtKg(s.kg)} kg</b>${ex.unit.includes("manubri") ? " (un manubrio)" : ""}<br><span class="small">${esc(s.why)}.</span></div>`;
   if(p.t === "fixed" || p.t === "emom") return `<div class="hint warn small">Nessun test ancora: nella prima serie cerca un peso con cui arriveresti a circa ${p.rm} ripetizioni.</div>`;
   if(p.t === "test") return "";
@@ -1377,7 +1412,7 @@ function scrIntro(){
     ${sugHtml(it.ex, it.p)}
     ${canRamp(b) ? "" : wuHtml(it, R.bi)}
     <div class="stack-sm"><span class="eyebrow">In breve</span><ul class="how small">${ex.how.slice(0,2).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>
-    <div class="row"><button class="btn sm" data-act="exInfo" data-k="${it.ex}">${svgI.info} Tecnica completa</button>${R.kind !== "post" && EXG[it.orig || it.ex] !== "post" && altOf(it.orig || it.ex).length && !R.log[R.bi][i].sets.length ? `<button class="btn sm" data-act="swapOpen" data-ii="${i}">Cambia</button>` : ""}<a class="btn sm ghost" href="https://www.youtube.com/results?search_query=${encodeURIComponent(ex.yt)}" target="_blank" rel="noopener">Video ↗</a></div></div>`; }).join("")}
+    <div class="row"><button class="btn sm" data-act="exInfo" data-k="${it.ex}">${svgI.info} Tecnica completa</button>${R.kind !== "post" && EXG[baseEx(it)] !== "post" && altOf(baseEx(it)).length && !R.log[R.bi][i].sets.length ? `<button class="btn sm" data-act="swapOpen" data-ii="${i}">Cambia</button>` : ""}<a class="btn sm ghost" href="https://www.youtube.com/results?search_query=${encodeURIComponent(ex.yt)}" target="_blank" rel="noopener">Video ↗</a></div></div>`; }).join("")}
   ${canRamp(b) ? `<div class="hint warn small"><b>Prima volta con questo esercizio.</b> Trova il peso con una o due serie di prova: non contano come serie e l'app ti dice da che peso partire.</div><button class="btn primary big" data-act="rampStart">Trova il peso</button><button class="btn" data-act="startEx">Conosco già il peso: inizia</button>`
     : `<button class="btn primary big" data-act="startEx">${svgI.play} Inizia esercizio</button>`}
   <button class="btn ghost" data-act="skipEx">Salta questo esercizio</button></div>`;
@@ -1589,9 +1624,9 @@ function act(a, d, e){
     case "exInfo": exSheet(d.k, d.slot); break;
     case "swapSet": setSwap(d.slot, d.to); closeSheet(); render(); break;
     case "swapOpen": runSwapSheet(Number(d.ii)); break;
-    case "swapRun": { const it = R.blocks[R.bi].items[Number(d.ii)]; const orig = it.orig || it.ex;
+    case "swapRun": { const it = R.blocks[R.bi].items[Number(d.ii)]; const orig = baseEx(it);
       if(d.mode === "always") setSwap(slotKey(R.kind, R.code, orig), d.to);
-      it.ex = d.to; it.orig = d.to === orig ? undefined : orig; R.ramp = null;
+      it.ex = d.to; it.orig = d.to === orig ? undefined : orig; it.variantOf = undefined; R.ramp = null;
       saveDraft(); closeSheet(); rRender(); break; }
     case "homeExpand": homeExpand = !homeExpand; render(); break;
     case "guideTab": guideTab = d.v; render(); break;
