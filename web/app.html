@@ -237,6 +237,8 @@ details.wk[open] summary::after{transform:rotate(-135deg)}
 @media (prefers-reduced-motion:reduce){.rdot{animation:none}}
 @media (max-width:380px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.bignum{font-size:62px}.ltitle{font-size:30px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.swaptag{font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:99px;padding:1px 7px;margin-left:4px;vertical-align:2px}
+.swapbtns{gap:6px;padding:0 14px 12px 34px;flex-wrap:wrap}
 </style>
 
 <div id="app"></div>
@@ -347,7 +349,7 @@ const EX = {
   hackSquat:{n:"Hack squat", step:5, inc:5, unit:"macchina", yt:"hack squat macchina tecnica", src:"PE2 pp. 292-293",
     how:["Spalle e schiena appoggiate, piedi avanti poco più larghi delle spalle, punte leggermente in fuori.","Scendi controllato mantenendo il bacino appoggiato, poi spingi."],
     err:["Bacino che si stacca in fondo."]},
-  legCurl:{n:"Leg curl (meglio sdraiato)", step:2.5, inc:2.5, unit:"macchina", yt:"leg curl prono tecnica", src:"PE2 pp. 303-304",
+  legCurl:{n:"Leg curl sdraiato", step:2.5, inc:2.5, unit:"macchina", yt:"leg curl prono tecnica", src:"PE2 pp. 303-304",
     how:["Sdraiato a pancia in giù, rotule appena fuori dall'appoggio, cuscinetto sopra i talloni.","Piega le ginocchia fino a 90°, lentamente, senza forzare oltre."],
     err:["Strappi e bacino che si solleva."]},
   legExtension:{n:"Leg extension", step:2.5, inc:2.5, unit:"macchina", yt:"leg extension tecnica", src:"PE2 pp. 299-300",
@@ -413,6 +415,33 @@ const EX = {
   stretchNuca:{n:"Allungamento della nuca", step:0, inc:0, unit:"corpo libero", yt:"suboccipital stretch supine", src:"Fitness posturale, atlante cap. 4, D.5", bw:true,
     how:["Supino, abbassa il mento verso lo sterno come nell'esercizio dei flessori profondi e mantieni.","Senti allungare la base del cranio."],
     err:["Sollevare la testa da terra."]},
+  legCurlSeduto:{n:"Leg curl da seduto", step:2.5, inc:2.5, unit:"macchina", yt:"seated leg curl tecnica", src:"Maeo et al. 2021, Med Sci Sports Exerc (crescita dei femorali maggiore da seduto che da sdraiato)",
+    how:["Siediti con la schiena ben appoggiata e le ginocchia allineate al perno della macchina; blocca le cosce con il rullo superiore.","Cuscinetto inferiore appena sopra i talloni.","Piega le ginocchia portando i talloni sotto il sedile, poi torna lentamente fino quasi a gambe distese."],
+    err:["Bacino che scivola in avanti sul sedile.","Ritorno veloce senza controllo.","Ampiezza ridotta: la parte con le gambe quasi distese è quella che fa crescere di più."]},
+  tricipitiOverheadCavo:{n:"Estensioni sopra la testa al cavo", step:2.5, inc:2.5, unit:"cavi", yt:"overhead cable triceps extension tecnica", src:"Maeo et al. 2022, Eur J Sport Sci (crescita dei tricipiti maggiore con il braccio sopra la testa)",
+    how:["Cavo in basso con la corda; girati di spalle, un piede avanti, busto leggermente inclinato.","Braccia sopra la testa, gomiti vicini e rivolti in avanti.","Distendi i gomiti fino in fondo, poi torna lentamente lasciando che le mani scendano dietro la testa."],
+    err:["Gomiti che si aprono molto.","Schiena che si inarca per spingere.","Accorciare la discesa."]},
+  tricipitiOverheadManubrio:{n:"Estensioni sopra la testa con manubrio", step:2, inc:2, unit:"manubrio", yt:"estensioni tricipiti manubrio sopra la testa tecnica", src:"Maeo et al. 2022, Eur J Sport Sci",
+    how:["Seduto con schienale, un manubrio tenuto a due mani sopra la testa.","Gomiti vicini e rivolti in avanti: scendi lentamente dietro la nuca.","Risali distendendo i gomiti."],
+    err:["Gomiti che si allargano.","Zona lombare inarcata."]},
+  smithSquat:{n:"Squat al multipower (Smith)", step:2.5, inc:5, unit:"bilanciere guidato (escluso il bilanciere)", yt:"smith machine squat tecnica", src:GEN,
+    how:["Bilanciere sulle spalle come nello squat; piedi un po' più avanti rispetto al bilanciere.","Sblocca ruotando i polsi, scendi finché le cosce sono almeno parallele.","Risali spingendo con tutta la pianta; a fine serie riaggancia ruotando i polsi."],
+    err:["Piedi troppo indietro (ginocchia molto avanti e talloni che si alzano).","Ginocchia che cedono verso l'interno."]},
+  pecDeck:{n:"Croci alla macchina (pec deck)", step:2.5, inc:2.5, unit:"macchina", yt:"pec deck tecnica", src:GEN,
+    how:["Sedile regolato in modo che le maniglie siano all'altezza del petto.","Gomiti leggermente piegati e fermi: chiudi le braccia davanti al petto.","Torna lentamente finché senti allungare il petto, senza forzare la spalla."],
+    err:["Spalle che salgono verso le orecchie.","Apertura eccessiva che tira la spalla."]},
+  alzateLateraliCavo:{n:"Alzate laterali al cavo", step:1.25, inc:1.25, unit:"cavo (un braccio)", side:"per braccio", yt:"alzate laterali cavo tecnica", src:GEN,
+    how:["Cavo in basso, impugnatura nella mano opposta al cavo, che passa davanti al corpo.","Solleva il braccio di lato fino all'altezza della spalla, gomito appena piegato.","Scendi lentamente fino a sotto il fianco."],
+    err:["Slanci con il busto.","Polso più alto del gomito."]},
+  curlCavo:{n:"Curl al cavo basso", step:2.5, inc:2.5, unit:"cavi", yt:"curl al cavo tecnica", src:GEN,
+    how:["Barra corta o corda al cavo basso, in piedi a mezzo passo dalla macchina.","Gomiti fermi ai fianchi: piega fino in alto, poi torna lentamente a braccia distese."],
+    err:["Gomiti che vanno avanti.","Slanci con la schiena."]},
+  curlScott:{n:"Curl alla panca Scott (o macchina)", step:2.5, inc:2.5, unit:"bilanciere EZ o macchina", yt:"curl panca scott tecnica", src:GEN,
+    how:["Ascelle appoggiate al bordo del cuscino, braccia distese sul piano inclinato.","Piega i gomiti fino in alto, poi scendi lentamente quasi a braccia distese."],
+    err:["Rimbalzo in basso a braccia completamente distese.","Sollevare i gomiti dal cuscino."]},
+  latPresaStretta:{n:"Lat machine, presa stretta neutra", step:2.5, inc:2.5, unit:"macchina", yt:"lat machine presa stretta triangolo tecnica", src:GEN,
+    how:["Maniglia a triangolo, cosce bloccate sotto i rulli.","Petto in fuori, porta la maniglia verso la parte alta del petto spingendo i gomiti verso il basso.","Risali lentamente fino a braccia distese."],
+    err:["Dondolare con il busto.","Fermarsi a metà nella risalita."]},
   crunchInverso:{n:"Crunch inverso", step:0, inc:0, unit:"corpo libero", yt:"crunch inverso tecnica", src:GEN, bw:true,
     how:["Sdraiato, gambe piegate sollevate.","Porta le ginocchia verso il petto sollevando il bacino da terra, poi torna lentamente."],
     err:["Slanciare le gambe."]}
@@ -470,7 +499,7 @@ function buildSession(pos, s){
     const acc = () => P.range(prm.sets, prm.rmin, prm.rmax, prm.buf, prm.ra);
     const core = (reps) => P.range(w===1 ? 2 : 3, reps, reps, "", 60);
     if(code==="A") blocks = [single(w<=2 ? "gobletSquat" : "squat", main()), single("pancaManubri", main()), single("latMachine", acc()), single("rdlManubri", acc()), single("alzateLaterali", P.range(prm.sets,12,15,prm.buf,60)), single("deadBug", core(8))];
-    else blocks = [single("splitSquat", main()), single("lentoManubri", main()), single("rematoreManubrio", acc()), single("legCurl", acc()), single("piegamenti", acc()), single("facePull", P.range(prm.sets,12,15,prm.buf,60)), single("pallof", core(10))];
+    else blocks = [single("splitSquat", main()), single("lentoManubri", main()), single("rematoreManubrio", acc()), single("legCurlSeduto", acc()), single("piegamenti", acc()), single("facePull", P.range(prm.sets,12,15,prm.buf,60)), single("pallof", core(10))];
     title = "Scheda " + code;
   } else if(k==="test"){
     code = "T" + (slot+1);
@@ -489,7 +518,7 @@ function buildSession(pos, s){
     else if(code==="B") blocks = [single("rematoreBil", m5()), single("military", m5()), single(legMain, m4()), single("panca", m4()), single("curlEZ", v()), single("frenchPress", v()), single("backExt", P.rpe(3, lvl===8 ? 10 : 12, 60))];
     else {
       const c = () => P.fixed(L.c[0], L.c[1], lvl, L.cr);
-      blocks = [single("pressa", c()), single(s.rdlInC ? "rdl" : "legCurl", v()), single("panca", c()), single("chestPress", v()), single("rematoreBil", c()), single("latMachine", v()), single("military", c()), single("alzateLaterali", v()), single("curlEZ", P.rpe(3, L.arm, 60)), single("pushdown", P.rpe(3, L.arm, 60))];
+      blocks = [single("pressa", c()), single(s.rdlInC ? "rdl" : "legCurlSeduto", v()), single("panca", c()), single("chestPress", v()), single("rematoreBil", c()), single("latMachine", v()), single("military", c()), single("alzateLaterali", v()), single("curlEZ", P.rpe(3, L.arm, 60)), single("pushdown", P.rpe(3, L.arm, 60))];
     }
     title = "Scheda " + code + " · peso da " + lvl + " ripetizioni massime";
   } else {
@@ -501,13 +530,13 @@ function buildSession(pos, s){
       const jr = wi<=4 ? 8 : 10, jr6 = wi<=4 ? 6 : 10;
       if(code==="A") blocks = [js(legMain, P.fixed(5,6,12,30), "panca", P.fixed(5,6,12,60), 60), js("rematoreBil", P.fixed(5,6,12,30), "military", P.fixed(5,6,12,60), 60), js("curlManubri", P.rpe(3,8,30), "pushdown", P.rpe(3,8,60), 60)];
       else if(code==="B") blocks = [js("pancaManubri", P.pyr(pyr,30), "rowMachine", P.pyr(pyr,90), 90), single("chestPress", P.emom(em[0],em[1])), single("latMachine", P.emom(em[0],em[1])), js("pulldown", P.rpe(3,jr6,30), "crociCavi", P.rpe(3,jr6,60), 60)];
-      else if(code==="C") blocks = [js("legCurl", P.rpe(3,jr,30), "legExtension", P.rpe(3,jr,60), 60), js("pressa", P.pyr(pyr,30), "pancaStretta", P.pyr(pyr,90), 90), single("hackSquat", P.emom(em[0],em[1]))];
+      else if(code==="C") blocks = [js("legCurlSeduto", P.rpe(3,jr,30), "legExtension", P.rpe(3,jr,60), 60), js("pressa", P.pyr(pyr,30), "pancaStretta", P.pyr(pyr,90), 90), single("hackSquat", P.emom(em[0],em[1]))];
       else blocks = [js("alzateLaterali", P.rpe(3,jr,30), "military", P.pyr(pyr,90), 90), single("shoulderPress", P.emom(em[0],em[1])), single("curlMartello", P.emom(em[0],em[1])), single("pushdown", P.emom(em[0],em[1]))];
       title = ["Heavy · corpo intero","Petto e dorso","Gambe e tricipiti","Spalle e braccia"][slot];
     } else {
       code = ["P","M","V"][slot];
       const x = wi>=3 ? 1 : 0;
-      if(code==="P") blocks = [single(legMain, P.range(4+x,3,5,"1-2",180)), single("panca", P.range(4,3,5,"1-2",180)), single("rematoreBil", P.range(3,6,8,"2",120)), single("legCurl", P.range(3,6,8,"2",90))];
+      if(code==="P") blocks = [single(legMain, P.range(4+x,3,5,"1-2",180)), single("panca", P.range(4,3,5,"1-2",180)), single("rematoreBil", P.range(3,6,8,"2",120)), single("legCurlSeduto", P.range(3,6,8,"2",90))];
       else if(code==="M") blocks = [single("stacco", P.range(4+x,6,8,"2",180)), single("military", P.range(4,6,8,"2",150)), single("latMachine", P.range(3,8,12,"2",120)), single("affondiCamminati", P.range(3,10,10,"2",90)), single("curlManubri", P.range(3,8,12,"1-2",60))];
       else blocks = [single("pressa", P.range(3+x,10,12,"1-2",120)), single("pancaInclinataManubri", P.range(4,10,12,"1-2",120)), single("pulley", P.range(3,12,15,"2",90)), single("alzateLaterali", P.range(3,12,15,"1-2",60)), single("pushdown", P.range(3,12,15,"1-2",60)), single("facePull", P.range(3,12,15,"2",60))];
       title = ["Giornata pesante","Giornata media","Giornata di volume"][slot];
@@ -518,8 +547,47 @@ function buildSession(pos, s){
       .concat(blocks)
       .concat([single("alzateProno", P.range(2,10,15,"",60)), single("alzateY", P.range(1,10,15,"",60)), single("wallSlide", P.range(2,10,15,"",30))]);
   }
-  return {code, title, kind:k, phase:PHASES[k], blocks};
+  return applySwaps({code, title, kind:k, phase:PHASES[k], blocks}, s);
 }
+
+/* ============ esercizi alternativi ============ */
+// Ogni gruppo contiene esercizi con lo stesso schema di movimento e gli stessi muscoli principali, nell'ordine in cui li proponiamo.
+const PAT = [
+  ["squat","hackSquat","pressa","smithSquat","gobletSquat"],
+  ["splitSquat","affondiCamminati"],
+  ["rdl","rdlManubri","stacco"],
+  ["legCurlSeduto","legCurl"],
+  ["panca","pancaManubri","chestPress","piegamenti"],
+  ["pancaInclinataManubri","chestPress","pancaManubri"],
+  ["pancaStretta","chestPress"],
+  ["crociCavi","pecDeck"],
+  ["military","lentoManubri","shoulderPress"],
+  ["alzateLaterali","alzateLateraliCavo"],
+  ["latMachine","latPresaStretta","trazioni"],
+  ["rematoreBil","rematoreManubrio","rowMachine","pulley"],
+  ["curlEZ","curlManubri","curlCavo","curlScott","curlMartello"],
+  ["frenchPress","tricipitiOverheadCavo","tricipitiOverheadManubrio","pushdown"],
+  ["pushdown","tricipitiOverheadCavo","tricipitiOverheadManubrio","frenchPress"],
+  ["crunch","crunchInverso"],
+  ["plank","deadBug","pallof"]
+];
+const ALT_NOTE = {
+  tricipitiOverheadCavo:"più crescita dei tricipiti (Maeo 2022)", tricipitiOverheadManubrio:"più crescita dei tricipiti (Maeo 2022)",
+  legCurlSeduto:"più crescita dei femorali (Maeo 2021)", hackSquat:"simile allo squat", pressa:"meno tecnica, più semplice da caricare",
+  rowMachine:"con appoggio al petto", gobletSquat:"più leggero, per imparare"
+};
+function altOf(k){
+  const out = [];
+  for(const g of PAT) if(g.includes(k)) for(const x of g) if(x !== k && EX[x] && !out.includes(x)) out.push(x);
+  return out;
+}
+const slotKey = (kind, code, orig) => kind + "|" + code + "|" + orig;
+function applySwaps(sess, s){
+  const sw = (s && s.swaps) || {};
+  sess.blocks.forEach(b => b.items.forEach(it => { const k = sw[slotKey(sess.kind, sess.code, it.ex)]; if(k && EX[k]){ it.orig = it.ex; it.ex = k; } }));
+  return sess;
+}
+function isMainLift(k){ return TESTED.includes(k); }
 function buildPostureSession(){
   const single = (ex, p) => ({type:"single", items:[{ex, p}]});
   return {code:"Post", title:"Routine posturale a casa", kind:"post", blocks:[
@@ -532,7 +600,7 @@ function posLabel(pos){ const k = weekKind(pos.week); const wp = weekInPhase(pos
 
 /* ============ stato e salvataggio ============ */
 const LS = "ripresa.v1";
-const DEFAULT = {settings:{legMain:"squat", f3freq:3, rdlInC:false, sound:true, posture:true, startDate:"2026-11-02"}, planned:{}, sessions:{}, metaAt:0};
+const DEFAULT = {settings:{legMain:"squat", f3freq:3, rdlInC:false, sound:true, posture:true, startDate:"2026-11-02", swaps:{}}, planned:{}, sessions:{}, metaAt:0};
 let S = load();
 function load(){
   try{ const raw = localStorage.getItem(LS); if(raw){ const o = JSON.parse(raw); return {...DEFAULT, ...o, settings:{...DEFAULT.settings, ...(o.settings||{})}}; } }catch(e){}
@@ -671,11 +739,11 @@ const GROUPS = {
   shoulders:{n:"Spalle", c:"var(--g-shoulders)"}, arms:{n:"Braccia", c:"var(--g-arms)"}, core:{n:"Core", c:"var(--g-core)"}, post:{n:"Posturale", c:"var(--g-post)"}
 };
 const EXG = {
-  gobletSquat:"legs", squat:"legs", splitSquat:"legs", affondiCamminati:"legs", stacco:"legs", rdlManubri:"legs", rdl:"legs", pressa:"legs", hackSquat:"legs", legCurl:"legs", legExtension:"legs", calf:"legs",
-  pancaManubri:"chest", panca:"chest", pancaInclinataManubri:"chest", pancaStretta:"chest", chestPress:"chest", piegamenti:"chest", crociCavi:"chest",
-  latMachine:"back", trazioni:"back", pulley:"back", rowMachine:"back", rematoreManubrio:"back", rematoreBil:"back", pulldown:"back",
-  military:"shoulders", lentoManubri:"shoulders", shoulderPress:"shoulders", alzateLaterali:"shoulders", facePull:"shoulders",
-  curlEZ:"arms", curlManubri:"arms", curlMartello:"arms", frenchPress:"arms", pushdown:"arms",
+  gobletSquat:"legs", squat:"legs", splitSquat:"legs", affondiCamminati:"legs", stacco:"legs", rdlManubri:"legs", rdl:"legs", pressa:"legs", hackSquat:"legs", legCurl:"legs", legCurlSeduto:"legs", smithSquat:"legs", legExtension:"legs", calf:"legs",
+  pancaManubri:"chest", panca:"chest", pancaInclinataManubri:"chest", pancaStretta:"chest", chestPress:"chest", piegamenti:"chest", crociCavi:"chest", pecDeck:"chest",
+  latMachine:"back", trazioni:"back", pulley:"back", rowMachine:"back", rematoreManubrio:"back", rematoreBil:"back", pulldown:"back", latPresaStretta:"back",
+  military:"shoulders", lentoManubri:"shoulders", shoulderPress:"shoulders", alzateLaterali:"shoulders", facePull:"shoulders", alzateLateraliCavo:"shoulders",
+  curlEZ:"arms", curlManubri:"arms", curlMartello:"arms", frenchPress:"arms", pushdown:"arms", curlCavo:"arms", curlScott:"arms", tricipitiOverheadCavo:"arms", tricipitiOverheadManubrio:"arms",
   deadBug:"core", pallof:"core", plank:"core", crunch:"core", crunchInverso:"core", backExt:"core",
   mobQuad:"post", mobProno:"post", neckFlex:"post", alzateProno:"post", alzateY:"post", wallSlide:"post", stretchPetto:"post", stretchCross:"post", stretchNuca:"post"
 };
@@ -746,7 +814,7 @@ function exRowsHtml(sess, kind){
   const groups = [];
   sess.blocks.forEach(b => { const sec = secOf(b, kind); let g = groups[groups.length-1]; if(!g || g.sec !== sec){ g = {sec, blocks:[]}; groups.push(g); } g.blocks.push(b); });
   return groups.map(g => `<div class="sect ${SECT[g.sec].cls}"><h3>${SECT[g.sec].n}</h3><span class="tiny muted">~${estMinutes(g.blocks, false)} min</span></div>
-    <ul class="exlist">${g.blocks.map(b => b.items.map((it, i) => { const ex = EX[it.ex]; const r = restShort(it.p); return `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}"><span class="gdot" style="background:${grp(it.ex).c}"></span><span class="t"><span class="n">${b.type==="js" ? `<span class="pairtag">coppia ${i===0?"1":"2"}</span>` : ""}${esc(ex.n)}</span><span class="p">${esc(shortP(it.p, ex))}${r ? " · rec " + r : ""}</span></span><span class="chev">${svgI.chev}</span></button></li>`; }).join("")).join("")}</ul>`).join("");
+    <ul class="exlist">${g.blocks.map(b => b.items.map((it, i) => { const ex = EX[it.ex]; const r = restShort(it.p); return `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}" data-slot="${esc(slotKey(sess.kind, sess.code, it.orig || it.ex))}"><span class="gdot" style="background:${grp(it.ex).c}"></span><span class="t"><span class="n">${b.type==="js" ? `<span class="pairtag">coppia ${i===0?"1":"2"}</span>` : ""}${esc(ex.n)}${it.orig ? ' <span class="swaptag">cambiato</span>' : ""}</span><span class="p">${esc(shortP(it.p, ex))}${r ? " · rec " + r : ""}</span></span><span class="chev">${svgI.chev}</span></button></li>`; }).join("")).join("")}</ul>`).join("");
 }
 
 /* ============ Oggi ============ */
@@ -814,7 +882,7 @@ function renderOggi(){
     <div class="meta"><span><b>~${estMinutes(sess.blocks, true)}</b> min</span><span><b>${sess.blocks.reduce((a,b)=>a+b.items.length,0)}</b> esercizi</span><span><b>${countSets(sess.blocks)}</b> serie</span></div>
     ${note ? `<div class="hint warn small">${esc(note)}</div>` : ""}
     <button class="btn primary big" data-act="start">${svgI.play} ${draft ? "Riprendi allenamento" : "Inizia allenamento"}</button>
-    ${homeExpand ? `<div>${exRowsHtml(sess)}</div>` : `<ul class="exlist">${preview.map(it => `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}"><span class="gdot" style="background:${grp(it.ex).c}"></span><span class="t"><span class="n">${esc(EX[it.ex].n)}</span><span class="p">${esc(shortP(it.p, EX[it.ex]))}</span></span><span class="chev">${svgI.chev}</span></button></li>`).join("")}</ul>`}
+    ${homeExpand ? `<div>${exRowsHtml(sess)}</div>` : `<ul class="exlist">${preview.map(it => `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}" data-slot="${esc(slotKey(sess.kind, sess.code, it.orig || it.ex))}"><span class="gdot" style="background:${grp(it.ex).c}"></span><span class="t"><span class="n">${esc(EX[it.ex].n)}${it.orig ? ' <span class="swaptag">cambiato</span>' : ""}</span><span class="p">${esc(shortP(it.p, EX[it.ex]))}</span></span><span class="chev">${svgI.chev}</span></button></li>`).join("")}</ul>`}
     <button class="btn ghost sm" data-act="homeExpand" style="align-self:flex-start">${homeExpand ? "Mostra meno" : `Vedi la seduta completa${S.settings.posture !== false ? ", con la parte posturale" : ""}`}</button>
     <label class="switch"><input type="checkbox" id="deloadToggle"><span><b>Settimana di scarico</b><br><span class="small muted">Metà delle serie, pesi -15%</span></span></label>
   </div>`;
@@ -899,7 +967,7 @@ function showSheet(html){ const s = $("#sheet"); s.innerHTML = `<div class="shee
 function closeSheet(){ const s = $("#sheet"); s.hidden = true; s.innerHTML = ""; }
 
 /* ============ scheda esercizio ============ */
-function exSheet(k){
+function exSheet(k, slot){
   const ex = EX[k]; if(!ex) return;
   const g = grp(k);
   const h0 = history(k).slice(-4).reverse();
@@ -908,8 +976,47 @@ function exSheet(k){
     <div class="stack-sm"><span class="eyebrow">Come si esegue</span><ol class="how">${ex.how.map(x => `<li>${esc(x)}</li>`).join("")}</ol></div>
     <div class="stack-sm"><span class="eyebrow">Errori da evitare</span><ul class="how">${ex.err.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>
     ${h0.length ? `<div class="stack-sm"><span class="eyebrow">Le tue ultime volte</span><div class="done-sets">${h0.map(x => { const best = x.e.sets.filter(z=>z.kg!=null).sort((a,b)=>b.kg-a.kg)[0]; return `<span>${esc(parseYmd(x.date).getDate() + " " + MESI[parseYmd(x.date).getMonth()].slice(0,3))}: ${best ? fmtKg(best.kg) + " kg × " + (best.reps ?? "—") : "—"}</span>`; }).join("")}</div></div>` : ""}
+    ${slot ? swapSectionHtml(k, slot) : ""}
     <p class="tiny muted">Fonte: ${esc(ex.src)}</p>
     <a class="btn" href="https://www.youtube.com/results?search_query=${encodeURIComponent(ex.yt)}" target="_blank" rel="noopener">Cerca un video su YouTube ↗</a>
+  </div>`);
+}
+
+function swapWarnHtml(orig){
+  return isMainLift(orig) ? `<div class="hint warn small"><b>È uno degli esercizi dei test.</b> Se lo cambi per sempre, il prossimo test misurerà un esercizio diverso e il confronto con i test precedenti non vale più. Se la macchina è solo occupata, cambialo solo per oggi.</div>` : "";
+}
+function altListHtml(k, actAttrs){
+  const alts = altOf(k);
+  if(!alts.length) return `<p class="small muted">Per questo esercizio non ci sono alternative equivalenti nell'elenco.</p>`;
+  return `<ul class="exlist">${alts.map(a => `<li><div class="exrow" style="cursor:default"><span class="gdot" style="background:${grp(a).c}"></span><span class="t"><span class="n">${esc(EX[a].n)}</span><span class="p">${esc(EX[a].unit)}${ALT_NOTE[a] ? " · " + esc(ALT_NOTE[a]) : ""}</span></span></div>
+    <div class="row swapbtns">${actAttrs(a)}</div></li>`).join("")}</ul>`;
+}
+function swapSectionHtml(k, slot){
+  const orig = slot.split("|")[2];
+  if(EXG[orig] === "post") return "";
+  const swapped = orig !== k;
+  if(!altOf(orig).length) return "";
+  return `<div class="stack-sm"><span class="eyebrow">Cambia esercizio in questa scheda</span>
+    ${swapped ? `<div class="hint small">Al posto di <b>${esc(EX[orig].n)}</b>. <button class="btn sm ghost" data-act="swapSet" data-slot="${esc(slot)}" data-to="${orig}">Torna all'originale</button></div>` : ""}
+    ${swapWarnHtml(orig)}
+    ${altListHtml(orig, a => a === k ? `<span class="pill acc">in uso</span>` : `<button class="btn sm primary" data-act="swapSet" data-slot="${esc(slot)}" data-to="${a}">Usa questo da ora</button>`)}
+    <p class="tiny muted">Vale per tutte le prossime sedute di questa scheda. Ogni esercizio ha il suo storico dei pesi: la prima volta l'app ti aiuta a trovare il peso.</p></div>`;
+}
+function setSwap(slot, to){
+  const orig = slot.split("|")[2];
+  const sw = {...(S.settings.swaps || {})};
+  if(!to || to === orig) delete sw[slot]; else sw[slot] = to;
+  S.settings.swaps = sw; pushMeta();
+}
+function runSwapSheet(ii){
+  const it = R.blocks[R.bi].items[ii];
+  const orig = it.orig || it.ex;
+  showSheet(`<div class="grab"></div><div class="stack">
+    <div class="row between"><h2>Cambia esercizio</h2><button class="btn icon ghost" data-act="closeSheet" aria-label="Chiudi">${svgI.close}</button></div>
+    <p class="small muted">Adesso: <b>${esc(EX[it.ex].n)}</b>${it.orig ? ` (al posto di ${esc(EX[orig].n)})` : ""}. Serie, ripetizioni e recupero restano gli stessi.</p>
+    ${swapWarnHtml(orig)}
+    ${it.orig ? `<button class="btn sm ghost" data-act="swapRun" data-ii="${ii}" data-to="${orig}" data-mode="always" style="align-self:flex-start">Torna a ${esc(EX[orig].n)}</button>` : ""}
+    ${altListHtml(orig, a => a === it.ex ? `<span class="pill acc">in uso</span>` : `<button class="btn sm" data-act="swapRun" data-ii="${ii}" data-to="${a}" data-mode="today">Solo oggi</button><button class="btn sm primary" data-act="swapRun" data-ii="${ii}" data-to="${a}" data-mode="always">Da ora in poi</button>`)}
   </div>`);
 }
 
@@ -950,6 +1057,15 @@ function renderProgressi(){
 }
 
 /* ============ Programma ============ */
+
+function swapsCardHtml(){
+  const sw = Object.entries(S.settings.swaps || {});
+  const codeName = c => c.length === 1 ? "Scheda " + c : c;
+  return `<div class="card stack"><h2>Esercizi cambiati</h2>
+    ${sw.length ? `<ul class="exlist">${sw.map(([slot, to]) => { const [kind, code, orig] = slot.split("|"); return `<li><div class="exrow" style="cursor:default"><span class="gdot" style="background:${grp(to).c}"></span><span class="t"><span class="n">${esc(EX[to]?.n || to)}</span><span class="p">al posto di ${esc(EX[orig]?.n || orig)} · ${esc((PHASES[kind]?.short || "Test") + ", " + codeName(code))}</span></span><button class="btn sm ghost" data-act="swapSet" data-slot="${esc(slot)}" data-to="${orig}">Ripristina</button></div></li>`; }).join("")}</ul>`
+      : `<p class="small muted">Nessuno. Per cambiare un esercizio toccalo nella seduta (in Oggi o nel Calendario) oppure usa "Cambia" durante l'allenamento.</p>`}
+  </div>`;
+}
 function renderProgramma(){
   const s = S.settings;
   const {pos} = nextPosition(todayStr());
@@ -989,6 +1105,7 @@ function renderProgramma(){
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-core)"></span><span class="t"><span class="n">Modifiche al programma</span><span class="p">Iperestensioni al posto dei crunch; squat e stacco solo con la zona lombare neutra; niente torsioni con carico; mento leggermente abbassato a chest press, pulley e rematori</span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-core)"></span><span class="t"><span class="n">Ogni giorno</span><span class="p">Ogni 2 ore circa da seduto, alzati e fai qualche estensione lombare in piedi</span></span></div></li>
     </ul></div>
+  ${swapsCardHtml()}
   <div class="card stack"><h2>Cosa dice la ricerca</h2><p class="small muted">Come gli studi scientifici confermano o correggono le scelte del programma.</p>
     <ul class="exlist">
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--accent)"></span><span class="t"><span class="n">Volume: confermato</span><span class="p">Più serie danno più crescita, ma con rendimenti decrescenti: tra 5 e 10 serie a settimana per muscolo il rendimento è massimo, tra 11 e 18 intermedio. Per la forza bastano poche serie. Il programma passa da circa 9-10 serie (Fase 1) a 12-18 (Fasi 2-3). Pelland et al. 2026, Sports Medicine.</span></span></div></li>
@@ -1000,6 +1117,10 @@ function renderProgramma(){
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-arms)"></span><span class="t"><span class="n">Proteine</span><span class="p">Oltre circa 1,6 g per kg al giorno il beneficio sulla massa magra non aumenta in media; il limite alto dell'intervallo di confidenza è circa 2,2 g/kg (Morton et al. 2018).</span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--post)"></span><span class="t"><span class="n">Postura e dolore</span><span class="p">Non c'è consenso che postura e posizioni causino il mal di schiena: esiste un'associazione, non una causa dimostrata (Swain et al. 2020). Gli esercizi di rinforzo e allungamento migliorano l'angolo del collo e moderatamente il dolore al collo (Sheikhhoseini et al. 2018, 7 studi).</span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--post)"></span><span class="t"><span class="n">Scoliosi</span><span class="p">Le linee guida SOSORT 2016 raccomandano lo sport per i benefici generali, ma non come trattamento della scoliosi. Per un adulto senza dolore con una curva lieve il minimo è nessun trattamento; al massimo esercizi specifici per la scoliosi, seguiti da un professionista formato.</span></span></div></li>
+      <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--accent)"></span><span class="t"><span class="n">Linee guida ACSM 2026</span><span class="p">Sintesi di 137 revisioni: la forza cresce di più con carichi alti (almeno 80% del massimale), ampiezza completa, esercizi all'inizio della seduta e almeno 2 sedute a settimana; la massa con almeno 10 serie a settimana per muscolo. Cedimento, tipo di attrezzo e periodizzazione complessa non cambiano i risultati in modo consistente (Currier et al. 2026).</span></span></div></li>
+      <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-back)"></span><span class="t"><span class="n">Macchine o pesi liberi</span><span class="p">Stessa crescita muscolare. La forza migliora soprattutto nel tipo di esercizio che alleni: per diventare forte su squat e panca allenati con il bilanciere (Haugen et al. 2023).</span></span></div></li>
+      <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-legs)"></span><span class="t"><span class="n">Muscolo allungato</span><span class="p">Il leg curl da seduto ha fatto crescere i femorali più di quello sdraiato (+14% contro +9%, Maeo et al. 2021); le estensioni sopra la testa hanno fatto crescere i tricipiti circa 1,4 volte più del pushdown (Maeo et al. 2022). Per questo il programma usa il leg curl da seduto e propone le estensioni sopra la testa come prima alternativa.</span></span></div></li>
+      <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-legs)"></span><span class="t"><span class="n">Ampiezza del movimento</span><span class="p">L'ampiezza completa è leggermente migliore, con differenze piccole; le ripetizioni parziali nella parte di muscolo allungato potrebbero dare un piccolo vantaggio per la massa, ma il dato è incerto (Wolf et al. 2023). Il programma resta sull'ampiezza completa.</span></span></div></li>
     </ul></div>
   <div class="card stack"><h2>Fonti</h2><p class="small">Fase 2, Fase 3 a 4 sedute e test: F. Liparoti, <i>Project Bodybuilding</i>, cap. 13. Volumi, buffer e routine posturale: A. Roncari, <i>Fitness posturale</i>, cap. 2, 4 e 5. Tecnica degli esercizi e zona lombare: <i>Project Exercise 1</i> (PE1) e <i>Project Exercise 2</i> (PE2). La Fase 1, la versione a 3 sedute della Fase 3 e le regole dell'app sono un'elaborazione a partire da questi testi.</p></div></div>`;
   return h;
@@ -1071,7 +1192,7 @@ const WARMUP = [
 ];
 let R = null;
 let tick = null, audioCtx = null, wakeLock = null;
-function cloneBlocks(blocks, deload){ return blocks.map(b => ({type:b.type, rest:b.rest, items:b.items.map(it => ({ex:it.ex, p: deload && !EXG[it.ex]?.startsWith("post") && EXG[it.ex] !== "post" ? deloadP(it.p) : it.p}))})); }
+function cloneBlocks(blocks, deload){ return blocks.map(b => ({type:b.type, rest:b.rest, items:b.items.map(it => ({ex:it.ex, orig:it.orig, p: deload && !EXG[it.ex]?.startsWith("post") && EXG[it.ex] !== "post" ? deloadP(it.p) : it.p}))})); }
 function startSession(){
   const t = todayStr();
   const {pos} = nextPosition(t);
@@ -1183,7 +1304,7 @@ function scrIntro(){
     <p class="small muted">${esc(prescText(it.p, ex))}</p>
     ${sugHtml(it.ex, it.p)}
     <div class="stack-sm"><span class="eyebrow">In breve</span><ul class="how small">${ex.how.slice(0,2).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>
-    <div class="row"><button class="btn sm" data-act="exInfo" data-k="${it.ex}">${svgI.info} Tecnica completa</button><a class="btn sm ghost" href="https://www.youtube.com/results?search_query=${encodeURIComponent(ex.yt)}" target="_blank" rel="noopener">Video ↗</a></div></div>`; }).join("")}
+    <div class="row"><button class="btn sm" data-act="exInfo" data-k="${it.ex}">${svgI.info} Tecnica completa</button>${R.kind !== "post" && EXG[it.orig || it.ex] !== "post" && altOf(it.orig || it.ex).length && !R.log[R.bi][i].sets.length ? `<button class="btn sm" data-act="swapOpen" data-ii="${i}">Cambia</button>` : ""}<a class="btn sm ghost" href="https://www.youtube.com/results?search_query=${encodeURIComponent(ex.yt)}" target="_blank" rel="noopener">Video ↗</a></div></div>`; }).join("")}
   ${canRamp(b) ? `<div class="hint warn small"><b>Prima volta con questo esercizio.</b> Trova il peso con una o due serie di prova: non contano come serie e l'app ti dice da che peso partire.</div><button class="btn primary big" data-act="rampStart">Trova il peso</button><button class="btn" data-act="startEx">Conosco già il peso: inizia</button>`
     : `<button class="btn primary big" data-act="startEx">${svgI.play} Inizia esercizio</button>`}
   <button class="btn ghost" data-act="skipEx">Salta questo esercizio</button></div>`;
@@ -1392,7 +1513,13 @@ function act(a, d, e){
     case "resume": resumeSession(); break;
     case "discardDraft": clearDraft(); render(); break;
     case "openDay": openDay(d.d); break;
-    case "exInfo": exSheet(d.k); break;
+    case "exInfo": exSheet(d.k, d.slot); break;
+    case "swapSet": setSwap(d.slot, d.to); closeSheet(); render(); break;
+    case "swapOpen": runSwapSheet(Number(d.ii)); break;
+    case "swapRun": { const it = R.blocks[R.bi].items[Number(d.ii)]; const orig = it.orig || it.ex;
+      if(d.mode === "always") setSwap(slotKey(R.kind, R.code, orig), d.to);
+      it.ex = d.to; it.orig = d.to === orig ? undefined : orig; R.ramp = null;
+      saveDraft(); closeSheet(); rRender(); break; }
     case "homeExpand": homeExpand = !homeExpand; render(); break;
     case "guideTab": guideTab = d.v; render(); break;
     case "closeSheet": closeSheet(); break;
