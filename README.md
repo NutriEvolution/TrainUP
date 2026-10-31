@@ -17,7 +17,7 @@ Restano solo sul telefono. Usa **Salva backup** in *Programma → App e dati* pr
 2. Scrivi le novità in `NOVITA.md`.
 3. Crea un tag `vX.Y.Z` (es. `v1.0.1`) e fai push: GitHub Actions compila, firma e pubblica l'APK nelle Releases.
 
-La firma usa i secret `KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`. La chiave non è nel repository: senza la stessa chiave gli aggiornamenti non si installano sopra la versione esistente.
+La firma usa due secret: `KEYSTORE_BASE64` e `KEYSTORE_PASSWORD`. La chiave non è nel repository: senza la stessa chiave gli aggiornamenti non si installano sopra la versione esistente.
 
 ## Struttura
 - `web/app.html`: l'app (HTML/CSS/JS in un file)
