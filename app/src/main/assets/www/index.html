@@ -318,6 +318,24 @@ details.wk[open] summary::after{transform:rotate(-135deg)}
 .o-banner b{display:block;color:var(--accent-text)}
 .o-banner span{font-size:13px}
 .o-switch{margin-top:12px}
+.refpic{margin:0;display:flex;flex-direction:column;gap:6px}
+.refpic .flip{position:relative;aspect-ratio:850/567;border-radius:14px;overflow:hidden;background:var(--surface2)}
+.refpic .flip img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.refpic .flip img+img{animation:flipimg 2.4s steps(1) infinite}
+@keyframes flipimg{0%{opacity:0}50%{opacity:1}}
+.refpic figcaption{font-size:11.5px;color:var(--muted)}
+.refpic.sm .flip{border-radius:12px;aspect-ratio:auto;height:170px}
+.vidcard{display:flex;gap:12px;align-items:center;padding:8px;border-radius:14px;background:var(--surface2);color:inherit;text-decoration:none}
+.vthumb{position:relative;width:120px;flex:none;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:var(--surface3)}
+.vthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.vthumb i{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(0,0,0,.25)}
+.vthumb i svg{width:26px;height:26px}
+.vt{display:flex;flex-direction:column;gap:2px;min-width:0}.vt b{font-size:14.5px;line-height:1.25}.vt span{font-size:12.5px;color:var(--muted)}
+.media-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.mitem{position:relative;border-radius:12px;overflow:hidden;background:#000;aspect-ratio:3/4}
+.mitem img,.mitem video{width:100%;height:100%;object-fit:cover;display:block}
+.mdel{position:absolute;top:6px;right:6px;width:30px;height:30px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.mdel svg{width:16px;height:16px}
 .o-inprog{margin-top:14px;padding:12px 14px;border-radius:14px;background:var(--accent-soft);color:var(--accent-text);display:flex;flex-direction:column;gap:2px}
 .o-inprog span{font-size:13px}
 </style>
@@ -1118,18 +1136,52 @@ function showSheet(html){ const s = $("#sheet"); s.innerHTML = `<div class="shee
 function closeSheet(){ const s = $("#sheet"); s.hidden = true; s.innerHTML = ""; }
 
 /* ============ scheda esercizio ============ */
+
+/* ============ foto, video tutorial e riprese personali ============ */
+// Foto di riferimento: archivio Free Exercise DB (github.com/yuhonas/free-exercise-db), caricate da internet, non incluse nell'app.
+// Escluse le foto che mostrano un'esecuzione diversa da quella consigliata qui (lat machine dietro la testa, pec deck a gomiti alti...).
+const FEDB = {gobletSquat:"Goblet_Squat",squat:"Barbell_Full_Squat",splitSquat:"Split_Squat_with_Dumbbells",affondiCamminati:"Dumbbell_Lunges",pancaManubri:"Dumbbell_Bench_Press",panca:"Barbell_Bench_Press_-_Medium_Grip",pancaInclinataManubri:"Incline_Dumbbell_Press",pancaStretta:"Close-Grip_Barbell_Bench_Press",chestPress:"Leverage_Chest_Press",piegamenti:"Pushups",crociCavi:"Cable_Crossover",military:"Standing_Military_Press",lentoManubri:"Seated_Dumbbell_Press",shoulderPress:"Leverage_Shoulder_Press",alzateLaterali:"Side_Lateral_Raise",facePull:"Face_Pull",latMachine:"Full_Range-Of-Motion_Lat_Pulldown",trazioni:"Pullups",pulley:"Seated_Cable_Rows",rowMachine:"Leverage_High_Row",rematoreManubrio:"One-Arm_Dumbbell_Row",rematoreBil:"Bent_Over_Barbell_Row",pulldown:"Straight-Arm_Pulldown",stacco:"Barbell_Deadlift",rdlManubri:"Stiff-Legged_Dumbbell_Deadlift",rdl:"Romanian_Deadlift",pressa:"Leg_Press",hackSquat:"Hack_Squat",legCurl:"Lying_Leg_Curls",legCurlSeduto:"Seated_Leg_Curl",legExtension:"Leg_Extensions",calf:"Standing_Calf_Raises",curlEZ:"EZ-Bar_Curl",curlManubri:"Dumbbell_Bicep_Curl",curlMartello:"Hammer_Curls",frenchPress:"EZ-Bar_Skullcrusher",pushdown:"Triceps_Pushdown_-_Rope_Attachment",deadBug:"Dead_Bug",pallof:"Pallof_Press",plank:"Plank",crunch:"Crunches",backExt:"Hyperextensions_Back_Extensions",tricipitiOverheadCavo:"Cable_Rope_Overhead_Triceps_Extension",tricipitiOverheadManubrio:"Seated_Triceps_Press",smithSquat:"Smith_Machine_Squat",curlCavo:"Standing_Biceps_Cable_Curl",latPresaStretta:"V-Bar_Pulldown",crunchInverso:"Reverse_Crunch",worldsGreatest:"Worlds_Greatest_Stretch",squatCorpo:"Bodyweight_Squat",rotBraccia:"Arm_Circles"};
+// Video tutorial del canale YouTube Project inVictus (autore verificato video per video).
+const VID = {squat:["H1_YLMIkoCU","Squat: come eseguirlo correttamente?"],gobletSquat:["H1_YLMIkoCU","Squat: come eseguirlo correttamente?"],splitSquat:["zvaJ9MdWzdM","Affondi e glutei: facciamoli correttamente"],affondiCamminati:["zvaJ9MdWzdM","Affondi e glutei: facciamoli correttamente"],panca:["tNC8yI5wo4M","Panca piana: come eseguirla correttamente?"],pancaStretta:["tNC8yI5wo4M","Panca piana: come eseguirla correttamente?"],chestPress:["lAkcFUulVn4","Chest press: come farla correttamente"],piegamenti:["MgCSo0xWj1M","Piegamenti sulle braccia: come eseguirli correttamente?"],crociCavi:["l9vGijqXG5s","Tutorial croci: manubri e cavi"],pecDeck:["6dExVifvwR8","Pectoral machine: esecuzione e consigli pratici"],military:["M6rkLOz29QQ","Tutorial lento in piedi"],lentoManubri:["m3UHlrhQ2IU","Biomeccanica del lento manubri"],shoulderPress:["m3UHlrhQ2IU","Biomeccanica del lento manubri"],alzateLaterali:["CGJiLSRpEFg","Alzate laterali, frontali e posteriori"],alzateLateraliCavo:["CGJiLSRpEFg","Alzate laterali, frontali e posteriori"],alzateProno:["CGJiLSRpEFg","Alzate laterali, frontali e posteriori"],latMachine:["bnSooG_TuRI","Lat machine: tutorial ed esecuzione"],latPresaStretta:["bnSooG_TuRI","Lat machine: tutorial ed esecuzione"],trazioni:["oN7zZJd4KnI","Trazioni alla sbarra: tutorial ed esecuzione"],rematoreBil:["wTeZWsf2i8o","Rematore bilanciere e manubrio"],rematoreManubrio:["wTeZWsf2i8o","Rematore bilanciere e manubrio"],stacco:["xPs2VFWDWTI","Tutorial stacco da terra"],rdl:["_ml0wRUcIRE","Tutorial breve sull'RDL (stacco rumeno)"],rdlManubri:["_ml0wRUcIRE","Tutorial breve sull'RDL (stacco rumeno)"],pressa:["LMTyPl_oo38","Leg press: tutorial, esecuzione e varianti"],legCurl:["1zevKZn_n1E","Leg curl: come si esegue correttamente?"],legCurlSeduto:["1zevKZn_n1E","Leg curl: come si esegue correttamente?"],curlEZ:["3SkazbN3l8w","Curl bilanciere e su panca inclinata"],curlManubri:["3SkazbN3l8w","Curl bilanciere e su panca inclinata"],pushdown:["uJAuEE_RCL0","Push down e french press"],frenchPress:["uJAuEE_RCL0","Push down e french press"],tricipitiOverheadCavo:["uJAuEE_RCL0","Push down e french press"],tricipitiOverheadManubrio:["uJAuEE_RCL0","Push down e french press"],plank:["Is-7PPaBcsM","Plank: esecuzione corretta"]};
+function photoHtml(k, small){
+  const id = FEDB[k]; if(!id) return "";
+  const b = "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/" + encodeURIComponent(id) + "/";
+  return `<figure class="refpic${small ? " sm" : ""}"><div class="flip"><img src="${b}0.jpg" alt="Posizione di partenza"><img src="${b}1.jpg" alt="Posizione finale"></div><figcaption>Foto: Free Exercise DB${small ? "" : " · l'esecuzione consigliata è quella scritta qui sotto"}</figcaption></figure>`;
+}
+function videoHtml(k, small){
+  const v = VID[k], ex = EX[k];
+  if(!v) return small ? `<a class="btn sm ghost" href="https://www.youtube.com/results?search_query=${encodeURIComponent(ex.yt)}" target="_blank" rel="noopener">Video ↗</a>`
+    : `<a class="btn" href="https://www.youtube.com/results?search_query=${encodeURIComponent(ex.yt)}" target="_blank" rel="noopener">Cerca un video su YouTube ↗</a>`;
+  if(small) return `<a class="btn sm ghost" href="https://www.youtube.com/watch?v=${v[0]}" target="_blank" rel="noopener">Tutorial ↗</a>`;
+  return `<a class="vidcard" href="https://www.youtube.com/watch?v=${v[0]}" target="_blank" rel="noopener"><span class="vthumb"><img src="https://i.ytimg.com/vi/${v[0]}/mqdefault.jpg" alt=""><i>${svgI.play}</i></span><span class="vt"><b>${esc(v[1])}</b><span>Project inVictus · YouTube</span></span></a>`;
+}
+let mediaSheet = null; // esercizio della scheda aperta, per aggiornarla quando cambiano foto e video
+function mediaHtml(k){
+  if(!(window.Android && Android.mediaList)) return "";
+  let list = []; try{ list = JSON.parse(Android.mediaList(k)) || []; }catch(e){}
+  return `<div class="stack-sm"><span class="eyebrow">Le tue foto e video</span>
+    ${list.length ? `<div class="media-grid">${list.map(m => `<div class="mitem">${m.video ? `<video src="${esc(m.url)}" controls preload="metadata" playsinline></video>` : `<img src="${esc(m.url)}" alt="">`}<button class="mdel" data-act="mediaDel" data-k="${k}" data-n="${esc(m.name)}" aria-label="Elimina">${svgI.close}</button></div>`).join("")}</div>`
+      : `<p class="small muted">Fatti riprendere in palestra per controllare la tecnica. Restano solo su questo telefono.</p>`}
+    <div class="row" style="flex-wrap:wrap;gap:8px"><button class="btn sm" data-act="mediaAdd" data-k="${k}" data-m="video">Registra video</button><button class="btn sm" data-act="mediaAdd" data-k="${k}" data-m="photo">Scatta foto</button><button class="btn sm ghost" data-act="mediaAdd" data-k="${k}" data-m="pick">Dalla galleria</button></div></div>`;
+}
+window.onMediaChanged = function(k){ const sh = $("#sheet"); if(mediaSheet && mediaSheet.k === k && sh && !sh.hidden) exSheet(mediaSheet.k, mediaSheet.slot); };
+window.onMediaError = function(){ alert("Non riesco ad aprire la fotocamera o la galleria su questo telefono."); };
+document.addEventListener("error", e => { const t = e.target; if(t && t.matches && t.matches(".refpic img, .vthumb img")){ const f = t.closest(".refpic"); if(f) f.remove(); else t.style.visibility = "hidden"; } }, true);
 function exSheet(k, slot){
   const ex = EX[k]; if(!ex) return;
+  mediaSheet = {k, slot};
   const g = grp(k);
   const h0 = history(k).slice(-4).reverse();
   showSheet(`<div class="grab"></div><div class="stack">
     <div class="row between" style="align-items:flex-start"><div class="stack-sm"><span class="pill" style="color:${g.c}"><span class="gdot" style="background:${g.c}"></span>${g.n}</span><h2>${esc(ex.n)}</h2></div><button class="btn icon ghost" data-act="closeSheet" aria-label="Chiudi">${svgI.close}</button></div>
+    ${photoHtml(k)}
     <div class="stack-sm"><span class="eyebrow">Come si esegue</span><ol class="how">${ex.how.map(x => `<li>${esc(x)}</li>`).join("")}</ol></div>
     <div class="stack-sm"><span class="eyebrow">Errori da evitare</span><ul class="how">${ex.err.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>
     ${h0.length ? `<div class="stack-sm"><span class="eyebrow">Le tue ultime volte</span><div class="done-sets">${h0.map(x => { const best = x.e.sets.filter(z=>z.kg!=null).sort((a,b)=>b.kg-a.kg)[0]; return `<span>${esc(parseYmd(x.date).getDate() + " " + MESI[parseYmd(x.date).getMonth()].slice(0,3))}: ${best ? fmtKg(best.kg) + " kg × " + (best.reps ?? "—") : "—"}</span>`; }).join("")}</div></div>` : ""}
     ${slot ? swapSectionHtml(k, slot) : ""}
     <p class="tiny muted">Fonte: ${esc(ex.src)}</p>
-    <a class="btn" href="https://www.youtube.com/results?search_query=${encodeURIComponent(ex.yt)}" target="_blank" rel="noopener">Cerca un video su YouTube ↗</a>
+    ${videoHtml(k)}
+    ${mediaHtml(k)}
   </div>`);
 }
 
@@ -1355,7 +1407,7 @@ function renderProgramma(){
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--post)"></span><span class="t"><span class="n">Postura</span><span class="p">Non è dimostrato che la postura causi mal di schiena. Gli esercizi per il collo migliorano la posizione della testa. <span class="cite">Swain 2020, Sheikhhoseini 2018</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--post)"></span><span class="t"><span class="n">Scoliosi</span><span class="p">Lo sport fa bene in generale ma non corregge la curva. Per un adulto senza dolore con una curva lieve può bastare non fare nulla di specifico. <span class="cite">SOSORT 2016</span></span></span></div></li>
     </ul></div>
-  <div class="card stack"><h2>Fonti</h2><p class="small">Fase 2, Fase 3 a 4 sedute e test: F. Liparoti, <i>Project Bodybuilding</i>, cap. 13. Volumi, buffer e routine posturale: A. Roncari, <i>Fitness posturale</i>, cap. 2, 4 e 5. Tecnica degli esercizi e zona lombare: <i>Project Exercise 1</i> (PE1) e <i>Project Exercise 2</i> (PE2). La Fase 1, la versione a 3 sedute della Fase 3 e le regole dell'app sono un'elaborazione a partire da questi testi.</p></div></div>`;
+  <div class="card stack"><h2>Fonti</h2><p class="small">Fase 2, Fase 3 a 4 sedute e test: F. Liparoti, <i>Project Bodybuilding</i>, cap. 13. Volumi, buffer e routine posturale: A. Roncari, <i>Fitness posturale</i>, cap. 2, 4 e 5. Tecnica degli esercizi e zona lombare: <i>Project Exercise 1</i> (PE1) e <i>Project Exercise 2</i> (PE2). La Fase 1, la versione a 3 sedute della Fase 3 e le regole dell'app sono un'elaborazione a partire da questi testi.</p><p class="small" style="margin-top:8px">Video tutorial: canale YouTube <b>Project inVictus</b>. Foto degli esercizi: archivio <b>Free Exercise DB</b> (github.com/yuhonas/free-exercise-db; le foto provengono in origine da Bodybuilding.com), caricate da internet e non incluse nell'app.</p></div></div>`;
   return h;
 }
 document.addEventListener("change", e => {
@@ -1567,12 +1619,13 @@ function scrIntro(){
   ${b.items.map((it, i) => { const ex = EX[it.ex]; const g = grp(it.ex); return `<div class="card stack">${isJs ? `<span class="tiny muted">${i===0?"Primo":"Secondo"} esercizio</span>` : ""}
     <div class="row" style="gap:8px"><span class="gdot" style="background:${g.c}"></span><span class="tiny muted">${g.n}</span></div>
     <h1>${esc(ex.n)}</h1>
+    ${photoHtml(it.ex, true)}
     <p class="num" style="font-weight:600">${esc(shortP(it.p, ex))}${restShort(it.p) && !isJs ? " · recupero " + restShort(it.p) : ""}</p>
     <p class="small muted">${esc(prescText(it.p, ex))}</p>
     ${sugHtml(it.ex, it.p)}
     ${canRamp(b) ? "" : wuHtml(it, R.bi)}
     <div class="stack-sm"><span class="eyebrow">In breve</span><ul class="how small">${ex.how.slice(0,2).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>
-    <div class="row"><button class="btn sm" data-act="exInfo" data-k="${it.ex}">${svgI.info} Tecnica completa</button>${R.kind !== "post" && EXG[baseEx(it)] !== "post" && altOf(baseEx(it)).length && !R.log[R.bi][i].sets.length ? `<button class="btn sm" data-act="swapOpen" data-ii="${i}">Cambia</button>` : ""}<a class="btn sm ghost" href="https://www.youtube.com/results?search_query=${encodeURIComponent(ex.yt)}" target="_blank" rel="noopener">Video ↗</a></div></div>`; }).join("")}
+    <div class="row"><button class="btn sm" data-act="exInfo" data-k="${it.ex}">${svgI.info} Tecnica completa</button>${R.kind !== "post" && EXG[baseEx(it)] !== "post" && altOf(baseEx(it)).length && !R.log[R.bi][i].sets.length ? `<button class="btn sm" data-act="swapOpen" data-ii="${i}">Cambia</button>` : ""}${videoHtml(it.ex, true)}</div></div>`; }).join("")}
   ${canRamp(b) ? `<div class="hint warn small"><b>Prima volta con questo esercizio.</b> Trova il peso con una o due serie di prova: non contano come serie e l'app ti dice da che peso partire.</div><button class="btn primary big" data-act="rampStart">Trova il peso</button><button class="btn" data-act="startEx">Conosco già il peso: inizia</button>`
     : `<button class="btn primary big" data-act="startEx">${svgI.play} Inizia esercizio</button>`}
   <button class="btn ghost" data-act="skipEx">Salta questo esercizio</button></div>`;
@@ -1784,6 +1837,8 @@ function act(a, d, e){
     case "discardDraft": clearDraft(); render(); break;
     case "openDay": openDay(d.d); break;
     case "exInfo": exSheet(d.k, d.slot); break;
+    case "mediaAdd": try{ Android.mediaAdd(d.k, d.m); }catch(err){} break;
+    case "mediaDel": if(confirm("Eliminare questa foto o questo video?")){ try{ Android.mediaDelete(d.k, d.n); }catch(err){} exSheet(d.k, mediaSheet && mediaSheet.slot); } break;
     case "swapSet": setSwap(d.slot, d.to); closeSheet(); render(); break;
     case "swapOpen": runSwapSheet(Number(d.ii)); break;
     case "swapRun": { const it = R.blocks[R.bi].items[Number(d.ii)]; const orig = baseEx(it);

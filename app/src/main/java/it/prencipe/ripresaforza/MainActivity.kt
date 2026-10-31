@@ -17,7 +17,10 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
+import java.io.File
 import org.json.JSONObject
 
 class MainActivity : ComponentActivity() {
@@ -48,6 +51,24 @@ class MainActivity : ComponentActivity() {
   }
 
   private val askNotif = registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
+
+  // ---- foto e video personali degli esercizi ----
+  private var mediaEx: String? = null
+  private var pendingCapture: File? = null
+  private fun mediaChanged(ex: String) = js("window.onMediaChanged && window.onMediaChanged(${JSONObject.quote(ex)})")
+  private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+    val ex = mediaEx ?: return@registerForActivityResult
+    if (uri != null) Thread { Media.importUri(this, ex, uri); mediaChanged(ex) }.start()
+  }
+  private fun captured(ok: Boolean) {
+    val f = pendingCapture; pendingCapture = null
+    val ex = mediaEx ?: return
+    if (!ok || f == null || f.length() == 0L) f?.delete()
+    mediaChanged(ex)
+  }
+  private val takePhoto = registerForActivityResult(ActivityResultContracts.TakePicture()) { ok -> captured(ok) }
+  private val takeVideo = registerForActivityResult(ActivityResultContracts.CaptureVideo()) { ok -> captured(ok) }
+  private fun uriFor(f: File): Uri = FileProvider.getUriForFile(this, "$packageName.files", f)
 
   @SuppressLint("SetJavaScriptEnabled")
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -134,5 +155,20 @@ class MainActivity : ComponentActivity() {
     @JavascriptInterface fun installUpdate(url: String) { Updater.download(this@MainActivity, url) }
 
     @JavascriptInterface fun openExternal(url: String) = runOnUiThread { this@MainActivity.openExternal(url) }
+
+    @JavascriptInterface fun mediaList(ex: String): String = Media.list(this@MainActivity, ex)
+
+    @JavascriptInterface fun mediaDelete(ex: String, name: String): Boolean = Media.delete(this@MainActivity, ex, name)
+
+    @JavascriptInterface fun mediaAdd(ex: String, mode: String) = runOnUiThread {
+      mediaEx = ex
+      try {
+        when (mode) {
+          "photo" -> { val f = Media.newFile(this@MainActivity, ex, "jpg"); pendingCapture = f; takePhoto.launch(uriFor(f)) }
+          "video" -> { val f = Media.newFile(this@MainActivity, ex, "mp4"); pendingCapture = f; takeVideo.launch(uriFor(f)) }
+          else -> pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+        }
+      } catch (e: Exception) { pendingCapture?.delete(); pendingCapture = null; js("window.onMediaError && window.onMediaError()") }
+    }
   }
 }
