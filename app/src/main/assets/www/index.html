@@ -245,6 +245,7 @@ details.wk[open] summary::after{transform:rotate(-135deg)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 .swaptag{font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:99px;padding:1px 7px;margin-left:4px;vertical-align:2px}
 .cite{color:var(--muted);font-size:12px}
+.warmrow{display:flex;align-items:center;gap:12px}.linkish{all:unset;cursor:pointer;flex:1;padding:2px 0}
 .swapbtns{gap:6px;padding:0 14px 12px 34px;flex-wrap:wrap}
 </style>
 
@@ -451,6 +452,30 @@ const EX = {
   latPresaStretta:{n:"Lat machine, presa stretta neutra", step:2.5, inc:2.5, unit:"macchina", yt:"lat machine presa stretta triangolo tecnica", src:GEN,
     how:["Maniglia a triangolo, cosce bloccate sotto i rulli.","Petto in fuori, porta la maniglia verso la parte alta del petto spingendo i gomiti verso il basso.","Risali lentamente fino a braccia distese."],
     err:["Dondolare con il busto.","Fermarsi a metà nella risalita."]},
+  cardioLeggero:{n:"Cardio leggero", step:0, inc:0, unit:"cyclette, vogatore o camminata", yt:"riscaldamento cyclette palestra", src:GEN, bw:true,
+    how:["3-5 minuti a ritmo tranquillo: devi riuscire a parlare.","Serve soprattutto se arrivi da fermo o hai freddo; se sei già caldo puoi accorciarlo."],
+    err:["Farlo intenso: deve scaldare, non stancare."]},
+  legSwing:{n:"Slanci delle gambe", step:0, inc:0, unit:"corpo libero", side:"per gamba", yt:"leg swings riscaldamento", src:GEN, bw:true,
+    how:["In piedi, una mano appoggiata al muro.","Slancia una gamba avanti e indietro in modo controllato, aumentando piano l'ampiezza.","Poi di lato, davanti all'altra gamba e verso l'esterno."],
+    err:["Inarcare la schiena per salire di più.","Slanci bruschi fin dalla prima ripetizione."]},
+  worldsGreatest:{n:"Affondo con rotazione", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"world's greatest stretch tecnica", src:GEN, bw:true,
+    how:["Fai un affondo lungo in avanti e appoggia le mani a terra all'interno del piede avanti.","Porta il gomito verso la caviglia, poi ruota il busto aprendo il braccio verso il soffitto.","Torna e cambia lato. 2-3 secondi per posizione, senza rimbalzare."],
+    err:["Ginocchio avanti che cade verso l'interno.","Ruotare solo il braccio senza il busto."]},
+  squatCorpo:{n:"Squat a corpo libero lento", step:0, inc:0, unit:"corpo libero", yt:"squat corpo libero tecnica", src:GEN, bw:true,
+    how:["Piedi come nello squat, braccia avanti per bilanciarti.","Scendi in 3 secondi fino in fondo, resta 1-2 secondi spingendo le ginocchia in fuori, risali."],
+    err:["Talloni che si alzano.","Fermarsi a metà discesa."]},
+  hingeBastone:{n:"Piegamento delle anche con bastone", step:0, inc:0, unit:"bastone o corpo libero", yt:"hip hinge bastone tecnica", src:GEN, bw:true,
+    how:["Bastone lungo la schiena: tocca testa, dorso e osso sacro.","Ginocchia appena piegate, spingi il bacino indietro e inclina il busto finché senti tirare dietro le cosce, senza perdere i tre contatti.","Risali spingendo il bacino in avanti."],
+    err:["Il bastone si stacca dalla zona lombare (schiena che si arrotonda).","Piegare troppo le ginocchia trasformandolo in uno squat."]},
+  rotBraccia:{n:"Circonduzioni delle braccia", step:0, inc:0, unit:"corpo libero", yt:"circonduzioni braccia riscaldamento", src:GEN, bw:true,
+    how:["Braccia tese, cerchi ampi e lenti in avanti e poi all'indietro.","Aggiungi qualche apertura e chiusura delle braccia davanti al petto."],
+    err:["Movimenti veloci e piccoli."]},
+  dislocazioni:{n:"Passaggi con bastone o elastico", step:0, inc:0, unit:"bastone o elastico", yt:"shoulder dislocates bastone", src:GEN, bw:true,
+    how:["Presa larga, braccia tese davanti alle cosce.","Porta il bastone sopra la testa e dietro la schiena, poi torna, senza piegare i gomiti.","Se non passa senza fastidio, allarga la presa."],
+    err:["Piegare i gomiti o inarcare la schiena per passare.","Forzare con dolore alla spalla."]},
+  pushupScapolari:{n:"Piegamenti scapolari", step:0, inc:0, unit:"corpo libero", yt:"scapular push up tecnica", src:GEN, bw:true,
+    how:["In posizione di piegamento (anche sulle ginocchia), braccia tese.","Senza piegare i gomiti, avvicina le scapole lasciando scendere il petto di pochi centimetri, poi spingi il pavimento allontanandole."],
+    err:["Piegare i gomiti.","Bacino che crolla."]},
   crunchInverso:{n:"Crunch inverso", step:0, inc:0, unit:"corpo libero", yt:"crunch inverso tecnica", src:GEN, bw:true,
     how:["Sdraiato, gambe piegate sollevate.","Porta le ginocchia verso il petto sollevando il bacino da terra, poi torna lentamente."],
     err:["Slanciare le gambe."]}
@@ -745,7 +770,7 @@ async function initSync(){
 /* ============ gruppi muscolari e sezioni ============ */
 const GROUPS = {
   legs:{n:"Gambe", c:"var(--g-legs)"}, chest:{n:"Petto", c:"var(--g-chest)"}, back:{n:"Schiena", c:"var(--g-back)"},
-  shoulders:{n:"Spalle", c:"var(--g-shoulders)"}, arms:{n:"Braccia", c:"var(--g-arms)"}, core:{n:"Core", c:"var(--g-core)"}, post:{n:"Posturale", c:"var(--g-post)"}
+  shoulders:{n:"Spalle", c:"var(--g-shoulders)"}, arms:{n:"Braccia", c:"var(--g-arms)"}, core:{n:"Core", c:"var(--g-core)"}, post:{n:"Posturale", c:"var(--g-post)"}, warm:{n:"Riscaldamento", c:"var(--muted)"}
 };
 const EXG = {
   gobletSquat:"legs", squat:"legs", splitSquat:"legs", affondiCamminati:"legs", stacco:"legs", rdlManubri:"legs", rdl:"legs", pressa:"legs", hackSquat:"legs", legCurl:"legs", legCurlSeduto:"legs", smithSquat:"legs", legExtension:"legs", calf:"legs",
@@ -754,6 +779,7 @@ const EXG = {
   military:"shoulders", lentoManubri:"shoulders", shoulderPress:"shoulders", alzateLaterali:"shoulders", facePull:"shoulders", alzateLateraliCavo:"shoulders",
   curlEZ:"arms", curlManubri:"arms", curlMartello:"arms", frenchPress:"arms", pushdown:"arms", curlCavo:"arms", curlScott:"arms", tricipitiOverheadCavo:"arms", tricipitiOverheadManubrio:"arms",
   deadBug:"core", pallof:"core", plank:"core", crunch:"core", crunchInverso:"core", backExt:"core",
+  cardioLeggero:"warm", legSwing:"warm", worldsGreatest:"warm", squatCorpo:"warm", hingeBastone:"warm", rotBraccia:"warm", dislocazioni:"warm", pushupScapolari:"warm",
   mobQuad:"post", mobProno:"post", neckFlex:"post", alzateProno:"post", alzateY:"post", wallSlide:"post", stretchPetto:"post", stretchCross:"post", stretchNuca:"post"
 };
 const PRE = ["mobQuad","mobProno","neckFlex"], POSTEND = ["alzateProno","alzateY","wallSlide"];
@@ -1125,6 +1151,7 @@ function renderProgramma(){
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-back)"></span><span class="t"><span class="n">Cambiare esercizi</span><span class="p">Variare gli esercizi dà gli stessi risultati di tenerli fissi. L'unico limite: se cambi un esercizio dei test, il confronto con i test precedenti salta. <span class="cite">Kassiano 2024</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-legs)"></span><span class="t"><span class="n">Muscolo allungato</span><span class="p">Gli esercizi che lavorano il muscolo in allungamento (leg curl da seduto, estensioni dei tricipiti sopra la testa) sembrano dare un po' più crescita, ma le prove sono poche e non tutte concordano. Il programma li preferisce perché non costano nulla; se manca la macchina, l'alternativa va bene. <span class="cite">Maeo 2021-22, Wolf 2025, Varovic 2024</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-legs)"></span><span class="t"><span class="n">Ampiezza del movimento</span><span class="p">Meglio il movimento completo, soprattutto per la forza. Le differenze con le ripetizioni parziali sono piccole. <span class="cite">Wolf 2023, ACSM 2026</span></span></span></div></li>
+      <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--muted)"></span><span class="t"><span class="n">Riscaldamento</span><span class="p">Bastano pochi minuti di movimenti dinamici e qualche serie leggera sul primo esercizio. Lo stretching statico breve (meno di 60 secondi per muscolo) cambia poco; tenute più lunghe riducono un po' la forza. <span class="cite">Behm 2016, Ribeiro 2021</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-legs)"></span><span class="t"><span class="n">Ripresa dopo lo stop</span><span class="p">La forza torna più in fretta della massa: per questo nella Fase 1 i pesi salgono appena chiudi le serie. <span class="cite">Psilander 2019</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--post)"></span><span class="t"><span class="n">Scarico</span><span class="p">Uno ogni 4-8 settimane o quando serve. Le settimane di test e l'interruttore di scarico seguono questa logica. <span class="cite">Bell 2023</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-arms)"></span><span class="t"><span class="n">Proteine</span><span class="p">Circa 1,6 g per kg al giorno bastano in media; oltre 2,2 g/kg non c'è beneficio dimostrato. <span class="cite">Morton 2018</span></span></span></div></li>
@@ -1143,7 +1170,7 @@ document.addEventListener("change", e => {
     else S.settings[k] = el.value;
     pushMeta(); render(); return;
   }
-  const w = e.target.closest("[data-warm]"); if(w && R){ R.warm[Number(w.dataset.warm)] = w.checked; saveDraft(); }
+  const w = e.target.closest("[data-warm]"); if(w && R){ if(!R.warm || Array.isArray(R.warm)) R.warm = {}; R.warm[w.dataset.warm] = w.checked; saveDraft(); }
 });
 
 /* ============ Guida ============ */
@@ -1172,7 +1199,7 @@ function renderGuida(){
   let body = "";
   if(guideTab === "esercizi"){
     const keys = Object.keys(EX).filter(k => !q || EX[k].n.toLowerCase().includes(q));
-    const order = ["legs","chest","back","shoulders","arms","core","post"];
+    const order = ["warm","legs","chest","back","shoulders","arms","core","post"];
     body = `<input type="search" id="guideSearch" placeholder="Cerca un esercizio" value="${esc(guideQ)}" aria-label="Cerca un esercizio">` +
       order.map(g => { const ks = keys.filter(k => (EXG[k]||"core") === g); if(!ks.length) return ""; return `<div class="card stack"><div class="row"><span class="gdot" style="background:${GROUPS[g].c}"></span><h3>${GROUPS[g].n}</h3><span class="tiny muted">${ks.length}</span></div><ul class="exlist">${ks.map(k => `<li><button class="exrow" data-act="exInfo" data-k="${k}"><span class="t"><span class="n">${esc(EX[k].n)}</span><span class="p">${esc(EX[k].src)}</span></span><span class="chev">${svgI.chev}</span></button></li>`).join("")}</ul></div>`; }).join("") || `<div class="card empty">Nessun esercizio con questo nome.</div>`;
   } else {
@@ -1194,11 +1221,37 @@ function deloadP(p){
   if(q.t === "emom") q.min = Math.ceil(q.min/2);
   return q;
 }
-const WARMUP = [
-  ["5 minuti di cardio leggero", "Camminata in salita, vogatore o cyclette, a ritmo tranquillo."],
-  ["Mobilità di anche, caviglie e spalle", "8-10 ripetizioni per movimento: cerchi con le anche, piegamenti delle caviglie, rotazioni delle braccia."],
-  ["Serie di avvicinamento sul primo esercizio con i pesi", "10 ripetizioni con circa il 40% del peso di lavoro, 5 con il 60%, 3 con l'80%. Non contano come serie."]
-];
+// Riscaldamento: generale breve + mobilità dinamica scelta in base agli esercizi della seduta.
+// Le serie di avvicinamento sono indicate prima di ogni esercizio principale (wuHtml).
+function warmPlan(blocks){
+  const main = blocks.filter(b => secOf(b) === "main").flatMap(b => b.items.map(it => it.ex));
+  const g = new Set(main.map(k => EXG[k]));
+  const legs = g.has("legs"), upper = g.has("chest") || g.has("back") || g.has("shoulders");
+  const hinge = main.some(k => ["rdl","rdlManubri","stacco"].includes(k));
+  const out = [{k:"cardioLeggero", dose:"3-5 min"}];
+  if(legs) out.push({k:"legSwing", dose:"10 avanti-indietro + 10 di lato, per gamba"}, {k:"worldsGreatest", dose:"4 per lato"}, {k:"squatCorpo", dose:"8 lente"});
+  if(hinge) out.push({k:"hingeBastone", dose:"10"});
+  if(upper) out.push({k:"rotBraccia", dose:"10 avanti + 10 indietro"}, {k:"dislocazioni", dose:"10"}, {k:"pushupScapolari", dose:"10"});
+  return out;
+}
+const WU_MAIN = ["legs","chest","back","shoulders"];
+function wuSets(it, bi){
+  const ex = EX[it.ex]; const g = EXG[it.ex];
+  if(!ex || ex.bw || !ex.step || !WU_MAIN.includes(g)) return null;
+  for(let i=0;i<bi;i++) if(secOf(R.blocks[i], R.kind) === "main" && R.blocks[i].items.some(x => EXG[x.ex] === g)) return null; // solo il primo esercizio per zona
+  const p = it.p;
+  const reps = p.t === "test" ? 5 : p.t === "range" ? p.rmin : p.t === "pyr" ? Math.min(...p.reps) : p.t === "emom" ? 6 : p.reps;
+  if(reps == null) return null;
+  const scheme = reps <= 5 ? [[0.4,8],[0.6,5],[0.8,3]] : reps <= 9 ? [[0.5,8],[0.75,4]] : [[0.6,6]];
+  return {scheme, ex};
+}
+function wuHtml(it, bi){
+  const w = wuSets(it, bi); if(!w) return "";
+  const s = suggest(it.ex, it.p, R.deload);
+  const minKg = w.ex.unit.startsWith("bilanciere") ? 20 : 0;
+  const parts = w.scheme.map(([f, r]) => s ? `${r} × ${fmtKg(Math.max(minKg, roundStep(s.kg*f, w.ex.step)))} kg` : `${r} al ${Math.round(f*100)}%`);
+  return `<div class="hint small"><b>Avvicinamento</b> (non contano come serie, poco recupero): ${parts.join(" · ")}${s ? "" : " del peso di lavoro"}.</div>`;
+}
 let R = null;
 let tick = null, audioCtx = null, wakeLock = null;
 function cloneBlocks(blocks, deload){ return blocks.map(b => ({type:b.type, rest:b.rest, items:b.items.map(it => ({ex:it.ex, orig:it.orig, p: deload && !EXG[it.ex]?.startsWith("post") && EXG[it.ex] !== "post" ? deloadP(it.p) : it.p}))})); }
@@ -1208,13 +1261,13 @@ function startSession(){
   const sess = buildSession(pos, S.settings);
   const deload = !!($("#deloadToggle") && $("#deloadToggle").checked);
   const blocks = cloneBlocks(sess.blocks, deload);
-  R = {id:uid(), date:t, pos, code:sess.code, title:sess.title, kind:sess.kind, deload, blocks, bi:-1, screen:"warmup", seq:[], si:0, log:blocks.map(b => b.items.map(() => ({sets:[]}))), restEnd:null, startedAt:Date.now(), notes:"", warm:[false,false,false]};
+  R = {id:uid(), date:t, pos, code:sess.code, title:sess.title, kind:sess.kind, deload, blocks, bi:-1, screen:"warmup", seq:[], si:0, log:blocks.map(b => b.items.map(() => ({sets:[]}))), restEnd:null, startedAt:Date.now(), notes:"", warm:{}};
   initAudio(); saveDraft(); openRunner();
 }
 function startPosture(){
   const sess = buildPostureSession();
   const blocks = cloneBlocks(sess.blocks, false);
-  R = {id:uid(), date:todayStr(), pos:null, code:sess.code, title:sess.title, kind:"post", deload:false, blocks, bi:0, screen:"intro", seq:[], si:0, log:blocks.map(b => b.items.map(() => ({sets:[]}))), restEnd:null, startedAt:Date.now(), notes:"", warm:[true,true,true]};
+  R = {id:uid(), date:todayStr(), pos:null, code:sess.code, title:sess.title, kind:"post", deload:false, blocks, bi:0, screen:"intro", seq:[], si:0, log:blocks.map(b => b.items.map(() => ({sets:[]}))), restEnd:null, startedAt:Date.now(), notes:"", warm:{}};
   initAudio(); saveDraft(); openRunner();
 }
 function resumeSession(){ R = loadDraft(); if(!R) return; initAudio(); openRunner(); }
@@ -1287,8 +1340,15 @@ function rRender(){
   saveDraft();
 }
 function scrWarmup(){
-  return `<div class="stack"><span class="eyebrow">Prima di iniziare</span><h1>Riscaldamento · 10 minuti</h1>
-  <div class="card">${WARMUP.map(([t,d],i) => `<label class="check"><input type="checkbox" data-warm="${i}" ${R.warm[i]?"checked":""}><span><b>${esc(t)}</b><br><span class="small muted">${esc(d)}</span></span></label>`).join("")}</div>
+  if(!R.warm || Array.isArray(R.warm)) R.warm = {};
+  const plan = warmPlan(R.blocks);
+  const hasPost = R.blocks.some(b => secOf(b, R.kind) === "pre");
+  return `<div class="stack"><span class="eyebrow">Prima di iniziare</span><h1>Riscaldamento · ~${plan.length <= 5 ? 6 : 8} minuti</h1>
+  <p class="small muted">Movimenti dinamici, senza fermarti nelle posizioni. Tocca il nome per vedere come si fa.</p>
+  <div class="card">${plan.map(x => `<div class="check warmrow"><input type="checkbox" data-warm="${x.k}" ${R.warm[x.k]?"checked":""} aria-label="${esc(EX[x.k].n)}"><button class="linkish" data-act="exInfo" data-k="${x.k}"><b>${esc(EX[x.k].n)}</b><br><span class="small muted">${esc(x.dose)}</span></button></div>`).join("")}</div>
+  ${hasPost ? `<p class="small muted">Subito dopo trovi i 3 esercizi posturali: fanno parte del riscaldamento.</p>` : ""}
+  <div class="hint small"><b>Stretching statico?</b> Prima dei pesi non serve. Se un punto è rigido, tienilo al massimo 30 secondi e poi fai qualche ripetizione dinamica: tenute più lunghe possono ridurre un po' la forza. Gli allungamenti lunghi vanno a fine seduta o nella routine posturale a casa.</div>
+  <div class="hint small"><b>Serie di avvicinamento:</b> te le indico prima del primo esercizio di ogni zona (gambe, petto, schiena, spalle), con i pesi già calcolati.</div>
   <button class="btn primary big" data-act="toIntro">Inizia gli esercizi</button></div>`;
 }
 function sugHtml(exKey, p){
@@ -1312,6 +1372,7 @@ function scrIntro(){
     <p class="num" style="font-weight:600">${esc(shortP(it.p, ex))}${restShort(it.p) && !isJs ? " · recupero " + restShort(it.p) : ""}</p>
     <p class="small muted">${esc(prescText(it.p, ex))}</p>
     ${sugHtml(it.ex, it.p)}
+    ${canRamp(b) ? "" : wuHtml(it, R.bi)}
     <div class="stack-sm"><span class="eyebrow">In breve</span><ul class="how small">${ex.how.slice(0,2).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>
     <div class="row"><button class="btn sm" data-act="exInfo" data-k="${it.ex}">${svgI.info} Tecnica completa</button>${R.kind !== "post" && EXG[it.orig || it.ex] !== "post" && altOf(it.orig || it.ex).length && !R.log[R.bi][i].sets.length ? `<button class="btn sm" data-act="swapOpen" data-ii="${i}">Cambia</button>` : ""}<a class="btn sm ghost" href="https://www.youtube.com/results?search_query=${encodeURIComponent(ex.yt)}" target="_blank" rel="noopener">Video ↗</a></div></div>`; }).join("")}
   ${canRamp(b) ? `<div class="hint warn small"><b>Prima volta con questo esercizio.</b> Trova il peso con una o due serie di prova: non contano come serie e l'app ti dice da che peso partire.</div><button class="btn primary big" data-act="rampStart">Trova il peso</button><button class="btn" data-act="startEx">Conosco già il peso: inizia</button>`
