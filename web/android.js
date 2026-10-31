@@ -40,7 +40,7 @@
     render();
   };
   window.onUpdateProgress = function(p){
-    if(p === -2) U.msg = "Consenti a Ripresa Forza di installare app, poi torna qui e tocca di nuovo Aggiorna.";
+    if(p === -2) U.msg = "Consenti a TrainUP di installare app, poi torna qui e tocca di nuovo Aggiorna.";
     else if(p === -1) U.msg = "Download non riuscito. Riprova.";
     U.progress = p >= 0 && p < 100 ? p : null;
     if(p === 100) U.msg = "Download completato: conferma l'installazione.";
@@ -67,12 +67,12 @@
       localStorage.setItem(LS, JSON.stringify(o.data));
       if(o.draft) localStorage.setItem(DRAFT, JSON.stringify(o.draft)); else localStorage.removeItem(DRAFT);
       S = load(); U.bmsg = "Dati ripristinati.";
-    }catch(e){ U.bmsg = "Questo file non è un backup di Ripresa Forza."; }
+    }catch(e){ U.bmsg = "Questo file non è un backup di TrainUP."; }
     render();
   };
   function exportBackup(){
     const o = {app:"ripresa-forza", v:1, savedAt:new Date().toISOString(), data:S, draft:loadDraft()};
-    A.saveFile(`ripresa-forza-backup-${todayStr()}.json`, JSON.stringify(o));
+    A.saveFile(`trainup-backup-${todayStr()}.json`, JSON.stringify(o));
   }
 
   // --- scheda "App e dati" in fondo a Programma ---

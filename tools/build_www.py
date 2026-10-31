@@ -7,7 +7,7 @@ android = (root / "web/android.js").read_text(encoding="utf-8")
 src = re.sub(r'<link rel="preconnect"[^>]*>\s*', "", src)
 src = re.sub(r'<link rel="stylesheet" href="https://fonts\.googleapis\.com[^>]*>\s*', "", src)
 src = re.sub(r'<meta name="claude:[^>]*>\s*', "", src)
-src = re.sub(r"<title>.*?</title>", "<title>Ripresa Forza</title>", src, count=1)
+src = re.sub(r"<title>.*?</title>", "<title>TrainUP</title>", src, count=1)
 
 fonts = """<style>
 @font-face{font-family:"Geist";src:url("fonts/Geist-Variable.woff2") format("woff2");font-weight:100 900;font-display:swap}

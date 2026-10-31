@@ -7,7 +7,7 @@
 @font-face{font-family:"Geist";src:url("fonts/Geist-Variable.woff2") format("woff2");font-weight:100 900;font-display:swap}
 @font-face{font-family:"Geist Mono";src:url("fonts/GeistMono-Variable.woff2") format("woff2");font-weight:100 900;font-display:swap}
 </style>
-<title>Ripresa Forza</title>
+<title>TrainUP</title>
 <style>
 /* Layout: una colonna (max 600px), titolo grande per sezione, schede raggruppate, barra delle sezioni sospesa con effetto vetro */
 :root{
@@ -736,7 +736,7 @@ const TABS = [["oggi","Oggi"],["calendario","Calendario"],["progressi","Progress
 function render(){
   const body = {oggi:renderOggi, calendario:renderCal, progressi:renderProgressi, programma:renderProgramma, guida:renderGuida}[view]();
   const title = view === "oggi" ? (doneSessions().length ? "Oggi" : "Benvenuto") : TABS.find(t => t[0] === view)[1];
-  $("#app").innerHTML = `<div class="wrap"><header class="top"><div class="brand">${svgI.logo}<span>Ripresa Forza</span></div><div class="sync"><span id="syncDot" class="dot"></span><span id="syncTxt"></span></div></header><h1 class="ltitle">${title}</h1>${body}</div>
+  $("#app").innerHTML = `<div class="wrap"><header class="top"><div class="brand">${svgI.logo}<span>TrainUP</span></div><div class="sync"><span id="syncDot" class="dot"></span><span id="syncTxt"></span></div></header><h1 class="ltitle">${title}</h1>${body}</div>
   <nav class="nav" aria-label="Sezioni">${TABS.map(([v,l]) => `<button data-nav="${v}" ${view===v ? 'aria-current="page"' : ""}>${svgI[v]}<span>${l}</span></button>`).join("")}</nav>`;
   setSync(sync.state);
 }
@@ -1507,7 +1507,7 @@ initSync();
     render();
   };
   window.onUpdateProgress = function(p){
-    if(p === -2) U.msg = "Consenti a Ripresa Forza di installare app, poi torna qui e tocca di nuovo Aggiorna.";
+    if(p === -2) U.msg = "Consenti a TrainUP di installare app, poi torna qui e tocca di nuovo Aggiorna.";
     else if(p === -1) U.msg = "Download non riuscito. Riprova.";
     U.progress = p >= 0 && p < 100 ? p : null;
     if(p === 100) U.msg = "Download completato: conferma l'installazione.";
@@ -1534,12 +1534,12 @@ initSync();
       localStorage.setItem(LS, JSON.stringify(o.data));
       if(o.draft) localStorage.setItem(DRAFT, JSON.stringify(o.draft)); else localStorage.removeItem(DRAFT);
       S = load(); U.bmsg = "Dati ripristinati.";
-    }catch(e){ U.bmsg = "Questo file non è un backup di Ripresa Forza."; }
+    }catch(e){ U.bmsg = "Questo file non è un backup di TrainUP."; }
     render();
   };
   function exportBackup(){
     const o = {app:"ripresa-forza", v:1, savedAt:new Date().toISOString(), data:S, draft:loadDraft()};
-    A.saveFile(`ripresa-forza-backup-${todayStr()}.json`, JSON.stringify(o));
+    A.saveFile(`trainup-backup-${todayStr()}.json`, JSON.stringify(o));
   }
 
   // --- scheda "App e dati" in fondo a Programma ---

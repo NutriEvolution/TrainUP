@@ -43,13 +43,13 @@ jobs:
           if [[ "$GITHUB_REF" == refs/tags/v* ]]; then V="${GITHUB_REF_NAME#v}"; else V="0.0.${GITHUB_RUN_NUMBER}"; fi
           echo "VERSION=$V" >> "$GITHUB_ENV"
           gradle assembleRelease -PversionName="$V" --no-daemon --stacktrace
-          cp app/build/outputs/apk/release/app-release.apk "RipresaForza-$V.apk"
+          cp app/build/outputs/apk/release/app-release.apk "TrainUP-$V.apk"
 
       - name: Pubblica la release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: RipresaForza-${{ env.VERSION }}.apk
+          files: TrainUP-${{ env.VERSION }}.apk
           body_path: NOVITA.md
 
       - name: Salva l'APK (prova manuale)
@@ -57,4 +57,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: apk
-          path: RipresaForza-*.apk
+          path: TrainUP-*.apk

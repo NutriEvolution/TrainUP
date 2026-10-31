@@ -1,10 +1,10 @@
-# Ripresa Forza
+# TrainUP
 
-App Android per il programma di allenamento "Ripresa Forza" (forza e ipertrofia, 19 settimane a cicli, con routine posturale).
+App Android per il programma di allenamento "TrainUP" (forza e ipertrofia, 19 settimane a cicli, con routine posturale).
 
 ## Installazione
 1. Apri la pagina **Releases** di questo repository dal telefono.
-2. Scarica il file `RipresaForza-x.y.z.apk` dell'ultima versione.
+2. Scarica il file `TrainUP-x.y.z.apk` dell'ultima versione.
 3. Aprilo e consenti l'installazione da questa fonte quando Android lo chiede.
 
 Gli aggiornamenti successivi si installano dall'app: **Programma → App e dati → Cerca aggiornamenti** (l'app controlla anche da sola all'avvio).

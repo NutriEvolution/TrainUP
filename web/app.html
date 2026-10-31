@@ -728,7 +728,7 @@ const TABS = [["oggi","Oggi"],["calendario","Calendario"],["progressi","Progress
 function render(){
   const body = {oggi:renderOggi, calendario:renderCal, progressi:renderProgressi, programma:renderProgramma, guida:renderGuida}[view]();
   const title = view === "oggi" ? (doneSessions().length ? "Oggi" : "Benvenuto") : TABS.find(t => t[0] === view)[1];
-  $("#app").innerHTML = `<div class="wrap"><header class="top"><div class="brand">${svgI.logo}<span>Ripresa Forza</span></div><div class="sync"><span id="syncDot" class="dot"></span><span id="syncTxt"></span></div></header><h1 class="ltitle">${title}</h1>${body}</div>
+  $("#app").innerHTML = `<div class="wrap"><header class="top"><div class="brand">${svgI.logo}<span>TrainUP</span></div><div class="sync"><span id="syncDot" class="dot"></span><span id="syncTxt"></span></div></header><h1 class="ltitle">${title}</h1>${body}</div>
   <nav class="nav" aria-label="Sezioni">${TABS.map(([v,l]) => `<button data-nav="${v}" ${view===v ? 'aria-current="page"' : ""}>${svgI[v]}<span>${l}</span></button>`).join("")}</nav>`;
   setSync(sync.state);
 }
