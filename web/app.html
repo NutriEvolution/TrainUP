@@ -599,7 +599,7 @@ const PAT = [
 ];
 const ALT_NOTE = {
   tricipitiOverheadCavo:"consigliato: tricipite in allungamento", tricipitiOverheadManubrio:"consigliato: tricipite in allungamento",
-  legCurlSeduto:"consigliato: femorali in allungamento", hackSquat:"simile allo squat", pressa:"meno tecnica, più semplice da caricare",
+  legCurlSeduto:"consigliato: femorali in allungamento", hackSquat:"macchina, simile allo squat", pressa:"meno tecnica e più rapida; per il salto lo squat rende di più",
   rowMachine:"con appoggio al petto", gobletSquat:"più leggero, per imparare"
 };
 function altOf(k){
@@ -984,11 +984,18 @@ function openDay(ds){
   } else {
     if(ds >= t) h += pl ? `<p>Giorno di allenamento.${fc[ds] ? ` Scheda prevista: <b>${esc(posLabel(fc[ds]))} · ${esc(dn(buildSession(fc[ds], S.settings)))}</b>.` : ""}</p>` : `<p class="muted">Nessun allenamento segnato.</p>`;
     else h += pl ? `<p class="muted">Era segnato ma non risulta fatto. Il programma riparte dalla seduta che non hai fatto.</p>` : `<p class="muted">Nessun allenamento.</p>`;
+    if(ds >= t){ const nb = neighbourTraining(ds); if(nb) h += `<div class="hint warn small">${nb} c'è già un allenamento. Con sedute a corpo intero è meglio lasciare almeno un giorno di riposo in mezzo. Con 4 sedute a settimana una coppia di giorni consecutivi è inevitabile: va bene.</div>`; }
     h += `<div class="row"><button class="btn ${pl ? "" : "primary"}" data-act="togglePlan" data-d="${ds}">${pl ? "Togli dal programma" : "Segna come giorno di allenamento"}</button>${ds === t ? `<button class="btn primary" data-act="start">${svgI.play} Inizia</button>` : ""}</div>`;
   }
   if(po) h += `<p class="small"><span class="pill post">Routine posturale fatta</span></p>`;
   h += `</div>`;
   showSheet(h);
+}
+function neighbourTraining(ds){
+  const d = parseYmd(ds); const y = new Date(d); y.setDate(d.getDate()-1); const tm = new Date(d); tm.setDate(d.getDate()+1);
+  const busy = x => !!S.planned[x] || !!sessionOn(x);
+  const a = busy(ymd(y)), b = busy(ymd(tm));
+  return a && b ? "Sia il giorno prima sia quello dopo" : a ? "Il giorno prima" : b ? "Il giorno dopo" : "";
 }
 function showSheet(html){ const s = $("#sheet"); s.innerHTML = `<div class="sheet-bg" data-act="bgClose"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`; s.hidden = false; }
 function closeSheet(){ const s = $("#sheet"); s.hidden = true; s.innerHTML = ""; }
@@ -1136,10 +1143,11 @@ function renderProgramma(){
   <div class="card stack"><h2>Cosa dice la ricerca</h2><p class="small muted">Perché il programma è fatto così, in breve.</p>
     <ul class="exlist">
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--accent)"></span><span class="t"><span class="n">Volume</span><span class="p">Più serie fanno crescere di più, ma ogni serie in più rende meno. La crescita è buona già da circa 10 serie a settimana per muscolo; il programma sale da 9-10 a 12-18. <span class="cite">Pelland 2026, ACSM 2026</span></span></span></div></li>
-      <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--accent)"></span><span class="t"><span class="n">Frequenza</span><span class="p">Per la massa conta il totale delle serie, non in quante sedute le dividi. Per la forza aiuta ripetere gli esercizi più volte a settimana: per questo i fondamentali tornano in più sedute. <span class="cite">Schoenfeld 2019, Pelland 2026</span></span></span></div></li>
+      <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--accent)"></span><span class="t"><span class="n">Frequenza</span><span class="p">Per la massa conta il totale delle serie, non in quante sedute le dividi. Per la forza aiuta ripetere gli esercizi più volte a settimana: per questo i fondamentali tornano in più sedute. Tra due sedute a corpo intero conviene almeno un giorno di riposo, ma non più di tre. <span class="cite">Schoenfeld 2019, Pelland 2026, NSCA</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--accent)"></span><span class="t"><span class="n">Cedimento</span><span class="p">Non serve arrivarci. Fondamentali con 1-3 ripetizioni in canna, complementari più vicini al limite. <span class="cite">Refalo 2023, ACSM 2026</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--accent)"></span><span class="t"><span class="n">Carichi</span><span class="p">Pesi leggeri e pesanti fanno crescere in modo simile, ma la forza massima cresce di più con pesi alti: da qui le serie da 3-5 e da 8 nelle fasi avanzate. <span class="cite">Schoenfeld 2017, ACSM 2026</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-back)"></span><span class="t"><span class="n">Macchine o pesi liberi</span><span class="p">Stessa crescita. La forza migliora soprattutto nell'esercizio che alleni: per diventare forte su squat e panca, tieni il bilanciere su quelli; per il resto scegli liberamente. <span class="cite">Haugen 2023</span></span></span></div></li>
+      <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-legs)"></span><span class="t"><span class="n">Pallavolo</span><span class="p">Gli esercizi in piedi con il bilanciere (squat, stacco) assomigliano di più al salto e si trasferiscono meglio della pressa: per questo lo squat resta l'esercizio principale. La pressa va bene come complementare o quando serve fare in fretta. <span class="cite">NSCA</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-back)"></span><span class="t"><span class="n">Cambiare esercizi</span><span class="p">Variare gli esercizi dà gli stessi risultati di tenerli fissi. L'unico limite: se cambi un esercizio dei test, il confronto con i test precedenti salta. <span class="cite">Kassiano 2024</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-legs)"></span><span class="t"><span class="n">Muscolo allungato</span><span class="p">Gli esercizi che lavorano il muscolo in allungamento (leg curl da seduto, estensioni dei tricipiti sopra la testa) sembrano dare un po' più crescita, ma le prove sono poche e non tutte concordano. Il programma li preferisce perché non costano nulla; se manca la macchina, l'alternativa va bene. <span class="cite">Maeo 2021-22, Wolf 2025, Varovic 2024</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-legs)"></span><span class="t"><span class="n">Ampiezza del movimento</span><span class="p">Meglio il movimento completo, soprattutto per la forza. Le differenze con le ripetizioni parziali sono piccole. <span class="cite">Wolf 2023, ACSM 2026</span></span></span></div></li>
