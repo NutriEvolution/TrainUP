@@ -688,7 +688,7 @@ function suggest(exKey, p, deload){
   const h = history(exKey).filter(x => !x.deload);
   const mult = deload ? 0.85 : 1;
   const done = sets => sets.filter(z => z.kg != null);
-  const fromRM = (rm) => { const k8 = last8RM(exKey); if(!k8) return null; const f = rm===12 ? 0.875 : rm===10 ? 0.95 : 1; return {kg: roundStep(k8*f*mult, ex.step), why:`stima dal tuo test: 8 ripetizioni con ${fmtKg(k8)} kg`}; };
+  const fromRM = (rm) => { const k8 = last8RM(exKey); if(!k8) return null; const f = pctRM(rm) / pctRM(8); return {kg: roundStep(k8*f*mult, ex.step), why:`stima dal tuo test: 8 ripetizioni con ${fmtKg(k8)} kg`}; };
   if(p.t === "fixed" || p.t === "emom"){
     const same = h.filter(x => (x.e.p.t === "fixed" || x.e.p.t === "emom") && x.e.p.rm === p.rm);
     const lastF = same[same.length-1];
@@ -1064,7 +1064,10 @@ function runSwapSheet(ii){
 
 /* ============ Progressi ============ */
 const TESTED = ["squat","pressa","panca","rematoreBil","military","curlEZ","frenchPress"];
-const e1rm = (kg, r) => kg * (1 + r/30);
+// Relazione %1RM-ripetizioni (NSCA, Essentials 4ª ed., tab. 17.7); oltre 15 ripetizioni si usa la formula di Epley.
+const NSCA_PCT = {1:100, 2:95, 3:93, 4:90, 5:87, 6:85, 7:83, 8:80, 9:77, 10:75, 11:70, 12:67, 13:66, 14:66, 15:65};
+const pctRM = r => NSCA_PCT[Math.round(r)] || 100 / (1 + r/30);
+const e1rm = (kg, r) => kg * 100 / pctRM(r);
 function sparkSvg(vals){
   if(vals.length < 2) return "";
   const w = 96, hgt = 30, pad = 3, mn = Math.min(...vals), mx = Math.max(...vals), rng = mx - mn || 1;

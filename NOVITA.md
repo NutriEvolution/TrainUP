@@ -1,4 +1,2 @@
-Novità della 1.2.1
-- Avviso nel calendario se segni due allenamenti in giorni consecutivi
-- Nota per la pallavolo: perché lo squat resta l'esercizio principale
-- Piccole correzioni ai consigli sugli esercizi
+Novità della 1.2.2
+- I pesi stimati dai test (8RM) e il massimale stimato ora usano la tabella percentuale-ripetizioni del manuale NSCA: per le serie da 12 il peso consigliato è un po' più prudente
