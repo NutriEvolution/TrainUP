@@ -308,6 +308,8 @@ details.wk[open] summary::after{transform:rotate(-135deg)}
 .o-banner b{display:block;color:var(--accent-text)}
 .o-banner span{font-size:13px}
 .o-switch{margin-top:12px}
+.o-inprog{margin-top:14px;padding:12px 14px;border-radius:14px;background:var(--accent-soft);color:var(--accent-text);display:flex;flex-direction:column;gap:2px}
+.o-inprog span{font-size:13px}
 </style>
 
 <div id="app"></div>
@@ -355,7 +357,7 @@ const EX = {
   pancaInclinataManubri:{n:"Panca inclinata con manubri", step:2, inc:2, unit:"manubri (peso di uno)", yt:"panca inclinata manubri tecnica", src:"PE1 pp. 224-226",
     how:["Come la panca piana con manubri: scapole strette, piedi a terra, gomiti a 45-60°.","PE1 nota che l'inclinazione conta poco: serve soprattutto a variare lo stimolo."],
     err:["Gomiti alti.","Inarcarsi per spingere di più."]},
-  pancaStretta:{n:"Panca stretta", step:2.5, inc:2.5, unit:"bilanciere", yt:"panca presa stretta tricipiti tecnica", src:GEN,
+  pancaStretta:{n:"Panca stretta", step:2.5, inc:2.5, unit:"bilanciere", yt:"panca presa stretta tricipiti tecnica", src:"PE1 p. 222",
     how:["Come la panca piana, con le mani alla larghezza delle spalle o poco meno.","Gomiti vicini al busto durante la discesa.","Tocca il petto nella parte bassa e distendi le braccia."],
     err:["Presa troppo stretta che sforza i polsi.","Gomiti che si aprono."]},
   chestPress:{n:"Chest press", step:2.5, inc:2.5, unit:"macchina", yt:"chest press macchina tecnica", src:"PE1 pp. 229-230",
@@ -436,9 +438,9 @@ const EX = {
   curlMartello:{n:"Curl a martello", step:1, inc:1, unit:"manubri (peso di uno)", yt:"curl a martello tecnica", src:"PE1 pp. 324-326",
     how:["Palmi uno verso l'altro per tutto il movimento; il manubrio arriva davanti alla spalla."],
     err:["Gomiti che scappano in avanti."]},
-  frenchPress:{n:"French press", step:2.5, inc:2.5, unit:"bilanciere EZ", yt:"french press tecnica", src:GEN,
-    how:["Sdraiato sulla panca, braccia verticali.","Piega solo i gomiti portando il bilanciere verso la fronte, poi distendi.","Gomiti fermi e stretti."],
-    err:["Gomiti che si aprono.","Muovere le spalle per aiutarsi."]},
+  frenchPress:{n:"French press", step:2.5, inc:2.5, unit:"bilanciere EZ", yt:"french press tecnica", src:"PE1 pp. 342-343, 355-356",
+    how:["Sdraiato sulla panca, braccia verticali: l'omero resta flesso a circa 90° per tutto l'esercizio.", "Piega solo i gomiti portando il bilanciere verso la fronte, poi distendi.", "Gomiti fermi, senza allargarli. Con i manubri accompagna l'estensione ruotando i palmi verso i piedi (pronazione)."],
+    err:["Gomiti che si allargano.", "Omero che si muove avanti e indietro per aiutarsi."]},
   pushdown:{n:"Pushdown ai cavi con corda", step:2.5, inc:2.5, unit:"cavi", yt:"pushdown corda tricipiti tecnica", src:"PE1 pp. 350-353",
     how:["In piedi, braccia ferme lungo i fianchi.","Parti con il gomito piegato oltre i 90° e arriva a gomiti distesi, ruotando le mani verso l'esterno in fondo."],
     err:["Gomiti che si allargano.","Ginocchia piegate."]},
@@ -448,12 +450,12 @@ const EX = {
   pallof:{n:"Pallof press", step:2.5, inc:2.5, unit:"cavo o elastico", side:"per lato", yt:"pallof press", src:GEN,
     how:["Di fianco al cavo, maniglia al petto con due mani.","Distendi le braccia davanti a te senza lasciare che il busto ruoti verso il cavo, poi torna."],
     err:["Busto che ruota."]},
-  plank:{n:"Plank", step:0, inc:0, unit:"corpo libero", yt:"plank tecnica", src:GEN, bw:true,
-    how:["Avambracci a terra sotto le spalle, corpo in linea dalla testa ai talloni.","Contrai addominali e glutei, respira normalmente."],
-    err:["Bacino troppo alto o che cede verso il basso."]},
-  crunch:{n:"Crunch", step:0, inc:0, unit:"corpo libero", yt:"crunch addominali tecnica", src:GEN, bw:true,
-    how:["Sdraiato, ginocchia piegate, mani vicino alle tempie senza tirare la testa.","Solleva le spalle arrotolando il busto, poi torna giù lentamente."],
-    err:["Tirare il collo con le mani."]},
+  plank:{n:"Plank", step:0, inc:0, unit:"corpo libero", yt:"plank tecnica", src:"PE2 pp. 129-130", bw:true,
+    how:["Avambracci a terra sotto le spalle, corpo in linea: spalle, tronco e bacino allineati.", "Zona lombare piatta (bacino leggermente in retroversione), addominali e glutei contratti, respira normalmente."],
+    err:["Schiena che si inarca e bacino che cede verso il basso.", "Bacino troppo alto."]},
+  crunch:{n:"Crunch", step:0, inc:0, unit:"corpo libero", yt:"crunch addominali tecnica", src:"PE2 pp. 29-31, 104-108", bw:true,
+    how:["Sdraiato, ginocchia piegate, mani incrociate sul petto o alla nuca senza tirare la testa.", "Bacino in leggera retroversione (zona lombare a terra) per tutta la ripetizione.", "Solleva le spalle arrotolando il busto, poi torna giù lentamente."],
+    err:["Perdere la retroversione e finire il movimento con le anche.", "Tirare il collo con le mani."]},
   backExt:{n:"Iperestensione su panca a 45°", step:0, inc:0, unit:"corpo libero", yt:"hyperextension panca 45 gradi tecnica", src:"PE2 pp. 300-302 e cap. 2", bw:true,
     how:["Al posto dei crunch: PE2 li sconsiglia a chi ha la lordosi lombare ridotta.","Cuscinetto all'altezza dell'anca, piedi bloccati.","Scendi piegandoti all'anca e risali mantenendo la curva lombare, senza inarcarti oltre la linea del corpo. Mento leggermente abbassato."],
     err:["Arrotondare la schiena in basso.","Iperestendere la zona lombare in alto."]},
@@ -493,24 +495,24 @@ const EX = {
   tricipitiOverheadManubrio:{n:"Estensioni sopra la testa con manubrio", step:2, inc:2, unit:"manubrio", yt:"estensioni tricipiti manubrio sopra la testa tecnica", src:"Maeo 2022",
     how:["Seduto con schienale, un manubrio tenuto a due mani sopra la testa.","Gomiti vicini e rivolti in avanti: scendi lentamente dietro la nuca.","Risali distendendo i gomiti."],
     err:["Gomiti che si allargano.","Zona lombare inarcata."]},
-  smithSquat:{n:"Squat al multipower (Smith)", step:2.5, inc:5, unit:"bilanciere guidato (escluso il bilanciere)", yt:"smith machine squat tecnica", src:GEN,
-    how:["Bilanciere sulle spalle come nello squat; piedi un po' più avanti rispetto al bilanciere.","Sblocca ruotando i polsi, scendi finché le cosce sono almeno parallele.","Risali spingendo con tutta la pianta; a fine serie riaggancia ruotando i polsi."],
-    err:["Piedi troppo indietro (ginocchia molto avanti e talloni che si alzano).","Ginocchia che cedono verso l'interno."]},
-  pecDeck:{n:"Croci alla macchina (pec deck)", step:2.5, inc:2.5, unit:"macchina", yt:"pec deck tecnica", src:GEN,
-    how:["Sedile regolato in modo che le maniglie siano all'altezza del petto.","Gomiti leggermente piegati e fermi: chiudi le braccia davanti al petto.","Torna lentamente finché senti allungare il petto, senza forzare la spalla."],
-    err:["Spalle che salgono verso le orecchie.","Apertura eccessiva che tira la spalla."]},
+  smithSquat:{n:"Squat al multipower (Smith)", step:2.5, inc:5, unit:"bilanciere guidato (escluso il bilanciere)", yt:"smith machine squat tecnica", src:"PE2 pp. 220-222",
+    how:["Bilanciere sulle spalle come nello squat classico, piedi sotto il bilanciere alla larghezza delle spalle.", "Sblocca ruotando i polsi e scendi come nello squat libero: il busto si inclina un po' in avanti e le ginocchia possono superare le punte.", "Risali spingendo con tutta la pianta; a fine serie riaggancia ruotando i polsi."],
+    err:["Piedi molto avanti e busto verticale (la variante \"salva schiena\"): sposta lo stress sul ginocchio e non protegge la schiena.", "Caricare molto più che nello squat libero solo perché la macchina guida."]},
+  pecDeck:{n:"Croci alla macchina (pec deck)", step:2.5, inc:2.5, unit:"macchina", yt:"pec deck tecnica", src:"PE1 pp. 216-217, 229-230",
+    how:["Regola il sedile in modo che i gomiti restino un po' più bassi delle spalle.", "Scapole strette e abbassate prima di partire, gomiti leggermente piegati e fermi.", "Chiudi le braccia davanti al petto, poi torna lentamente senza aprire oltre la linea delle spalle."],
+    err:["Gomiti alti all'altezza delle spalle (la versione classica, sconsigliata se la spalla dà fastidio).", "Spalle che salgono verso le orecchie."]},
   alzateLateraliCavo:{n:"Alzate laterali al cavo", step:1.25, inc:1.25, unit:"cavo (un braccio)", side:"per braccio", yt:"alzate laterali cavo tecnica", src:GEN,
     how:["Cavo in basso, impugnatura nella mano opposta al cavo, che passa davanti al corpo.","Solleva il braccio di lato fino all'altezza della spalla, gomito appena piegato.","Scendi lentamente fino a sotto il fianco."],
     err:["Slanci con il busto.","Polso più alto del gomito."]},
-  curlCavo:{n:"Curl al cavo basso", step:2.5, inc:2.5, unit:"cavi", yt:"curl al cavo tecnica", src:GEN,
-    how:["Barra corta o corda al cavo basso, in piedi a mezzo passo dalla macchina.","Gomiti fermi ai fianchi: piega fino in alto, poi torna lentamente a braccia distese."],
-    err:["Gomiti che vanno avanti.","Slanci con la schiena."]},
-  curlScott:{n:"Curl alla panca Scott (o macchina)", step:2.5, inc:2.5, unit:"bilanciere EZ o macchina", yt:"curl panca scott tecnica", src:GEN,
-    how:["Ascelle appoggiate al bordo del cuscino, braccia distese sul piano inclinato.","Piega i gomiti fino in alto, poi scendi lentamente quasi a braccia distese."],
-    err:["Rimbalzo in basso a braccia completamente distese.","Sollevare i gomiti dal cuscino."]},
-  latPresaStretta:{n:"Lat machine, presa stretta neutra", step:2.5, inc:2.5, unit:"macchina", yt:"lat machine presa stretta triangolo tecnica", src:GEN,
-    how:["Maniglia a triangolo, cosce bloccate sotto i rulli.","Petto in fuori, porta la maniglia verso la parte alta del petto spingendo i gomiti verso il basso.","Risali lentamente fino a braccia distese."],
-    err:["Dondolare con il busto.","Fermarsi a metà nella risalita."]},
+  curlCavo:{n:"Curl al cavo basso", step:2.5, inc:2.5, unit:"cavi", yt:"curl al cavo tecnica", src:"PE1 pp. 326-328",
+    how:["Barra dritta o corda al cavo basso, in piedi a mezzo passo dalla macchina.", "Tronco fermo e spalla leggermente flessa (gomiti un filo avanti): piega fino in alto, poi torna lentamente a braccia distese."],
+    err:["Spalla che si estende portando i gomiti indietro per aiutarsi.", "Slanci con la schiena."]},
+  curlScott:{n:"Curl su panca inclinata a 30° (gomiti liberi)", step:2.5, inc:2.5, unit:"bilanciere EZ o macchina", yt:"preacher curl panca 30 gradi", src:"PE1 pp. 304, 310-311",
+    how:["Panca inclinata a circa 30°: appoggia il petto sullo schienale e lascia le braccia libere davanti, gomiti NON bloccati su un cuscino.", "Spalla flessa a circa 90°: piega i gomiti fino in alto, poi scendi lentamente quasi a braccia distese."],
+    err:["Usare la panca Scott classica con i gomiti bloccati sul cuscino: il manuale la sconsiglia per lo stress sul gomito.", "Rimbalzo in basso a braccia completamente distese."]},
+  latPresaStretta:{n:"Lat machine, presa stretta neutra", step:2.5, inc:2.5, unit:"macchina", yt:"lat machine presa stretta triangolo tecnica", src:"PE1 pp. 249-250",
+    how:["Maniglia a triangolo (presa neutra), cosce bloccate sotto i rulli.", "Petto in fuori, porta la maniglia verso la parte alta del petto spingendo i gomiti verso il basso.", "Risali lentamente fino a braccia distese. Attiva il gran dorsale come la presa prona ed è la versione più adatta a chi inizia."],
+    err:["Dondolare con il busto.", "Fermarsi a metà nella risalita."]},
   cardioLeggero:{n:"Cardio leggero", step:0, inc:0, unit:"cyclette, vogatore o camminata", yt:"riscaldamento cyclette palestra", src:GEN, bw:true,
     how:["3-5 minuti a ritmo tranquillo: devi riuscire a parlare.","Serve soprattutto se arrivi da fermo o hai freddo; se sei già caldo puoi accorciarlo."],
     err:["Farlo intenso: deve scaldare, non stancare."]},
@@ -535,9 +537,9 @@ const EX = {
   pushupScapolari:{n:"Piegamenti scapolari", step:0, inc:0, unit:"corpo libero", yt:"scapular push up tecnica", src:GEN, bw:true,
     how:["In posizione di piegamento (anche sulle ginocchia), braccia tese.","Senza piegare i gomiti, avvicina le scapole lasciando scendere il petto di pochi centimetri, poi spingi il pavimento allontanandole."],
     err:["Piegare i gomiti.","Bacino che crolla."]},
-  crunchInverso:{n:"Crunch inverso", step:0, inc:0, unit:"corpo libero", yt:"crunch inverso tecnica", src:GEN, bw:true,
-    how:["Sdraiato, gambe piegate sollevate.","Porta le ginocchia verso il petto sollevando il bacino da terra, poi torna lentamente."],
-    err:["Slanciare le gambe."]}
+  crunchInverso:{n:"Crunch inverso", step:0, inc:0, unit:"corpo libero", yt:"crunch inverso tecnica", src:"PE2 pp. 99-100, 125", bw:true,
+    how:["Sdraiato su panca o a terra, gambe piegate sollevate, mani ai lati o alla panca.", "Fletti solo la zona lombare: stacca l'osso sacro e spingi le gambe verso l'alto, poi torna lentamente."],
+    err:["Muovere solo le anche portando le gambe avanti e indietro.", "Slanciare le gambe."]}
 };
 
 /* ============ prescrizioni ============ */
@@ -1002,15 +1004,17 @@ function renderOggi(){
     return `<button class="o-row" data-act="exInfo" data-k="${it.ex}" data-slot="${esc(slotKey(sess.kind, sess.code, baseEx(it)))}"><span class="dot" style="background:${grp(it.ex).c}"></span><span class="n">${esc(ex.n)}${it.orig ? ' <span class="swaptag">cambiato</span>' : it.variantOf ? ' <span class="swaptag">variante</span>' : ""}</span><span class="p">${esc(shortP(it.p, ex).split(" · ")[0])}${sg ? " · " + fmtKg(sg.kg) + " kg" : ""}</span></button>`; };
   let h = `<div class="o-hello o-sec first"><div class="o-label" style="text-transform:uppercase">${esc(fmtDate(t))}</div><h1>${greet}${name ? `,<br>${esc(name)}` : ""}</h1></div>`;
   if(typeof updateBannerHtml === "function") h += updateBannerHtml();
-  if(draft) h += `<button class="o-banner" data-act="resume"><span style="flex:1"><b>Allenamento in corso</b><span>${esc(dn(draft))} · tocca per riprendere</span></span>${svgI.play}</button>`;
   // seduta
   h += `<div class="o-sec"><div class="o-head"><span class="o-label">${doneToday ? "Prossima seduta" : "Seduta di oggi"}</span>${doneToday ? `<span class="r" style="color:var(--accent-text);font-weight:600">oggi fatto ✓</span>` : ""}</div>
     <div class="o-today"><div class="big">${esc(sess.code.length <= 2 ? sess.code : sess.code.slice(0,1))}</div><div><h2>${esc(dn(sess))}</h2><div class="o-sub">${esc(posLabel(pos))}</div>${note ? `<div class="o-note" style="color:var(--warn)">${esc(note)}</div>` : ""}</div></div>
     <div class="o-stats"><div><b>${estMinutes(sess.blocks, true)}′</b><span>durata</span></div><div><b>${sess.blocks.reduce((a,b)=>a+b.items.length,0)}</b><span>esercizi</span></div><div><b>${countSets(sess.blocks)}</b><span>serie</span></div></div>
     <div class="o-list">${shown.map(exLine).join("")}${mainItems.length > 3 ? `<button class="o-row" data-act="homeExpand"><span class="dot" style="background:var(--surface3)"></span><span class="n o-more">${homeExpand ? "Mostra meno" : `+ ${mainItems.length - 3} esercizi${S.settings.posture !== false ? " e la parte posturale" : ""}`}</span><span class="p">${homeExpand ? "‹" : "›"}</span></button>` : ""}</div>
     ${homeExpand && S.settings.posture !== false ? `<div style="margin-top:6px">${exRowsHtml(sess)}</div>` : ""}
-    <label class="switch o-switch"><input type="checkbox" id="deloadToggle"><span><b>Settimana di scarico</b><br><span class="small muted">Metà delle serie, pesi -15%</span></span></label>
-    <button class="btn primary big" data-act="start" style="margin-top:12px">${svgI.play} ${draft ? "Riprendi allenamento" : "Inizia allenamento"}</button></div>`;
+    ${draft ? (() => { const nSets = (draft.log||[]).flat().reduce((a,x) => a + ((x && x.sets) ? x.sets.length : 0), 0); const ora = draft.startedAt ? new Date(draft.startedAt) : null;
+      return `<div class="o-inprog"><b>Allenamento in corso</b><span>${esc(dn(draft))}${ora ? ` · iniziato ${draft.date === t ? "alle" : esc(fmtDate(draft.date)) + " alle"} ${pad(ora.getHours())}:${pad(ora.getMinutes())}` : ""} · ${nSets} ${nSets === 1 ? "serie registrata" : "serie registrate"}</span></div>
+      <button class="btn primary big" data-act="resume" style="margin-top:12px">${svgI.play} Riprendi allenamento</button><button class="btn ghost sm" data-act="askDiscard" style="display:block;margin:8px auto 0;color:var(--danger)">Elimina l'allenamento in corso</button></div>`; })()
+    : `<label class="switch o-switch"><input type="checkbox" id="deloadToggle"><span><b>Settimana di scarico</b><br><span class="small muted">Metà delle serie, pesi -15%</span></span></label>
+    <button class="btn primary big" data-act="start" style="margin-top:12px">${svgI.play} Inizia allenamento</button></div>`}`;
   // settimana
   const td = parseYmd(t); const mon = monday(td); const L = ["L","M","M","G","V","S","D"]; let days = "";
   for(let i=0;i<7;i++){ const d = new Date(mon); d.setDate(mon.getDate()+i); const ds = ymd(d); const done = sessionOn(ds), pl = !!S.planned[ds];
@@ -1763,6 +1767,8 @@ function act(a, d, e){
     case "start": closeSheet(); if(loadDraft()) resumeSession(); else startSession(); break;
     case "startPost": if(loadDraft()) resumeSession(); else startPosture(); break;
     case "resume": resumeSession(); break;
+    case "askDiscard": showSheet(`<div class="grab"></div><div class="stack"><h2>Eliminare l'allenamento in corso?</h2><p class="small muted">Le serie registrate finora vanno perse e la seduta non viene salvata. Il programma resta alla stessa seduta.</p><div class="row" style="gap:10px"><button class="btn" data-act="closeSheet" style="flex:1">Annulla</button><button class="btn" data-act="discardDraft" style="flex:1;background:var(--danger);color:#fff">Elimina</button></div></div>`); break;
+    case "discardDraft": clearDraft(); R = null; try{ window.Android && Android.cancelAlarm(); }catch(err){} closeSheet(); render(); break;
     case "discardDraft": clearDraft(); render(); break;
     case "openDay": openDay(d.d); break;
     case "exInfo": exSheet(d.k, d.slot); break;
