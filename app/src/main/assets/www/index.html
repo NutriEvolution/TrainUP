@@ -1042,17 +1042,32 @@ function renderOggi(){
     return `<button class="o-row" data-act="exInfo" data-k="${it.ex}" data-slot="${esc(slotKey(sess.kind, sess.code, baseEx(it)))}"><span class="dot" style="background:${grp(it.ex).c}"></span><span class="n">${esc(ex.n)}${it.orig ? ' <span class="swaptag">cambiato</span>' : it.variantOf ? ' <span class="swaptag">variante</span>' : ""}</span><span class="p">${esc(shortP(it.p, ex).split(" · ")[0])}${sg ? " · " + fmtKg(sg.kg) + " kg" : ""}</span></button>`; };
   let h = `<div class="o-hello o-sec first"><div class="o-label" style="text-transform:uppercase">${esc(fmtDate(t))}</div><h1>${greet}${name ? `,<br>${esc(name)}` : ""}</h1></div>`;
   if(typeof updateBannerHtml === "function") h += updateBannerHtml();
-  // seduta
-  h += `<div class="o-sec"><div class="o-head"><span class="o-label">${doneToday ? "Prossima seduta" : "Seduta di oggi"}</span>${doneToday ? `<span class="r" style="color:var(--accent-text);font-weight:600">oggi fatto ✓</span>` : ""}</div>
-    <div class="o-today"><div class="big">${esc(sess.code.length <= 2 ? sess.code : sess.code.slice(0,1))}</div><div><h2>${esc(dn(sess))}</h2><div class="o-sub">${esc(posLabel(pos))}</div>${note ? `<div class="o-note" style="color:var(--warn)">${esc(note)}</div>` : ""}</div></div>
-    <div class="o-stats"><div><b>${estMinutes(sess.blocks, true)}′</b><span>durata</span></div><div><b>${sess.blocks.reduce((a,b)=>a+b.items.length,0)}</b><span>esercizi</span></div><div><b>${countSets(sess.blocks)}</b><span>serie</span></div></div>
-    <div class="o-list">${shown.map(exLine).join("")}${mainItems.length > 3 ? `<button class="o-row" data-act="homeExpand"><span class="dot" style="background:var(--surface3)"></span><span class="n o-more">${homeExpand ? "Mostra meno" : `+ ${mainItems.length - 3} esercizi${S.settings.posture !== false ? " e la parte posturale" : ""}`}</span><span class="p">${homeExpand ? "‹" : "›"}</span></button>` : ""}</div>
-    ${homeExpand && S.settings.posture !== false ? `<div style="margin-top:6px">${exRowsHtml(sess)}</div>` : ""}
-    ${draft ? (() => { const nSets = (draft.log||[]).flat().reduce((a,x) => a + ((x && x.sets) ? x.sets.length : 0), 0); const ora = draft.startedAt ? new Date(draft.startedAt) : null;
-      return `<div class="o-inprog"><b>Allenamento in corso</b><span>${esc(dn(draft))}${ora ? ` · iniziato ${draft.date === t ? "alle" : esc(fmtDate(draft.date)) + " alle"} ${pad(ora.getHours())}:${pad(ora.getMinutes())}` : ""} · ${nSets} ${nSets === 1 ? "serie registrata" : "serie registrate"}</span></div>
-      <button class="btn primary big" data-act="resume" style="margin-top:12px">${svgI.play} Riprendi allenamento</button><button class="btn ghost sm" data-act="askDiscard" style="display:block;margin:8px auto 0;color:var(--danger)">Elimina l'allenamento in corso</button></div>`; })()
-    : `<label class="switch o-switch"><input type="checkbox" id="deloadToggle"><span><b>Settimana di scarico</b><br><span class="small muted">Metà delle serie, pesi -15%</span></span></label>
-    <button class="btn primary big" data-act="start" style="margin-top:12px">${svgI.play} Inizia allenamento</button></div>`}`;
+  // seduta: solo nel giorno di allenamento (giorno segnato), con un allenamento in corso o già fatto oggi
+  const isTrainDay = !!S.planned[t] || !!draft;
+  if(doneToday && !draft){
+    const nSets = (doneToday.ex||[]).reduce((a,e) => a + ((e.sets||[]).length), 0);
+    const nextUp = Object.entries(fc).find(([d]) => d > t);
+    h += `<div class="o-sec"><div class="o-head"><span class="o-label">Oggi</span><span class="r" style="color:var(--accent-text);font-weight:600">fatto ✓</span></div>
+      <div class="o-today"><div class="big">✓</div><div><h2>${esc(dn(doneToday))}</h2><div class="o-sub">${nSets} serie registrate${doneToday.pos ? " · " + esc(posLabel(doneToday.pos)) : ""}</div></div></div>
+      ${nextUp ? `<p class="o-sub" style="margin-top:12px">Prossimo allenamento: <b style="color:var(--ink)">${esc(fmtDate(nextUp[0]))}</b> · ${esc(dn(buildSession(nextUp[1], S.settings)))}</p>` : ""}</div>`;
+  } else if(isTrainDay){
+    h += `<div class="o-sec"><div class="o-head"><span class="o-label">${doneToday ? "Prossima seduta" : "Seduta di oggi"}</span>${doneToday ? `<span class="r" style="color:var(--accent-text);font-weight:600">oggi fatto ✓</span>` : ""}</div>
+      <div class="o-today"><div class="big">${esc(sess.code.length <= 2 ? sess.code : sess.code.slice(0,1))}</div><div><h2>${esc(dn(sess))}</h2><div class="o-sub">${esc(posLabel(pos))}</div>${note ? `<div class="o-note" style="color:var(--warn)">${esc(note)}</div>` : ""}</div></div>
+      <div class="o-stats"><div><b>${estMinutes(sess.blocks, true)}′</b><span>durata</span></div><div><b>${sess.blocks.reduce((a,b)=>a+b.items.length,0)}</b><span>esercizi</span></div><div><b>${countSets(sess.blocks)}</b><span>serie</span></div></div>
+      <div class="o-list">${shown.map(exLine).join("")}${mainItems.length > 3 ? `<button class="o-row" data-act="homeExpand"><span class="dot" style="background:var(--surface3)"></span><span class="n o-more">${homeExpand ? "Mostra meno" : `+ ${mainItems.length - 3} esercizi${S.settings.posture !== false ? " e la parte posturale" : ""}`}</span><span class="p">${homeExpand ? "‹" : "›"}</span></button>` : ""}</div>
+      ${homeExpand && S.settings.posture !== false ? `<div style="margin-top:6px">${exRowsHtml(sess)}</div>` : ""}
+      ${draft ? (() => { const nSets = (draft.log||[]).flat().reduce((a,x) => a + ((x && x.sets) ? x.sets.length : 0), 0); const ora = draft.startedAt ? new Date(draft.startedAt) : null;
+        return `<div class="o-inprog"><b>Allenamento in corso</b><span>${esc(dn(draft))}${ora ? ` · iniziato ${draft.date === t ? "alle" : esc(fmtDate(draft.date)) + " alle"} ${pad(ora.getHours())}:${pad(ora.getMinutes())}` : ""} · ${nSets} ${nSets === 1 ? "serie registrata" : "serie registrate"}</span></div>
+        <button class="btn primary big" data-act="resume" style="margin-top:12px">${svgI.play} Riprendi allenamento</button><button class="btn ghost sm" data-act="askDiscard" style="display:block;margin:8px auto 0;color:var(--danger)">Elimina l'allenamento in corso</button></div>`; })()
+      : `<label class="switch o-switch"><input type="checkbox" id="deloadToggle"><span><b>Settimana di scarico</b><br><span class="small muted">Metà delle serie, pesi -15%</span></span></label>
+      <button class="btn primary big" data-act="start" style="margin-top:12px">${svgI.play} Inizia allenamento</button></div>`}`;
+  } else {
+    const nextUp = Object.entries(fc).find(([d]) => d > t);
+    h += `<div class="o-sec"><div class="o-head"><span class="o-label">Oggi</span><span class="r">giorno di riposo</span></div>
+      ${nextUp ? `<div class="o-today"><div class="big" style="font-size:44px;color:var(--accent-mint)">${parseYmd(nextUp[0]).getDate()}</div><div><span class="o-sub" style="margin:0">Prossimo allenamento</span><h2>${esc(fmtDate(nextUp[0]).replace(/^./, c => c.toUpperCase()))}</h2><div class="o-sub">${esc(dn(buildSession(nextUp[1], S.settings)))} · ${esc(posLabel(nextUp[1]))}</div></div></div>`
+        : `<p class="o-sub" style="margin-top:8px">Nessun giorno di allenamento segnato. Segna i giorni nel calendario e la seduta comparirà qui il giorno stesso.</p>`}
+      <button class="btn ghost sm" data-act="trainToday" style="margin-top:10px;padding-left:0">Allenati oggi lo stesso</button></div>`;
+  }
   // settimana
   const td = parseYmd(t); const mon = monday(td); const L = ["L","M","M","G","V","S","D"]; let days = "";
   for(let i=0;i<7;i++){ const d = new Date(mon); d.setDate(mon.getDate()+i); const ds = ymd(d); const done = sessionOn(ds), pl = !!S.planned[ds];
@@ -1855,6 +1870,7 @@ function act(a, d, e){
       saveDraft(); closeSheet(); rRender(); break; }
     case "homeExpand": homeExpand = !homeExpand; render(); break;
     case "progPeriod": progPeriod = d.v; render(); break;
+    case "trainToday": S.planned[todayStr()] = true; pushMeta(); render(); break;
     case "progLift": progLift = d.k; render(); break;
     case "guideTab": guideTab = d.v; render(); break;
     case "closeSheet": closeSheet(); break;
@@ -1970,6 +1986,7 @@ initSync();
     if(p === 100) U.msg = "Download completato: conferma l'installazione.";
     render();
   };
+  window.onUpdateRejected = function(why){ U.progress = null; U.msg = "Aggiornamento bloccato: " + why + ". Non è stato installato nulla."; render(); };
   window.updateBannerHtml = function(){
     const i = U.info;
     if(!i || !i.available) return "";
