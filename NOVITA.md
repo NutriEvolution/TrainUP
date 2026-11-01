@@ -1,9 +1,4 @@
-Novità della 1.15.0
-- Nuova organizzazione: Oggi, Piano, Progressi, Guida (Calendario e Programma sono uniti in Piano)
-- Piano → La mia settimana: i giorni di tutti gli sport si scelgono in un solo posto, con i consigli sui giorni in comune; i giorni dei pesi si ripetono da soli
-- Ogni piano (palestra, corsa, salto, bici) si apre da Piano con le sue settimane e le sue opzioni; la priorità tra pesi e corsa è nel piano della corsa
-- Oggi: solo le sedute di oggi e i prossimi 3 allenamenti
-- Guida → Perché così: tutte le spiegazioni basate sulla ricerca, per sport
-- Impostazioni senza le opzioni dei piani
-- Icona del pallone da pallavolo per le sedute di salto
-- Corretto: una routine posturale interrotta faceva comparire in Oggi la seduta di palestra
+Novità della 1.15.1
+- La mia settimana più leggera: i consigli sui giorni sono chiusi in una riga, la priorità tra pesi e corsa è nel piano della corsa
+- Nuove fonti in Guida → Perché così: allenamento a casa (Calatayud 2015, Kikuchi 2017, Speirs 2016), pesi liberi e macchine (Hernández-Belmonte 2022), scarico (Coleman 2024), pesi e salti (Ma 2025, Zhao 2026), stallo (NSCA, cap. 21)
+- Salti e pesi nello stesso giorno: l'avviso ora spiega anche l'eccezione del complex training
