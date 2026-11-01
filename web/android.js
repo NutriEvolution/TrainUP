@@ -30,6 +30,8 @@
   window.androidBack = function(){
     const sh = $("#sheet");
     if(sh && !sh.hidden){ closeSheet(); return true; }
+    const rr = document.getElementById("runr");
+    if(rr && !rr.hidden){ act("runExit", {}, null); return true; }
     const rn = $("#runner");
     if(rn && !rn.hidden){ act("exitRunner", {}, null); return true; }
     if(view !== "oggi"){ view = "oggi"; render(); window.scrollTo(0,0); return true; }
