@@ -35,7 +35,8 @@
     const rn = $("#runner");
     if(rn && !rn.hidden){ act("exitRunner", {}, null); return true; }
     if(view === "impostazioni"){ view = setPrev || "oggi"; render(); window.scrollTo(0,0); return true; }
-    if(view !== "oggi"){ view = "oggi"; render(); window.scrollTo(0,0); return true; }
+    if(view === "piano" && planOpen){ planOpen = null; render(); window.scrollTo(0,0); return true; }
+    if(view !== "oggi"){ view = "oggi"; planOpen = null; weekDraft = null; render(); window.scrollTo(0,0); return true; }
     return false;
   };
 
