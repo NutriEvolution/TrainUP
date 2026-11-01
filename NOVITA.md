@@ -1,5 +1,5 @@
-Novità della 1.8.0
-- Corsa: piani bianco (inizio), rosso, blu e oro, blocco VO2max 4 × 4, gara 5-10 km, mezza maratona e maratona
-- Ritmi al km e frequenza cardiaca dal tuo tempo di gara (VDOT di Daniels); i test del piano li aggiornano da soli
-- Corse nella home, nel calendario e in Progressi; guida con timer e suoni, oppure registrazione dei dati dell'orologio
-- Le sedute si adattano ai giorni scelti restando nei limiti di volume di Daniels
+Novità della 1.9.0
+- Pesi e corsa insieme: in Programma → Settimana scegli la priorità (palestra, equilibrio, corsa) e i giorni di pesi e corsa, oppure fatti proporre una settimana
+- Avvisi quando pesi e corsa cadono nello stesso giorno, con il consiglio sull'ordine e sulle ore di pausa (Schumann 2022, Wilson 2012)
+- Con la priorità alla palestra e più di 3 corse, le corse facili si fermano a 30 minuti e le sedute dure della corsa vanno lontane dai pesi
+- "Pesi e corsa insieme" si può scegliere anche nella configurazione iniziale

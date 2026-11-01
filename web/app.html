@@ -249,6 +249,15 @@ details.wk[open] summary::after{transform:rotate(-135deg)}
 
 /* ===== stile aperto (home e progressi): niente riquadri, sezioni separate da linee sottili ===== */
 /* corsa */
+.cb-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:12px}
+.cb-day{display:flex;flex-direction:column;align-items:center;gap:6px}
+.cb-l{font-size:12px;font-weight:700;color:var(--muted)}
+.cb-t{width:100%;aspect-ratio:1;max-width:46px;border-radius:12px;border:1.5px dashed var(--line);background:none;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.cb-t svg{width:20px;height:20px}
+.cb-t.g.on{background:var(--accent);border:0;color:var(--accent-ink)}
+.cb-t.r.on{background:var(--c2);border:0;color:#fff}
+.cb-leg{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}.cb-leg span{display:flex;align-items:center;gap:6px}
+.cb-sw{width:10px;height:10px;border-radius:3px;display:inline-block}.cb-sw.g{background:var(--accent)}.cb-sw.r{background:var(--c2)}
 .rn-big{color:var(--c2)!important;font-size:0!important;display:flex;align-items:center;justify-content:center}
 .rn-feel{font-size:12.5px;color:var(--muted);display:inline-block;max-width:150px;text-align:right}
 .rn-list .o-row .p{max-width:48%}
@@ -1076,6 +1085,7 @@ function renderOggi(){
   // seduta: solo nel giorno di allenamento (giorno segnato), con un allenamento in corso o già fatto oggi
   const isTrainDay = gymOn() && (!!S.planned[t] || !!draft);
   const runToday = runTodayHtml(t);
+  h += comboTodayNote(t);
   if(!gymOn()){ /* solo corsa */ }
   else if(doneToday && !draft){
     const nSets = (doneToday.ex||[]).reduce((a,e) => a + ((e.sets||[]).length), 0);
@@ -1587,7 +1597,7 @@ function renderCorpo(){
 }
 
 /* ============ primo avvio: profilo, attività, livello ============ */
-const ACTIVITIES = [["palestra","Palestra (pesi)",true],["corsa","Corsa",true],["ciclismo","Ciclismo",false],["pallavolo","Pallavolo",false],["combinato","Allenamento combinato",false]];
+const ACTIVITIES = [["palestra","Palestra (pesi)",true],["corsa","Corsa",true],["ciclismo","Ciclismo",false],["pallavolo","Pallavolo",false],["combinato","Pesi e corsa insieme",true]];
 let onb = null;
 function onbHtml(){
   const d = onb, st = d.step, p = 4;
@@ -1603,10 +1613,10 @@ function onbHtml(){
     ${d.err ? `<div class="hint warn small">${esc(d.err)}</div>` : ""}`;
   else if(st === 2) b = `<h1>Cosa pratichi?</h1><p class="o-sub">Puoi sceglierne più di una.</p>
     <div class="o-list">${ACTIVITIES.map(([k,l,ok]) => `<button class="o-row" data-act="onbAct" data-v="${k}"><span class="dot" style="background:${(d.acts||[]).includes(k) ? "var(--accent)" : "var(--surface3)"}"></span><span class="n">${l}${ok ? "" : "<small>Programma in arrivo</small>"}</span><span class="p">${(d.acts||[]).includes(k) ? "✓" : ""}</span></button>`).join("")}</div>
-    ${(d.acts||[]).some(k => !ACTIVITIES.find(a => a[0] === k)[2]) ? `<div class="hint small">Per ora TrainUP ha i programmi per palestra e corsa. Ciclismo, pallavolo e allenamento combinato arriveranno con i prossimi aggiornamenti.</div>` : ""}`;
+    ${(d.acts||[]).some(k => !ACTIVITIES.find(a => a[0] === k)[2]) ? `<div class="hint small">Per ora TrainUP ha i programmi per palestra e corsa. Ciclismo e pallavolo arriveranno con i prossimi aggiornamenti.</div>` : ""}`;
   else b = levelSheetHtml(true, true);
   return `<div class="onb-in">${dots}<div class="stack">${b}</div>
-    <div class="row" style="gap:10px;margin-top:auto;padding-top:20px">${st > 0 ? `<button class="btn" data-act="onbBack" style="flex:none">Indietro</button>` : ""}<button class="btn primary big" data-act="onbNext" style="flex:1">${st === 3 || (st === 2 && !(d.acts||[]).includes("palestra")) ? "Inizia" : "Avanti"}</button></div></div>`;
+    <div class="row" style="gap:10px;margin-top:auto;padding-top:20px">${st > 0 ? `<button class="btn" data-act="onbBack" style="flex:none">Indietro</button>` : ""}<button class="btn primary big" data-act="onbNext" style="flex:1">${st === 3 || (st === 2 && !(d.acts||[]).some(k => k === "palestra" || k === "combinato")) ? "Inizia" : "Avanti"}</button></div></div>`;
 }
 function onbRender(){ let el = $("#onb"); if(!el){ el = document.createElement("div"); el.id = "onb"; document.body.appendChild(el); } el.innerHTML = onbHtml(); }
 function onbRead(){ const n = $("#onbName"); if(n) onb.name = n.value.trim(); const a = $("#onbAge"); if(a){ onb.age = numOf(a.value); onb.h = numOf($("#onbH").value); onb.w = numOf($("#onbW").value); } }
@@ -1614,6 +1624,7 @@ function onbFinish(){
   S.settings.name = onb.name || S.settings.name || "";
   S.profile = {...(S.profile||{}), sex:onb.sex || "M", birthYear: onb.age ? new Date().getFullYear() - onb.age : undefined, height: onb.h || undefined};
   S.settings.activities = onb.acts && onb.acts.length ? onb.acts : ["palestra"];
+  if(S.settings.activities.includes("combinato")) S.settings.activities = [...new Set(S.settings.activities.concat(["palestra","corsa"]))];
   if(onb.w) S.body = (S.body || []).concat([{id:uid(), date:todayStr(), t:Date.now(), w:onb.w}]);
   S.settings.levelChosen = true; pushMeta();
   const el = $("#onb"); if(el){ el.classList.add("out"); setTimeout(() => el.remove(), 300); }
@@ -1639,8 +1650,9 @@ function profileSheetHtml(){ const p = S.profile || {}; const a = ageNow();
 function renderProgramma(){
   const showRun = (S.settings.activities||[]).includes("corsa") || runActive();
   if(runProgTab == null) runProgTab = gymOn() ? "palestra" : "corsa";
-  const seg = `<div class="o-seg" style="margin-bottom:10px">${[["palestra","Palestra"],["corsa","Corsa"]].map(([k,l]) => `<button class="${runProgTab===k?"on":""}" data-act="progSport" data-v="${k}">${l}</button>`).join("")}</div>`;
+  const seg = `<div class="o-seg" style="margin-bottom:10px">${[["palestra","Palestra"],["corsa","Corsa"]].concat(comboOn() ? [["settimana","Settimana"]] : []).map(([k,l]) => `<button class="${runProgTab===k?"on":""}" data-act="progSport" data-v="${k}">${l}</button>`).join("")}</div>`;
   if(runProgTab === "corsa") return seg + renderCorsaProgramma();
+  if(runProgTab === "settimana" && comboOn()) return seg + renderSettimana();
   return seg + renderPalestraProgramma();
 }
 function renderPalestraProgramma(){
@@ -2262,7 +2274,7 @@ function adaptWeek(sessions, paces){
 // S.settings.run = {plan, days:[0..6 da lunedì], start:"AAAA-MM-GG" (lunedì della settimana 1), vdot, hrmax, raceDate, hist:[{date, vdot, src}]}
 const DOW_L = ["L","M","M","G","V","S","D"], DOW_N = ["lunedì","martedì","mercoledì","giovedì","venerdì","sabato","domenica"];
 function runCfg(){ return S.settings.run || null; }
-function gymOn(){ return (S.settings.activities || ["palestra"]).includes("palestra"); }
+function gymOn(){ const a = S.settings.activities || ["palestra"]; return a.includes("palestra") || a.includes("combinato"); }
 function runActive(){ const c = runCfg(); return !!(c && c.plan && RUN_PLANS[c.plan] && c.start && (c.days||[]).length); }
 function dowOf(ds){ return (parseYmd(ds).getDay() + 6) % 7; }
 function mondayStr(ds){ const d = parseYmd(ds); d.setDate(d.getDate() - dowOf(ds)); return ymd(d); }
@@ -2274,10 +2286,12 @@ function runWeekPlan(w){ // {giorno della settimana: seduta}
   const c = runCfg(); const P = RUN_PLANS[c.plan]; if(w < 0 || w >= P.weeks.length) return {};
   const days = c.days.slice().sort((a,b) => a-b);
   let ses = adaptWeek(planWeek(c.plan, w, days.length), runPaces(c.vdot || 40));
+  const pr = comboPriority(), gd = comboGymDays();
+  if(pr === "palestra" && days.length > 3) for(const x of ses) if(x.t === "E" && x.blocks[0][1] > 30){ x.blocks[0][1] = 30; x.title = x.title.replace(/^\d+′/, "30′"); x.forGym = true; }
   const out = {}; const raceHere = c.raceDate && w === P.weeks.length - 1;
   if(raceHere){ const ri = ses.findIndex(s => s.t === "RACE"); if(ri >= 0){ out[dowOf(c.raceDate)] = ses[ri]; ses.splice(ri, 1); } }
   const free = days.filter(d => out[d] == null); const hard = Object.keys(out).map(Number);
-  const pick = () => { let best = null, bd = -1; for(const d of free){ if(out[d] != null) continue; const dist = hard.length ? Math.min(...hard.map(h => Math.abs(h - d))) : 9; if(dist > bd){ bd = dist; best = d; } } return best; };
+  const pick = () => { let best = null, bd = -1; for(const d of free){ if(out[d] != null) continue; let dist = hard.length ? Math.min(...hard.map(h => Math.abs(h - d))) : 9; if(gd.includes(d)) dist += pr === "palestra" ? -2.5 : pr === "corsa" ? 0 : -0.5; if(gd.includes((d+1)%7)) dist -= pr === "corsa" ? 0 : 0.6; if(dist > bd){ bd = dist; best = d; } } return best; };
   const anchors = ses.filter(isAnchor), quals = ses.filter(s => !isAnchor(s) && isQual(s)), easy = ses.filter(s => !isAnchor(s) && !isQual(s));
   for(const s of anchors){ const d = [...free].reverse().find(x => out[x] == null); if(d == null) break; out[d] = s; hard.push(d); }
   for(const s of quals){ const d = pick(); if(d == null) break; out[d] = s; hard.push(d); }
@@ -2321,9 +2335,85 @@ function runDetailHtml(s, opt={}){
   const p = runPacesNow();
   const lines = s.blocks.map(b => blockLine(b, s, p));
   return `<div class="o-list rn-list">${lines.map((l, i) => `<div class="o-row" style="cursor:default"><span class="dot" style="background:${RUN_C[s.blocks[i][0]] || "var(--surface3)"}"></span><span class="n">${esc(l.n)}<small>${esc(l.what)}</small></span><span class="p">${l.pace ? esc(l.pace) : `<span class="rn-feel">${esc(l.feel)}</span>`}${l.hr ? `<br><span class="tiny">FC ${esc(l.hr)}</span>` : ""}</span></div>`).join("")}</div>
-    ${s.hr ? `<p class="tiny muted" style="margin-top:6px">${esc(s.hr)}</p>` : ""}${s.adapted && !opt.noAdapt ? `<p class="tiny muted" style="margin-top:6px">Accorciata per stare nei limiti del volume della tua settimana.</p>` : ""}`;
+    ${s.hr ? `<p class="tiny muted" style="margin-top:6px">${esc(s.hr)}</p>` : ""}${s.adapted && !opt.noAdapt ? `<p class="tiny muted" style="margin-top:6px">Accorciata per stare nei limiti del volume della tua settimana.</p>` : ""}${s.forGym ? `<p class="tiny muted" style="margin-top:6px">Accorciata a 30 minuti: con la priorità alla palestra e più di 3 corse a settimana (Wilson 2012).</p>` : ""}`;
 }
 const RUN_C = {W:"var(--surface3)", E:"var(--c2)", L:"var(--c2)", J:"var(--surface3)", ST:"var(--c3)", M:"var(--c4)", T:"var(--accent)", I:"var(--warn)", R:"var(--danger)", TT:"var(--danger)"};
+
+
+/* ============ allenamento combinato: palestra e corsa nella stessa settimana ============ */
+// Wilson et al. 2012 (meta-analisi, 21 studi): la corsa insieme ai pesi riduce un po' massa e forza delle gambe, non delle braccia;
+// l'effetto cresce con durata (> 20-30 min) e frequenza (> 3 a settimana) della corsa; la potenza è la più colpita.
+// Schumann et al. 2022 (meta-analisi, 43 studi): massa e forza massima non peggiorano; la forza esplosiva sì, soprattutto se
+// pesi e corsa sono nella stessa seduta (≤ 20 min tra i due); separati da almeno 3 ore l'effetto non c'è. L'ordine non conta.
+const PRIO = {palestra:{n:"Palestra", d:"Massa e forza prima di tutto: corse facili brevi, sedute dure della corsa lontane dai pesi."}, equilibrio:{n:"Equilibrio", d:"Pesi e corsa con lo stesso peso. Le sedute dure possono stare nei giorni dei pesi, separate da qualche ora."}, corsa:{n:"Corsa", d:"La corsa viene prima: i pesi diventano un complemento, anche con 2 sedute a settimana."}};
+function comboCfg(){ return S.settings.combo || null; }
+function comboOn(){ return gymOn() && (S.settings.activities||[]).includes("corsa"); }
+function comboPriority(){ const c = comboCfg(); return comboOn() && c ? c.priority || "equilibrio" : null; }
+function comboGymDays(){ const c = comboCfg(); return comboOn() && c ? c.gymDays || [] : []; }
+function comboPropose(g, r, prio){ // prova tutte le combinazioni di giorni per la corsa e tiene quella che costa meno
+  const gym = {2:[0,3], 3:[0,2,4], 4:[0,1,3,4], 5:[0,1,2,4,5]}[g] || [0,2,4];
+  const ws = {palestra:3, equilibrio:1, corsa:0.5}[prio], wb = {palestra:1, equilibrio:0.5, corsa:0.2}[prio];
+  let best = null, bc = 1e9;
+  for(let m = 0; m < 128; m++){ const d = [0,1,2,3,4,5,6].filter(i => m & (1<<i)); if(d.length !== r) continue;
+    let c = 0; for(const x of d){ if(gym.includes(x)) c += ws; if(gym.includes((x+1)%7)) c += wb; if(d.includes((x+1)%7)) c += r <= 4 ? 0.7 : 0.2; }
+    if(!d.some(x => x >= 5)) c += 2; if(c < bc){ bc = c; best = d; } }
+  return {gymDays:gym, runDays:best || []};
+}
+function comboWarnings(gd, rd, prio, runN){
+  const w = [];
+  const both = gd.filter(d => rd.includes(d));
+  if(both.length) w.push(["info", `${both.map(d => DOW_N[d]).join(", ")}: pesi e corsa nello stesso giorno. Lascia almeno 3 ore in mezzo: nella stessa seduta cresce meno la forza esplosiva (Schumann 2022); massa e forza massima non ne risentono.`]);
+  if(prio === "palestra" && runN > 3) w.push(["warn", `Più di 3 corse a settimana: frequenza e durata della corsa riducono un po' i guadagni delle gambe (Wilson 2012). Con questa priorità le corse facili si fermano a 30 minuti.`]);
+  const consec = gd.filter(d => gd.includes((d+1)%7)); if(gd.length <= 3 && consec.length) w.push(["warn", "Due sedute di pesi in giorni consecutivi: con sedute a corpo intero è meglio un giorno di riposo in mezzo."]);
+  if(runActive()){ const m = runWeekPlan(Math.max(0, runWeekIdx(todayStr()))); for(const [d, x] of Object.entries(m)){ const dd = Number(d); if(x.t === "L" && gd.includes((dd+1)%7)) w.push(["info", `Lungo di ${DOW_N[dd]} e pesi il giorno dopo: le gambe possono essere stanche. Se succede, alleggerisci gli esercizi per le gambe (indicazione generale).`]); } }
+  return w;
+}
+let comboDraft = null;
+function renderSettimana(){
+  const c = comboCfg() || {};
+  if(!comboDraft){ const P = runActive() ? RUN_PLANS[runCfg().plan] : null; comboDraft = {priority:c.priority || "palestra", gymDays:(c.gymDays || [0,2,4]).slice(), runDays:(runActive() ? runCfg().days : c.runDays || [1,3,5]).slice()}; }
+  const d = comboDraft; const P = runActive() ? RUN_PLANS[runCfg().plan] : null;
+  const rn = d.runDays.length, okRun = !P || (rn >= P.days[0] && rn <= P.days[P.days.length-1]);
+  const grid = DOW_L.map((l, i) => { const g = d.gymDays.includes(i), r = d.runDays.includes(i); return `<div class="cb-day"><span class="cb-l">${l}</span><button class="cb-t g ${g ? "on" : ""}" data-act="cbTog" data-k="gymDays" data-v="${i}" aria-label="Pesi ${DOW_N[i]}" aria-pressed="${g}">${svgI.oggi}</button><button class="cb-t r ${r ? "on" : ""}" data-act="cbTog" data-k="runDays" data-v="${i}" aria-label="Corsa ${DOW_N[i]}" aria-pressed="${r}">${runIcon().replace(/width="46" height="46"/, 'width="20" height="20"')}</button></div>`; }).join("");
+  const warns = comboWarnings(d.gymDays, d.runDays, d.priority, rn);
+  const saved = c.gymDays && JSON.stringify([c.priority, c.gymDays.slice().sort(), (runActive() ? runCfg().days : c.runDays || []).slice().sort()]) === JSON.stringify([d.priority, d.gymDays.slice().sort(), d.runDays.slice().sort()]);
+  return `<div class="o-sec first"><div class="o-label">Priorità</div><div class="o-seg" style="margin-top:8px">${Object.entries(PRIO).map(([k, x]) => `<button class="${d.priority === k ? "on" : ""}" data-act="cbPrio" data-v="${k}">${x.n}</button>`).join("")}</div><p class="small muted">${esc(PRIO[d.priority].d)}</p></div>
+    <div class="o-sec"><div class="o-head"><span class="o-label">La tua settimana</span><button class="rn-link" data-act="cbPropose">Proponi</button></div>
+      <div class="cb-grid">${grid}</div>
+      <div class="cb-leg small muted"><span><i class="cb-sw g"></i>Pesi · ${d.gymDays.length}</span><span><i class="cb-sw r"></i>Corsa · ${rn}${P ? ` (il piano ${esc(P.n.split(" · ")[0])} ne chiede ${P.days.join(" o ")})` : ""}</span></div>
+      ${!okRun ? `<p class="tiny" style="color:var(--warn);margin-top:6px">Il piano di corsa vuole ${P.days.join(" o ")} giorni: cambia i giorni o il piano.</p>` : ""}
+      ${!runActive() ? `<p class="tiny muted" style="margin-top:6px">Nessun piano di corsa attivo: i giorni di corsa si useranno quando ne scegli uno.</p>` : ""}
+      ${warns.map(([k, t]) => `<div class="hint ${k === "warn" ? "warn" : ""} small" style="margin-top:10px">${esc(t)}</div>`).join("")}
+      <button class="btn primary big" data-act="cbApply" style="margin-top:14px" ${okRun && d.gymDays.length ? "" : "disabled"}>${saved ? "Applicata ✓ · riapplica" : "Applica per le prossime 8 settimane"}</button>
+      <p class="tiny muted" style="margin-top:6px">Segna i giorni dei pesi nel calendario da oggi in poi (sostituisce quelli futuri) e usa i giorni di corsa nel piano.</p></div>
+    <div class="o-sec"><div class="o-label">Nei giorni con pesi e corsa</div>
+      <p class="small" style="margin-top:8px">Se puoi, separa le due sedute di almeno 3 ore. L'ordine non cambia i risultati: comincia da quella che ti interessa di più (con la priorità alla palestra, i pesi). Se devi farle di fila, scegli una corsa facile e falla dopo i pesi.</p></div>
+    <div class="o-sec"><div class="o-label">Cosa dice la ricerca</div>
+      <div class="o-list">
+      <div class="o-row" style="cursor:default;align-items:flex-start"><span class="dot" style="background:var(--accent);margin-top:7px"></span><span class="n">Massa e forza<small>Aggiungere la corsa ai pesi non riduce la crescita muscolare e la forza massima in media: le differenze con i soli pesi sono quasi zero. <span class="cite">Schumann 2022</span></small></span></div>
+      <div class="o-row" style="cursor:default;align-items:flex-start"><span class="dot" style="background:var(--warn);margin-top:7px"></span><span class="n">Forza esplosiva<small>È l'unica che ne risente, soprattutto con pesi e corsa nella stessa seduta. Con almeno 3 ore in mezzo l'effetto non si vede. Conta per salti e scatti, come nella pallavolo. <span class="cite">Schumann 2022, Wilson 2012</span></small></span></div>
+      <div class="o-row" style="cursor:default;align-items:flex-start"><span class="dot" style="background:var(--g-legs);margin-top:7px"></span><span class="n">Gambe, non braccia<small>L'interferenza riguarda i muscoli che lavorano in entrambe: la corsa non toglie nulla alla parte alta. Corse più lunghe e frequenti tolgono un po' di più. <span class="cite">Wilson 2012</span></small></span></div>
+      <div class="o-row" style="cursor:default;align-items:flex-start"><span class="dot" style="background:var(--c2);margin-top:7px"></span><span class="n">Corsa o bici<small>Nella meta-analisi del 2012 la corsa interferiva più della bici, forse per la parte eccentrica dell'appoggio; in quella del 2022 la differenza non c'era. <span class="cite">Wilson 2012, Schumann 2022</span></small></span></div>
+      <div class="o-row" style="cursor:default;align-items:flex-start"><span class="dot" style="background:var(--c4);margin-top:7px"></span><span class="n">Il fiato non ci perde<small>I pesi non riducono i miglioramenti del VO₂max dati dalla corsa. <span class="cite">Wilson 2012</span></small></span></div>
+      </div>
+      <p class="tiny muted" style="margin-top:8px">Wilson et al., <i>J Strength Cond Res</i> 2012 · Schumann et al., <i>Sports Med</i> 2022. Gli studi riguardano soprattutto persone non allenate o mediamente allenate, con poche ore di corsa a settimana. La regola sul lungo prima dei pesi è un'indicazione generale.</p></div>`;
+}
+function comboApply(){
+  const d = comboDraft; const t = todayStr();
+  for(const k of Object.keys(S.planned)) if(k >= t && !sessionOn(k)) delete S.planned[k];
+  const base = parseYmd(t); for(let i=0;i<56;i++){ const x = new Date(base); x.setDate(base.getDate()+i); if(d.gymDays.includes((x.getDay()+6)%7)) S.planned[ymd(x)] = true; }
+  S.settings.combo = {priority:d.priority, gymDays:d.gymDays.slice().sort((a,b) => a-b), runDays:d.runDays.slice().sort((a,b) => a-b)};
+  if(runActive()) S.settings.run = {...runCfg(), days:d.runDays.slice().sort((a,b) => a-b)};
+  pushMeta();
+}
+function comboTodayNote(t){
+  if(!comboOn()) return "";
+  const gym = !!S.planned[t] && !sessionOn(t), run = runDoneOn(t) ? null : runPlannedOn(t);
+  if(!gym || !run) return "";
+  const pr = comboPriority() || "equilibrio"; const hard = isQual(run);
+  const first = pr === "corsa" ? "la corsa" : "i pesi";
+  return `<div class="o-sec"><div class="o-head"><span class="o-label">Oggi pesi e corsa</span></div><p class="small" style="margin-top:8px">Comincia con ${first}${pr === "equilibrio" ? " (o con quella che preferisci: l'ordine non cambia i risultati)" : ""} e lascia almeno 3 ore prima dell'altra.${hard ? " La corsa di oggi è impegnativa: tenerla separata dai pesi conta di più." : " La corsa è facile: se non hai tempo puoi farla subito dopo i pesi."}</p></div>`;
+}
 
 /* ============ corsa: Oggi ============ */
 function runTodayHtml(t){
@@ -2575,7 +2665,7 @@ function act(a, d, e){
     case "progPeriod": progPeriod = d.v; render(); break;
     case "pickLevel": S.settings.level = d.v; pushMeta(); if(onb) onbRender(); else showSheet(levelSheetHtml(!S.settings.levelChosen)); break;
     case "pickStart": S.settings.startFrom = d.v; pushMeta(); if(onb) onbRender(); else showSheet(levelSheetHtml(!S.settings.levelChosen)); break;
-    case "onbNext": onbRead(); if(onb.step === 1){ if(!(onb.age >= 16)){ onb.err = onb.age ? "TrainUP è pensata per chi ha almeno 16 anni: sotto quell'età serve un allenatore che ti segua di persona." : "Scrivi la tua età."; onbRender(); break; } if(!(onb.h > 120 && onb.h < 230)){ onb.err = "Scrivi l'altezza in centimetri."; onbRender(); break; } onb.err = ""; } if(onb.step >= 3 || (onb.step === 2 && !(onb.acts||[]).includes("palestra"))) onbFinish(); else { onb.step++; onbRender(); } break;
+    case "onbNext": onbRead(); if(onb.step === 1){ if(!(onb.age >= 16)){ onb.err = onb.age ? "TrainUP è pensata per chi ha almeno 16 anni: sotto quell'età serve un allenatore che ti segua di persona." : "Scrivi la tua età."; onbRender(); break; } if(!(onb.h > 120 && onb.h < 230)){ onb.err = "Scrivi l'altezza in centimetri."; onbRender(); break; } onb.err = ""; } if(onb.step >= 3 || (onb.step === 2 && !(onb.acts||[]).some(k => k === "palestra" || k === "combinato"))) onbFinish(); else { onb.step++; onbRender(); } break;
     case "onbBack": onbRead(); onb.step = Math.max(0, onb.step-1); onbRender(); break;
     case "onbSex": onbRead(); onb.sex = d.v; onbRender(); break;
     case "onbAct": { const a = onb.acts || []; onb.acts = a.includes(d.v) ? a.filter(x => x !== d.v) : a.concat([d.v]); onbRender(); break; }
@@ -2648,7 +2738,11 @@ function act(a, d, e){
     case "testBack": { const st = curStep(); const ex = EX[R.blocks[R.bi].items[st.ii].ex]; const reps = readNum("inReps") ?? 0; const kg = roundStep(R.test.kg8*0.9, ex.step); R.log[R.bi][st.ii].sets.push({kg, reps, label:"richiamo"}); R.test.back++; R.inReps = null; if(reps < 8 || R.test.back >= 5) endTestEx(); else { R.afterRest = "test"; startRest(60); } break; }
     case "testEnd": endTestEx(); break;
     case "finish": finishSession(); break;
-    case "progSport": runProgTab = d.v; render(); break;
+    case "progSport": runProgTab = d.v; comboDraft = null; render(); break;
+    case "cbPrio": comboDraft.priority = d.v; render(); break;
+    case "cbTog": { const a = comboDraft[d.k], v = Number(d.v); comboDraft[d.k] = a.includes(v) ? a.filter(x => x !== v) : a.concat([v]); render(); break; }
+    case "cbPropose": { const P = runActive() ? RUN_PLANS[runCfg().plan] : null; const g = comboDraft.priority === "corsa" ? 2 : 3; let r = comboDraft.runDays.length || 3; if(P) r = Math.min(Math.max(r, P.days[0]), P.days[P.days.length-1]); if(comboDraft.priority === "palestra" && (!P || P.days[0] <= 3)) r = Math.min(r, 3); const x = comboPropose(g, r, comboDraft.priority); comboDraft.gymDays = x.gymDays; comboDraft.runDays = x.runDays; render(); break; }
+    case "cbApply": comboApply(); render(); break;
     case "runPlans": showSheet(runPlansSheet()); break;
     case "runPick": { const P = RUN_PLANS[d.v]; const c = runCfg() || {}; const t = todayStr(); const nm = (() => { const x = parseYmd(mondayStr(t)); x.setDate(x.getDate()+7); return ymd(x); })();
       const def = {3:[1,3,5], 4:[1,3,5,6], 5:[0,1,3,4,6], 6:[0,1,2,3,4,6], 7:[0,1,2,3,4,5,6]};
