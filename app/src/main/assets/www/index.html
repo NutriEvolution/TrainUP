@@ -733,6 +733,7 @@ const PHASES = {
 function slotsInWeek(w, s){ return weekKind(w)==="f3" ? (s.f3freq===4 ? 4 : 3) : 3; }
 
 function buildSession(pos, s){
+  if(pos.gen) return buildGenSession(pos, s);
   const w = pos.week, k = weekKind(w), slot = pos.slot;
   const legMain = s.legMain === "pressa" ? "pressa" : "squat";
   let code, title, blocks = [];
@@ -792,6 +793,74 @@ function buildSession(pos, s){
   { const pg = postureGymBlocks(); blocks = pg.pre.concat(blocks).concat(pg.end); }
   if(pos.learn) blocks = learnVersion(blocks);
   return applyHome(applyVariants(applySwaps({code, title, kind:k, phase:PHASES[k], blocks}, s), pos));
+}
+
+/* ============ programma su misura: regole di The Muscle and Strength Pyramid: Training (Helms, Morgan, Valdez, 3ª ed., 2025) ============ */
+// Split per giorni: tabella 7.2 (p. 227), tra le opzioni elencate per ogni numero di giorni. Serie per muscolo a settimana: tabella 7.4 (p. 232). Massimo ~11 serie per muscolo per seduta (p. 71).
+// Ripetizioni e RIR per tipo di esercizio: tabella 7.7 (p. 235); variazione tra sedute: tabella 7.8 (p. 237).
+// Scelta: sei schemi di movimento, una panca inclinata, due rematori (gomiti larghi e estensione di spalla), due trazioni verticali,
+// isolamento per quadricipiti, femorali, bicipiti, tricipiti, deltoidi laterali, polpacci (pp. 177-178, tabella 7.16).
+// Ordine: multiarticolari a peso libero prima (p. 178). Recupero: almeno 90 s, di più per i multiarticolari delle gambe (p. 201).
+// Settimana introduttiva: ~75% delle serie e un po' più lontano dal cedimento (p. 108). Conteggio frazionario: tabella 7.17 (p. 243).
+const GEN_VOL = [[6,"Minimo","4-8 serie, ~1-2,5 ore a settimana"],[10,"Basso","9-12 serie, ~3-4,5 ore"],[14,"Medio","13-16 serie, ~5-6,5 ore"],[18,"Alto","17-20 serie, ~7-8,5 ore"]];
+const GEN_SPLIT = {2:["FB","FB"], 3:["FB","FB","FB"], 4:["L","U","L","U"], 5:["L","UPS","UPL","L","U"], 6:["L","U","L","U","L","U"]};
+const GEN_ST = {FB:["Corpo intero",["quad","fem","petto","dorso","spalle","tri","bic","polp"]], L:["Gambe",["quad","fem","polp"]], U:["Parte alta",["petto","dorso","spalle","tri","bic"]], UPS:["Spinta",["petto","spalle","tri"]], UPL:["Tirata",["dorso","bic"]]};
+const GEN_MUS = {quad:"Quadricipiti", fem:"Femorali e glutei", petto:"Petto", dorso:"Dorso", spalle:"Spalle", tri:"Tricipiti", bic:"Bicipiti", polp:"Polpacci"};
+// tipo di esercizio (tabella 7.7): LF = gambe multiarticolare a peso libero; PL = gambe alla macchina o spinta con peso libero; MT = spinta alla macchina e trazioni; IS = isolamento
+const GEN_TYPE = {squat:"LF", stacco:"LF", rdl:"LF", rdlManubri:"LF", splitSquat:"LF", affondiCamminati:"LF", gobletSquat:"LF",
+  pressa:"PL", hackSquat:"PL", smithSquat:"PL", panca:"PL", pancaManubri:"PL", pancaInclinataManubri:"PL", military:"PL", lentoManubri:"PL",
+  chestPress:"MT", shoulderPress:"MT", latMachine:"MT", latPresaStretta:"MT", trazioni:"MT", rowMachine:"MT", pulley:"MT", rematoreManubrio:"MT", rematoreBil:"MT"};
+const GEN_RX = { // [ripetizioni A, ripetizioni B, RIR A, RIR B, recupero in s]
+  LF:[[4,6],[6,8],"3-4","2-3",180], PL:[[6,10],[8,12],"2-3","1-2",150], MT:[[6,10],[10,15],"1-2","0-2",120], IS:[[8,12],[12,20],"0-2","0-2",90]};
+// muscoli allenati (1 = principale, 0,5 = secondario, tabella 7.17 semplificata)
+const GEN_HIT = {petto:{tri:0.5}, inc:{tri:0.5, spalle:0.5}, vpush:{tri:0.5}, pull:{bic:0.5}};
+function genRot(s){ const sq = s.legMain === "pressa" ? "pressa" : "squat"; return {
+  quad:[sq, "legExtension", sq === "pressa" ? "hackSquat" : "pressa"], fem:["rdl", "legCurlSeduto"], petto:["panca", "pancaInclinataManubri"],
+  dorso:["latMachine", "rowMachine", "latPresaStretta", "pulley"], spalle:["alzateLaterali", "lentoManubri"], tri:["tricipitiOverheadCavo", "pushdown"],
+  bic:["curlManubri", "curlCavo"], polp:["calf"]}; }
+const GEN_NOTE = {rowMachine:"gomiti larghi, tirata alta", pulley:"gomiti stretti, estensione di spalla"};
+function genDays(){ const n = gymWeekDays().length || 3; return Math.max(2, Math.min(6, n)); }
+function genCfg(){ const g = S.settings.gen || {}; const lv = S.settings.level || "ripresa"; return {vol: g.vol || (lv === "allenato" ? 14 : 10)}; }
+function genOn(){ return S.settings.program === "principi"; }
+function genWeek(intro){ // le sedute della settimana, in ordine
+  const s = S.settings, n = genDays(), split = GEN_SPLIT[n], V = genCfg().vol, rot = genRot(s);
+  const occ = {}; split.forEach(t => GEN_ST[t][1].forEach(m => occ[m] = (occ[m] || 0) + 1));
+  // serie dirette per muscolo e seduta; braccia e spalle tengono conto del lavoro indiretto (mezza serie)
+  const per = {}; for(const m of ["quad","fem","petto","dorso","polp"]) per[m] = Math.max(2, Math.round(V / occ[m]));
+  const credit = {tri:0, bic:0, spalle:0}; const cnt = {};
+  split.forEach(t => GEN_ST[t][1].forEach(m => { if(m === "petto"){ const k = cnt.petto = (cnt.petto || 0); credit.tri += 0.5*per.petto; if(rot.petto[k % rot.petto.length] === "pancaInclinataManubri") credit.spalle += 0.5*per.petto; cnt.petto++; } if(m === "dorso") credit.bic += 0.5*per.dorso; }));
+  for(const m of ["spalle","tri","bic"]) per[m] = Math.max(2, Math.round(Math.max(occ[m]*2, V - credit[m]) / occ[m]));
+  const seen = {}, typeSeen = {}, used = {};
+  return split.map((t, si) => {
+    const v = (typeSeen[t] = (typeSeen[t] || 0) + 1) % 2 === 1 ? 0 : 1; // A, B, A...
+    const items = [];
+    for(const m of GEN_ST[t][1]){
+      const k = seen[m] = (seen[m] === undefined ? 0 : seen[m]); const L = rot[m];
+      let sets = Math.min(11, per[m]); const parts = sets > 4 && L.length > 1 ? [Math.ceil(sets/2), Math.floor(sets/2)] : [sets];
+      const inSess = new Set(items.map(x => x.ex));
+      parts.forEach((ps, j) => { let ex = L[(k + j) % L.length]; for(let q = 1; inSess.has(ex) && q < L.length; q++) ex = L[(k + j + q) % L.length]; inSess.add(ex); const ty = GEN_TYPE[ex] || "IS", R = GEN_RX[ty];
+        let lo = R[v][0], hi = R[v][1], buf = R[2+v], sets2 = ps;
+        if(intro){ sets2 = Math.max(1, Math.round(ps*0.75)); buf = buf.split("-").map(x => Number(x)+1).join("-"); }
+        items.push({ex, ty, p:P.range(sets2, lo, hi, buf, R[4], GEN_NOTE[ex] ? {note:GEN_NOTE[ex]} : {}), m}); });
+      seen[m] = k + parts.length;
+    }
+    const ord = {LF:0, PL:1, MT:2, IS:3}; items.sort((a, b) => ord[a.ty] - ord[b.ty]);
+    const code = String.fromCharCode(65 + si);
+    return {code, title:GEN_ST[t][0], type:t, variant:v, items};
+  });
+}
+function genVolume(week){ // serie a settimana per muscolo con il conteggio frazionario
+  const vol = {}; for(const m in GEN_MUS) vol[m] = 0;
+  for(const x of week) for(const it of x.items){ vol[it.m] += it.p.sets;
+    const h = it.m === "petto" ? (it.ex === "pancaInclinataManubri" ? GEN_HIT.inc : GEN_HIT.petto) : it.ex === "lentoManubri" ? GEN_HIT.vpush : it.m === "dorso" ? GEN_HIT.pull : null;
+    if(h) for(const [mm, f] of Object.entries(h)) vol[mm] += f*it.p.sets; }
+  return vol;
+}
+function buildGenSession(pos, s){
+  const wk = genWeek(pos.week === 1); const x = wk[pos.slot % wk.length];
+  let blocks = x.items.map(it => ({type:"single", items:[{ex:it.ex, p:it.p}]}));
+  { const pg = postureGymBlocks(); blocks = pg.pre.concat(blocks).concat(pg.end); }
+  return applyHome(applySwaps({code:x.code, title:x.title, kind:"gen", phase:{name:"Programma su misura", short:"Su misura", desc:""}, blocks}, s));
 }
 // Fase 1 di apprendimento (principianti): macchine al posto dei pesi liberi più tecnici e una ripetizione in più di margine
 const LEARN_SWAP = {gobletSquat:"pressa", squat:"pressa", pancaManubri:"chestPress", lentoManubri:"shoulderPress", rematoreManubrio:"rowMachine"};
@@ -923,7 +992,7 @@ function applyHome(sess){
 }
 function dn(o){ return /^Scheda/.test(o.title) ? o.title : o.code + " · " + o.title; }
 function weekInPhase(w){ const k = weekKind(w); if(k==="f1") return w; if(k==="f2") return w-5; if(k==="f3") return w-12; return null; }
-function posLabel(pos){ const k = weekKind(pos.week); const wp = weekInPhase(pos.week); if(pos.learn) return "Fase 1 · apprendimento · settimana " + pos.week; return (pos.cycle>1 ? "Ciclo " + pos.cycle + " · " : "") + PHASES[k].short + (wp ? " · settimana " + wp : "") ; }
+function posLabel(pos){ if(pos && pos.gen) return pos.week === 1 ? "Su misura · settimana introduttiva" : "Su misura · settimana " + pos.week; const k = weekKind(pos.week); const wp = weekInPhase(pos.week); if(pos.learn) return "Fase 1 · apprendimento · settimana " + pos.week; return (pos.cycle>1 ? "Ciclo " + pos.cycle + " · " : "") + PHASES[k].short + (wp ? " · settimana " + wp : "") ; }
 
 /* ============ stato e salvataggio ============ */
 const LS = "ripresa.v1";
@@ -957,6 +1026,13 @@ function programSessions(){ const r = S.settings.restartAt || 0; return doneSess
 function nextPosition(onDate){
   const list = programSessions();
   const last = list[list.length-1];
+  if(genOn()){ // programma su misura: settimane in fila; dopo più di 2 settimane di stop si rifà la settimana introduttiva (Pyramid, p. 108)
+    const lg = [...list].reverse().find(x => x.pos && x.pos.gen);
+    if(!lg) return {pos:{gen:true, week:1, slot:0}, note:null};
+    let {week, slot} = lg.pos; slot++; if(slot >= genDays()){ slot = 0; week++; }
+    if(daysBetween(lg.date, onDate || todayStr()) > 14) return {pos:{gen:true, week:1, slot:0}, note:"Sono passate più di 2 settimane dall'ultimo allenamento: si riparte con la settimana introduttiva (meno serie, più margine)."};
+    return {pos:{gen:true, week, slot}, note:null};
+  }
   if(!last || !last.pos) return {pos:startPos(), note:null};
   let {cycle, week, slot, learn} = last.pos;
   slot++;
@@ -972,7 +1048,7 @@ function nextPosition(onDate){
   }
   return {pos:learn ? {cycle, week, slot, learn} : {cycle, week, slot}, note};
 }
-function advance(pos){ let {cycle, week, slot, learn} = pos; slot++; if(slot >= slotsInWeek(week, S.settings)){ slot = 0; week++; } if(learn && week > 4){ week = 2; learn = false; } if(week > WEEKS){ week = 6; cycle++; } return learn ? {cycle, week, slot, learn} : {cycle, week, slot}; }
+function advance(pos){ if(pos.gen){ let {week, slot} = pos; slot++; if(slot >= genDays()){ slot = 0; week++; } return {gen:true, week, slot}; } let {cycle, week, slot, learn} = pos; slot++; if(slot >= slotsInWeek(week, S.settings)){ slot = 0; week++; } if(learn && week > 4){ week = 2; learn = false; } if(week > WEEKS){ week = 6; cycle++; } return learn ? {cycle, week, slot, learn} : {cycle, week, slot}; }
 function forecast(){ // assegna le sedute ai giorni pianificati futuri
   const t = todayStr();
   const days = Object.keys(S.planned).filter(d => S.planned[d] && d >= t && !sessionOn(d)).sort();
@@ -1032,7 +1108,14 @@ function suggest(exKey, p, deload){
     return fromRM(p.rm);
   }
   if(p.t === "range"){
-    const same = h.filter(x => x.e.p.t === "range");
+    const allR = h.filter(x => x.e.p.t === "range");
+    const same = allR.some(x => x.e.p.rmin === p.rmin && x.e.p.rmax === p.rmax) ? allR.filter(x => x.e.p.rmin === p.rmin && x.e.p.rmax === p.rmax) : allR;
+    if(same !== allR || !allR.length){} else if(allR.length && (allR[allR.length-1].e.p.rmin !== p.rmin || allR[allR.length-1].e.p.rmax !== p.rmax)){
+      // ultima volta con un altro numero di ripetizioni: stima dal massimale (tabella NSCA 17.7), contando le ripetizioni che restavano
+      const lr = allR[allR.length-1]; const st = done(lr.e.sets);
+      if(st.length){ const best = st.map(z => ({kg:z.kg, r:(z.reps || 0) + (z.rir != null && z.rir !== "" ? Number(z.rir) : 0)})).filter(z => z.r > 0).sort((a, b) => e1rm(b.kg, b.r) - e1rm(a.kg, a.r))[0];
+        if(best){ const tg = rirTarget(p); const r = (p.rmin + p.rmax)/2 + (tg ? (tg.lo + tg.hi)/2 : 0); return {kg: roundStep(e1rm(best.kg, best.r) * pctRM(r) / 100 * mult, ex.step), why:`stima dall'ultima volta (${fmtKg(best.kg)} kg con un altro numero di ripetizioni)`}; } }
+    }
     const lastR = same[same.length-1];
     if(lastR){
       const sets = done(lastR.e.sets); if(!sets.length) return null;
@@ -1188,7 +1271,7 @@ function exRowsHtml(sess, kind){
   const groups = [];
   sess.blocks.forEach(b => { const sec = secOf(b, kind); let g = groups[groups.length-1]; if(!g || g.sec !== sec){ g = {sec, blocks:[]}; groups.push(g); } g.blocks.push(b); });
   return groups.map(g => `<div class="sect ${SECT[g.sec].cls}"><h3>${SECT[g.sec].n}</h3><span class="tiny muted">~${estMinutes(g.blocks, false)} min</span></div>
-    <ul class="exlist">${g.blocks.map(b => b.items.map((it, i) => { const ex = EX[it.ex]; const r = restShort(it.p); return `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}" data-slot="${esc(slotKey(sess.kind, sess.code, baseEx(it)))}"><span class="gdot" style="background:${grp(it.ex).c}"></span><span class="t"><span class="n">${b.type==="js" ? `<span class="pairtag">coppia ${i===0?"1":"2"}</span>` : ""}${esc(ex.n)}${it.homeOf ? ' <span class="swaptag">a casa</span>' : it.orig ? ' <span class="swaptag">cambiato</span>' : it.variantOf ? ' <span class="swaptag">variante</span>' : ""}</span><span class="p">${esc(shortP(it.p, ex))}${r ? " · rec " + r : ""}</span></span><span class="chev">${svgI.chev}</span></button></li>`; }).join("")).join("")}</ul>`).join("");
+    <ul class="exlist">${g.blocks.map(b => b.items.map((it, i) => { const ex = EX[it.ex]; const r = restShort(it.p); return `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}" data-slot="${esc(slotKey(sess.kind, sess.code, baseEx(it)))}"><span class="gdot" style="background:${grp(it.ex).c}"></span><span class="t"><span class="n">${b.type==="js" ? `<span class="pairtag">coppia ${i===0?"1":"2"}</span>` : ""}${esc(ex.n)}${it.homeOf ? ' <span class="swaptag">a casa</span>' : it.orig ? ' <span class="swaptag">cambiato</span>' : it.variantOf ? ' <span class="swaptag">variante</span>' : ""}</span><span class="p">${esc(shortP(it.p, ex))}${r ? " · rec " + r : ""}${it.p.note ? " · " + esc(it.p.note) : ""}</span></span><span class="chev">${svgI.chev}</span></button></li>`; }).join("")).join("")}</ul>`).join("");
 }
 
 /* ============ Oggi ============ */
@@ -1281,7 +1364,7 @@ function renderOggi(){
       ${draft ? (() => { const nSets = (draft.log||[]).flat().reduce((a,x) => a + ((x && x.sets) ? x.sets.length : 0), 0); const ora = draft.startedAt ? new Date(draft.startedAt) : null;
         return `<div class="o-inprog"><b>Allenamento in corso</b><span>${esc(dn(draft))}${ora ? ` · iniziato ${draft.date === t ? "alle" : esc(fmtDate(draft.date)) + " alle"} ${pad(ora.getHours())}:${pad(ora.getMinutes())}` : ""} · ${nSets} ${nSets === 1 ? "serie registrata" : "serie registrate"}</span></div>
         <button class="btn primary big" data-act="resume" style="margin-top:12px">${svgI.play} Riprendi allenamento</button><button class="btn ghost sm" data-act="askDiscard" style="display:block;margin:8px auto 0;color:var(--danger)">Elimina l'allenamento in corso</button></div>`; })()
-      : `<label class="switch o-switch"><input type="checkbox" id="deloadToggle"><span><b>Settimana di scarico</b><br><span class="small muted">Metà delle serie, pesi -15%</span></span></label>
+      : `<label class="switch o-switch"><input type="checkbox" id="deloadToggle"><span><b>Settimana di scarico</b><br><span class="small muted">${sess.kind === "gen" ? "Serie -40%, stessi pesi e stesso margine" : "Metà delle serie, pesi -15%"}</span></span></label>${sess.kind === "gen" ? `<button class="btn ghost sm" data-act="deloadCheck" style="padding-left:0">Serve uno scarico? Controlla</button>` : ""}
       <button class="btn primary big" data-act="start" style="margin-top:12px">${svgI.play} Inizia allenamento</button></div>`}`;
   }
   if(!anyToday){
@@ -1917,12 +2000,49 @@ function profileSheetHtml(){ const p = S.profile || {}; const a = ageNow();
     <div class="field"><label for="pfSex">Sesso</label><select id="pfSex"><option value="M" ${p.sex!=="F"?"selected":""}>Uomo</option><option value="F" ${p.sex==="F"?"selected":""}>Donna</option></select></div>
     <div class="bf-grid"><label class="bf-in"><span>Età</span><span class="bf-f"><input type="text" inputmode="numeric" id="pfAge" value="${a ?? ""}"><em>anni</em></span></label><label class="bf-in"><span>Altezza</span><span class="bf-f"><input type="text" inputmode="decimal" id="pfH" value="${p.height ?? ""}"><em>cm</em></span></label></div>
     <button class="btn primary big" data-act="saveProfile">Salva</button></div>`; }
+function programChoiceHtml(){
+  return `<div class="o-sec first"><div class="o-label">Programma</div><div class="o-seg" style="margin-top:8px">${[["liparoti","Project Invictus"],["principi","Su misura"]].map(([k, l]) => `<button class="${(S.settings.program || "liparoti") === k ? "on" : ""}" data-act="setProgram" data-v="${k}">${l}</button>`).join("")}</div>
+    <p class="small muted">${genOn() ? "Costruito dall'app con le regole di <i>The Muscle and Strength Pyramid</i> (Helms e colleghi): serie, ripetizioni ed esercizi si adattano ai tuoi giorni e al tempo che hai." : "Il programma in tre fasi con i test, da <i>Project Bodybuilding</i> di Liparoti e dai manuali di Project Invictus."}</p></div>`;
+}
+function deloadCheckHtml(){ // tabella 3.2 di The Muscle and Strength Pyramid: Training
+  const Q = ["Hai poca voglia di andare in palestra?", "Dormi peggio del solito?", "Pesi o ripetizioni con lo stesso peso in calo rispetto al ciclo precedente?", "Stress più alto del solito?", "Dolori e acciacchi più del solito?"];
+  return `<div class="grab"></div><div class="stack"><div class="row between"><h2>Serve uno scarico?</h2><button class="btn icon ghost" data-act="closeSheet" aria-label="Chiudi">${svgI.close}</button></div>
+    <p class="small muted">Pensa all'ultima settimana, giorni di riposo compresi.</p>
+    <div class="o-list">${Q.map((q, i) => `<label class="switch"><input type="checkbox" data-dl="${i}" data-act="dlAns"><span><b>${q}</b></span></label>`).join("")}</div>
+    <div id="dlOut" class="hint small"><b>Sì a 0 domande:</b> vai avanti normalmente.</div>
+    <p class="tiny muted">Con 2 o più sì il libro suggerisce di valutare uno scarico: circa il 30-50% di serie in meno, stessi pesi e stessa vicinanza al cedimento, stesse sedute. Non serve programmarlo in anticipo: si fa quando serve. (Helms e colleghi, <i>The Muscle and Strength Pyramid: Training</i>, tabella 3.2 e pp. 104-106.)</p></div>`;
+}
+function renderGenProgramma(){
+  const s = S.settings, t = todayStr(), n = genDays(), V = genCfg().vol, {pos} = nextPosition(t);
+  const wk = genWeek(false), vol = genVolume(wk), gd = gymWeekDays();
+  const allowed = GEN_VOL.filter(([v]) => n >= 4 || (n === 3 ? v <= 14 : v <= 10));
+  let h = programChoiceHtml();
+  h += `<div class="o-sec"><div class="o-label">Il tuo programma</div>
+    <div class="o-stats"><div><b>${n}</b><span>sedute a settimana</span></div><div><b>${V}</b><span>serie per muscolo</span></div><div><b>${pos.gen ? (pos.week === 1 ? "intro" : pos.week) : "—"}</b><span>settimana</span></div></div>
+    <p class="small" style="margin-top:10px">Schema: <b>${esc([...new Set(GEN_SPLIT[n])].map(x => GEN_ST[x][0].toLowerCase()).join(", "))}</b>, scelto dai tuoi ${n} giorni (tabella 7.2 del libro). La prima settimana è introduttiva: circa tre quarti delle serie e una ripetizione in più di margine.</p>
+    ${gd.length < 2 ? `<p class="small" style="color:var(--warn)">Il libro indica almeno 2 sedute a settimana: con meno giorni l'app usa 2 sedute a corpo intero.</p>` : ""}
+    <div class="o-list">${gd.length ? planDaysRow(gd) : `<button class="o-row" data-act="goWeek"><span class="n">Nessun giorno scelto<small>Sceglili in Piano → La mia settimana</small></span><span class="p">›</span></button>`}</div></div>`;
+  h += `<div class="o-sec"><div class="o-label">Tempo e volume</div><div class="o-seg" style="margin-top:8px">${GEN_VOL.map(([v, l]) => `<button class="${V === v ? "on" : ""}" data-act="genVol" data-v="${v}" ${allowed.some(a => a[0] === v) ? "" : "disabled"}>${l}</button>`).join("")}</div>
+    <p class="small muted">${esc(GEN_VOL.find(x => x[0] === V)[2])}. Più serie danno più crescita ma ogni serie in più rende meno: il libro consiglia di partire nella fascia che puoi sostenere e di aggiungere serie solo se ti fermi pur dormendo, mangiando e recuperando bene.${n < 4 ? ` Con ${n} sedute i volumi più alti renderebbero le sedute troppo lunghe.` : ""}</p>
+    <div class="o-list" style="margin-top:6px">${Object.entries(GEN_MUS).map(([m, nm]) => `<div class="o-row" style="cursor:default"><span class="n">${nm}</span><span class="p">${String(Math.round(vol[m]*2)/2).replace(".", ",")} serie</span></div>`).join("")}</div>
+    <p class="tiny muted" style="margin-top:6px">Serie a settimana contate come nel libro: intere per il muscolo principale, mezze per quelli secondari (per esempio i tricipiti nella panca).</p></div>`;
+  h += `<div class="o-sec"><div class="o-label">Le sedute della settimana</div>${wk.map(x => { const sess = buildGenSession({gen:true, week:2, slot:wk.indexOf(x)}, s); return `<details class="wk" ${pos.gen && pos.slot === wk.indexOf(x) ? "open" : ""}><summary><span>${esc(x.code)} · ${esc(x.title)}<span class="tiny muted"> · ripetizioni ${x.variant ? "più alte" : "più basse"}</span>${pos.gen && pos.slot === wk.indexOf(x) ? ' <span class="pill acc">prossima</span>' : ""}</span><span class="small muted">~${estMinutes(sess.blocks, true)}′</span></summary><div style="margin-top:8px">${exRowsHtml(sess, "gen")}</div></details>`; }).join("")}
+    <p class="tiny muted" style="margin-top:8px">Ogni esercizio ha un intervallo di ripetizioni e di ripetizioni in canna secondo il tipo (tabella 7.7): multiarticolari delle gambe a peso libero 4-8 con 2-4 in canna, panche e pressa 6-12, macchine e trazioni 6-15, isolamento 8-20. Le sedute A e B dello stesso tipo alternano intervalli più bassi e più alti (tabella 7.8). Progressione a doppia progressione: quando arrivi in cima all'intervallo in tutte le serie, aumenti il peso.</p></div>`;
+  h += `<div class="o-sec"><div class="o-label">Opzioni</div>
+    <div class="field" style="margin-top:10px"><label for="setLeg">Esercizio principale per le gambe</label>
+      <select id="setLeg" data-set="legMain"><option value="squat" ${s.legMain==="squat"?"selected":""}>Squat con bilanciere</option><option value="pressa" ${s.legMain==="pressa"?"selected":""}>Pressa</option></select></div>
+    <p class="tiny muted">Dove ti alleni e la postura si scelgono nelle Impostazioni${s.where === "casa" ? "; ora: a casa" : ""}. Gli esercizi si possono cambiare toccandoli.</p></div>`;
+  h += swapsCardHtml();
+  h += `<div class="o-sec"><button class="btn ghost sm" data-act="clearFutureSet" style="color:var(--danger);padding-left:0">Togli i giorni di palestra da domani in poi</button></div>`;
+  return h;
+}
 function renderPalestraProgramma(){
+  if(genOn()) return renderGenProgramma();
   const s = S.settings, t = todayStr();
   const {pos} = nextPosition(t);
   const sw = (key, n, sub, on) => `<label class="switch"><input type="checkbox" data-set="${key}" ${on ? "checked" : ""}><span><b>${n}</b><br><span class="small muted">${sub}</span></span></label>`;
   const gd = gymWeekDays();
-  let h = `<div class="o-sec first"><div class="o-label">Il tuo piano</div>
+  let h = programChoiceHtml() + `<div class="o-sec"><div class="o-label">Il tuo piano</div>
     <div class="o-stats"><div><b>${pos.week}</b><span>settimana di ${WEEKS}</span></div><div><b>${pos.slot+1}/${slotsInWeek(pos.week, s)}</b><span>seduta</span></div><div><b>${gd.length || "—"}</b><span>giorni</span></div></div>
     <p class="small" style="margin-top:10px">Adesso: <b>${esc(posLabel(pos))}</b>. Ogni allenamento completato fa passare alla seduta successiva, qualunque sia il giorno: se salti un giorno non perdi niente.</p>
     <p class="tiny muted">Più di 2 settimane di stop: ripeti la settimana precedente. Più di 5 settimane: si riparte dalla Fase 1, settimana 3. Dopo la settimana 19 riparte la Fase 2 con un nuovo ciclo.</p>
@@ -1954,6 +2074,24 @@ function renderPalestraProgramma(){
   h += swapsCardHtml();
   h += `<div class="o-sec"><button class="btn ghost sm" data-act="clearFutureSet" style="color:var(--danger);padding-left:0">Togli i giorni di palestra da domani in poi</button></div>`;
   return h;
+}
+function whyGenHtml(){
+  const R = (c, n, t, src) => `<div class="o-row" style="cursor:default;align-items:flex-start"><span class="dot" style="background:${c};margin-top:7px"></span><span class="n">${n}<small>${t} <span class="cite">${src}</span></small></span></div>`;
+  return `<div class="o-sec"><div class="o-label">Programma su misura: le regole</div><p class="small muted" style="margin-top:6px">Il programma "Su misura" applica le regole del libro di Helms, Morgan e Valdez; dove una scelta è dell'app è scritto.</p>
+    <div class="o-list">
+      ${R("var(--accent)", "Giorni e schema", "Il libro propone per ogni numero di giorni alcuni schemi possibili; l'app usa: 2-3 giorni corpo intero, 4 giorni gambe e parte alta alternate, 5 giorni gambe, spinta, tirata, gambe, parte alta, 6 giorni gambe e parte alta tre volte. Per la massa conta il totale delle serie più di come le dividi.", "Pyramid tab. 7.2, p. 226")}
+      ${R("var(--accent)", "Serie a settimana", "Da 4 serie per muscolo si vedono già risultati in 2-3 mesi; la fascia pratica è 10-20; oltre ~30 non si guadagna più. Più serie fanno crescere di più ma ogni serie in più rende meno: il libro dice di fare abbastanza per progredire, non il più possibile.", "Pyramid tab. 2.2 e 7.4, Pelland 2026")}
+      ${R("var(--accent)", "Serie per seduta", "Oltre circa 11 serie per lo stesso muscolo nella stessa seduta il beneficio delle serie in più diventa incerto: in quel caso si allena il muscolo più volte a settimana.", "Pyramid p. 71 (Remmert 2025)")}
+      ${R("var(--g-legs)", "Ripetizioni e margine", "Dipendono dal tipo di esercizio: squat e stacchi 4-8 ripetizioni con 2-4 in canna (sono pesanti e tecnici), pressa e panche 4-12, macchine e trazioni 6-15, isolamento 8-20 fino quasi al cedimento. Le serie devono avere almeno 4 ripetizioni.", "Pyramid tab. 7.7, p. 235")}
+      ${R("var(--g-legs)", "Variare le ripetizioni", "Variare le ripetizioni probabilmente aiuta la crescita; nessuno schema è risultato migliore degli altri. L'app alterna le sedute A (ripetizioni più basse) e B (più alte).", "Pyramid tab. 7.8, pp. 125-126")}
+      ${R("var(--g-back)", "Scelta degli esercizi", "Uno o più esercizi per ciascuno dei sei schemi (squat, stacco, panca, spinta sopra la testa, rematore, trazioni), una panca inclinata, due rematori (gomiti larghi e gomiti stretti), due trazioni verticali e un esercizio di isolamento per quadricipiti, femorali, bicipiti, tricipiti, deltoidi laterali e polpacci. Quali esercizi precisi usare è una scelta dell'app tra quelli che rispettano queste regole.", "Pyramid pp. 177-178, tab. 7.16")}
+      ${R("var(--g-back)", "Ordine", "Prima i multiarticolari con i pesi liberi, da freschi: la forza cresce di più negli esercizi fatti all'inizio, la massa no.", "Pyramid p. 178, Nunes 2021")}
+      ${R("var(--muted)", "Recupero", "Almeno 90 secondi in media per la massa, di più per i multiarticolari delle gambe; per la forza almeno 2 minuti. L'app usa da 90 secondi a 3 minuti secondo il tipo di esercizio.", "Pyramid p. 201, Singer 2024")}
+      ${R("var(--post)", "Settimana introduttiva", "All'inizio, o dopo una pausa, circa il 75% delle serie e un po' più lontano dal cedimento, per non arrivare con dolori forti alle sedute vere.", "Pyramid pp. 107-108")}
+      ${R("var(--post)", "Scarico quando serve", "Non a calendario: dopo una settimana con almeno 2 sì su 5 domande (voglia, sonno, pesi in calo, stress, dolori), 30-50% di serie in meno con gli stessi pesi.", "Pyramid tab. 3.2, pp. 104-106, Coleman 2024")}
+      ${R("var(--g-arms)", "Progressione", "Doppia progressione: stesso peso finché arrivi in cima all'intervallo di ripetizioni in tutte le serie, poi aumenti. Chi comincia aumenta più spesso, chi è avanti più di rado.", "Pyramid pp. 127-129")}
+      ${R("var(--g-arms)", "Chi comincia", "Niente carichi massimali finché la tecnica non è sicura; movimenti completi; gli esercizi per tutto il corpo (squat, stacchi) sono importanti fin dall'inizio.", "Zatsiorsky, Kraemer, Fry, cap. 4 e 6")}
+    </div></div>`;
 }
 function whyGymHtml(){
   return `<div class="o-sec first"><div class="o-label">Palestra</div><p class="small muted" style="margin-top:6px">Perché il programma è fatto così, in breve.</p>
@@ -2007,6 +2145,8 @@ const REFS = [
   ["Daniels J.", "Daniels' Running Formula, 4ª ed.", "Human Kinetics, Champaign (IL), 2022. ISBN 978-1-7182-0366-2.", "VDOT, ritmi, limiti di volume, FC massima."],
   ["Daniels J., Gilbert J.", "Oxygen Power: Performance Tables for Distance Runners.", "Pubblicato dagli autori, 1979.", "Equazioni del VDOT (citate nel libro di Daniels)."],
   ["Allen H., Coggan A.R.", "Training and Racing with a Power Meter, 2ª ed.", "VeloPress, Boulder (CO), 2010.", "Livelli di potenza, test FTP, sedute, struttura del piano."],
+  ["Helms E., Morgan A., Valdez A.", "The Muscle and Strength Pyramid: Training, 3ª ed.", "Pubblicato dagli autori, 2025.", "Regole del programma su misura: tabelle 2.2, 2.5, 3.2, 7.2, 7.4, 7.7, 7.8, 7.16, 7.17."],
+  ["Zatsiorsky V.M., Kraemer W.J., Fry A.C.", "Science and Practice of Strength Training, 3ª ed.", "Human Kinetics, Champaign (IL), 2021. ISBN 978-1-4925-9200-6.", "Metodi di allenamento della forza (cap. 4), esercizi per chi comincia (cap. 6)."],
   ["Friel J.", "Joe Friel's Quick Guide to Setting Zones.", "TrainingPeaks, 4 maggio 2012. trainingpeaks.com/learn/articles/joe-friel-s-quick-guide-to-setting-zones", "Test della FC di soglia in bici."]]],
  ["Palestra: ricerca", [
   ["Pelland J., Remmert J., Robinson Z., Hinson S., Zourdos M.", "The resistance training dose response: meta-regressions exploring the effects of weekly volume and frequency on muscle hypertrophy and strength gains.", "Sports Medicine 2026;56(2):481-505.", "Volume e frequenza."],
@@ -2016,6 +2156,8 @@ const REFS = [
   ["Schoenfeld B.J., Grgic J., Ogborn D., Krieger J.W.", "Strength and hypertrophy adaptations between low- vs. high-load resistance training: a systematic review and meta-analysis.", "Journal of Strength and Conditioning Research 2017;31(12):3508-3523.", "doi:10.1519/JSC.0000000000002200"],
   ["Haugen M.E., Vårvik F.T., Larsen S., Haugen A.S., van den Tillaar R., Bjørnsen T.", "Effect of free-weight vs. machine-based strength training on maximal strength, hypertrophy and jump performance.", "BMC Sports Science, Medicine and Rehabilitation 2023;15.", "doi:10.1186/s13102-023-00713-4"],
   ["Hernández-Belmonte A., Martínez-Cava A., Buendía-Romero Á., Franco-López F., Pallarés J.G.", "Free-weight and machine-based training are equally effective on strength and hypertrophy: challenging a traditional myth.", "Journal of Strength and Conditioning Research 2022;36(11):2992-2999.", "Pesi liberi e macchine."],
+  ["Nunes J.P., Grgic J., Cunha P.M., Ribeiro A.S., Schoenfeld B.J., de Salles B.F., Cyrino E.S.", "What influence does resistance exercise order have on muscular strength gains and muscle hypertrophy? A systematic review and meta-analysis.", "European Journal of Sport Science 2021;21(2):149-157.", "doi:10.1080/17461391.2020.1733672"],
+  ["Singer A., Wolf M., Generoso L. et al.", "Give it a rest: a systematic review with Bayesian meta-analysis on the effect of inter-set rest interval duration on muscle hypertrophy.", "Frontiers in Sports and Active Living 2024;6.", "doi:10.3389/fspor.2024.1429789"],
   ["Calatayud J., Borreani S., Colado J.C., Martin F., Tella V., Andersen L.L.", "Bench press and push-up at comparable levels of muscle activity results in similar strength gains.", "Journal of Strength and Conditioning Research 2015;29(1):246-253.", "doi:10.1519/JSC.0000000000000589"],
   ["Kikuchi N., Nakazato K.", "Low-load bench press and push-up induce similar muscle hypertrophy and strength gain.", "Journal of Exercise Science & Fitness 2017;15(1):37-42.", "doi:10.1016/j.jesf.2017.06.003"],
   ["Speirs D.E., Bennett M.A., Finn C.V., Turner A.P.", "Unilateral vs. bilateral squat training for strength, sprints, and agility in academy rugby players.", "Journal of Strength and Conditioning Research 2016;30(2):386-392.", "Split squat e squat."],
@@ -2129,7 +2271,7 @@ function renderGuida(){
     body = renderFonti();
   } else if(guideTab === "perche"){
     const a = S.settings.activities || ["palestra"];
-    const W = [["palestra","Palestra",whyGymHtml],["combinato","Combinato",whyComboHtml],["corsa","Corsa",runPlansInfoHtml],["salto","Salto",vbInfoHtml],["bici","Bici",bkInfoHtml]];
+    const W = [["palestra","Palestra",() => whyGymHtml() + whyGenHtml()],["combinato","Combinato",whyComboHtml],["corsa","Corsa",runPlansInfoHtml],["salto","Salto",vbInfoHtml],["bici","Bici",bkInfoHtml]];
     if(!whyTab) whyTab = gymOn() ? "palestra" : a.includes("corsa") ? "corsa" : a.includes("pallavolo") ? "salto" : a.includes("ciclismo") ? "bici" : "palestra";
     body = `<div class="o-seg" style="flex-wrap:wrap">${W.map(([k, l]) => `<button class="${whyTab === k ? "on" : ""}" data-act="whyTab" data-v="${k}">${l}</button>`).join("")}</div>` + W.find(x => x[0] === whyTab)[2]();
   } else {
@@ -2177,20 +2319,20 @@ function wuSets(it, bi){
 }
 function wuHtml(it, bi){
   const w = wuSets(it, bi); if(!w) return "";
-  const s = suggest(it.ex, it.p, R.deload);
+  const s = suggest(it.ex, it.p, R.deload && R.kind !== "gen");
   const minKg = w.ex.unit.startsWith("bilanciere") ? 20 : 0;
   const parts = w.scheme.map(([f, r]) => s ? `${r} × ${fmtKg(Math.max(minKg, roundStep(s.kg*f, w.ex.step)))} kg` : `${r} al ${Math.round(f*100)}%`);
   return `<div class="hint small"><b>Avvicinamento</b> (non contano come serie, poco recupero): ${parts.join(" · ")}${s ? "" : " del peso di lavoro"}.</div>`;
 }
 let R = null;
 let tick = null, audioCtx = null, wakeLock = null;
-function cloneBlocks(blocks, deload){ return blocks.map(b => ({type:b.type, rest:b.rest, sec:b.sec, items:b.items.map(it => ({ex:it.ex, orig:it.orig, variantOf:it.variantOf, p: deload && !EXG[it.ex]?.startsWith("post") && EXG[it.ex] !== "post" ? deloadP(it.p) : it.p}))})); }
+function cloneBlocks(blocks, deload, gen){ return blocks.map(b => ({type:b.type, rest:b.rest, sec:b.sec, items:b.items.map(it => ({ex:it.ex, orig:it.orig, variantOf:it.variantOf, homeOf:it.homeOf, p: deload && !EXG[it.ex]?.startsWith("post") && EXG[it.ex] !== "post" ? (gen ? {...it.p, sets:Math.max(1, Math.round(it.p.sets*0.6))} : deloadP(it.p)) : it.p}))})); }
 function startSession(){
   const t = todayStr();
   const {pos} = nextPosition(t);
   const sess = buildSession(pos, S.settings);
   const deload = !!($("#deloadToggle") && $("#deloadToggle").checked);
-  const blocks = cloneBlocks(sess.blocks, deload);
+  const blocks = cloneBlocks(sess.blocks, deload, sess.kind === "gen");
   R = {id:uid(), date:t, pos, code:sess.code, title:sess.title, kind:sess.kind, deload, blocks, bi:-1, screen:"warmup", seq:[], si:0, log:blocks.map(b => b.items.map(() => ({sets:[]}))), restEnd:null, startedAt:Date.now(), notes:"", warm:{}};
   initAudio(); saveDraft(); openRunner();
 }
@@ -2294,7 +2436,7 @@ function scrWarmup(){
 function sugHtml(exKey, p){
   const ex = EX[exKey];
   if(ex.bw) return `<div class="hint small">A corpo libero: annota solo ripetizioni o secondi.</div>`;
-  const s = suggest(exKey, p, R.deload);
+  const s = suggest(exKey, p, R.deload && R.kind !== "gen");
   if(s && s.stall) return `<div class="hint warn"><b>Peso consigliato: ${fmtKg(s.kg)} kg</b>${ex.unit.includes("manubri") ? " (un manubrio)" : ""}<br><span class="small">${esc(s.why)}. Capita a tutti: ripartire un po' più leggeri di solito sblocca la situazione in poche sedute. Se preferisci, tocca "Cambia" per passare a un esercizio simile.</span></div>`;
   if(s) return `<div class="hint"><b>Peso consigliato: ${fmtKg(s.kg)} kg</b>${ex.unit.includes("manubri") ? " (un manubrio)" : ""}<br><span class="small">${esc(s.why)}.</span></div>`;
   if(p.t === "fixed" || p.t === "emom") return `<div class="hint warn small">Nessun test ancora: nella prima serie cerca un peso con cui arriveresti a circa ${p.rm} ripetizioni.</div>`;
@@ -2321,7 +2463,7 @@ function scrIntro(){
     : `<button class="btn primary big" data-act="startEx">${svgI.play} Inizia esercizio</button>`}
   <button class="btn ghost" data-act="skipEx">Salta questo esercizio</button></div>`;
 }
-function canRamp(b){ if(b.type !== "single") return false; const it = b.items[0]; const ex = EX[it.ex]; return !ex.bw && ex.step > 0 && EXG[it.ex] !== "post" && ["range","rpe","pyr"].includes(it.p.t) && !suggest(it.ex, it.p, R.deload); }
+function canRamp(b){ if(b.type !== "single") return false; const it = b.items[0]; const ex = EX[it.ex]; return !ex.bw && ex.step > 0 && EXG[it.ex] !== "post" && ["range","rpe","pyr"].includes(it.p.t) && !suggest(it.ex, it.p, R.deload && R.kind !== "gen"); }
 const RAMPFEEL = [[7,"6 o più","troppo leggero"],[4.5,"4-5","leggero"],[2.5,"2-3","impegnativo"],[0.5,"0-1","al limite"]];
 function scrRamp(){
   const it = R.blocks[R.bi].items[0]; const ex = EX[it.ex]; const tg = rirTarget(it.p); const reps = it.p.t === "range" ? it.p.rmax : it.p.t === "pyr" ? it.p.reps[0] : it.p.reps;
@@ -2379,7 +2521,7 @@ function rirHelpHtml(){
 }
 function scrSet(){
   const st = curStep(); const b = R.blocks[R.bi]; const it = b.items[st.ii]; const ex = EX[it.ex];
-  const sug = suggest(it.ex, it.p, R.deload);
+  const sug = suggest(it.ex, it.p, R.deload && R.kind !== "gen");
   const kg = R.inKg ?? (R.nextKg && R.nextKg[st.ii]) ?? lastKg(R.bi, st.ii) ?? (sug ? sug.kg : "");
   const reps = R.inReps ?? st.def;
   const done = R.log[R.bi][st.ii].sets;
@@ -2425,7 +2567,7 @@ function scrEmom(){
   const st = curStep(); const it = R.blocks[R.bi].items[st.ii]; const ex = EX[it.ex];
   const E = R.emom || (R.emom = {start:null, rounds:st.min, kg:null});
   if(E.finished){
-    const sug = suggest(it.ex, it.p, R.deload);
+    const sug = suggest(it.ex, it.p, R.deload && R.kind !== "gen");
     return `<div class="stack"><span class="eyebrow">${esc(ex.n)} · EMOM finito</span><h1>Com'è andata?</h1>
     <div class="row"><div class="field"><label for="inKg">Peso usato (kg)</label><div class="stepper"><button data-act="kgStep" data-v="-1">−</button><input id="inKg" inputmode="decimal" value="${esc(R.inKg != null ? fmtKg(R.inKg) : (sug ? fmtKg(sug.kg) : ""))}"><button data-act="kgStep" data-v="1">+</button></div></div>
     <div class="field"><label for="inReps">Minuti con tutte le ${st.reps} ripetizioni</label><div class="stepper"><button data-act="repStep" data-v="-1">−</button><input id="inReps" inputmode="numeric" value="${esc(R.inReps ?? st.min)}"><button data-act="repStep" data-v="1">+</button></div></div></div>
@@ -3561,6 +3703,10 @@ function act(a, d, e){
     case "clearFutureSet": if(confirm("Togliere i giorni di palestra segnati da domani in poi?")){ const t = todayStr(); for(const k of Object.keys(S.planned)) if(k > t) delete S.planned[k]; pushMeta(); render(); } break;
     case "openSettings": if(view !== "impostazioni"){ setPrev = view; view = "impostazioni"; render(); window.scrollTo(0,0); } break;
     case "closeSettings": view = setPrev || "oggi"; render(); window.scrollTo(0,0); break;
+    case "setProgram": if((S.settings.program || "liparoti") !== d.v){ S.settings.program = d.v; pushMeta(); render(); } break;
+    case "genVol": S.settings.gen = {...(S.settings.gen || {}), vol:Number(d.v)}; pushMeta(); render(); break;
+    case "deloadCheck": showSheet(deloadCheckHtml()); break;
+    case "dlAns": { const b = document.querySelectorAll("#sheet [data-dl]"); const yes = [...b].filter(x => x.checked).length; $("#dlOut").innerHTML = yes >= 2 ? `<b>Sì a ${yes} domande:</b> il libro suggerisce di valutare una settimana di scarico: se la fai, attiva l'interruttore "Settimana di scarico" nelle sedute di questa settimana.` : `<b>Sì a ${yes} ${yes === 1 ? "domanda" : "domande"}:</b> vai avanti normalmente.`; break; }
     case "openPlan": planOpen = d.v; view = "piano"; render(); window.scrollTo(0,0); break;
     case "closePlan": planOpen = null; render(); window.scrollTo(0,0); break;
     case "goWeek": closeSheet(); view = "piano"; planOpen = null; render(); window.scrollTo(0,0); break;
