@@ -2264,11 +2264,13 @@ function fmtMin(m){ return m < 1 ? Math.round(m*60) + "″" : (m % 1 ? Math.floo
 
 // Ogni settimana elenca le sedute in ordine di priorità: con meno giorni a disposizione cadono le ultime (corse facili).
 const RUN_PLANS = {
-  bianco:{ph:[[8,"Corsa e cammino"],[4,"Corsa continua"],[4,"Prima soglia e test"]], n:"Bianco · inizio", d:"Per chi non corre o riprende dopo tanto tempo: corsa alternata al cammino fino a 30-40 minuti continui.", days:[3,4], weeks:(() => {
-    const rw = [[10,1,2],[10,1.5,1.5],[8,2,1],[6,3,1],[5,4,1],[4,6,1],[3,8,1],[2,12,1]];
-    const W = rw.map(([r,a,b]) => [S_.RW(r,a,b), S_.RW(r,a,b), S_.RW(r,a,b), S_.RW(Math.max(2,r-2),a,b)]);
-    W.push([S_.E(25,4), S_.E(25), S_.E(25,4), S_.E(20)], [S_.E(28,4), S_.E(28), S_.E(28,4), S_.E(20)], [S_.E(30,6), S_.E(30), S_.E(30,6), S_.E(25)], [S_.E(30,6), S_.E(35), S_.E(30,6), S_.E(25)]);
-    W.push([S_.E(35,6), S_.T(2,5,1,10,10), S_.E(35), S_.E(25)], [S_.E(35,6), S_.T(3,5,1,10,10), S_.E(40), S_.E(25)], [S_.E(40,6), S_.T(3,5,1,10,10), S_.E(40), S_.E(30)], [S_.E(30,6), S_.TT(3000), S_.E(30), S_.E(25)]);
+  bianco:{ph:[[4,"Corsa e cammino"],[4,"Corsa e cammino, tratti più lunghi"],[4,"Corsa continua a blocchi"],[4,"Corsa facile e allunghi"]], n:"Bianco · inizio", d:"Per chi non corre o riprende dopo tanto tempo. Struttura del piano bianco di Daniels: quattro fasi di 4 settimane, sedute da 30 a 45 minuti, dalla corsa alternata al cammino fino a 30 minuti continui con allunghi.", days:[3,4], weeks:(() => {
+    // Struttura dal piano bianco di Daniels (4ª ed., cap. 8): stesse sedute per tutta la fase; sedute dell'app costruite su questa struttura.
+    const f1 = [S_.RW(10,1,1), S_.RW(6,2,1), S_.RW(10,1,1), S_.RW(6,2,1)];
+    const f2 = [S_.RW(10,2,1), S_.RW(6,3,2), S_.RW(10,2,1), S_.RW(6,3,2)];
+    const f3 = [S_.MIX("Corsa a blocchi 3 × 10′", [["W",3],["E",10,3,3,"W"],["W",4]]), S_.MIX("Corsa a blocchi 4 × 8′", [["W",2],["E",8,4,1,"W"],["W",2]]), S_.MIX("Corsa 20′ + 10′", [["W",5],["E",20],["W",5],["E",10],["W",5]]), S_.MIX("Corsa a blocchi 3 × 10′", [["W",3],["E",10,3,3,"W"],["W",4]])];
+    const f4 = [S_.E(36,6), S_.MIX("30′ facili con allunghi", [["E",10],["ST",20/60,5,1,"W"],["E",10],["ST",20/60,5,1,"W"],["E",10]]), S_.E(36,6), S_.MIX("30′ facili con allunghi", [["E",10],["ST",20/60,5,1,"W"],["E",10],["ST",20/60,5,1,"W"],["E",10]])];
+    const W = []; for(const f of [f1, f2, f3, f4]) for(let i=0;i<4;i++) W.push(f);
     return W; })()},
   rosso:{ph:[[4,"Base"],[4,"Ripetute"],[4,"Intervalli"],[4,"Soglia e test"]], n:"Rosso · intermedio", d:"Per chi corre già 30 minuti di fila: arrivano ripetute, intervalli e soglia. Fino a circa 4 ore a settimana.", days:[4,5], weeks:(() => {
     const W = [];
@@ -2693,7 +2695,7 @@ function renderCorsaProgramma(){
 function runPlansInfoHtml(){
   return `<div class="o-sec"><div class="o-label">Come sono fatti i piani</div>
     <p class="small" style="margin-top:8px">I ritmi vengono dal VDOT, un indice ricavato da un tempo di gara con le equazioni di Daniels e Gilbert. Le sedute seguono le regole di Jack Daniels: quasi tutto a ritmo facile; soglia al massimo il 10% della settimana, intervalli l'8%, ripetute il 5%; lungo entro il 30% della settimana sotto i 64 km, entro il 25% e le 2 ore e mezza da 64 km in su. Con meno giorni le sedute vengono accorciate per stare in questi limiti. I volumi restano uguali per 3-4 settimane prima di salire.</p>
-    <p class="small" style="margin-top:8px">I piani bianco, rosso, blu e oro seguono le quattro fasi di Daniels: base con allunghi, ripetute, intervalli, soglia. Il blocco VO₂max riprende lo studio di Helgerud (2007): 4 × 4 minuti al 90-95% della FC massima, 3 volte a settimana per 8 settimane. È più intenso dei limiti di Daniels: serve una base di corsa.</p>
+    <p class="small" style="margin-top:8px">Il piano bianco segue la struttura del piano bianco di Daniels (quattro fasi di 4 settimane, sedute da 30 a 45 minuti, niente soglia né test); alla fine Daniels suggerisce, se vuoi, una gara non competitiva di massimo 40 minuti, partendo piano. I piani rosso, blu e oro seguono le quattro fasi di Daniels: base con allunghi, ripetute, intervalli, soglia. Il blocco VO₂max riprende lo studio di Helgerud (2007): 4 × 4 minuti al 90-95% della FC massima, 3 volte a settimana per 8 settimane. È più intenso dei limiti di Daniels: serve una base di corsa.</p>
     <p class="small" style="margin-top:8px">Settimane e sedute sono costruite dall'app su questi principi, non copiate dalle tabelle del libro.</p>
     <p class="tiny muted" style="margin-top:8px">J. Daniels, <i>Daniels' Running Formula</i>, 4ª ed. (2022) · Daniels e Gilbert, <i>Oxygen Power</i>, 1979 · Helgerud et al., <i>Med Sci Sports Exerc</i> 2007 · Tanaka et al., <i>J Am Coll Cardiol</i> 2001</p></div>`;
 }
