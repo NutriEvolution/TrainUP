@@ -566,6 +566,60 @@ const EX = {
   stretchNuca:{n:"Allungamento della nuca", step:0, inc:0, unit:"corpo libero", yt:"suboccipital stretch supine", src:"Fitness posturale, atlante cap. 4, D.5", bw:true,
     how:["Supino, abbassa il mento verso lo sterno come nell'esercizio dei flessori profondi e mantieni.","Senti allungare la base del cranio."],
     err:["Sollevare la testa da terra."]},
+  allineamentoCerv:{n:"Riconoscimento dell'allineamento del collo", step:0, inc:0, unit:"corpo libero", yt:"correzione postura cervicale seduto", src:"Fitness posturale, atlante cap. 4, C.1", bw:true,
+    how:["Seduto, raddrizza la parte alta della schiena e il collo attivando i muscoli profondi, come se volessi \"allungarti\" verso l'alto.","Mantieni 5 secondi e torna dolcemente."],
+    err:["Inarcare e estendere la schiena invece di allungarsi."]},
+  estensoriCerv:{n:"Estensori profondi del collo a carponi", step:0, inc:0, unit:"corpo libero", yt:"deep cervical extensor quadruped", src:"Fitness posturale, atlante cap. 4, A.2", bw:true,
+    how:["A carponi, tronco allineato, collo piegato in avanti in partenza.","Estendi la parte bassa del collo mantenendo il mento vicino al collo: la parte alta non si muove.","Se non controlli il movimento, riduci l'ampiezza e aumentala solo quando migliori."],
+    err:["Portare il mento verso l'alto (estensione della parte alta del collo)."]},
+  stretchCollo:{n:"Allungamento di scaleni, elevatore della scapola e sternocleidomastoideo", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"stretching scaleni elevatore scapola", src:"Fitness posturale, atlante cap. 4, D.1, D.2, D.4", bw:true,
+    how:["Scaleni: abbassa la spalla, inclina la testa dalla parte opposta e porta il collo un po' indietro.","Elevatore della scapola: abbassa la spalla, ruota e inclina la testa dalla parte opposta e piegala in avanti, aiutandoti con una mano.","Sternocleidomastoideo: ruota la testa dallo stesso lato, inclinala dalla parte opposta ed estendi la parte bassa del collo.","Tieni ogni posizione per il tempo indicato, senza dolore."],
+    err:["Alzare la spalla dal lato che stai allungando."]},
+  ritornoEstensione:{n:"Ritorno corretto dall'estensione del collo", step:0, inc:0, unit:"corpo libero", yt:"cervical flexion extension control exercise", src:"Fitness posturale, atlante cap. 4, C.2", bw:true,
+    how:["Seduto, porta la testa indietro, poi torna in posizione neutra lentamente.","Nel ritorno la nuca va avanti e in alto e il mento segue verso il collo, senza spingere la testa in avanti.","Se è difficile, riduci l'ampiezza."],
+    err:["Far scivolare la testa in avanti invece di riportarla con il mento."]},
+  rotazioneCerv:{n:"Rotazione controllata del collo al muro", step:0, inc:0, unit:"corpo libero", yt:"cervical rotation wall exercise", src:"Fitness posturale, atlante cap. 4, C.3", bw:true,
+    how:["Seduto con la schiena al muro, braccia aperte e gomiti piegati appoggiati al muro.","Ruota la testa da un lato e torna lentamente al centro senza portarla in avanti; poi dall'altro lato."],
+    err:["Spingere la testa in avanti durante la rotazione."]},
+  mobToracica:{n:"Mobilizzazione della schiena in estensione da seduto", step:0, inc:0, unit:"corpo libero", yt:"thoracic extension seated mobility", src:"Fitness posturale, atlante cap. 4, E.4 e D.9", bw:true,
+    how:["Seduto con i piedi a terra e le ginocchia più alte delle anche, mani intrecciate dietro il collo e gomiti vicini.","Estendi la parte alta della schiena allungandoti verso l'alto con un'inspirazione profonda; tieni 3 secondi.","Il protocollo aggiunge una rotazione: braccia incrociate sul petto, ruota il collo e poi la schiena dallo stesso lato fino a fine corsa."],
+    err:["Ginocchia più basse delle anche: si inarca la zona lombare al posto della schiena alta."]},
+  stabRitmiche:{n:"Stabilizzazione del collo in isometria", step:0, inc:0, unit:"corpo libero", yt:"cervical isometric towel exercise", src:"Fitness posturale, atlante cap. 4, A.4", bw:true,
+    how:["Seduto in buon allineamento, un asciugamano dietro la testa tenuto per i due capi.","Tira l'asciugamano in avanti e resisti con il collo senza muoverlo; tieni 5 secondi.","In alternativa spingi con il palmo sulla fronte o sulle tempie. La spinta deve essere moderata e crescere piano."],
+    err:["Muovere la testa: lo scopo è non farla muovere."]},
+  plankPlus:{n:"Plank plus", step:0, inc:0, unit:"corpo libero", yt:"plank plus serratus", src:"Fitness posturale, atlante cap. 5, D.1", bw:true,
+    how:["Prono sui gomiti (o in plank).","Allontana il torace dal pavimento spingendo con le scapole, che si aprono restando attaccate al torace; tieni 3 secondi.","Collo allineato, scapole che non salgono verso le orecchie."],
+    err:["Scapole che si sollevano dal torace o salgono."]},
+  propScapPalla:{n:"Movimento delle scapole con la palla", step:0, inc:0, unit:"palla o muro", side:"per lato", yt:"scapular retraction ball wall", src:"Fitness posturale, atlante cap. 5, L.2", bw:true,
+    how:["In piedi, avambraccio appoggiato a una palla contro il muro, busto e spalla piegati in avanti.","Raddrizza busto e spalla facendo rotolare la palla verso di te: la scapola va indietro.","Variante del protocollo per le scapole alate: mano sulla palla a lato e solo la scapola che va indietro, gomito teso."],
+    err:["Ruotare il busto invece di muovere la scapola."]},
+  stabElastico:{n:"Stabilizzatori delle scapole con elastico", step:0, inc:0, unit:"elastico", yt:"band pull down scapular retraction straight arm", src:"Fitness posturale, atlante cap. 5, C.5", bw:true,
+    how:["Seduto o in piedi, elastico fissato davanti a te in alto, braccia in avanti e in alto.","A gomiti tesi porta le braccia in basso e indietro, portando le scapole indietro.","Scegli un elastico con cui arrivi alle ripetizioni con un paio di ripetizioni di margine."],
+    err:["Spalle che vanno in avanti durante il movimento.","Piegare i gomiti."]},
+  sleeper:{n:"Allungamento della parte posteriore della spalla (sleeper stretch)", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"sleeper stretch", src:"Fitness posturale, atlante cap. 5, H.1", bw:true,
+    how:["Sdraiato sul fianco della spalla da allungare, braccio a 90° davanti a te e gomito piegato a 90°.","Con l'altra mano spingi piano l'avambraccio verso il pavimento.","La scapola resta bloccata sotto il peso del corpo. Senti allungare dietro la spalla, mai dolore."],
+    err:["Non bloccare la scapola: l'allungamento si perde."]},
+  mobRullo:{n:"Mobilizzazione della schiena sul rullo", step:0, inc:0, unit:"rullo (foam roller)", yt:"foam roller thoracic extension", src:"Fitness posturale, atlante cap. 4, E.5", bw:true,
+    how:["Sdraiato con un rullo sotto la parte alta della schiena, anche e ginocchia piegate.","Mani intrecciate dietro la nuca: estendi la schiena cercando di avvicinare la testa al pavimento.","Sposta il rullo su punti diversi della schiena alta."],
+    err:["Inarcare la zona lombare: deve restare piegata."]},
+  diagManubrio:{n:"Diagonale con manubrio (gran dentato)", step:1, inc:1, unit:"manubrio", side:"per lato", yt:"dumbbell serratus punch diagonal", src:"Fitness posturale, atlante cap. 5, D.4",
+    how:["In piedi o seduto, manubrio in mano e braccio lungo il fianco.","Porta il braccio in avanti e verso il centro del corpo spingendo la scapola in avanti; il gomito si piega a 90° e non supera la spalla.","Busto fermo, senza ruotare."],
+    err:["Ruotare il busto."]},
+  rematoreElastico:{n:"Rematore con elastico", step:0, inc:0, unit:"elastico", yt:"band row high elbows", src:"Fitness posturale, atlante cap. 5, C.3", bw:true,
+    how:["In piedi, elastico fissato davanti a te, braccia tese in avanti; meglio con due maniglie separate.","Tira portando i gomiti indietro e alti, piegati a 90°, come delle gomitate all'indietro, e stringi le scapole alla fine.","Nel ritorno lascia andare un po' le scapole in avanti.","Scegli un elastico con cui arrivi alle ripetizioni con il margine indicato."],
+    err:["Abbassare troppo i gomiti, vicino al busto."]},
+  latElastico:{n:"Lat con elastico", step:0, inc:0, unit:"elastico", yt:"band lat pulldown kneeling", src:"Fitness posturale, atlante cap. 5, C.4", bw:true,
+    how:["In affondo (o in ginocchio), elastico fissato in alto davanti a te, braccia tese in avanti e in alto; meglio con due maniglie.","Tira i gomiti in basso e indietro portando le scapole indietro e in basso.","Nel ritorno lascia salire un po' le scapole per allungare bene."],
+    err:["Tirare con le spalle in avanti e le scapole aperte."]},
+  alzateLateraliElastico:{n:"Alzate laterali con elastico", step:0, inc:0, unit:"elastico", yt:"band lateral raise", src:"Fitness posturale, atlante cap. 5, F.1", bw:true,
+    how:["In piedi, elastico sotto il piede.","Solleva il braccio leggermente in avanti rispetto al fianco (piano della scapola), spingendo verso l'esterno: conta il gomito, non il polso.","Scapole leggermente indietro e in basso."],
+    err:["Alzare le spalle verso le orecchie."]},
+  curlElastico:{n:"Curl con elastico", step:0, inc:0, unit:"elastico", yt:"band bicep curl", src:"Indicazione generale (non presa dai manuali)", bw:true,
+    how:["In piedi sull'elastico, impugnature in mano, braccia lungo i fianchi.","Piega i gomiti portando le mani verso le spalle; i gomiti restano fermi ai fianchi.","Torna giù lentamente."],
+    err:["Dondolare con il busto."]},
+  pushdownElastico:{n:"Tricipiti con elastico (push down)", step:0, inc:0, unit:"elastico", yt:"band tricep pushdown", src:"Indicazione generale (non presa dai manuali)", bw:true,
+    how:["Elastico fissato in alto (una porta, una sbarra), impugnature in mano, gomiti piegati vicino ai fianchi.","Distendi i gomiti spingendo verso il basso; i gomiti non si muovono.","Torna su lentamente."],
+    err:["Gomiti che si allontanano dal busto."]},
   legCurlSeduto:{n:"Leg curl da seduto", step:2.5, inc:2.5, unit:"macchina", yt:"seated leg curl tecnica", src:"Maeo 2021",
     how:["Siediti con la schiena ben appoggiata e le ginocchia allineate al perno della macchina; blocca le cosce con il rullo superiore.","Cuscinetto inferiore appena sopra i talloni.","Piega le ginocchia portando i talloni sotto il sedile, poi torna lentamente fino quasi a gambe distese."],
     err:["Bacino che scivola in avanti sul sedile.","Ritorno veloce senza controllo.","Ampiezza ridotta: arriva fin quasi a gambe distese."]},
@@ -717,13 +771,9 @@ function buildSession(pos, s){
       title = ["Giornata pesante","Giornata media","Giornata di volume"][slot];
     }
   }
-  if(s.posture !== false){
-    blocks = [single("mobQuad", P.range(2,10,10,"",30)), single("mobProno", P.time(1,90,30)), single("neckFlex", P.range(2,10,10,"",30))]
-      .concat(blocks)
-      .concat([single("alzateProno", P.range(2,10,15,"",60)), single("alzateY", P.range(1,10,15,"",60)), single("wallSlide", P.range(2,10,15,"",30))]);
-  }
+  { const pg = postureGymBlocks(); blocks = pg.pre.concat(blocks).concat(pg.end); }
   if(pos.learn) blocks = learnVersion(blocks);
-  return applyVariants(applySwaps({code, title, kind:k, phase:PHASES[k], blocks}, s), pos);
+  return applyHome(applyVariants(applySwaps({code, title, kind:k, phase:PHASES[k], blocks}, s), pos));
 }
 // Fase 1 di apprendimento (principianti): macchine al posto dei pesi liberi più tecnici e una ripetizione in più di margine
 const LEARN_SWAP = {gobletSquat:"pressa", squat:"pressa", pancaManubri:"chestPress", lentoManubri:"shoulderPress", rematoreManubrio:"rowMachine"};
@@ -783,10 +833,75 @@ function applySwaps(sess, s){
 }
 function isMainLift(k){ return TESTED.includes(k); }
 function buildPostureSession(){
-  const single = (ex, p) => ({type:"single", items:[{ex, p}]});
-  return {code:"Post", title:"Routine posturale a casa", kind:"post", blocks:[
-    single("mobQuad", P.range(2,10,10,"",30)), single("mobProno", P.time(1,120,30)), single("neckFlex", P.range(2,10,10,"",30)),
-    single("wallSlide", P.range(2,10,15,"",30)), single("stretchPetto", P.time(3,45,15)), single("stretchCross", P.time(3,45,15)), single("stretchNuca", P.time(2,45,15))]};
+  const seen = new Set(), blocks = [];
+  for(const k of postureConds()) for(const [ex, p] of POSTURE[k].home) if(!seen.has(ex)){ seen.add(ex); blocks.push({type:"single", items:[{ex, p}]}); }
+  return {code:"Post", title:"Routine posturale a casa", kind:"post", blocks};
+}
+
+/* ============ posturale: condizioni a scelta ============ */
+// Protocolli dal libro: A. Roncari, Fitness posturale (cap. 4 e 5, livello 1) e Project Exercise 2 per la zona lombare.
+// Nelle sedute di palestra l'app usa una parte del protocollo (scelta dell'app); la routine a casa contiene il protocollo intero.
+const POSTURE = {
+  testa:{n:"Testa in avanti e collo rigido", src:"Fitness posturale, cap. 4, protocollo I, livello 1 (pp. 101-103)",
+    home:[["allineamentoCerv",P.range(2,15,15,"",30)], ["neckFlex",P.range(2,15,15,"",30)], ["estensoriCerv",P.range(2,10,10,"",30)], ["stretchCollo",P.time(1,60,15)], ["ritornoEstensione",P.range(2,10,10,"",30)], ["mobToracica",P.range(2,10,10,"",30)]],
+    pre:["allineamentoCerv","neckFlex"], end:["estensoriCerv"], edu:"Attenzione all'allineamento del collo durante l'allenamento e davanti agli schermi o guardando a lungo verso l'alto."},
+  colloDritto:{n:"Collo dritto (lordosi cervicale ridotta)", src:"Fitness posturale, cap. 4, protocollo II, livello 1 (pp. 107-108)",
+    home:[["ritornoEstensione",P.range(2,10,10,"",30)], ["rotazioneCerv",P.range(2,10,10,"",30)], ["stabRitmiche",P.range(2,10,10,"",30)], ["estensoriCerv",P.range(2,10,10,"",30)], ["alzateProno",P.range(2,12,12,"",30)], ["plankPlus",P.range(2,12,12,"",30)]],
+    pre:["ritornoEstensione","stabRitmiche"], end:["alzateProno","plankPlus"], edu:"Per la salute del collo contano stabilità e forza; massaggi e terapie passive da soli non danno effetti a lungo termine (Roncari)."},
+  spalle:{n:"Spalle in avanti", src:"Fitness posturale, cap. 5, protocollo I, livello 1 (pp. 261-263)",
+    home:[["propScapPalla",P.range(2,12,12,"",30)], ["alzateProno",P.range(4,12,12,"",60)], ["stabElastico",P.range(3,12,12,"",60)], ["stretchPetto",P.time(2,60,15)], ["sleeper",P.time(2,60,15)], ["mobRullo",P.time(2,60,15)]],
+    pre:["propScapPalla","mobRullo"], end:["alzateProno","stabElastico"], edu:"Le posizioni con le spalle in avanti tenute a lungo durante il giorno remano contro gli esercizi: alzati e muoviti spesso."},
+  scapole:{n:"Scapole alate", src:"Fitness posturale, cap. 5, protocollo II, livello 1 (pp. 266-267)",
+    home:[["propScapPalla",P.range(2,15,15,"",60)], ["plankPlus",P.range(2,10,10,"",60)], ["diagManubrio",P.range(3,10,10,"",60)], ["alzateProno",P.range(3,12,12,"",60)], ["stretchCross",P.time(3,60,15)]],
+    pre:["propScapPalla"], end:["plankPlus","diagManubrio"], edu:"Se la causa è nella forma della schiena (per esempio cifosi piatta o lieve scoliosi) gli esercizi cambiano poco: conta un allenamento regolare ed equilibrato (Roncari)."},
+  lombare:{n:"Lordosi lombare ridotta", src:"Project Exercise 2, Mobilizzare la lordosi lombare; pp. 300-302 e cap. 2",
+    home:[["mobQuad",P.range(2,10,10,"",30)], ["mobProno",P.time(1,120,30)]],
+    pre:["mobQuad","mobProno"], end:[], edu:"Squat e stacco solo con la zona lombare in posizione neutra; al posto dei crunch le iperestensioni (PE2)."},
+  scoliosi:{n:"Scoliosi lieve", src:"SOSORT 2016; Fitness posturale, cap. 5",
+    home:[], pre:[], end:[], edu:"Nessun esercizio specifico: per un adulto con curva lieve le linee guida prevedono anche nessun trattamento specifico; gli esercizi specifici per la scoliosi vanno decisi con un professionista. L'allenamento regolare va bene."}
+};
+function postureConds(){ const s = S.settings; return s.posture === false ? [] : (s.postureConds || []).filter(k => POSTURE[k]); }
+function postureHomeOn(){ return postureConds().some(k => POSTURE[k].home.length); }
+function postureGymBlocks(){
+  const c = postureConds(); if(!c.length || S.settings.postureGym === false) return {pre:[], end:[]};
+  const pick = (key, max) => { const out = []; for(let i = 0; i < 4; i++) for(const k of c){ const ex = POSTURE[k][key][i]; if(ex && !out.includes(ex) && out.length < max) out.push(ex); } return out; }; // a turno: il primo esercizio di ogni condizione, poi il secondo
+  const dose = ex => { for(const k of c){ const f = POSTURE[k].home.find(x => x[0] === ex); if(f) return {...f[1], sets:Math.min(2, f[1].sets)}; } return P.range(2,10,10,"",30); }; // in palestra al massimo 2 serie (scelta dell'app, per non allungare la seduta)
+  const mk = (ex, sec) => ({type:"single", sec, items:[{ex, p:dose(ex)}]});
+  return {pre:pick("pre", 3).map(ex => mk(ex, "pre")), end:pick("end", 3).map(ex => mk(ex, "end"))};
+}
+
+/* ============ allenamento a casa ============ */
+// A casa ogni esercizio che richiede macchine o attrezzi che non hai viene sostituito con il primo disponibile della sua lista.
+// Elastici e allenamento a casa sono efficaci (ACSM 2026; Lopes 2019: forza simile all'allenamento con pesi). Le liste sono una scelta dell'app.
+const EQUIP = [["m","Manubri"],["pa","Panca"],["sb","Sbarra per trazioni"],["el","Elastici"],["bil","Bilanciere e rack"]];
+const REQ = {gobletSquat:["m"], squat:["bil"], splitSquat:[], affondiCamminati:[], pancaManubri:["m","pa"], panca:["bil","pa"], pancaInclinataManubri:["m","pa"], pancaStretta:["bil","pa"],
+  piegamenti:[], military:["bil"], lentoManubri:["m"], alzateLaterali:["m"], trazioni:["sb"], rematoreManubrio:["m"], rematoreBil:["bil"], stacco:["bil"], rdlManubri:["m"], rdl:["bil"],
+  curlEZ:["bil"], curlManubri:["m"], curlMartello:["m"], tricipitiOverheadManubrio:["m"], deadBug:[], plank:[], crunch:[], crunchInverso:[], squatCorpo:[],
+  rematoreElastico:["el"], latElastico:["el"], alzateLateraliElastico:["el"], curlElastico:["el"], pushdownElastico:["el"], stabElastico:["el"], pallof:["el"]};
+const HOME_ALT = {
+  squat:["squat","gobletSquat","splitSquat"], hackSquat:["gobletSquat","splitSquat"], pressa:["gobletSquat","splitSquat"], smithSquat:["gobletSquat","splitSquat"], legExtension:["splitSquat"],
+  legCurl:["rdlManubri","affondiCamminati"], legCurlSeduto:["rdlManubri","affondiCamminati"], calf:["squatCorpo"],
+  panca:["panca","pancaManubri","piegamenti"], chestPress:["pancaManubri","piegamenti"], pancaInclinataManubri:["pancaInclinataManubri","piegamenti"], pancaStretta:["pancaStretta","piegamenti"], crociCavi:["pancaManubri","piegamenti"], pecDeck:["pancaManubri","piegamenti"],
+  military:["military","lentoManubri","piegamenti"], shoulderPress:["lentoManubri","military","piegamenti"],
+  alzateLateraliCavo:["alzateLaterali","alzateLateraliElastico"], alzateLaterali:["alzateLaterali","alzateLateraliElastico"], facePull:["stabElastico","alzateProno"],
+  latMachine:["trazioni","latElastico","rematoreManubrio","rematoreElastico"], latPresaStretta:["trazioni","latElastico","rematoreManubrio","rematoreElastico"], pulldown:["latElastico","rematoreManubrio"],
+  pulley:["rematoreManubrio","rematoreElastico","rematoreBil"], rowMachine:["rematoreManubrio","rematoreElastico","rematoreBil"], rematoreBil:["rematoreBil","rematoreManubrio","rematoreElastico"],
+  stacco:["stacco","rdlManubri","affondiCamminati"], rdl:["rdl","rdlManubri","affondiCamminati"],
+  curlEZ:["curlEZ","curlManubri","curlElastico"], curlCavo:["curlManubri","curlElastico"], curlScott:["curlManubri","curlElastico"],
+  frenchPress:["tricipitiOverheadManubrio","pushdownElastico","piegamenti"], pushdown:["tricipitiOverheadManubrio","pushdownElastico","piegamenti"], tricipitiOverheadCavo:["tricipitiOverheadManubrio","pushdownElastico","piegamenti"],
+  pallof:["pallof","plank"], backExt:["deadBug","plank"],
+  gobletSquat:["gobletSquat","splitSquat"], pancaManubri:["pancaManubri","piegamenti"], rdlManubri:["rdlManubri","affondiCamminati"], lentoManubri:["lentoManubri","piegamenti"],
+  rematoreManubrio:["rematoreManubrio","rematoreElastico","alzateProno"], trazioni:["trazioni","latElastico","rematoreManubrio","rematoreElastico"],
+  curlManubri:["curlManubri","curlElastico"], curlMartello:["curlMartello","curlManubri","curlElastico"], tricipitiOverheadManubrio:["tricipitiOverheadManubrio","pushdownElastico","piegamenti"]
+};
+function atHome(){ return gymOn() && S.settings.where === "casa"; }
+function exAvail(ex){ if(!atHome()) return true; if(["post","warm"].includes(EXG[ex])) return !REQ[ex] || REQ[ex].every(e => (S.settings.equip||[]).includes(e)); const r = REQ[ex]; return !!r && r.every(e => (S.settings.equip||[]).includes(e)); }
+function homeSub(ex, used){ if(exAvail(ex)) return ex; const ok = (HOME_ALT[ex] || []).filter(a => EX[a] && exAvail(a)); return ok.find(a => !used || !used.has(a)) || null; } // se tutte le alternative sono già nella seduta, l'esercizio si toglie
+function applyHome(sess){
+  if(!atHome()) return sess;
+  const used = new Set(sess.blocks.flatMap(b => b.items.map(it => it.ex)).filter(exAvail));
+  sess.blocks = sess.blocks.map(b => { const items = b.items.map(it => { const n = homeSub(it.ex, used); if(!n) return null; used.add(n); if(n !== it.ex){ it.homeOf = it.ex; it.ex = n; } return it; }).filter(Boolean); return items.length ? {...b, items, type: items.length > 1 ? b.type : "single"} : null; }).filter(Boolean);
+  return sess;
 }
 function dn(o){ return /^Scheda/.test(o.title) ? o.title : o.code + " · " + o.title; }
 function weekInPhase(w){ const k = weekKind(w); if(k==="f1") return w; if(k==="f2") return w-5; if(k==="f3") return w-12; return null; }
@@ -794,10 +909,13 @@ function posLabel(pos){ const k = weekKind(pos.week); const wp = weekInPhase(pos
 
 /* ============ stato e salvataggio ============ */
 const LS = "ripresa.v1";
-const DEFAULT = {settings:{legMain:"squat", f3freq:3, rdlInC:false, sound:true, posture:true, startDate:"2026-11-02", swaps:{}, level:"ripresa", levelChosen:false, startFrom:"f2", restartAt:0, activities:["palestra"]}, planned:{}, sessions:{}, profile:{}, body:[], metaAt:0};
+const DEFAULT = {settings:{legMain:"squat", f3freq:3, rdlInC:false, sound:true, posture:true, postureConds:[], postureGym:true, startDate:"2026-11-02", swaps:{}, level:"ripresa", levelChosen:false, startFrom:"f2", restartAt:0, activities:["palestra"]}, planned:{}, sessions:{}, profile:{}, body:[], metaAt:0};
 let S = load();
 function load(){
-  try{ const raw = localStorage.getItem(LS); if(raw){ const o = JSON.parse(raw); return {...DEFAULT, ...o, settings:{...DEFAULT.settings, ...(o.settings||{})}}; } }catch(e){}
+  try{ const raw = localStorage.getItem(LS); if(raw){ const o = JSON.parse(raw); const r = {...DEFAULT, ...o, settings:{...DEFAULT.settings, ...(o.settings||{})}};
+    // prima della 1.14 la routine posturale era fissa (testa e spalle in avanti, lordosi lombare ridotta, scoliosi lieve): la si traduce nelle condizioni equivalenti
+    if(!Array.isArray(o.settings && o.settings.postureConds)) r.settings.postureConds = (o.settings && o.settings.levelChosen && r.settings.posture !== false) ? ["testa","spalle","lombare","scoliosi"] : [];
+    return r; } }catch(e){}
   return JSON.parse(JSON.stringify(DEFAULT));
 }
 function saveLocal(){ try{ localStorage.setItem(LS, JSON.stringify(S)); }catch(e){} }
@@ -976,12 +1094,14 @@ const EXG = {
   curlEZ:"arms", curlManubri:"arms", curlMartello:"arms", frenchPress:"arms", pushdown:"arms", curlCavo:"arms", curlScott:"arms", tricipitiOverheadCavo:"arms", tricipitiOverheadManubrio:"arms",
   deadBug:"core", pallof:"core", plank:"core", crunch:"core", crunchInverso:"core", backExt:"core",
   cardioLeggero:"warm", legSwing:"warm", worldsGreatest:"warm", squatCorpo:"warm", hingeBastone:"warm", rotBraccia:"warm", dislocazioni:"warm", pushupScapolari:"warm",
+  rematoreElastico:"back", latElastico:"back", alzateLateraliElastico:"shoulders", curlElastico:"arms", pushdownElastico:"arms",
+  allineamentoCerv:"post", estensoriCerv:"post", stretchCollo:"post", ritornoEstensione:"post", rotazioneCerv:"post", mobToracica:"post", stabRitmiche:"post", plankPlus:"post", propScapPalla:"post", stabElastico:"post", sleeper:"post", mobRullo:"post", diagManubrio:"post",
   mobQuad:"post", mobProno:"post", neckFlex:"post", alzateProno:"post", alzateY:"post", wallSlide:"post", stretchPetto:"post", stretchCross:"post", stretchNuca:"post"
 };
 const PRE = ["mobQuad","mobProno","neckFlex"], POSTEND = ["alzateProno","alzateY","wallSlide"];
 const SECT = {pre:{n:"Prima dei pesi · posturale", cls:"post"}, main:{n:"Allenamento", cls:""}, end:{n:"Fine seduta · posturale", cls:"post"}, home:{n:"Routine a casa", cls:"post"}};
 const grp = k => GROUPS[EXG[k] || "core"];
-const secOf = (b, kind) => kind === "post" ? "home" : PRE.includes(b.items[0].ex) ? "pre" : POSTEND.includes(b.items[0].ex) ? "end" : "main";
+const secOf = (b, kind) => kind === "post" ? "home" : b.sec ? b.sec : (EXG[b.items[0].ex] === "post" && (PRE.includes(b.items[0].ex) || POSTEND.includes(b.items[0].ex))) ? (PRE.includes(b.items[0].ex) ? "pre" : "end") : "main";
 function shortP(p, ex){
   const side = ex && ex.side ? " " + ex.side : "";
   switch(p.t){
@@ -1046,7 +1166,7 @@ function exRowsHtml(sess, kind){
   const groups = [];
   sess.blocks.forEach(b => { const sec = secOf(b, kind); let g = groups[groups.length-1]; if(!g || g.sec !== sec){ g = {sec, blocks:[]}; groups.push(g); } g.blocks.push(b); });
   return groups.map(g => `<div class="sect ${SECT[g.sec].cls}"><h3>${SECT[g.sec].n}</h3><span class="tiny muted">~${estMinutes(g.blocks, false)} min</span></div>
-    <ul class="exlist">${g.blocks.map(b => b.items.map((it, i) => { const ex = EX[it.ex]; const r = restShort(it.p); return `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}" data-slot="${esc(slotKey(sess.kind, sess.code, baseEx(it)))}"><span class="gdot" style="background:${grp(it.ex).c}"></span><span class="t"><span class="n">${b.type==="js" ? `<span class="pairtag">coppia ${i===0?"1":"2"}</span>` : ""}${esc(ex.n)}${it.orig ? ' <span class="swaptag">cambiato</span>' : it.variantOf ? ' <span class="swaptag">variante</span>' : ""}</span><span class="p">${esc(shortP(it.p, ex))}${r ? " · rec " + r : ""}</span></span><span class="chev">${svgI.chev}</span></button></li>`; }).join("")).join("")}</ul>`).join("");
+    <ul class="exlist">${g.blocks.map(b => b.items.map((it, i) => { const ex = EX[it.ex]; const r = restShort(it.p); return `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}" data-slot="${esc(slotKey(sess.kind, sess.code, baseEx(it)))}"><span class="gdot" style="background:${grp(it.ex).c}"></span><span class="t"><span class="n">${b.type==="js" ? `<span class="pairtag">coppia ${i===0?"1":"2"}</span>` : ""}${esc(ex.n)}${it.homeOf ? ' <span class="swaptag">a casa</span>' : it.orig ? ' <span class="swaptag">cambiato</span>' : it.variantOf ? ' <span class="swaptag">variante</span>' : ""}</span><span class="p">${esc(shortP(it.p, ex))}${r ? " · rec " + r : ""}</span></span><span class="chev">${svgI.chev}</span></button></li>`; }).join("")).join("")}</ul>`).join("");
 }
 
 /* ============ Oggi ============ */
@@ -1103,7 +1223,7 @@ function renderOggi(){
   const greet = hour < 12 ? "Buongiorno" : hour < 18 ? "Buon pomeriggio" : "Buonasera";
   const name = (S.settings.name || "").trim();
   const exLine = it => { const ex = EX[it.ex]; const sg = ex.bw ? null : suggest(it.ex, it.p, false);
-    return `<button class="o-row" data-act="exInfo" data-k="${it.ex}" data-slot="${esc(slotKey(sess.kind, sess.code, baseEx(it)))}"><span class="dot" style="background:${grp(it.ex).c}"></span><span class="n">${esc(ex.n)}${it.orig ? ' <span class="swaptag">cambiato</span>' : it.variantOf ? ' <span class="swaptag">variante</span>' : ""}</span><span class="p">${esc(shortP(it.p, ex).split(" · ")[0])}${sg ? " · " + fmtKg(sg.kg) + " kg" : ""}</span></button>`; };
+    return `<button class="o-row" data-act="exInfo" data-k="${it.ex}" data-slot="${esc(slotKey(sess.kind, sess.code, baseEx(it)))}"><span class="dot" style="background:${grp(it.ex).c}"></span><span class="n">${esc(ex.n)}${it.homeOf ? ' <span class="swaptag">a casa</span>' : it.orig ? ' <span class="swaptag">cambiato</span>' : it.variantOf ? ' <span class="swaptag">variante</span>' : ""}</span><span class="p">${esc(shortP(it.p, ex).split(" · ")[0])}${sg ? " · " + fmtKg(sg.kg) + " kg" : ""}</span></button>`; };
   let h = `<div class="o-hello o-sec first"><div class="o-label" style="text-transform:uppercase">${esc(fmtDate(t))}</div><h1>${greet}${name ? `,<br>${esc(name)}` : ""}</h1></div>`;
   if(typeof updateBannerHtml === "function") h += updateBannerHtml();
   // seduta: solo nel giorno di allenamento (giorno segnato), con un allenamento in corso o già fatto oggi
@@ -1131,7 +1251,7 @@ function renderOggi(){
   } else if(!(runToday && (runPlannedOn(t) || runDoneOn(t) || loadRunDraft())) && !vbPlannedOn(t) && !vbDoneOn(t) && !bkPlannedOn(t) && !bkDoneOn(t)){
     const nextUp = Object.entries(fc).find(([d]) => d > t);
     h += `<div class="o-sec"><div class="o-head"><span class="o-label">Oggi</span><span class="r">giorno di riposo</span></div>
-      ${nextUp ? `<div class="o-today"><div class="big" style="font-size:44px;color:var(--accent-mint)">${parseYmd(nextUp[0]).getDate()}</div><div><span class="o-sub" style="margin:0">Prossimo allenamento</span><h2>${esc(fmtDate(nextUp[0]).replace(/^./, c => c.toUpperCase()))}</h2><div class="o-sub">${esc(dn(buildSession(nextUp[1], S.settings)))} · ${esc(posLabel(nextUp[1]))}</div></div></div>`
+      ${nextUp ? (() => { const gg = daysBetween(t, nextUp[0]); const quando = gg === 1 ? "domani" : "tra " + gg + " giorni"; return `<div class="o-label" style="margin-top:14px">Prossimo allenamento · ${quando}</div><button class="o-row" data-act="openDay" data-d="${nextUp[0]}" style="margin-top:4px"><span class="dot" style="background:var(--accent)"></span><span class="n">${esc(fmtDate(nextUp[0]).replace(/^./, c => c.toUpperCase()))}<small>${esc(dn(buildSession(nextUp[1], S.settings)))} · ${esc(posLabel(nextUp[1]))}</small></span><span class="p">›</span></button>`; })()
         : `<p class="o-sub" style="margin-top:8px">Nessun giorno di allenamento segnato. Segna i giorni e la seduta comparirà qui il giorno stesso.</p><button class="btn" data-act="planLMV" style="margin-top:10px">Segna lun, mer, ven · 4 settimane</button>`}
       <button class="btn ghost sm" data-act="trainToday" style="margin-top:10px;padding-left:0">Allenati oggi lo stesso</button></div>`;
   }
@@ -1161,7 +1281,7 @@ function renderOggi(){
   // posturale + guida al peso
   h += `<div class="o-sec"><div class="o-list" style="margin-top:0">
     <button class="o-row" data-act="bodyAdd"><span class="dot" style="background:var(--c4)"></span><span class="n">Registra peso o misure<small>${(() => { const w = latestWeight(); return w ? "ultimo peso " + fmtKg(w) + " kg" : "peso, circonferenze, composizione"; })()}</small></span><span class="p">›</span></button>
-    <button class="o-row" data-act="startPost"><span class="dot" style="background:var(--post)"></span><span class="n">Routine posturale a casa<small>${postDone ? "fatta oggi ✓" : "circa 10 minuti"}</small></span><span class="p">›</span></button>
+    ${postureHomeOn() ? `<button class="o-row" data-act="startPost"><span class="dot" style="background:var(--post)"></span><span class="n">Routine posturale a casa<small>${postDone ? "fatta oggi ✓" : esc(postureConds().filter(k => POSTURE[k].home.length).map(k => POSTURE[k].n.toLowerCase()).join(", "))}</small></span><span class="p">›</span></button>` : ""}
     ${gymOn() && st.total < 4 ? `<button class="o-row" data-act="rirHelp"><span class="dot" style="background:var(--accent-mint)"></span><span class="n">Come scegliere il peso<small>Le prime sedute: "Trova il peso" e le ripetizioni in canna</small></span><span class="p">›</span></button>` : ""}
   </div></div>`;
   return h;
@@ -1198,9 +1318,6 @@ function renderCal(){
       <div class="row between"><button class="btn icon ghost" data-act="month" data-dir="-1" aria-label="Mese precedente">‹</button><h2 style="text-transform:capitalize">${MESI[m]} ${y}</h2><button class="btn icon ghost" data-act="month" data-dir="1" aria-label="Mese successivo">›</button></div>
       <div class="cal">${["L","M","M","G","V","S","D"].map(x => `<div class="dow">${x}</div>`).join("")}${cells}</div>
       <div class="legend"><span><i class="sw" style="background:var(--accent)"></i>Fatto</span><span><i class="sw" style="border:2px solid var(--accent)"></i>In programma</span><span><i class="sw" style="border:1px dashed var(--muted)"></i>Saltato</span><span><i class="sw" style="background:var(--post)"></i>Posturale a casa</span>${runActive() || runSessions().length ? `<span><i class="sw" style="background:var(--c2);border-radius:50%;width:8px;height:8px"></i>Corsa</span>` : ""}${vbActive() || vbSessions().length ? `<span><i class="sw" style="background:var(--c3);border-radius:2px;width:8px;height:8px"></i>Salto</span>` : ""}${bkActive() || bkSessions().length ? `<span><i class="sw" style="background:var(--c4);border-radius:50%;width:8px;height:8px"></i>Bici</span>` : ""}</div>
-    </div>
-    <div class="card stack"><h3>Come funziona</h3><p class="small muted">Tocca un giorno per segnarlo come giorno di allenamento. La lettera è la scheda che ti verrà assegnata: se salti un giorno, la scheda passa al giorno successivo segnato.</p>
-      <div class="row"><button class="btn" data-act="planLMV">Segna lun, mer, ven · 4 settimane</button><button class="btn ghost" data-act="clearFuture">Togli i giorni futuri</button></div>
     </div>
   </div>`;
 }
@@ -1678,7 +1795,11 @@ function profileSheetHtml(){ const p = S.profile || {}; const a = ageNow();
 function renderProgramma(){
   const showRun = (S.settings.activities||[]).includes("corsa") || runActive();
   if(runProgTab == null) runProgTab = gymOn() ? "palestra" : "corsa";
-  const seg = `<div class="o-seg" style="margin-bottom:10px">${[["palestra","Palestra"],["corsa","Corsa"]].concat((S.settings.activities||[]).includes("pallavolo") || vbActive() ? [["pallavolo","Pallavolo"]] : []).concat((S.settings.activities||[]).includes("ciclismo") || bkActive() ? [["ciclismo","Bici"]] : []).concat(comboOn() ? [["settimana","Settimana"]] : []).map(([k,l]) => `<button class="${runProgTab===k?"on":""}" data-act="progSport" data-v="${k}">${l}</button>`).join("")}</div>`;
+  const actsP = S.settings.activities || ["palestra"];
+  const tabs = [].concat(gymOn() ? [["palestra","Palestra"]] : []).concat(actsP.includes("corsa") ? [["corsa","Corsa"]] : []).concat(actsP.includes("pallavolo") ? [["pallavolo","Pallavolo"]] : []).concat(actsP.includes("ciclismo") ? [["ciclismo","Bici"]] : []).concat(comboOn() ? [["settimana","Settimana"]] : []);
+  if(!tabs.length) tabs.push(["palestra","Palestra"]);
+  if(!tabs.some(x => x[0] === runProgTab)) runProgTab = tabs[0][0];
+  const seg = tabs.length > 1 ? `<div class="o-seg" style="margin-bottom:10px">${tabs.map(([k,l]) => `<button class="${runProgTab===k?"on":""}" data-act="progSport" data-v="${k}">${l}</button>`).join("")}</div>` : "";
   if(runProgTab === "corsa") return seg + renderCorsaProgramma();
   if(runProgTab === "settimana" && comboOn()) return seg + renderSettimana();
   if(runProgTab === "pallavolo") return seg + renderPallavoloProgramma();
@@ -1707,15 +1828,10 @@ function renderPalestraProgramma(){
     }
     h += `</div></div>`;
   }
-  h += `<div class="card stack"><h2>Routine posturale</h2>
-    <p>Per scoliosi lombare lieve, lordosi lombare ridotta, spalle e collo in avanti. Secondo Fitness posturale l'obiettivo è muoversi meglio ed essere più forte, non "raddrizzarsi": il legame tra postura e dolore non è dimostrato. La scoliosi ha di solito una parte strutturale che gli esercizi non cambiano; quelli specifici per la scoliosi richiedono una valutazione professionale.</p>
-    <ul class="exlist">
-      <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--post)"></span><span class="t"><span class="n">Prima dei pesi · 5 min</span><span class="p">Mobilizzazione lombare a carponi e da prono, flessori profondi del collo</span></span></div></li>
-      <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--post)"></span><span class="t"><span class="n">Fine seduta · 8 min</span><span class="p">Alzate da prono a T e a Y, scivolamenti al muro con il collo allineato</span></span></div></li>
-      <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--post)"></span><span class="t"><span class="n">Giorni di riposo · 10 min</span><span class="p">Dalla schermata Oggi: mobilità, collo, scivolamenti al muro, allungamenti</span></span></div></li>
-      <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-core)"></span><span class="t"><span class="n">Modifiche al programma</span><span class="p">Iperestensioni al posto dei crunch; squat e stacco solo con la zona lombare neutra; niente torsioni con carico; mento leggermente abbassato a chest press, pulley e rematori</span></span></div></li>
-      <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--g-core)"></span><span class="t"><span class="n">Ogni giorno</span><span class="p">Ogni 2 ore circa da seduto, alzati e fai qualche estensione lombare in piedi</span></span></div></li>
-    </ul></div>
+  h += `<div class="card stack"><h2>Postura</h2>${(() => { const c = postureConds(); if(!c.length) return `<p class="small muted">Nessuna condizione scelta: niente esercizi posturali. Se ti serve, scegli le tue condizioni nelle Impostazioni.</p>`;
+    return `<ul class="exlist">${c.map(k => { const P0 = POSTURE[k]; return `<li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--post)"></span><span class="t"><span class="n">${esc(P0.n)}</span><span class="p">${P0.home.length ? esc(P0.home.map(x => EX[x[0]].n).join(", ")) + ". " : ""}${esc(P0.edu)} <span class="cite">${esc(P0.src)}</span></span></span></div></li>`; }).join("")}</ul>
+    <p class="small muted">Secondo Roncari l'obiettivo è muoversi meglio ed essere più forte, non "raddrizzarsi": il legame tra postura e dolore non è dimostrato (Swain 2020). Nelle sedute di palestra l'app inserisce una parte di questi esercizi; la routine completa è in Oggi.</p>`; })()}
+    <button class="btn sm" data-act="openSettings" style="align-self:flex-start">Scegli le condizioni</button></div>
   ${swapsCardHtml()}
   <div class="card stack"><h2>Cosa dice la ricerca</h2><p class="small muted">Perché il programma è fatto così, in breve.</p>
     <ul class="exlist">
@@ -1735,7 +1851,7 @@ function renderPalestraProgramma(){
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--post)"></span><span class="t"><span class="n">Postura</span><span class="p">Non è dimostrato che la postura causi mal di schiena. Gli esercizi per il collo migliorano la posizione della testa. <span class="cite">Swain 2020, Sheikhhoseini 2018</span></span></span></div></li>
       <li><div class="exrow" style="cursor:default"><span class="gdot" style="background:var(--post)"></span><span class="t"><span class="n">Scoliosi</span><span class="p">Per un adulto con una curva lieve le linee guida indicano come opzione minima nessun trattamento specifico; gli esercizi specifici per la scoliosi vanno decisi con un professionista. <span class="cite">SOSORT 2016</span></span></span></div></li>
     </ul></div>
-  <div class="card stack"><h2>Fonti</h2><p class="small">Fase 2, Fase 3 a 4 sedute e test: F. Liparoti, <i>Project Bodybuilding</i>, cap. 13. Volumi, buffer e routine posturale: A. Roncari, <i>Fitness posturale</i>, cap. 2, 4 e 5. Tecnica degli esercizi e zona lombare: <i>Project Exercise 1</i> (PE1) e <i>Project Exercise 2</i> (PE2). La Fase 1, la versione a 3 sedute della Fase 3 e le regole dell'app sono un'elaborazione a partire da questi testi.</p><p class="small" style="margin-top:8px">Video tutorial: canale YouTube <b>Project inVictus</b>. Foto degli esercizi: archivio <b>Free Exercise DB</b> (github.com/yuhonas/free-exercise-db; le foto provengono in origine da Bodybuilding.com), caricate da internet e non incluse nell'app.</p></div></div>`;
+  <p class="small muted" style="margin:8px 0 4px">Riferimenti completi in Guida → Fonti.</p></div>`;
   return h;
 }
 document.addEventListener("change", e => {
@@ -1747,6 +1863,10 @@ document.addEventListener("change", e => {
     else S.settings[k] = el.value;
     pushMeta(); render(); return;
   }
+  const eq = e.target.closest("[data-equip]");
+  if(eq){ const k = eq.dataset.equip; let a = (S.settings.equip || []).slice(); a = eq.checked ? [...new Set(a.concat([k]))] : a.filter(x => x !== k); S.settings.equip = a; pushMeta(); render(); return; }
+  const pc = e.target.closest("[data-pcond]");
+  if(pc){ const k = pc.dataset.pcond; let a = (S.settings.postureConds || []).slice(); a = pc.checked ? [...new Set(a.concat([k]))] : a.filter(x => x !== k); S.settings.postureConds = a; if(a.length) S.settings.posture = true; pushMeta(); render(); return; }
   const av = e.target.closest("[data-actv]");
   if(av){ const k = av.dataset.actv; let a = (S.settings.activities || ["palestra"]).slice(); a = av.checked ? [...new Set(a.concat([k]))] : a.filter(x => x !== k); if(!a.length){ av.checked = true; return; } S.settings.activities = a; pushMeta(); render(); return; }
   if(e.target.closest("#sheet [data-bfsel]")){ readBodyForm(); showSheet(bodySheetHtml()); updateBfResult(); return; }
@@ -1760,7 +1880,7 @@ const REFS = [
  ["Manuali e libri", [
   ["Roncari A.", "Project Exercise. Biomeccanica applicata al fitness e al bodybuilding. Vol. I (Arto superiore) e Vol. II.", "Project Invictus, Milano.", "Tecnica degli esercizi (PE1, PE2)."],
   ["Roncari A.", "Fitness posturale. Valutazione, postura e dolore.", "Project Invictus, Milano. ISBN 978-88-942054-8-0.", "Volumi, buffer, routine posturale."],
-  ["Liparoti F.", "Project Bodybuilding. Il manuale della ricomposizione corporea.", "Project Invictus, Milano.", "Fase 2, Fase 3 a 4 sedute, test 8RM (cap. 13)."],
+  ["Liparoti F.", "Project Bodybuilding. Il manuale della ricomposizione corporea.", "Project Invictus, Milano.", "Fase 2, Fase 3 a 4 sedute, test 8RM (cap. 13). La Fase 1, la Fase 3 a 3 sedute e le regole dell'app sono un'elaborazione a partire da questi testi."],
   ["Haff G.G., Triplett N.T. (a cura di)", "Essentials of Strength Training and Conditioning, 4ª ed.", "Human Kinetics, Champaign (IL), 2016. Cap. 17 (Sheppard J.M., Triplett N.T.), cap. 18 (Potach D.H., Chu D.A., pp. 471-520), cap. 19 (DeWeese B.H., Nimphius S., pp. 521-557).", "Programmazione dei pesi, pliometria, agilità."],
   ["Daniels J.", "Daniels' Running Formula, 4ª ed.", "Human Kinetics, Champaign (IL), 2022. ISBN 978-1-7182-0366-2.", "VDOT, ritmi, limiti di volume, FC massima."],
   ["Daniels J., Gilbert J.", "Oxygen Power: Performance Tables for Distance Runners.", "Pubblicato dagli autori, 1979.", "Equazioni del VDOT (citate nel libro di Daniels)."],
@@ -1784,6 +1904,7 @@ const REFS = [
   ["Ribeiro B., Pereira A., Neves P., Marinho D., Marques M., Neiva H.P.", "The effect of warm-up in resistance training and strength performance: a systematic review.", "Motricidade 2021;17.", "doi:10.6063/motricidade.21143"],
   ["Psilander N., Eftestøl E., Cumming K.T. et al.", "Effects of training, detraining, and retraining on strength, hypertrophy, and myonuclear number in human skeletal muscle.", "Journal of Applied Physiology 2019;126(6):1636-1645.", "Memoria muscolare."],
   ["Bell L., Strafford B.W., Coleman M., Androulakis Korakakis P., Nolan D.", "Integrating deloading into strength and physique sports training programmes: an international Delphi consensus approach.", "Sports Medicine - Open 2023;9.", "doi:10.1186/s40798-023-00633-0"],
+  ["Lopes J.S.S., Machado A.F., Micheletti J.K., de Almeida A.C., Cavina A.P., Pastre C.M.", "Effects of training with elastic resistance versus conventional resistance on muscular strength: a systematic review and meta-analysis.", "SAGE Open Medicine 2019;7.", "doi:10.1177/2050312119831116"],
   ["Morton R.W., Murphy K.T., McKellar S.R. et al.", "A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains in muscle mass and strength in healthy adults.", "British Journal of Sports Medicine 2018;52(6):376-384.", "doi:10.1136/bjsports-2017-097608"],
   ["Swain C.T.V., Pan F., Owen P.J., Schmidt H., Belavy D.L.", "No consensus on causality of spine postures or physical exposure and low back pain: a systematic review of systematic reviews.", "Journal of Biomechanics 2020;102:109312.", "doi:10.1016/j.jbiomech.2019.08.006"],
   ["Sheikhhoseini R., Shahrbanian S., Sayyadi P., O'Sullivan K.", "Effectiveness of therapeutic exercise on forward head posture: a systematic review and meta-analysis.", "Journal of Manipulative and Physiological Therapeutics 2018;41(6):530-539.", "doi:10.1016/j.jmpt.2018.02.002"],
@@ -1829,16 +1950,19 @@ function renderImpostazioni(){
     <div class="o-list">${row("editProfile", "Profilo", esc([p.sex === "F" ? "donna" : p.sex === "M" ? "uomo" : "", a ? a + " anni" : "", p.height ? p.height + " cm" : ""].filter(Boolean).join(" · ") || "sesso, età, altezza"))}</div></div>`;
   h += `<div class="o-sec"><div class="o-label">Cosa pratichi</div><div class="o-list">${ACTIVITIES.filter(([k]) => k !== "combinato").map(([k, l]) => `<label class="switch"><input type="checkbox" data-actv="${k}" ${acts.includes(k) ? "checked" : ""}><span><b>${l}</b></span></label>`).join("")}</div>
     <p class="tiny muted" style="margin-top:6px">Togliere un'attività la nasconde da Oggi e dal Calendario; piani e storico restano. Con palestra e corsa insieme compare in Programma la scheda Settimana.</p></div>`;
+  if(gymOn()) h += `<div class="o-sec"><div class="o-label">Dove ti alleni</div><div class="o-seg" style="margin-top:8px">${[["palestra","In palestra"],["casa","A casa"]].map(([k, l]) => `<button class="${(s.where || "palestra") === k ? "on" : ""}" data-act="setWhere" data-v="${k}">${l}</button>`).join("")}</div>
+    ${s.where === "casa" ? `<p class="small muted">Cosa hai a casa? Gli esercizi che richiedono macchine o attrezzi che non hai vengono sostituiti con un esercizio simile; senza attrezzi restano corpo libero ed elastici.</p><div class="o-list">${EQUIP.map(([k, l]) => `<label class="switch"><input type="checkbox" data-equip="${k}" ${(s.equip||[]).includes(k) ? "checked" : ""}><span><b>${l}</b></span></label>`).join("")}</div>
+      <p class="tiny muted" style="margin-top:6px">Elastici e allenamento a casa funzionano: con gli elastici la forza cresce in modo simile ai pesi (Lopes 2019; ACSM 2026). Le sostituzioni sono una scelta dell'app; con gli elastici il peso non si registra.</p>` : ""}</div>`;
   if(gymOn()) h += `<div class="o-sec"><div class="o-label">Palestra</div>
     <div class="o-list">${row("openLevel", "Livello", esc(LEVELS[s.level || "ripresa"].n) + (s.level === "allenato" ? (s.startFrom === "f3" ? " · parti dalla Fase 3" : " · parti dalla Fase 2") : ""))}</div>
     <div class="field"><label for="setLeg">Esercizio principale per le gambe</label>
       <select id="setLeg" data-set="legMain"><option value="squat" ${s.legMain==="squat"?"selected":""}>Squat con bilanciere (consigliato per la forza)</option><option value="pressa" ${s.legMain==="pressa"?"selected":""}>Pressa (come Liparoti)</option></select></div>
     <div class="field"><label for="setF3">Sedute a settimana nella Fase 3</label>
       <select id="setF3" data-set="f3freq"><option value="3" ${s.f3freq!==4?"selected":""}>3 sedute: pesante, media, volume</option><option value="4" ${s.f3freq===4?"selected":""}>4 sedute: Intensity Loading di Liparoti</option></select></div>
-    ${sw("posture", "Routine posturale nelle sedute", "3 esercizi prima dei pesi e 3 alla fine (circa 12 minuti)", s.posture !== false)}
     ${sw("rdlInC", "Stacco rumeno nella scheda C", "Fase 2, al posto del leg curl", !!s.rdlInC)}
-    <div class="o-list">${row("goSwaps", "Esercizi cambiati", Object.keys(s.swaps || {}).length ? Object.keys(s.swaps).length + " cambiati" : "nessuno")}</div></div>`;
-  h += `<div class="o-sec"><div class="o-label">Piani</div><div class="o-list">
+    <div class="o-list">${row("clearFutureSet", "Togli i giorni di palestra futuri", "dal calendario, da domani in poi")}${row("goSwaps", "Esercizi cambiati", Object.keys(s.swaps || {}).length ? Object.keys(s.swaps).length + " cambiati" : "nessuno")}</div></div>`;
+  h += postureSettingsHtml();
+  if(["corsa","pallavolo","ciclismo"].some(k => acts.includes(k))) h += `<div class="o-sec"><div class="o-label">Piani</div><div class="o-list">
     ${acts.includes("corsa") ? row("goSport", "Corsa", runActive() ? esc(RUN_PLANS[rc.plan].n) + (rc.vdot ? " · VDOT " + rc.vdot.toFixed(0) : "") : "nessun piano", 'data-v="corsa"') + row("vdotOpen", "Ritmi e FC massima", rc.vdot ? "VDOT " + rc.vdot.toFixed(1) : "inserisci un tempo") : ""}
     ${acts.includes("pallavolo") ? row("vbSetup", "Pallavolo", vbActive() ? esc(VB_LV[vc.level].n) + " · " + (vc.season ? "in stagione" : "fuori stagione") : "non impostato") : ""}
     ${acts.includes("ciclismo") ? row("bkSetup", "Bici", bkActive() ? (bc.power ? "con misuratore · FTP " + (bc.ftp || "—") : "senza misuratore · FC soglia " + (bc.fthr || "—")) : "non impostato") : ""}
@@ -1849,6 +1973,14 @@ function renderImpostazioni(){
   return h;
 }
 
+function postureSettingsHtml(){
+  const s = S.settings, sel = s.postureConds || [];
+  return `<div class="o-sec" id="posturaSet"><div class="o-label">Postura</div>
+    <p class="small muted" style="margin-top:6px">Scegli le condizioni che ti riguardano: riceverai gli esercizi dei protocolli di Roncari (<i>Fitness posturale</i>) e di <i>Project Exercise 2</i>. Se non ne scegli nessuna, niente esercizi posturali. Meglio farle valutare da un professionista.</p>
+    <div class="o-list">${Object.entries(POSTURE).map(([k, c]) => `<label class="switch"><input type="checkbox" data-pcond="${k}" ${sel.includes(k) ? "checked" : ""}><span><b>${esc(c.n)}</b><br><span class="small muted">${c.home.length ? c.home.length + " esercizi" : "solo indicazioni"}</span></span></label>`).join("")}</div>
+    ${sel.length ? `<label class="switch"><input type="checkbox" data-set="postureGym" ${s.postureGym !== false ? "checked" : ""}><span><b>Anche nelle sedute di palestra</b><br><span class="small muted">Fino a 3 esercizi prima dei pesi e 3 alla fine; la routine completa resta nella home come routine a casa</span></span></label>` : ""}
+  </div>`;
+}
 /* ============ Guida ============ */
 const GLOSS = [
   ["Ripetizione e serie", "Una ripetizione è un movimento completo. Una serie è un gruppo di ripetizioni di fila: \"3 serie da 10\" vuol dire 10 ripetizioni, pausa, altre 10, pausa, altre 10."],
@@ -1932,7 +2064,7 @@ function wuHtml(it, bi){
 }
 let R = null;
 let tick = null, audioCtx = null, wakeLock = null;
-function cloneBlocks(blocks, deload){ return blocks.map(b => ({type:b.type, rest:b.rest, items:b.items.map(it => ({ex:it.ex, orig:it.orig, variantOf:it.variantOf, p: deload && !EXG[it.ex]?.startsWith("post") && EXG[it.ex] !== "post" ? deloadP(it.p) : it.p}))})); }
+function cloneBlocks(blocks, deload){ return blocks.map(b => ({type:b.type, rest:b.rest, sec:b.sec, items:b.items.map(it => ({ex:it.ex, orig:it.orig, variantOf:it.variantOf, p: deload && !EXG[it.ex]?.startsWith("post") && EXG[it.ex] !== "post" ? deloadP(it.p) : it.p}))})); }
 function startSession(){
   const t = todayStr();
   const {pos} = nextPosition(t);
@@ -1958,8 +2090,18 @@ function tone(t0, dur, freq, vol){
   o.connect(f).connect(g).connect(audioCtx.destination); o.start(t0); o.stop(t0 + dur + 0.02);
 }
 /* suono da timer digitale: kind "alarm" = 3 gruppi da 4 bip, "pip" = un bip corto (ultimi secondi), "double" = due bip (minuto EMOM) */
+function ding(){ // un solo rintocco morbido: due sinusoidi che si spengono lentamente
+  const now = audioCtx.currentTime + 0.02;
+  [[880, 0.22], [1760, 0.06]].forEach(([f, v]) => { const o = audioCtx.createOscillator(), g = audioCtx.createGain(); o.type = "sine"; o.frequency.value = f; g.gain.setValueAtTime(0.0001, now); g.gain.linearRampToValueAtTime(v, now + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, now + 1.6); o.connect(g).connect(audioCtx.destination); o.start(now); o.stop(now + 1.7); });
+}
 function beep(kind="alarm"){
   if(!S.settings.sound) return;
+  if(kind === "pip") return; // niente bip prima della fine
+  try{ navigator.vibrate && navigator.vibrate(250); }catch(e){}
+  if(!audioCtx) return;
+  try{ if(audioCtx.state === "suspended") audioCtx.resume(); }catch(e){}
+  try{ ding(); }catch(e){}
+  return;
   if(kind === "alarm"){ try{ navigator.vibrate && navigator.vibrate([120,60,120,60,120,60,120]); }catch(e){} }
   if(!audioCtx) return;
   try{ if(audioCtx.state === "suspended") audioCtx.resume(); }catch(e){}
@@ -2398,7 +2540,7 @@ function adaptWeek(sessions, paces){
 const DOW_L = ["L","M","M","G","V","S","D"], DOW_N = ["lunedì","martedì","mercoledì","giovedì","venerdì","sabato","domenica"];
 function runCfg(){ return S.settings.run || null; }
 function gymOn(){ const a = S.settings.activities || ["palestra"]; return a.includes("palestra") || a.includes("combinato"); }
-function runActive(){ const c = runCfg(); return !!(c && c.plan && RUN_PLANS[c.plan] && c.start && (c.days||[]).length); }
+function runActive(){ const c = runCfg(); return !!(c && c.plan && RUN_PLANS[c.plan] && c.start && (c.days||[]).length) && (S.settings.activities||[]).includes("corsa"); }
 function dowOf(ds){ return (parseYmd(ds).getDay() + 6) % 7; }
 function mondayStr(ds){ const d = parseYmd(ds); d.setDate(d.getDate() - dowOf(ds)); return ymd(d); }
 function runPacesNow(){ const c = runCfg(); return c && c.vdot ? runPaces(c.vdot) : null; }
@@ -2818,7 +2960,7 @@ const VB_SCALE = {principiante:1, intermedio:1.2, avanzato:1.4};
 const VB_LV = {principiante:{n:"Prime volte", d:"Non hai mai fatto lavori di salto strutturati"}, intermedio:{n:"Un po' di esperienza", d:"Hai già fatto salti e balzi in allenamento"}, avanzato:{n:"Esperto", d:"Pliometria regolare da più stagioni"}};
 const SOFT = {depth:"atterraggio", tuck1:"tuck", splitCiclico:"splitJump", vert1:"saltelli1", zigzag:"ostacoloLat", rincorsa:"saltoTocco"}; // sostituti a media intensità
 function vbCfg(){ return S.settings.volley || null; }
-function vbActive(){ const c = vbCfg(); return !!(c && c.on && c.start && (c.days||[]).length); }
+function vbActive(){ const c = vbCfg(); return !!(c && c.on && c.start && (c.days||[]).length) && (S.settings.activities||[]).includes("pallavolo"); }
 function vbNoHigh(){ const c = vbCfg() || {}; const w = latestWeight(); return c.level === "principiante" || (w && w > 100); }
 function vbSession(w, k){ // costruisce la seduta: serie calcolate per arrivare al volume obiettivo
   const c = vbCfg() || {}; const W = VB_WEEKS[w]; if(!W) return null; const base = W[k];
@@ -2995,7 +3137,7 @@ const BK_WEEKS = [
   {ph:"Scarico e test", rest:true, s:[BK.END(60), BK.TEST(), BK.REC(45), BK.REC(30)]}
 ];
 function bkCfg(){ return S.settings.bike || null; }
-function bkActive(){ const c = bkCfg(); return !!(c && c.on && c.start && (c.days||[]).length); }
+function bkActive(){ const c = bkCfg(); return !!(c && c.on && c.start && (c.days||[]).length) && (S.settings.activities||[]).includes("ciclismo"); }
 function bkMin(s){ return Math.round(s.b.reduce((a, [k, m, r=1, rec=0]) => a + m*r + rec*Math.max(0, r-1), 0)); }
 function bkWeekPlan(w){
   const c = bkCfg(); const W = BK_WEEKS[w]; if(!W) return {};
@@ -3238,6 +3380,8 @@ function act(a, d, e){
     case "testEnd": endTestEx(); break;
     case "finish": finishSession(); break;
     case "progSport": runProgTab = d.v; comboDraft = null; render(); break;
+    case "setWhere": S.settings.where = d.v; pushMeta(); render(); break;
+    case "clearFutureSet": if(confirm("Togliere i giorni di palestra segnati da domani in poi?")){ const t = todayStr(); for(const k of Object.keys(S.planned)) if(k > t) delete S.planned[k]; pushMeta(); render(); } break;
     case "openSettings": if(view !== "impostazioni"){ setPrev = view; view = "impostazioni"; render(); window.scrollTo(0,0); } break;
     case "closeSettings": view = setPrev || "oggi"; render(); window.scrollTo(0,0); break;
     case "goSport": runProgTab = d.v; comboDraft = null; view = "programma"; render(); window.scrollTo(0,0); break;
