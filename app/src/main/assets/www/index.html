@@ -318,6 +318,18 @@ details.wk[open] summary::after{transform:rotate(-135deg)}
 .o-banner b{display:block;color:var(--accent-text)}
 .o-banner span{font-size:13px}
 .o-switch{margin-top:12px}
+#onb{position:fixed;inset:0;z-index:50;background:var(--bg);overflow:auto;transition:opacity .3s ease}
+#onb.out{opacity:0;pointer-events:none}
+.onb-in{max-width:600px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding:max(24px,env(safe-area-inset-top,0px)) 20px max(24px,env(safe-area-inset-bottom,0px))}
+.onb-in h1{font-size:30px;margin-top:8px}
+.onb-dots{display:flex;gap:6px;margin-bottom:18px}.onb-dots i{flex:1;height:4px;border-radius:9px;background:var(--surface2)}.onb-dots i.on{background:var(--accent)}
+.bf-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.bf-in{display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--muted);font-weight:600}
+.bf-in.big{font-size:15px;color:var(--ink)}
+.bf-in input{font:inherit;font-size:16px;font-weight:500;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 12px;width:100%;min-width:0}
+.bf-f{position:relative;display:flex}.bf-f em{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-style:normal;font-size:13px;color:var(--muted);pointer-events:none}
+.bf-f input{padding-right:44px}
+details summary{cursor:pointer}
 .refpic{margin:0;display:flex;flex-direction:column;gap:6px}
 .refpic .flip{position:relative;aspect-ratio:850/567;border-radius:14px;overflow:hidden;background:var(--surface2)}
 .refpic .flip img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -752,7 +764,7 @@ function posLabel(pos){ const k = weekKind(pos.week); const wp = weekInPhase(pos
 
 /* ============ stato e salvataggio ============ */
 const LS = "ripresa.v1";
-const DEFAULT = {settings:{legMain:"squat", f3freq:3, rdlInC:false, sound:true, posture:true, startDate:"2026-11-02", swaps:{}, level:"ripresa", levelChosen:false, startFrom:"f2", restartAt:0}, planned:{}, sessions:{}, metaAt:0};
+const DEFAULT = {settings:{legMain:"squat", f3freq:3, rdlInC:false, sound:true, posture:true, startDate:"2026-11-02", swaps:{}, level:"ripresa", levelChosen:false, startFrom:"f2", restartAt:0, activities:["palestra"]}, planned:{}, sessions:{}, profile:{}, body:[], metaAt:0};
 let S = load();
 function load(){
   try{ const raw = localStorage.getItem(LS); if(raw){ const o = JSON.parse(raw); return {...DEFAULT, ...o, settings:{...DEFAULT.settings, ...(o.settings||{})}}; } }catch(e){}
@@ -886,7 +898,7 @@ function writeDoc(id, data){
   writeChains[id] = prev.then(() => sync.col.doc(id).set(data)).catch(() => { setSync("warn"); });
 }
 let metaTimer = null;
-function pushMeta(){ S.metaAt = Date.now(); saveLocal(); clearTimeout(metaTimer); metaTimer = setTimeout(() => writeDoc("meta", {kind:"meta", settings:S.settings, planned:S.planned, metaAt:S.metaAt}), 800); }
+function pushMeta(){ S.metaAt = Date.now(); saveLocal(); clearTimeout(metaTimer); metaTimer = setTimeout(() => writeDoc("meta", {kind:"meta", settings:S.settings, planned:S.planned, profile:S.profile, body:S.body, metaAt:S.metaAt}), 800); }
 function pushSession(sess){ saveLocal(); writeDoc("s-" + sess.id, {kind:"session", ...sess}); }
 function setSync(st){ sync.state = st; const el = $("#syncDot"); if(el){ el.className = "dot " + (st==="ok" ? "ok" : st==="warn" ? "warn" : ""); $("#syncTxt").textContent = st==="ok" ? "Salvato nel tuo account" : st==="warn" ? "Salvato su questo telefono" : st==="wait" ? "Collegamento…" : "Salvato su questo telefono"; } }
 async function initSync(){
@@ -905,7 +917,7 @@ async function initSync(){
       const remoteIds = new Set();
       for(const d of snap.docs){
         const v = d.data(); if(!v) continue; remoteIds.add(d.id);
-        if(v.kind === "meta"){ if((v.metaAt||0) > (S.metaAt||0)){ S.settings = {...DEFAULT.settings, ...v.settings}; S.planned = v.planned || {}; S.metaAt = v.metaAt; changed = true; } }
+        if(v.kind === "meta"){ if((v.metaAt||0) > (S.metaAt||0)){ S.settings = {...DEFAULT.settings, ...v.settings}; S.planned = v.planned || {}; S.profile = v.profile || S.profile || {}; S.body = v.body || S.body || []; S.metaAt = v.metaAt; changed = true; } }
         else if(v.kind === "session"){ const loc = S.sessions[v.id]; if(!loc || (v.updatedAt||0) > (loc.updatedAt||0)){ const c = {...v}; delete c.kind; S.sessions[v.id] = c; changed = true; } }
       }
       if(!snap.metadata.fromCache){
@@ -1107,6 +1119,7 @@ function renderOggi(){
   h += `</div>`;
   // posturale + guida al peso
   h += `<div class="o-sec"><div class="o-list" style="margin-top:0">
+    <button class="o-row" data-act="bodyAdd"><span class="dot" style="background:var(--c4)"></span><span class="n">Registra peso o misure<small>${(() => { const w = latestWeight(); return w ? "ultimo peso " + fmtKg(w) + " kg" : "peso, circonferenze, composizione"; })()}</small></span><span class="p">›</span></button>
     <button class="o-row" data-act="startPost"><span class="dot" style="background:var(--post)"></span><span class="n">Routine posturale a casa<small>${postDone ? "fatta oggi ✓" : "circa 10 minuti"}</small></span><span class="p">›</span></button>
     ${st.total < 4 ? `<button class="o-row" data-act="rirHelp"><span class="dot" style="background:var(--accent-mint)"></span><span class="n">Come scegliere il peso<small>Le prime sedute: "Trova il peso" e le ripetizioni in canna</small></span><span class="p">›</span></button>` : ""}
   </div></div>`;
@@ -1278,8 +1291,12 @@ function sparkSvg(vals){
   const last = pts[pts.length-1];
   return `<svg class="spark" viewBox="0 0 ${w} ${hgt}" aria-hidden="true"><path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="3" fill="var(--accent)"/></svg>`;
 }
-let progPeriod = "3m", progLift = null;
+let progPeriod = "3m", progLift = null, progTab = "allenamento";
 function renderProgressi(){
+  const tabs = `<div class="o-seg" style="margin-bottom:10px">${[["allenamento","Allenamento"],["corpo","Corpo"]].map(([k,l]) => `<button class="${progTab===k?"on":""}" data-act="progTab" data-v="${k}">${l}</button>`).join("")}</div>`;
+  return tabs + (progTab === "corpo" ? renderCorpo() : renderAllenamento());
+}
+function renderAllenamento(){
   const list = doneSessions();
   if(!list.length) return `<div class="o-sec first"><p class="o-empty">Dopo il primo allenamento qui trovi il massimale stimato, la costanza, le serie per muscolo e i record.</p></div>`;
   const t = todayStr(); const now = parseYmd(t);
@@ -1380,10 +1397,10 @@ function weekStreak(){
 const LIFT_C = ["var(--c1)","var(--c2)","var(--c3)","var(--c4)"];
 
 /* ============ scelta del livello (primo avvio) ============ */
-function levelSheetHtml(first){
+function levelSheetHtml(first, inline){
   const lv = S.settings.level || "ripresa", sf = S.settings.startFrom || "f2";
-  return `<div class="grab"></div><div class="stack">
-    <div class="row between"><h2>${first ? "Da dove parti?" : "Il tuo livello"}</h2>${first ? "" : `<button class="btn icon ghost" data-act="closeSheet" aria-label="Chiudi">${svgI.close}</button>`}</div>
+  return `${inline ? "" : '<div class="grab"></div>'}<div class="stack">
+    <div class="row between">${inline ? "<h1>Da dove parti?</h1>" : `<h2>${first ? "Da dove parti?" : "Il tuo livello"}</h2>`}${first ? "" : `<button class="btn icon ghost" data-act="closeSheet" aria-label="Chiudi">${svgI.close}</button>`}</div>
     <p class="small muted">Il programma cambia solo all'inizio: il punto di partenza e le prime settimane.</p>
     <div class="o-list" style="margin-top:0">${Object.entries(LEVELS).map(([k,v]) => `<button class="o-row lvl${lv===k?" on":""}" data-act="pickLevel" data-v="${k}"><span class="dot" style="background:${lv===k ? "var(--accent)" : "var(--surface3)"}"></span><span class="n">${v.n}<small>${v.d}</small></span><span class="p">${lv===k ? "✓" : ""}</span></button>`).join("")}</div>
     <div class="hint small">${lv === "principiante" ? "<b>7 settimane di Fase 1.</b> Le prime 4 sono di apprendimento: macchine e manubri, pesi leggeri, un margine più ampio dal cedimento. Poi 3 settimane di Fase 1 normale, con l'arrivo del bilanciere, e il primo test. 2 o 3 sedute a settimana."
@@ -1391,8 +1408,182 @@ function levelSheetHtml(first){
       : "<b>Fase 1 di 4 settimane</b> per riabituare tendini e articolazioni al carico, poi il primo test e la Fase 2."}</div>
     ${lv === "allenato" ? `<div class="o-seg">${[["f2","Test → Fase 2"],["f3","Test → Fase 3"]].map(([k,l]) => `<button class="${sf===k?"on":""}" data-act="pickStart" data-v="${k}">${l}</button>`).join("")}</div><p class="tiny muted" style="margin-top:-4px">${sf === "f3" ? "Fase 3: più intensità e volume, per chi è già abituato a carichi pesanti. Dopo il ciclo si riparte dalla Fase 2." : "Fase 2: carichi fissi sulle ripetizioni massime, la fase più graduale per chi è allenato."}</p>` : ""}
     ${!first && programSessions().length ? `<div class="hint warn small">Hai già allenamenti registrati: il livello conta solo se ricominci il programma. Lo storico e i pesi restano.</div><button class="btn" data-act="restartProgram">Ricomincia il programma da qui</button>` : ""}
-    <button class="btn primary big" data-act="levelDone">${first ? "Inizia" : "Fatto"}</button></div>`;
+    ${inline ? "" : `<button class="btn primary big" data-act="levelDone">${first ? "Inizia" : "Fatto"}</button>`}</div>`;
 }
+
+/* ============ corpo: peso, circonferenze, composizione corporea ============ */
+// Equazioni plicometriche riprese da NutriEvolution (engine/bodyfat.py), stessi coefficienti verificati.
+// Densità -> % grasso: media di Siri (1961) e Brozek et al. (1963).
+const FOLD_N = {petto:"Pettorale", ascellare:"Ascellare media", tricipite:"Tricipitale", sottoscapolare:"Sottoscapolare", addome:"Addominale", soprailiaca:"Soprailiaca", coscia:"Coscia", bicipite:"Bicipitale", polpaccio:"Polpaccio mediale", sovraspinale:"Sovraspinale"};
+const CIRC_N = {vita:"Vita", fianchi:"Fianchi", petto:"Torace", braccio:"Braccio (contratto)", coscia:"Coscia", collo:"Collo", avambraccio:"Avambraccio", polpaccio:"Polpaccio", caviglia:"Caviglia"};
+const CIRC_MAIN = ["vita","fianchi","petto","braccio","coscia"], CIRC_MORE = ["collo","avambraccio","polpaccio","caviglia"];
+const SEVEN = ["petto","ascellare","tricipite","sottoscapolare","addome","soprailiaca","coscia"];
+const BF_EQ = {
+  jp3:{n:"Jackson-Pollock, 3 pliche", folds:{M:["petto","addome","coscia"], F:["tricipite","soprailiaca","coscia"]}, circ:{M:["vita","avambraccio"], F:["fianchi"]}, circOpt:true, age:[18,61], pop:"Adulti, USA", src:"Jackson & Pollock 1978 (uomini); Jackson, Pollock & Ward 1980 (donne)"},
+  jp7:{n:"Jackson-Pollock, 7 pliche", folds:{M:SEVEN, F:SEVEN}, circ:{M:["vita","avambraccio"], F:["fianchi"]}, circOpt:true, age:[18,61], pop:"Adulti, USA", src:"Jackson & Pollock 1978 (uomini); Jackson, Pollock & Ward 1980 (donne)"},
+  dw:{n:"Durnin-Womersley, 4 pliche", folds:{M:["bicipite","tricipite","sottoscapolare","soprailiaca"], F:["bicipite","tricipite","sottoscapolare","soprailiaca"]}, circ:{M:[],F:[]}, age:[16,72], pop:"Adulti, Regno Unito", src:"Durnin & Womersley 1974"},
+  withers:{n:"Withers, atleti", folds:{M:["addome","polpaccio","coscia","petto"], F:["tricipite","sottoscapolare","sovraspinale","polpaccio"]}, circ:{M:["collo","caviglia"], F:["vita","fianchi","petto"]}, age:[17,35], pop:"Atleti, Australia", src:"Withers et al. 1987"}
+};
+const DW_T = [[0,19,1.1620,0.0630,1.1549,0.0678],[20,29,1.1631,0.0632,1.1599,0.0717],[30,39,1.1422,0.0544,1.1423,0.0632],[40,49,1.1620,0.0700,1.1333,0.0612],[50,999,1.1715,0.0779,1.1339,0.0645]];
+function bfFromFolds(eq, sex, age, heightCm, f, c, withCirc){
+  const E = BF_EQ[eq]; const M = sex !== "F"; const sx = M ? "M" : "F";
+  const need = E.folds[sx].filter(k => !(f[k] > 0));
+  const needC = (eq === "withers" || withCirc) ? E.circ[sx].filter(k => !(c[k] > 0)) : [];
+  if(need.length || needC.length || !(age > 0)) return {missing:[...need.map(k => FOLD_N[k]), ...needC.map(k => CIRC_N[k]), ...(age > 0 ? [] : ["età"])]};
+  const sum = E.folds[sx].reduce((a,k) => a + f[k], 0); let D;
+  if(eq === "jp3" || eq === "jp7"){
+    const seven = eq === "jp7";
+    if(M){ const vm = (c.vita||0)/100, am = (c.avambraccio||0)/100;
+      D = seven ? (withCirc ? 1.1010000 - 0.00041150*sum + 0.00000069*sum*sum - 0.00022631*age - 0.0059239*vm + 0.0190632*am : 1.1120000 - 0.00043499*sum + 0.00000055*sum*sum - 0.00028826*age)
+                : (withCirc ? 1.0990750 - 0.0008209*sum + 0.0000026*sum*sum - 0.0002017*age - 0.005675*vm + 0.018586*am : 1.1093800 - 0.0008267*sum + 0.0000016*sum*sum - 0.0002574*age);
+    } else { const h = c.fianchi || 0;
+      D = seven ? (withCirc ? 1.1470 - 0.00042359*sum + 0.00000061*sum*sum - 0.00009975*age - 0.00062415*h : 1.0970 - 0.00046971*sum + 0.00000056*sum*sum - 0.00012828*age)
+                : (withCirc ? 1.1470292 - 0.0009376*sum + 0.0000030*sum*sum - 0.0001156*age - 0.0005839*h : 1.0994921 - 0.0009929*sum + 0.0000023*sum*sum - 0.0001392*age);
+    }
+  } else if(eq === "dw"){
+    const r = DW_T.find(t => age >= t[0] && age <= t[1]) || DW_T[DW_T.length-1];
+    D = M ? r[2] - r[3]*Math.log10(sum) : r[4] - r[5]*Math.log10(sum);
+  } else {
+    if(M) D = 1.078865 - 0.000419*sum + 0.000948*c.collo - 0.000266*age - 0.000564*c.caviglia;
+    else { if(!(heightCm > 0)) return {missing:["altezza"]}; D = 1.14075 - 0.04959*Math.log10(sum) + 0.00044*age - 0.000612*c.vita + 0.000284*heightCm - 0.000505*c.fianchi + 0.000331*c.petto; }
+  }
+  const siri = (4.95/D - 4.50)*100, brozek = (4.57/D - 4.142)*100;
+  const pct = (siri + brozek)/2;
+  const warn = (age < E.age[0] || age > E.age[1]) ? `Età fuori dall'intervallo dello studio (${E.age[0]}-${E.age[1]} anni): stima meno affidabile.` : "";
+  return {pct, sum, warn};
+}
+function ageNow(){ const p = S.profile || {}; return p.birthYear ? new Date().getFullYear() - p.birthYear : null; }
+function heightM(){ const h = (S.profile || {}).height; return h > 0 ? h/100 : null; }
+function bodySorted(){ return (S.body || []).slice().sort((a,b) => a.date === b.date ? (a.t||0) - (b.t||0) : a.date.localeCompare(b.date)); }
+function latestWeight(beforeDate){ const L = bodySorted().filter(e => e.w > 0 && (!beforeDate || e.date <= beforeDate)); return L.length ? L[L.length-1].w : null; }
+function weightAvgSeries(){ // media mobile degli ultimi 7 giorni, un punto per ogni giorno con una pesata
+  const L = bodySorted().filter(e => e.w > 0); const byDay = {};
+  L.forEach(e => byDay[e.date] = e.w);
+  const days = Object.keys(byDay).sort();
+  return days.map(d => { const from = ymd(new Date(parseYmd(d).getTime() - 6*864e5)); const win = days.filter(x => x >= from && x <= d).map(x => byDay[x]); return {date:d, v:win.reduce((a,b)=>a+b,0)/win.length, raw:byDay[d]}; });
+}
+let bodyChart = "peso", bodyDraft = {};
+function bodySheetHtml(){
+  const d = bodyDraft; const sex = (S.profile || {}).sex || "M"; const sx = sex === "F" ? "F" : "M";
+  const method = d.method || "none", eq = d.eq || "jp3"; const E = BF_EQ[eq];
+  const inp = (key, label, unit, val) => `<label class="bf-in"><span>${label}</span><span class="bf-f"><input type="text" inputmode="decimal" autocomplete="off" data-bf="${key}" value="${val ?? ""}"><em>${unit}</em></span></label>`;
+  let comp = "";
+  if(method === "pliche"){
+    const withC = !!d.withCirc;
+    comp = `<div class="field"><label>Equazione</label><select data-bfsel="eq">${Object.entries(BF_EQ).map(([k,v]) => `<option value="${k}" ${k===eq?"selected":""}>${esc(v.n)}</option>`).join("")}</select></div>
+      <p class="tiny muted">${esc(E.pop)} · ${esc(E.src)}</p>
+      <div class="bf-grid">${E.folds[sx].map(k => inp("f_"+k, FOLD_N[k], "mm", d["f_"+k])).join("")}</div>
+      ${E.circOpt ? `<label class="switch"><input type="checkbox" data-bfsel="withCirc" ${withC?"checked":""}><span><b>Con le circonferenze</b><br><span class="small muted">${sx==="M" ? "Vita e avambraccio" : "Fianchi"}, dalle circonferenze qui sopra</span></span></label>` : (E.circ[sx].length ? `<p class="small muted">Usa anche: ${E.circ[sx].map(k => CIRC_N[k].toLowerCase()).join(", ")} (dalle circonferenze qui sopra).</p>` : "")}
+      <div id="bfResult" class="hint small"></div>`;
+  } else if(method === "bia"){
+    comp = `<p class="small muted">Scrivi i valori dello strumento: ne bastano due su tre (con il peso, l'app ricava il terzo).</p>
+      <div class="bf-grid">${inp("bia_pct","Massa grassa","%",d.bia_pct)}${inp("bia_fm","Massa grassa","kg",d.bia_fm)}${inp("bia_ffm","Massa magra (FFM)","kg",d.bia_ffm)}</div><div id="bfResult" class="hint small"></div>`;
+  }
+  return `<div class="grab"></div><div class="stack">
+    <div class="row between"><h2>Nuova misura</h2><button class="btn icon ghost" data-act="closeSheet" aria-label="Chiudi">${svgI.close}</button></div>
+    <div class="bf-grid">${inp("date","Data","",d.date || todayStr()).replace('type="text" inputmode="decimal" autocomplete="off"','type="date"')}${inp("w","Peso","kg",d.w)}</div>
+    <div class="stack-sm"><span class="eyebrow">Circonferenze</span><div class="bf-grid">${CIRC_MAIN.map(k => inp("c_"+k, CIRC_N[k], "cm", d["c_"+k])).join("")}</div>
+      <details ${CIRC_MORE.some(k => d["c_"+k]) ? "open" : ""}><summary class="small muted">Altre circonferenze (servono ad alcune equazioni)</summary><div class="bf-grid" style="margin-top:8px">${CIRC_MORE.map(k => inp("c_"+k, CIRC_N[k], "cm", d["c_"+k])).join("")}</div></details></div>
+    <div class="stack-sm"><span class="eyebrow">Composizione corporea</span><div class="o-seg">${[["none","Nessuna"],["pliche","Dalle pliche"],["bia","Valori BIA"]].map(([k,l]) => `<button class="${method===k?"on":""}" data-act="bfMethod" data-v="${k}">${l}</button>`).join("")}</div>${comp}</div>
+    <button class="btn primary big" data-act="bodySave">Salva</button></div>`;
+}
+function readBodyForm(){ document.querySelectorAll("#sheet [data-bf]").forEach(el => { bodyDraft[el.dataset.bf] = el.value; }); document.querySelectorAll("#sheet [data-bfsel]").forEach(el => { bodyDraft[el.dataset.bfsel] = el.type === "checkbox" ? el.checked : el.value; }); }
+const numOf = v => { const x = parseFloat(String(v ?? "").replace(",", ".")); return isNaN(x) ? null : x; };
+function bodyComputed(){
+  const d = bodyDraft; const w = numOf(d.w) || latestWeight(d.date); const sex = (S.profile || {}).sex || "M";
+  if(d.method === "pliche"){
+    const f = {}, c = {}; Object.keys(FOLD_N).forEach(k => f[k] = numOf(d["f_"+k])); Object.keys(CIRC_N).forEach(k => c[k] = numOf(d["c_"+k]));
+    const r = bfFromFolds(d.eq || "jp3", sex, ageNow(), (S.profile||{}).height, f, c, !!d.withCirc);
+    if(r.missing) return {msg:"Mancano: " + r.missing.join(", ").toLowerCase() + "."};
+    const fm = w ? w*r.pct/100 : null;
+    return {pct:r.pct, fm, ffm: w ? w - fm : null, warn:r.warn, needW:!w};
+  }
+  if(d.method === "bia"){
+    let pct = numOf(d.bia_pct), fm = numOf(d.bia_fm), ffm = numOf(d.bia_ffm);
+    if(fm != null && ffm != null){ pct = pct ?? 100*fm/(fm+ffm); }
+    else if(w){ if(pct != null){ fm = fm ?? w*pct/100; ffm = ffm ?? w - fm; } else if(fm != null){ pct = 100*fm/w; ffm = w - fm; } else if(ffm != null){ fm = w - ffm; pct = 100*fm/w; } }
+    if(pct == null) return {msg:"Scrivi almeno due valori, oppure uno insieme al peso."};
+    return {pct, fm, ffm};
+  }
+  return null;
+}
+function updateBfResult(){ const el = $("#bfResult"); if(!el) return; readBodyForm(); const r = bodyComputed(); if(!r){ el.textContent = ""; return; }
+  el.innerHTML = r.msg ? esc(r.msg) : `<b>Massa grassa ${fmtKg(Math.round(r.pct*10)/10)}%</b>${r.fm != null ? ` · ${fmtKg(Math.round(r.fm*10)/10)} kg · massa magra ${fmtKg(Math.round(r.ffm*10)/10)} kg` : ""}${r.needW ? "<br>Scrivi il peso per avere i chili." : ""}${r.warn ? "<br>" + esc(r.warn) : ""}`; }
+document.addEventListener("input", e => { if(e.target.closest && e.target.closest("#sheet [data-bf]")) updateBfResult(); });
+function saveBodyEntry(){
+  readBodyForm(); const d = bodyDraft; const e = {id:uid(), date:d.date || todayStr(), t:Date.now()};
+  const w = numOf(d.w); if(w) e.w = w;
+  const circ = {}; Object.keys(CIRC_N).forEach(k => { const v = numOf(d["c_"+k]); if(v) circ[k] = v; }); if(Object.keys(circ).length) e.circ = circ;
+  const r = bodyComputed();
+  if(r && !r.msg){ e.comp = {method:d.method, pct:Math.round(r.pct*10)/10, ...(r.fm != null ? {fm:Math.round(r.fm*10)/10, ffm:Math.round(r.ffm*10)/10} : {})};
+    if(d.method === "pliche"){ e.comp.eq = d.eq || "jp3"; e.comp.withCirc = !!d.withCirc; const fo = {}; Object.keys(FOLD_N).forEach(k => { const v = numOf(d["f_"+k]); if(v) fo[k] = v; }); e.comp.folds = fo; } }
+  if(!e.w && !e.circ && !e.comp) return false;
+  S.body = (S.body || []).concat([e]); pushMeta(); return true;
+}
+function renderCorpo(){
+  const L = bodySorted(); const p = S.profile || {};
+  if(!L.length) return `<div class="o-sec first"><p class="o-empty">Registra peso, circonferenze e composizione corporea per vederne l'andamento.</p><button class="btn primary" data-act="bodyAdd" style="margin-top:8px">Nuova misura</button></div>`;
+  const avg = weightAvgSeries(); const lastAvg = avg.length ? avg[avg.length-1].v : null, firstAvg = avg.length ? avg[0].v : null;
+  const comps = L.filter(e => e.comp); const lc = comps[comps.length-1];
+  const ffm = lc && lc.comp.ffm; const h = heightM();
+  const ffmi = ffm && h ? ffm/(h*h) : null;
+  let s = `<div class="o-sec first" style="padding-top:8px"><div class="o-stats" style="margin-top:0">
+    <div><b>${lastAvg ? fmtKg(Math.round(lastAvg*10)/10) : "—"}</b><span>peso, media 7 giorni${avg.length > 1 ? ` · ${lastAvg - firstAvg >= 0 ? "+" : ""}${fmtKg(Math.round((lastAvg-firstAvg)*10)/10)}` : ""}</span></div>
+    <div><b>${lc ? fmtKg(lc.comp.pct) + "%" : "—"}</b><span>massa grassa</span></div>
+    <div><b>${ffmi ? fmtKg(Math.round(ffmi*10)/10) : "—"}</b><span>FFMI${ffm ? ` · FFM ${fmtKg(ffm)} kg` : h ? "" : " · manca l'altezza"}</span></div></div>
+    <button class="btn primary" data-act="bodyAdd" style="margin-top:16px;width:100%">Nuova misura</button></div>`;
+  const chips = [["peso","Peso"],["pct","Massa grassa"],["ffm","Massa magra"],...CIRC_MAIN.map(k => ["c_"+k, CIRC_N[k].replace(" (contratto)","")])];
+  let series = [], unit = "";
+  if(bodyChart === "peso"){ series = avg.length ? [{pts:avg.map(x => ({date:x.date, v:x.v})), c:"var(--c1)"}, {pts:avg.map(x => ({date:x.date, v:x.raw})), c:"var(--c2)"}] : []; unit = "kg"; }
+  else if(bodyChart === "pct" || bodyChart === "ffm"){ const k = bodyChart; series = [{pts:comps.filter(e => e.comp[k] != null).map(e => ({date:e.date, v:e.comp[k]})), c:"var(--c1)"}]; unit = k === "pct" ? "%" : "kg"; }
+  else { const k = bodyChart.slice(2); series = [{pts:L.filter(e => e.circ && e.circ[k]).map(e => ({date:e.date, v:e.circ[k]})), c:"var(--c1)"}]; unit = "cm"; }
+  series = series.filter(x => x.pts.length);
+  s += `<div class="o-sec"><div class="o-head"><span class="o-label">Andamento</span><span class="r">${bodyChart === "peso" ? "linea scura: media 7 giorni" : unit}</span></div>
+    <div class="o-chips">${chips.map(([k,l]) => `<button class="${bodyChart===k?"on":""}" data-act="bodyChart" data-v="${k}">${l}</button>`).join("")}</div>
+    ${series.length && series[0].pts.length > 1 ? `<div class="o-chart">${lineChartSvg(series, {label:"Andamento"})}</div>` : `<p class="o-empty">${series.length ? "Serve almeno una seconda misura per il grafico." : "Nessun valore registrato per questa voce."}</p>`}</div>`;
+  s += `<div class="o-sec"><div class="o-head"><span class="o-label">Misure registrate</span></div><div class="o-list">${L.slice().reverse().slice(0, 30).map(e => {
+      const parts = []; if(e.w) parts.push(fmtKg(e.w) + " kg");
+      if(e.comp) parts.push("grasso " + fmtKg(e.comp.pct) + "%" + (e.comp.ffm ? " · FFM " + fmtKg(e.comp.ffm) + " kg" : "") + " (" + (e.comp.method === "bia" ? "BIA" : BF_EQ[e.comp.eq] ? BF_EQ[e.comp.eq].n : "pliche") + ")");
+      if(e.circ) parts.push(Object.entries(e.circ).map(([k,v]) => CIRC_N[k].replace(" (contratto)","").toLowerCase() + " " + fmtKg(v)).join(", ") + " cm");
+      return `<div class="o-row" style="cursor:default"><span class="n">${esc(fmtDate(e.date).replace(/^./, c => c.toUpperCase()))}<small>${esc(parts.join(" · "))}</small></span><button class="btn icon ghost" data-act="bodyDel" data-id="${e.id}" aria-label="Elimina">${svgI.close}</button></div>`; }).join("")}</div></div>`;
+  s += `<div class="o-sec"><p class="tiny muted">FFMI = massa magra / altezza². Le equazioni plicometriche non sono validate sulla popolazione italiana: usale soprattutto per confrontare le tue misure nel tempo, con lo stesso metodo e la stessa equazione.</p></div>`;
+  return s;
+}
+
+/* ============ primo avvio: profilo, attività, livello ============ */
+const ACTIVITIES = [["palestra","Palestra (pesi)",true],["corsa","Corsa",false],["ciclismo","Ciclismo",false],["pallavolo","Pallavolo",false],["combinato","Allenamento combinato",false]];
+let onb = null;
+function onbHtml(){
+  const d = onb, st = d.step, p = 4;
+  const dots = `<div class="onb-dots">${[0,1,2,3].map(i => `<i class="${i<=st?"on":""}"></i>`).join("")}</div>`;
+  let b = "";
+  if(st === 0) b = `<h1>Benvenuto in TrainUP</h1><p class="o-sub">Qualche domanda per preparare il tuo programma. Le risposte restano solo su questo telefono.</p>
+    <label class="bf-in big"><span>Come ti chiami?</span><input type="text" id="onbName" value="${esc(d.name||"")}" placeholder="Nome" autocomplete="given-name"></label>`;
+  else if(st === 1) b = `<h1>Su di te</h1><p class="o-sub">Servono per i grafici del peso e per le stime della composizione corporea.</p>
+    <div class="o-seg">${[["M","Uomo"],["F","Donna"]].map(([k,l]) => `<button class="${d.sex===k?"on":""}" data-act="onbSex" data-v="${k}">${l}</button>`).join("")}</div>
+    <div class="bf-grid"><label class="bf-in"><span>Età</span><span class="bf-f"><input type="text" inputmode="numeric" id="onbAge" value="${d.age||""}"><em>anni</em></span></label>
+    <label class="bf-in"><span>Altezza</span><span class="bf-f"><input type="text" inputmode="decimal" id="onbH" value="${d.h||""}"><em>cm</em></span></label>
+    <label class="bf-in"><span>Peso</span><span class="bf-f"><input type="text" inputmode="decimal" id="onbW" value="${d.w||""}"><em>kg</em></span></label></div>
+    ${d.err ? `<div class="hint warn small">${esc(d.err)}</div>` : ""}`;
+  else if(st === 2) b = `<h1>Cosa pratichi?</h1><p class="o-sub">Puoi sceglierne più di una.</p>
+    <div class="o-list">${ACTIVITIES.map(([k,l,ok]) => `<button class="o-row" data-act="onbAct" data-v="${k}"><span class="dot" style="background:${(d.acts||[]).includes(k) ? "var(--accent)" : "var(--surface3)"}"></span><span class="n">${l}${ok ? "" : "<small>Programma in arrivo</small>"}</span><span class="p">${(d.acts||[]).includes(k) ? "✓" : ""}</span></button>`).join("")}</div>
+    ${(d.acts||[]).some(k => k !== "palestra") ? `<div class="hint small">Per ora TrainUP ha il programma per la palestra. Corsa, ciclismo, pallavolo e allenamento combinato arriveranno con i prossimi aggiornamenti.</div>` : ""}`;
+  else b = levelSheetHtml(true, true);
+  return `<div class="onb-in">${dots}<div class="stack">${b}</div>
+    <div class="row" style="gap:10px;margin-top:auto;padding-top:20px">${st > 0 ? `<button class="btn" data-act="onbBack" style="flex:none">Indietro</button>` : ""}<button class="btn primary big" data-act="onbNext" style="flex:1">${st === 3 ? "Inizia" : "Avanti"}</button></div></div>`;
+}
+function onbRender(){ let el = $("#onb"); if(!el){ el = document.createElement("div"); el.id = "onb"; document.body.appendChild(el); } el.innerHTML = onbHtml(); }
+function onbRead(){ const n = $("#onbName"); if(n) onb.name = n.value.trim(); const a = $("#onbAge"); if(a){ onb.age = numOf(a.value); onb.h = numOf($("#onbH").value); onb.w = numOf($("#onbW").value); } }
+function onbFinish(){
+  S.settings.name = onb.name || S.settings.name || "";
+  S.profile = {...(S.profile||{}), sex:onb.sex || "M", birthYear: onb.age ? new Date().getFullYear() - onb.age : undefined, height: onb.h || undefined};
+  S.settings.activities = onb.acts && onb.acts.length ? onb.acts : ["palestra"];
+  if(onb.w) S.body = (S.body || []).concat([{id:uid(), date:todayStr(), t:Date.now(), w:onb.w}]);
+  S.settings.levelChosen = true; pushMeta();
+  const el = $("#onb"); if(el){ el.classList.add("out"); setTimeout(() => el.remove(), 300); }
+  onb = null; render();
+}
+function startOnboarding(){ onb = {step:0, name:S.settings.name || "", sex:(S.profile||{}).sex || "M", acts:["palestra"]}; onbRender(); }
 
 /* ============ Programma ============ */
 
@@ -1404,12 +1595,18 @@ function swapsCardHtml(){
       : `<p class="small muted">Nessuno. Per cambiare un esercizio toccalo nella seduta (in Oggi o nel Calendario) oppure usa "Cambia" durante l'allenamento.</p>`}
   </div>`;
 }
+function profileSheetHtml(){ const p = S.profile || {}; const a = ageNow();
+  return `<div class="grab"></div><div class="stack"><div class="row between"><h2>Il tuo profilo</h2><button class="btn icon ghost" data-act="closeSheet" aria-label="Chiudi">${svgI.close}</button></div>
+    <div class="field"><label for="pfSex">Sesso</label><select id="pfSex"><option value="M" ${p.sex!=="F"?"selected":""}>Uomo</option><option value="F" ${p.sex==="F"?"selected":""}>Donna</option></select></div>
+    <div class="bf-grid"><label class="bf-in"><span>Età</span><span class="bf-f"><input type="text" inputmode="numeric" id="pfAge" value="${a ?? ""}"><em>anni</em></span></label><label class="bf-in"><span>Altezza</span><span class="bf-f"><input type="text" inputmode="decimal" id="pfH" value="${p.height ?? ""}"><em>cm</em></span></label></div>
+    <button class="btn primary big" data-act="saveProfile">Salva</button></div>`; }
 function renderProgramma(){
   const s = S.settings;
   const {pos} = nextPosition(todayStr());
   let h = `<div class="stack">
   <div class="card stack"><h2>Impostazioni</h2>
-    <button class="o-row" data-act="openLevel" style="padding-top:2px"><span class="n">Il tuo livello<small>${esc(LEVELS[s.level || "ripresa"].n)}${(s.level === "allenato") ? (s.startFrom === "f3" ? " · parti dalla Fase 3" : " · parti dalla Fase 2") : ""}</small></span><span class="p">Cambia ›</span></button>
+    <button class="o-row" data-act="editProfile" style="padding-top:2px"><span class="n">Il tuo profilo<small>${(() => { const p = S.profile || {}, a = ageNow(); return [p.sex === "F" ? "donna" : p.sex === "M" ? "uomo" : "", a ? a + " anni" : "", p.height ? p.height + " cm" : ""].filter(Boolean).join(" · ") || "sesso, età, altezza"; })()}</small></span><span class="p">Modifica ›</span></button>
+    <button class="o-row" data-act="openLevel"><span class="n">Il tuo livello<small>${esc(LEVELS[s.level || "ripresa"].n)}${(s.level === "allenato") ? (s.startFrom === "f3" ? " · parti dalla Fase 3" : " · parti dalla Fase 2") : ""}</small></span><span class="p">Cambia ›</span></button>
     <div class="field"><label for="setName">Il tuo nome (per il saluto nella home)</label><input id="setName" type="text" data-set="name" value="${esc(s.name || "")}" placeholder="Facoltativo" autocomplete="given-name"></div>
     <div class="field"><label for="setLeg">Esercizio principale per le gambe</label>
       <select id="setLeg" data-set="legMain"><option value="squat" ${s.legMain==="squat"?"selected":""}>Squat con bilanciere (consigliato per la forza)</option><option value="pressa" ${s.legMain==="pressa"?"selected":""}>Pressa (come Liparoti)</option></select></div>
@@ -1476,6 +1673,7 @@ document.addEventListener("change", e => {
     else S.settings[k] = el.value;
     pushMeta(); render(); return;
   }
+  if(e.target.closest("#sheet [data-bfsel]")){ readBodyForm(); showSheet(bodySheetHtml()); updateBfResult(); return; }
   const w = e.target.closest("[data-warm]"); if(w && R){ if(!R.warm || Array.isArray(R.warm)) R.warm = {}; R.warm[w.dataset.warm] = w.checked; saveDraft(); }
 });
 
@@ -1904,8 +2102,20 @@ function act(a, d, e){
       saveDraft(); closeSheet(); rRender(); break; }
     case "homeExpand": homeExpand = !homeExpand; render(); break;
     case "progPeriod": progPeriod = d.v; render(); break;
-    case "pickLevel": S.settings.level = d.v; pushMeta(); showSheet(levelSheetHtml(!S.settings.levelChosen)); break;
-    case "pickStart": S.settings.startFrom = d.v; pushMeta(); showSheet(levelSheetHtml(!S.settings.levelChosen)); break;
+    case "pickLevel": S.settings.level = d.v; pushMeta(); if(onb) onbRender(); else showSheet(levelSheetHtml(!S.settings.levelChosen)); break;
+    case "pickStart": S.settings.startFrom = d.v; pushMeta(); if(onb) onbRender(); else showSheet(levelSheetHtml(!S.settings.levelChosen)); break;
+    case "onbNext": onbRead(); if(onb.step === 1){ if(!(onb.age >= 16)){ onb.err = onb.age ? "TrainUP è pensata per chi ha almeno 16 anni: sotto quell'età serve un allenatore che ti segua di persona." : "Scrivi la tua età."; onbRender(); break; } if(!(onb.h > 120 && onb.h < 230)){ onb.err = "Scrivi l'altezza in centimetri."; onbRender(); break; } onb.err = ""; } if(onb.step >= 3) onbFinish(); else { onb.step++; onbRender(); } break;
+    case "onbBack": onbRead(); onb.step = Math.max(0, onb.step-1); onbRender(); break;
+    case "onbSex": onbRead(); onb.sex = d.v; onbRender(); break;
+    case "onbAct": { const a = onb.acts || []; onb.acts = a.includes(d.v) ? a.filter(x => x !== d.v) : a.concat([d.v]); onbRender(); break; }
+    case "progTab": progTab = d.v; render(); break;
+    case "bodyAdd": bodyDraft = {date:todayStr(), method:"none"}; showSheet(bodySheetHtml()); break;
+    case "bfMethod": readBodyForm(); bodyDraft.method = d.v; showSheet(bodySheetHtml()); updateBfResult(); break;
+    case "bodySave": if(saveBodyEntry()){ closeSheet(); render(); } else alert("Scrivi almeno un valore: peso, una circonferenza o la composizione corporea."); break;
+    case "bodyDel": if(confirm("Eliminare questa misura?")){ S.body = (S.body||[]).filter(e => e.id !== d.id); pushMeta(); render(); } break;
+    case "bodyChart": bodyChart = d.v; render(); break;
+    case "editProfile": showSheet(profileSheetHtml()); break;
+    case "saveProfile": { const a = numOf($("#pfAge").value), h = numOf($("#pfH").value); S.profile = {...(S.profile||{}), sex:$("#pfSex").value, birthYear: a ? new Date().getFullYear() - a : undefined, height: h || undefined}; pushMeta(); closeSheet(); render(); break; }
     case "levelDone": S.settings.levelChosen = true; pushMeta(); closeSheet(); render(); break;
     case "openLevel": showSheet(levelSheetHtml(false)); break;
     case "restartProgram": if(confirm("Ricominciare il programma dal punto di partenza del livello scelto? Lo storico degli allenamenti resta.")){ S.settings.restartAt = Date.now(); S.settings.levelChosen = true; pushMeta(); closeSheet(); render(); } break;
@@ -1971,7 +2181,7 @@ function act(a, d, e){
 }
 
 render();
-setTimeout(() => { if(!S.settings.levelChosen && !doneSessions().length && $("#sheet").hidden) showSheet(levelSheetHtml(true)); }, 2400);
+if(!S.settings.levelChosen && !doneSessions().length) startOnboarding();
 initSync();
 </script>
 <script>
