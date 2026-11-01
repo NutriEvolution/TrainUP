@@ -443,6 +443,12 @@ const EX = {
   splitSquat:{n:"Split squat con manubri", step:2, inc:2, unit:"manubri (peso di uno)", side:"per gamba", yt:"split squat manubri tecnica", src:"PE2 pp. 283-284",
     how:["Una gamba avanti e una indietro, con un passo più lungo del normale.","Busto eretto, scendi in verticale finché il ginocchio dietro sfiora il pavimento.","La tibia della gamba avanti resta verticale; spingi con quella gamba per risalire.","Finite le ripetizioni, cambia gamba. Se serve, la prima settimana fallo senza pesi."],
     err:["Buttarsi in avanti sollevando il tallone.","Ginocchio avanti che cede verso l'interno."]},
+  splitSquatCorpo:{n:"Split squat a corpo libero", step:0, inc:0, unit:"corpo libero", side:"per gamba", yt:"split squat corpo libero tecnica", src:"PE2 pp. 283-284 (senza pesi)", bw:true,
+    how:["Una gamba avanti e una indietro, con un passo più lungo del normale.","Busto eretto, scendi in verticale finché il ginocchio dietro sfiora il pavimento.","La tibia della gamba avanti resta verticale; spingi con quella gamba per risalire.","Finite le ripetizioni, cambia gamba."],
+    err:["Buttarsi in avanti sollevando il tallone.","Ginocchio avanti che cede verso l'interno."]},
+  affondiCorpo:{n:"Affondi camminati a corpo libero", step:0, inc:0, unit:"corpo libero", side:"per gamba", yt:"affondi camminati corpo libero tecnica", src:"PE2 pp. 285-286 (senza pesi)", bw:true,
+    how:["Cammina in avanti con passi più lunghi del normale.","A ogni passo scendi finché il ginocchio dietro sfiora il pavimento, busto eretto.","Spingi con la gamba avanti e fai subito il passo successivo, senza unire i piedi."],
+    err:["Ginocchio che cade verso l'interno (guardati anche di fronte).","Busto che si piega in avanti."]},
   affondiCamminati:{n:"Affondi camminati con manubri", step:2, inc:2, unit:"manubri (peso di uno)", side:"per gamba", yt:"affondi camminati manubri tecnica", src:"PE2 pp. 285-286",
     how:["Cammina in avanti con passi più lunghi del normale.","A ogni passo scendi finché il ginocchio dietro sfiora il pavimento, busto eretto.","Spingi con la gamba avanti e fai subito il passo successivo, senza unire i piedi."],
     err:["Ginocchio che cade verso l'interno (guardati anche di fronte).","Spalle in avanti: tieni i manubri vicino ai fianchi."]},
@@ -892,7 +898,7 @@ function learnVersion(blocks){
 // Ogni gruppo contiene esercizi con lo stesso schema di movimento e gli stessi muscoli principali, nell'ordine in cui li proponiamo.
 const PAT = [
   ["squat","hackSquat","pressa","smithSquat","gobletSquat"],
-  ["splitSquat","affondiCamminati"],
+  ["splitSquat","affondiCamminati","splitSquatCorpo","affondiCorpo"],
   ["rdl","rdlManubri","stacco"],
   ["legCurlSeduto","legCurl"],
   ["panca","pancaManubri","chestPress","piegamenti"],
@@ -940,7 +946,7 @@ function applySwaps(sess, s){
 function isMainLift(k){ return TESTED.includes(k); }
 function buildPostureSession(){
   const seen = new Set(), blocks = [];
-  for(const k of postureConds()) for(const [ex, p] of POSTURE[k].home) if(!seen.has(ex)){ seen.add(ex); blocks.push({type:"single", items:[{ex, p}]}); }
+  for(const k of postureConds()) for(const [ex, p] of POSTURE[k].home) if(!seen.has(ex) && exAvail(ex)){ seen.add(ex); blocks.push({type:"single", items:[{ex, p}]}); } // a casa: senza l'attrezzo l'esercizio si toglie
   return {code:"Post", title:"Routine posturale a casa", kind:"post", blocks};
 }
 
@@ -979,24 +985,24 @@ function postureGymBlocks(){
 /* ============ allenamento a casa ============ */
 // A casa ogni esercizio che richiede macchine o attrezzi che non hai viene sostituito con il primo disponibile della sua lista.
 // Elastici e allenamento a casa sono efficaci (ACSM 2026; Lopes 2019: forza simile all'allenamento con pesi). Le liste sono una scelta dell'app.
-const EQUIP = [["m","Manubri"],["pa","Panca"],["sb","Sbarra per trazioni"],["el","Elastici"],["bil","Bilanciere e rack"]];
-const REQ = {gobletSquat:["m"], squat:["bil"], splitSquat:[], affondiCamminati:[], pancaManubri:["m","pa"], panca:["bil","pa"], pancaInclinataManubri:["m","pa"], pancaStretta:["bil","pa"],
+const EQUIP = [["m","Manubri"],["pa","Panca"],["sb","Sbarra per trazioni"],["el","Elastici"],["bil","Bilanciere e rack"],["rul","Rullo (foam roller)"]];
+const REQ = {gobletSquat:["m"], squat:["bil"], splitSquat:["m"], affondiCamminati:["m"], splitSquatCorpo:[], affondiCorpo:[], alzateProno:["m"], diagManubrio:["m"], mobRullo:["rul"], pancaManubri:["m","pa"], panca:["bil","pa"], pancaInclinataManubri:["m","pa"], pancaStretta:["bil","pa"],
   piegamenti:[], military:["bil"], lentoManubri:["m"], alzateLaterali:["m"], trazioni:["sb"], rematoreManubrio:["m"], rematoreBil:["bil"], stacco:["bil"], rdlManubri:["m"], rdl:["bil"],
   curlEZ:["bil"], curlManubri:["m"], curlMartello:["m"], tricipitiOverheadManubrio:["m"], deadBug:[], plank:[], crunch:[], crunchInverso:[], squatCorpo:[],
   rematoreElastico:["el"], latElastico:["el"], alzateLateraliElastico:["el"], curlElastico:["el"], pushdownElastico:["el"], stabElastico:["el"], pallof:["el"]};
 const HOME_ALT = {
-  squat:["squat","gobletSquat","splitSquat"], hackSquat:["gobletSquat","splitSquat"], pressa:["gobletSquat","splitSquat"], smithSquat:["gobletSquat","splitSquat"], legExtension:["splitSquat"],
-  legCurl:["rdlManubri","affondiCamminati"], legCurlSeduto:["rdlManubri","affondiCamminati"], calf:["squatCorpo"],
+  squat:["squat","gobletSquat","splitSquat","splitSquatCorpo"], hackSquat:["gobletSquat","splitSquat","splitSquatCorpo"], pressa:["gobletSquat","splitSquat","splitSquatCorpo"], smithSquat:["gobletSquat","splitSquat","splitSquatCorpo"], legExtension:["splitSquat","splitSquatCorpo"],
+  legCurl:["rdlManubri","affondiCamminati","affondiCorpo"], legCurlSeduto:["rdlManubri","affondiCamminati","affondiCorpo"], calf:["squatCorpo"],
   panca:["panca","pancaManubri","piegamenti"], chestPress:["pancaManubri","piegamenti"], pancaInclinataManubri:["pancaInclinataManubri","piegamenti"], pancaStretta:["pancaStretta","piegamenti"], crociCavi:["pancaManubri","piegamenti"], pecDeck:["pancaManubri","piegamenti"],
   military:["military","lentoManubri","piegamenti"], shoulderPress:["lentoManubri","military","piegamenti"],
   alzateLateraliCavo:["alzateLaterali","alzateLateraliElastico"], alzateLaterali:["alzateLaterali","alzateLateraliElastico"], facePull:["stabElastico","alzateProno"],
   latMachine:["trazioni","latElastico","rematoreManubrio","rematoreElastico"], latPresaStretta:["trazioni","latElastico","rematoreManubrio","rematoreElastico"], pulldown:["latElastico","rematoreManubrio"],
   pulley:["rematoreManubrio","rematoreElastico","rematoreBil"], rowMachine:["rematoreManubrio","rematoreElastico","rematoreBil"], rematoreBil:["rematoreBil","rematoreManubrio","rematoreElastico"],
-  stacco:["stacco","rdlManubri","affondiCamminati"], rdl:["rdl","rdlManubri","affondiCamminati"],
+  stacco:["stacco","rdlManubri","affondiCamminati","affondiCorpo"], rdl:["rdl","rdlManubri","affondiCamminati","affondiCorpo"],
   curlEZ:["curlEZ","curlManubri","curlElastico"], curlCavo:["curlManubri","curlElastico"], curlScott:["curlManubri","curlElastico"],
   frenchPress:["tricipitiOverheadManubrio","pushdownElastico","piegamenti"], pushdown:["tricipitiOverheadManubrio","pushdownElastico","piegamenti"], tricipitiOverheadCavo:["tricipitiOverheadManubrio","pushdownElastico","piegamenti"],
-  pallof:["pallof","plank"], backExt:["deadBug","plank"],
-  gobletSquat:["gobletSquat","splitSquat"], pancaManubri:["pancaManubri","piegamenti"], rdlManubri:["rdlManubri","affondiCamminati"], lentoManubri:["lentoManubri","piegamenti"],
+  pallof:["pallof","plank"], splitSquat:["splitSquat","splitSquatCorpo"], affondiCamminati:["affondiCamminati","affondiCorpo"], backExt:["deadBug","plank"],
+  gobletSquat:["gobletSquat","splitSquat","splitSquatCorpo"], pancaManubri:["pancaManubri","piegamenti"], rdlManubri:["rdlManubri","affondiCamminati","affondiCorpo"], lentoManubri:["lentoManubri","piegamenti"],
   rematoreManubrio:["rematoreManubrio","rematoreElastico","alzateProno"], trazioni:["trazioni","latElastico","rematoreManubrio","rematoreElastico"],
   curlManubri:["curlManubri","curlElastico"], curlMartello:["curlMartello","curlManubri","curlElastico"], tricipitiOverheadManubrio:["tricipitiOverheadManubrio","pushdownElastico","piegamenti"]
 };
@@ -1207,7 +1213,7 @@ const GROUPS = {
   shoulders:{n:"Spalle", c:"var(--g-shoulders)"}, arms:{n:"Braccia", c:"var(--g-arms)"}, core:{n:"Core", c:"var(--g-core)"}, post:{n:"Posturale", c:"var(--g-post)"}, warm:{n:"Riscaldamento", c:"var(--muted)"}
 };
 const EXG = {
-  gobletSquat:"legs", squat:"legs", splitSquat:"legs", affondiCamminati:"legs", stacco:"legs", rdlManubri:"legs", rdl:"legs", pressa:"legs", hackSquat:"legs", legCurl:"legs", legCurlSeduto:"legs", smithSquat:"legs", legExtension:"legs", calf:"legs",
+  gobletSquat:"legs", squat:"legs", splitSquat:"legs", affondiCamminati:"legs", splitSquatCorpo:"legs", affondiCorpo:"legs", stacco:"legs", rdlManubri:"legs", rdl:"legs", pressa:"legs", hackSquat:"legs", legCurl:"legs", legCurlSeduto:"legs", smithSquat:"legs", legExtension:"legs", calf:"legs",
   pancaManubri:"chest", panca:"chest", pancaInclinataManubri:"chest", pancaStretta:"chest", chestPress:"chest", piegamenti:"chest", crociCavi:"chest", pecDeck:"chest",
   latMachine:"back", trazioni:"back", pulley:"back", rowMachine:"back", rematoreManubrio:"back", rematoreBil:"back", pulldown:"back", latPresaStretta:"back",
   military:"shoulders", lentoManubri:"shoulders", shoulderPress:"shoulders", alzateLaterali:"shoulders", facePull:"shoulders", alzateLateraliCavo:"shoulders",
@@ -1596,7 +1602,7 @@ const FEDB = {gobletSquat:"Goblet_Squat",squat:"Barbell_Full_Squat",splitSquat:"
 // Video tutorial del canale YouTube Project inVictus (autore verificato video per video).
 const FEDB_VB = {boxSalita:"Front_Box_Jump", tuck:"Knee_Tuck_Jump", splitCiclico:"Scissors_Jump", lungoFermo:"Standing_Long_Jump", ostacoloLat:"Lateral_Cone_Hops", boxLat:"Lateral_Box_Jump", petto:"Medicine_Ball_Chest_Pass", skip:"Fast_Skipping"};
 for(const [k, v] of Object.entries(FEDB_VB)) FEDB["vb:" + k] = v;
-const VID = {squat:["H1_YLMIkoCU","Squat: come eseguirlo correttamente?"],gobletSquat:["H1_YLMIkoCU","Squat: come eseguirlo correttamente?"],splitSquat:["zvaJ9MdWzdM","Affondi e glutei: facciamoli correttamente"],affondiCamminati:["zvaJ9MdWzdM","Affondi e glutei: facciamoli correttamente"],panca:["tNC8yI5wo4M","Panca piana: come eseguirla correttamente?"],pancaStretta:["tNC8yI5wo4M","Panca piana: come eseguirla correttamente?"],chestPress:["lAkcFUulVn4","Chest press: come farla correttamente"],piegamenti:["MgCSo0xWj1M","Piegamenti sulle braccia: come eseguirli correttamente?"],crociCavi:["l9vGijqXG5s","Tutorial croci: manubri e cavi"],pecDeck:["6dExVifvwR8","Pectoral machine: esecuzione e consigli pratici"],military:["M6rkLOz29QQ","Tutorial lento in piedi"],lentoManubri:["m3UHlrhQ2IU","Biomeccanica del lento manubri"],shoulderPress:["m3UHlrhQ2IU","Biomeccanica del lento manubri"],alzateLaterali:["CGJiLSRpEFg","Alzate laterali, frontali e posteriori"],alzateLateraliCavo:["CGJiLSRpEFg","Alzate laterali, frontali e posteriori"],alzateProno:["CGJiLSRpEFg","Alzate laterali, frontali e posteriori"],latMachine:["bnSooG_TuRI","Lat machine: tutorial ed esecuzione"],latPresaStretta:["bnSooG_TuRI","Lat machine: tutorial ed esecuzione"],trazioni:["oN7zZJd4KnI","Trazioni alla sbarra: tutorial ed esecuzione"],rematoreBil:["wTeZWsf2i8o","Rematore bilanciere e manubrio"],rematoreManubrio:["wTeZWsf2i8o","Rematore bilanciere e manubrio"],stacco:["xPs2VFWDWTI","Tutorial stacco da terra"],rdl:["_ml0wRUcIRE","Tutorial breve sull'RDL (stacco rumeno)"],rdlManubri:["_ml0wRUcIRE","Tutorial breve sull'RDL (stacco rumeno)"],pressa:["LMTyPl_oo38","Leg press: tutorial, esecuzione e varianti"],legCurl:["1zevKZn_n1E","Leg curl: come si esegue correttamente?"],legCurlSeduto:["1zevKZn_n1E","Leg curl: come si esegue correttamente?"],curlEZ:["3SkazbN3l8w","Curl bilanciere e su panca inclinata"],curlManubri:["3SkazbN3l8w","Curl bilanciere e su panca inclinata"],pushdown:["uJAuEE_RCL0","Push down e french press"],frenchPress:["uJAuEE_RCL0","Push down e french press"],tricipitiOverheadCavo:["uJAuEE_RCL0","Push down e french press"],tricipitiOverheadManubrio:["uJAuEE_RCL0","Push down e french press"],plank:["Is-7PPaBcsM","Plank: esecuzione corretta"]};
+const VID = {squat:["H1_YLMIkoCU","Squat: come eseguirlo correttamente?"],gobletSquat:["H1_YLMIkoCU","Squat: come eseguirlo correttamente?"],splitSquat:["zvaJ9MdWzdM","Affondi e glutei: facciamoli correttamente"],splitSquatCorpo:["zvaJ9MdWzdM","Affondi e glutei: facciamoli correttamente"],affondiCorpo:["zvaJ9MdWzdM","Affondi e glutei: facciamoli correttamente"],affondiCamminati:["zvaJ9MdWzdM","Affondi e glutei: facciamoli correttamente"],panca:["tNC8yI5wo4M","Panca piana: come eseguirla correttamente?"],pancaStretta:["tNC8yI5wo4M","Panca piana: come eseguirla correttamente?"],chestPress:["lAkcFUulVn4","Chest press: come farla correttamente"],piegamenti:["MgCSo0xWj1M","Piegamenti sulle braccia: come eseguirli correttamente?"],crociCavi:["l9vGijqXG5s","Tutorial croci: manubri e cavi"],pecDeck:["6dExVifvwR8","Pectoral machine: esecuzione e consigli pratici"],military:["M6rkLOz29QQ","Tutorial lento in piedi"],lentoManubri:["m3UHlrhQ2IU","Biomeccanica del lento manubri"],shoulderPress:["m3UHlrhQ2IU","Biomeccanica del lento manubri"],alzateLaterali:["CGJiLSRpEFg","Alzate laterali, frontali e posteriori"],alzateLateraliCavo:["CGJiLSRpEFg","Alzate laterali, frontali e posteriori"],alzateProno:["CGJiLSRpEFg","Alzate laterali, frontali e posteriori"],latMachine:["bnSooG_TuRI","Lat machine: tutorial ed esecuzione"],latPresaStretta:["bnSooG_TuRI","Lat machine: tutorial ed esecuzione"],trazioni:["oN7zZJd4KnI","Trazioni alla sbarra: tutorial ed esecuzione"],rematoreBil:["wTeZWsf2i8o","Rematore bilanciere e manubrio"],rematoreManubrio:["wTeZWsf2i8o","Rematore bilanciere e manubrio"],stacco:["xPs2VFWDWTI","Tutorial stacco da terra"],rdl:["_ml0wRUcIRE","Tutorial breve sull'RDL (stacco rumeno)"],rdlManubri:["_ml0wRUcIRE","Tutorial breve sull'RDL (stacco rumeno)"],pressa:["LMTyPl_oo38","Leg press: tutorial, esecuzione e varianti"],legCurl:["1zevKZn_n1E","Leg curl: come si esegue correttamente?"],legCurlSeduto:["1zevKZn_n1E","Leg curl: come si esegue correttamente?"],curlEZ:["3SkazbN3l8w","Curl bilanciere e su panca inclinata"],curlManubri:["3SkazbN3l8w","Curl bilanciere e su panca inclinata"],pushdown:["uJAuEE_RCL0","Push down e french press"],frenchPress:["uJAuEE_RCL0","Push down e french press"],tricipitiOverheadCavo:["uJAuEE_RCL0","Push down e french press"],tricipitiOverheadManubrio:["uJAuEE_RCL0","Push down e french press"],plank:["Is-7PPaBcsM","Plank: esecuzione corretta"]};
 function photoHtml(k, small){
   const id = FEDB[k]; if(!id) return "";
   const b = "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/" + encodeURIComponent(id) + "/";
@@ -2268,7 +2274,7 @@ function renderImpostazioni(){
   h += `<div class="o-sec"><div class="o-label">Cosa pratichi</div><div class="o-list">${ACTIVITIES.filter(([k]) => k !== "combinato").map(([k, l]) => `<label class="switch"><input type="checkbox" data-actv="${k}" ${acts.includes(k) ? "checked" : ""}><span><b>${l}</b></span></label>`).join("")}</div>
     <p class="tiny muted" style="margin-top:6px">Togliere un'attività la nasconde da Oggi e da Piano; piani e storico restano. Giorni e opzioni dei piani sono in Piano.</p></div>`;
   if(gymOn()) h += `<div class="o-sec"><div class="o-label">Dove ti alleni</div><div class="o-seg" style="margin-top:8px">${[["palestra","In palestra"],["casa","A casa"]].map(([k, l]) => `<button class="${(s.where || "palestra") === k ? "on" : ""}" data-act="setWhere" data-v="${k}">${l}</button>`).join("")}</div>
-    ${s.where === "casa" ? `<p class="small muted">Cosa hai a casa? Gli esercizi che richiedono macchine o attrezzi che non hai vengono sostituiti con un esercizio simile; senza attrezzi restano corpo libero ed elastici.</p><div class="o-list">${EQUIP.map(([k, l]) => `<label class="switch"><input type="checkbox" data-equip="${k}" ${(s.equip||[]).includes(k) ? "checked" : ""}><span><b>${l}</b></span></label>`).join("")}</div>
+    ${s.where === "casa" ? `<p class="small muted">Cosa hai a casa? Gli esercizi che richiedono macchine o attrezzi che non hai vengono sostituiti con un esercizio simile (senza manubri, per esempio, split squat e affondi a corpo libero); gli esercizi posturali che richiedono un attrezzo che non hai vengono tolti.</p><div class="o-list">${EQUIP.map(([k, l]) => `<label class="switch"><input type="checkbox" data-equip="${k}" ${(s.equip||[]).includes(k) ? "checked" : ""}><span><b>${l}</b></span></label>`).join("")}</div>
       <p class="tiny muted" style="margin-top:6px">Con gli elastici la forza cresce in modo simile ai pesi (Lopes 2019; ACSM 2026); piegamenti e split squat hanno dato risultati simili a panca e squat (Calatayud 2015, Kikuchi 2017, Speirs 2016). Le altre sostituzioni sono scelte dell'app; con gli elastici il peso non si registra. Dettagli in Guida → Perché così.</p>` : ""}</div>`;
   h += postureSettingsHtml();
   h += `<div class="o-sec"><div class="o-label">Durante l'allenamento</div>${sw("sound", "Suono e vibrazione", "Fine del recupero, minuti degli EMOM, cambi di passo nella corsa", !!s.sound)}</div>`;
