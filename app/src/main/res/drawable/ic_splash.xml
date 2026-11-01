@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Logo per la schermata di avvio di Android 12+: manubrio stilizzato nel colore dell'app -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:width="288dp" android:height="288dp" android:viewportWidth="96" android:viewportHeight="96">
+  <group android:translateX="32" android:translateY="32">
+    <path android:strokeColor="@color/splash_icon" android:strokeWidth="2.4" android:strokeLineCap="round"
+      android:pathData="M8,9v14M24,9v14M4,13v6M28,13v6M8,16h16"/>
+  </group>
+</vector>

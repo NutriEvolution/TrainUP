@@ -1,4 +1,3 @@
-Novità della 1.5.0
-- Foto degli esercizi (posizione di partenza e finale) nella scheda tecnica e durante l'allenamento
-- Video tutorial di Project inVictus per i principali esercizi, con l'autore indicato
-- Le tue foto e video: registra o scatta dalla scheda di ogni esercizio, o prendili dalla galleria
+Novità della 1.5.1
+- All'apertura il logo di TrainUP per 2 secondi, su sfondo chiaro o scuro come l'app
+- Aggiornamenti più sicuri: l'app scarica solo dalle release di TrainUP su GitHub e, prima di installare, controlla che il file sia TrainUP, più recente e firmato con la stessa chiave

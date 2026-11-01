@@ -22,6 +22,16 @@ i = src.index('<div id="app">')
 head, body = src[:i], src[i:]
 j = body.rindex("</script>") + len("</script>")
 body = body[:j] + "\n<script>\n" + android + "\n</script>\n" + body[j:]
+splash = """<style>
+#splash{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .3s ease}
+#splash svg{width:80px;height:80px;color:var(--accent)}
+#splash b{font-family:var(--serif);font-weight:600;font-size:30px;letter-spacing:-.02em;color:var(--ink);animation:splashIn .5s ease .15s both}
+#splash.out{opacity:0;pointer-events:none}
+@keyframes splashIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+<div id="splash" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 9v14M24 9v14M4 13v6M28 13v6M8 16h16"/></svg><b>TrainUP</b></div>
+"""
+body = splash + body
 out = ('<!doctype html>\n<html lang="it">\n<head>\n<meta charset="utf-8">\n'
        '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
        + fonts + head + "</head>\n<body>\n" + body + "\n</body>\n</html>\n")

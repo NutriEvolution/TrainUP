@@ -1,5 +1,8 @@
 /* ===== Integrazione Android (aggiunta solo nella versione APK) ===== */
 (function(){
+  // schermata con il logo: 2 secondi dall'apertura, poi dissolvenza
+  const sp = document.getElementById("splash");
+  if(sp) setTimeout(() => { sp.classList.add("out"); setTimeout(() => sp.remove(), 350); }, Math.max(0, 2000 - performance.now()));
   const A = window.Android;
   if(!A) return;
   const U = window.__upd = {info:null, progress:null, checking:false, msg:""};
@@ -46,6 +49,7 @@
     if(p === 100) U.msg = "Download completato: conferma l'installazione.";
     render();
   };
+  window.onUpdateRejected = function(why){ U.progress = null; U.msg = "Aggiornamento bloccato: " + why + ". Non è stato installato nulla."; render(); };
   window.updateBannerHtml = function(){
     const i = U.info;
     if(!i || !i.available) return "";
