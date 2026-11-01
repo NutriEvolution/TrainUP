@@ -1086,7 +1086,7 @@ function renderOggi(){
     const nextUp = Object.entries(fc).find(([d]) => d > t);
     h += `<div class="o-sec"><div class="o-head"><span class="o-label">Oggi</span><span class="r">giorno di riposo</span></div>
       ${nextUp ? `<div class="o-today"><div class="big" style="font-size:44px;color:var(--accent-mint)">${parseYmd(nextUp[0]).getDate()}</div><div><span class="o-sub" style="margin:0">Prossimo allenamento</span><h2>${esc(fmtDate(nextUp[0]).replace(/^./, c => c.toUpperCase()))}</h2><div class="o-sub">${esc(dn(buildSession(nextUp[1], S.settings)))} · ${esc(posLabel(nextUp[1]))}</div></div></div>`
-        : `<p class="o-sub" style="margin-top:8px">Nessun giorno di allenamento segnato. Segna i giorni nel calendario e la seduta comparirà qui il giorno stesso.</p>`}
+        : `<p class="o-sub" style="margin-top:8px">Nessun giorno di allenamento segnato. Segna i giorni e la seduta comparirà qui il giorno stesso.</p><button class="btn" data-act="planLMV" style="margin-top:10px">Segna lun, mer, ven · 4 settimane</button>`}
       <button class="btn ghost sm" data-act="trainToday" style="margin-top:10px;padding-left:0">Allenati oggi lo stesso</button></div>`;
   }
   // settimana
@@ -1105,9 +1105,6 @@ function renderOggi(){
     h += lifts.map(x => { const f = x.pts[0].v, l = x.pts[x.pts.length-1].v, dlt = l - f; return `<div class="o-lift"><span class="row" style="gap:8px"><span class="gdot" style="background:${x.c}"></span>${esc(EX[x.k].n.replace(" con bilanciere","").replace(" (in piedi)",""))}</span><span class="row" style="gap:0">${x.pts.length > 1 ? `<span class="${dlt >= 0 ? "o-up" : "o-down"}">${dlt >= 0 ? "+" : ""}${fmtKg(Math.round(dlt))} kg</span>` : ""}<b>${fmtKg(Math.round(l))} kg</b></span></div>`; }).join("");
   } else h += `<p class="o-empty">Il grafico compare dopo un paio di sedute con i pesi registrati sugli esercizi principali.</p>`;
   h += `</div>`;
-  // prossimi allenamenti
-  if(upcoming.length) h += `<div class="o-sec"><div class="o-head"><span class="o-label">Prossimi allenamenti</span><button class="btn ghost sm" data-nav="calendario">Calendario</button></div><div class="o-list">${upcoming.map(([d,p]) => { const b = buildSession(p, S.settings); return `<button class="o-row" data-act="openDay" data-d="${d}"><span class="dbadge"><b>${parseYmd(d).getDate()}</b><span>${MESI[parseYmd(d).getMonth()].slice(0,3)}</span></span><span class="n" style="text-transform:capitalize">${esc(GIORNI[parseYmd(d).getDay()])}<small style="text-transform:none">${esc(dn(b))} · ${esc(posLabel(p))}</small></span><span class="p">›</span></button>`; }).join("")}</div></div>`;
-  else h += `<div class="o-sec"><span class="o-label">Pianifica la settimana</span><p class="small muted" style="margin:8px 0 10px">Segna i giorni in cui ti allenerai: l'app assegna la scheda giusta a ognuno.</p><button class="btn" data-act="planLMV">Segna lun, mer, ven · 4 settimane</button></div>`;
   // posturale + guida al peso
   h += `<div class="o-sec"><div class="o-list" style="margin-top:0">
     <button class="o-row" data-act="startPost"><span class="dot" style="background:var(--post)"></span><span class="n">Routine posturale a casa<small>${postDone ? "fatta oggi ✓" : "circa 10 minuti"}</small></span><span class="p">›</span></button>
