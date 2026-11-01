@@ -660,7 +660,14 @@ function buildSession(pos, s){
       .concat(blocks)
       .concat([single("alzateProno", P.range(2,10,15,"",60)), single("alzateY", P.range(1,10,15,"",60)), single("wallSlide", P.range(2,10,15,"",30))]);
   }
+  if(pos.learn) blocks = learnVersion(blocks);
   return applyVariants(applySwaps({code, title, kind:k, phase:PHASES[k], blocks}, s), pos);
+}
+// Fase 1 di apprendimento (principianti): macchine al posto dei pesi liberi più tecnici e una ripetizione in più di margine
+const LEARN_SWAP = {gobletSquat:"pressa", squat:"pressa", pancaManubri:"chestPress", lentoManubri:"shoulderPress", rematoreManubrio:"rowMachine"};
+function learnVersion(blocks){
+  const bump = b => !b ? b : String(b).split("-").map(x => String(Number(x) + 1)).join("-");
+  return blocks.map(b => ({...b, items:b.items.map(it => ({ex:LEARN_SWAP[it.ex] || it.ex, p:it.p.t === "range" && it.p.buf ? {...it.p, buf:bump(it.p.buf)} : it.p}))}));
 }
 
 /* ============ esercizi alternativi ============ */
@@ -721,11 +728,11 @@ function buildPostureSession(){
 }
 function dn(o){ return /^Scheda/.test(o.title) ? o.title : o.code + " · " + o.title; }
 function weekInPhase(w){ const k = weekKind(w); if(k==="f1") return w; if(k==="f2") return w-5; if(k==="f3") return w-12; return null; }
-function posLabel(pos){ const k = weekKind(pos.week); const wp = weekInPhase(pos.week); return (pos.cycle>1 ? "Ciclo " + pos.cycle + " · " : "") + PHASES[k].short + (wp ? " · settimana " + wp : "") ; }
+function posLabel(pos){ const k = weekKind(pos.week); const wp = weekInPhase(pos.week); if(pos.learn) return "Fase 1 · apprendimento · settimana " + pos.week; return (pos.cycle>1 ? "Ciclo " + pos.cycle + " · " : "") + PHASES[k].short + (wp ? " · settimana " + wp : "") ; }
 
 /* ============ stato e salvataggio ============ */
 const LS = "ripresa.v1";
-const DEFAULT = {settings:{legMain:"squat", f3freq:3, rdlInC:false, sound:true, posture:true, startDate:"2026-11-02", swaps:{}}, planned:{}, sessions:{}, metaAt:0};
+const DEFAULT = {settings:{legMain:"squat", f3freq:3, rdlInC:false, sound:true, posture:true, startDate:"2026-11-02", swaps:{}, level:"ripresa", levelChosen:false, startFrom:"f2", restartAt:0}, planned:{}, sessions:{}, metaAt:0};
 let S = load();
 function load(){
   try{ const raw = localStorage.getItem(LS); if(raw){ const o = JSON.parse(raw); return {...DEFAULT, ...o, settings:{...DEFAULT.settings, ...(o.settings||{})}}; } }catch(e){}
@@ -736,13 +743,27 @@ function postureOn(d){ return Object.values(S.sessions).find(x => x && !x.delete
 function doneSessions(){ return Object.values(S.sessions).filter(x => x && !x.deleted && x.kind !== "post").sort((a,b) => a.date === b.date ? a.finishedAt - b.finishedAt : (a.date < b.date ? -1 : 1)); }
 
 /* ============ motore: prossima seduta ============ */
+/* Livello: principiante (Fase 1 di apprendimento + Fase 1 normale), ripresa (Fase 1), allenato (test, poi Fase 2 o Fase 3) */
+const LEVELS = {
+  principiante:{n:"Principiante", d:"Mai allenato in palestra, o da meno di 2 mesi"},
+  ripresa:{n:"Ripresa dopo uno stop", d:"Allenato in passato, fermo da qualche mese"},
+  allenato:{n:"Allenato", d:"Ti alleni con regolarità da almeno 6-12 mesi"}
+};
+function startPos(){
+  const lv = S.settings.level || "ripresa";
+  if(lv === "principiante") return {cycle:1, week:1, slot:0, learn:true};
+  if(lv === "allenato") return {cycle:1, week:S.settings.startFrom === "f3" ? 12 : 5, slot:0};
+  return {cycle:1, week:1, slot:0};
+}
+function programSessions(){ const r = S.settings.restartAt || 0; return doneSessions().filter(x => !r || (x.finishedAt || 0) > r); }
 function nextPosition(onDate){
-  const list = doneSessions();
+  const list = programSessions();
   const last = list[list.length-1];
-  if(!last) return {pos:{cycle:1, week:1, slot:0}, note:null};
-  let {cycle, week, slot} = last.pos;
+  if(!last || !last.pos) return {pos:startPos(), note:null};
+  let {cycle, week, slot, learn} = last.pos;
   slot++;
   if(slot >= slotsInWeek(week, S.settings)){ slot = 0; week++; }
+  if(learn && week > 4){ week = 2; learn = false; }
   if(week > WEEKS){ week = 6; cycle++; }
   let note = null;
   const gap = daysBetween(last.date, onDate || todayStr());
@@ -751,9 +772,9 @@ function nextPosition(onDate){
     const prev = week - 1;
     if(weekKind(prev) !== "test"){ week = prev; slot = 0; note = "Sono passate più di 2 settimane dall'ultimo allenamento: ripeti la settimana precedente prima di andare avanti."; }
   }
-  return {pos:{cycle, week, slot}, note};
+  return {pos:learn ? {cycle, week, slot, learn} : {cycle, week, slot}, note};
 }
-function advance(pos){ let {cycle, week, slot} = pos; slot++; if(slot >= slotsInWeek(week, S.settings)){ slot = 0; week++; } if(week > WEEKS){ week = 6; cycle++; } return {cycle, week, slot}; }
+function advance(pos){ let {cycle, week, slot, learn} = pos; slot++; if(slot >= slotsInWeek(week, S.settings)){ slot = 0; week++; } if(learn && week > 4){ week = 2; learn = false; } if(week > WEEKS){ week = 6; cycle++; } return learn ? {cycle, week, slot, learn} : {cycle, week, slot}; }
 function forecast(){ // assegna le sedute ai giorni pianificati futuri
   const t = todayStr();
   const days = Object.keys(S.planned).filter(d => S.planned[d] && d >= t && !sessionOn(d)).sort();
@@ -1341,6 +1362,21 @@ function weekStreak(){
 }
 const LIFT_C = ["var(--c1)","var(--c2)","var(--c3)","var(--c4)"];
 
+/* ============ scelta del livello (primo avvio) ============ */
+function levelSheetHtml(first){
+  const lv = S.settings.level || "ripresa", sf = S.settings.startFrom || "f2";
+  return `<div class="grab"></div><div class="stack">
+    <div class="row between"><h2>${first ? "Da dove parti?" : "Il tuo livello"}</h2>${first ? "" : `<button class="btn icon ghost" data-act="closeSheet" aria-label="Chiudi">${svgI.close}</button>`}</div>
+    <p class="small muted">Il programma cambia solo all'inizio: il punto di partenza e le prime settimane.</p>
+    <div class="o-list" style="margin-top:0">${Object.entries(LEVELS).map(([k,v]) => `<button class="o-row lvl${lv===k?" on":""}" data-act="pickLevel" data-v="${k}"><span class="dot" style="background:${lv===k ? "var(--accent)" : "var(--surface3)"}"></span><span class="n">${v.n}<small>${v.d}</small></span><span class="p">${lv===k ? "✓" : ""}</span></button>`).join("")}</div>
+    <div class="hint small">${lv === "principiante" ? "<b>7 settimane di Fase 1.</b> Le prime 4 sono di apprendimento: macchine e manubri, pesi leggeri, un margine più ampio dal cedimento. Poi 3 settimane di Fase 1 normale, con l'arrivo del bilanciere, e il primo test. 2 o 3 sedute a settimana."
+      : lv === "allenato" ? "<b>Niente Fase 1.</b> Si parte dalla settimana di test per trovare i pesi giusti, poi la fase che scegli qui sotto."
+      : "<b>Fase 1 di 4 settimane</b> per riabituare tendini e articolazioni al carico, poi il primo test e la Fase 2."}</div>
+    ${lv === "allenato" ? `<div class="o-seg">${[["f2","Test → Fase 2"],["f3","Test → Fase 3"]].map(([k,l]) => `<button class="${sf===k?"on":""}" data-act="pickStart" data-v="${k}">${l}</button>`).join("")}</div><p class="tiny muted" style="margin-top:-4px">${sf === "f3" ? "Fase 3: più intensità e volume, per chi è già abituato a carichi pesanti. Dopo il ciclo si riparte dalla Fase 2." : "Fase 2: carichi fissi sulle ripetizioni massime, la fase più graduale per chi è allenato."}</p>` : ""}
+    ${!first && programSessions().length ? `<div class="hint warn small">Hai già allenamenti registrati: il livello conta solo se ricominci il programma. Lo storico e i pesi restano.</div><button class="btn" data-act="restartProgram">Ricomincia il programma da qui</button>` : ""}
+    <button class="btn primary big" data-act="levelDone">${first ? "Inizia" : "Fatto"}</button></div>`;
+}
+
 /* ============ Programma ============ */
 
 function swapsCardHtml(){
@@ -1356,6 +1392,7 @@ function renderProgramma(){
   const {pos} = nextPosition(todayStr());
   let h = `<div class="stack">
   <div class="card stack"><h2>Impostazioni</h2>
+    <button class="o-row" data-act="openLevel" style="padding-top:2px"><span class="n">Il tuo livello<small>${esc(LEVELS[s.level || "ripresa"].n)}${(s.level === "allenato") ? (s.startFrom === "f3" ? " · parti dalla Fase 3" : " · parti dalla Fase 2") : ""}</small></span><span class="p">Cambia ›</span></button>
     <div class="field"><label for="setName">Il tuo nome (per il saluto nella home)</label><input id="setName" type="text" data-set="name" value="${esc(s.name || "")}" placeholder="Facoltativo" autocomplete="given-name"></div>
     <div class="field"><label for="setLeg">Esercizio principale per le gambe</label>
       <select id="setLeg" data-set="legMain"><option value="squat" ${s.legMain==="squat"?"selected":""}>Squat con bilanciere (consigliato per la forza)</option><option value="pressa" ${s.legMain==="pressa"?"selected":""}>Pressa (come Liparoti)</option></select></div>
@@ -1850,6 +1887,11 @@ function act(a, d, e){
       saveDraft(); closeSheet(); rRender(); break; }
     case "homeExpand": homeExpand = !homeExpand; render(); break;
     case "progPeriod": progPeriod = d.v; render(); break;
+    case "pickLevel": S.settings.level = d.v; pushMeta(); showSheet(levelSheetHtml(!S.settings.levelChosen)); break;
+    case "pickStart": S.settings.startFrom = d.v; pushMeta(); showSheet(levelSheetHtml(!S.settings.levelChosen)); break;
+    case "levelDone": S.settings.levelChosen = true; pushMeta(); closeSheet(); render(); break;
+    case "openLevel": showSheet(levelSheetHtml(false)); break;
+    case "restartProgram": if(confirm("Ricominciare il programma dal punto di partenza del livello scelto? Lo storico degli allenamenti resta.")){ S.settings.restartAt = Date.now(); S.settings.levelChosen = true; pushMeta(); closeSheet(); render(); } break;
     case "trainToday": S.planned[todayStr()] = true; pushMeta(); render(); break;
     case "progLift": progLift = d.k; render(); break;
     case "guideTab": guideTab = d.v; render(); break;
@@ -1912,5 +1954,6 @@ function act(a, d, e){
 }
 
 render();
+setTimeout(() => { if(!S.settings.levelChosen && !doneSessions().length && $("#sheet").hidden) showSheet(levelSheetHtml(true)); }, 2400);
 initSync();
 </script>
