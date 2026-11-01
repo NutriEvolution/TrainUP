@@ -2556,37 +2556,55 @@ function fmtMin(m){ return m < 1 ? Math.round(m*60) + "″" : (m % 1 ? Math.floo
 
 // Ogni settimana elenca le sedute in ordine di priorità: con meno giorni a disposizione cadono le ultime (corse facili).
 const RUN_PLANS = {
-  bianco:{ph:[[4,"Corsa e cammino"],[4,"Corsa e cammino, tratti più lunghi"],[4,"Corsa continua a blocchi"],[4,"Corsa facile e allunghi"]], n:"Bianco · inizio", d:"Per chi non corre o riprende dopo tanto tempo. Struttura del piano bianco di Daniels: quattro fasi di 4 settimane, sedute da 30 a 45 minuti, dalla corsa alternata al cammino fino a 30 minuti continui con allunghi.", days:[3,4], weeks:(() => {
-    // Struttura dal piano bianco di Daniels (4ª ed., cap. 8): stesse sedute per tutta la fase; sedute dell'app costruite su questa struttura.
-    const f1 = [S_.RW(10,1,1), S_.RW(6,2,1), S_.RW(10,1,1), S_.RW(6,2,1)];
-    const f2 = [S_.RW(10,2,1), S_.RW(6,3,2), S_.RW(10,2,1), S_.RW(6,3,2)];
-    const f3 = [S_.MIX("Corsa a blocchi 3 × 10′", [["W",3],["E",10,3,3,"W"],["W",4]]), S_.MIX("Corsa a blocchi 4 × 8′", [["W",2],["E",8,4,1,"W"],["W",2]]), S_.MIX("Corsa 20′ + 10′", [["W",5],["E",20],["W",5],["E",10],["W",5]]), S_.MIX("Corsa a blocchi 3 × 10′", [["W",3],["E",10,3,3,"W"],["W",4]])];
-    const f4 = [S_.E(36,6), S_.MIX("30′ facili con allunghi", [["E",10],["ST",20/60,5,1,"W"],["E",10],["ST",20/60,5,1,"W"],["E",10]]), S_.E(36,6), S_.MIX("30′ facili con allunghi", [["E",10],["ST",20/60,5,1,"W"],["E",10],["ST",20/60,5,1,"W"],["E",10]])];
-    const W = []; for(const f of [f1, f2, f3, f4]) for(let i=0;i<4;i++) W.push(f);
-    return W; })()},
-  rosso:{ph:[[4,"Base"],[4,"Ripetute"],[4,"Intervalli"],[4,"Soglia e test"]], n:"Rosso · intermedio", d:"Per chi corre già 30 minuti di fila: arrivano ripetute, intervalli e soglia. Fino a circa 4 ore a settimana.", days:[4,5], weeks:(() => {
+  // dd = giorno della tabella (1-7): le sedute scelte si mettono nei giorni dell'utente in quest'ordine.
+  // Bianco, rosso, blu e oro: tabelle 8.1-8.4 di J. Daniels, Daniels' Running Formula, 4ª ed. (2022), cap. 8. Sedute e durate del libro,
+  // miglia convertite (1 miglio ≈ 1,6 km). Ogni settimana elenca prima i giorni minimi (in grassetto nel libro), poi quelli facoltativi.
+  bianco:{book:"8.1", ph:[[4,"Fase I · corsa e cammino"],[4,"Fase II · tratti di corsa più lunghi"],[4,"Fase III · corsa continua"],[4,"Fase IV · corsa e allunghi"]], n:"Bianco · inizio", d:"Per chi non corre o riprende dopo tanto tempo: dalla corsa alternata al cammino a 30 minuti di corsa con allunghi, sedute da 30 a 45 minuti. Tabella 8.1 di Daniels.", days:[3,4,5], weeks:(() => {
+    const RW = (title, blocks) => ({t:"RW", title, blocks});
+    const f1 = [RW("Corsa e cammino 10 × 1′", [["W",5],["E",1,10,1,"W"],["W",5]]), RW("Corsa e cammino 7 × 2′", [["W",5],["E",2,7,1,"W"],["W",4]]), RW("Corsa e cammino 6 × 1′ + 8 × 30″", [["W",5],["E",1,6,0.5,"W"],["W",0.5],["E",0.5,8,1,"W"],["W",4]])];
+    const f2 = [RW("Corsa e cammino 10 × 2′", [["E",3],["W",3],["E",2,10,1,"W"],["W",4]]), RW("Corsa e cammino 6 × 3′", [["E",3],["W",3],["E",3,6,2,"W"],["W",4]]), RW("Corsa e cammino 20 × 1′", [["E",3],["W",3],["E",1,20,0.5,"W"],["W",4]])];
+    const f3 = [RW("Corsa 3 × 10′", [["E",10],["W",3],["E",10],["W",3],["E",10],["W",4]]), RW("Corsa 4 × 8′", [["W",2],["E",8,4,1,"W"],["W",2]]), RW("Corsa 20′ + 10′", [["W",5],["E",20],["W",5],["E",10],["W",5]])];
+    const p4a = RW("30′ facili + 6 allunghi", [["E",30],["ST",20/60,6,1,"W"],["E",6]]), p4b = RW("30′ facili con 10 allunghi", [["E",10],["ST",20/60,5,1,"W"],["E",10],["ST",20/60,5,1,"W"],["E",10]]);
     const W = [];
-    for(let i=0;i<4;i++) W.push([S_.E(35+i*2,6), S_.L(50+i*2), S_.E(35,6), S_.E(30), S_.E(30)]);
-    for(let i=0;i<4;i++) W.push([S_.R(6+i,200), S_.L(55+i*2), S_.E(40,6), S_.E(35), S_.E(30)]);
-    for(let i=0;i<4;i++) W.push([S_.I(4+Math.min(i,2),3,2), S_.L(60+i*2), S_.R(6,200), S_.E(40), S_.E(30)]);
-    for(let i=0;i<3;i++) W.push([S_.T(3,6+i,1), S_.L(65+i*3), S_.I(4,3,2), S_.E(40), S_.E(30)]);
-    W.push([S_.T(2,6,1), S_.E(40,6), S_.TT(5000), S_.E(35), S_.E(30)]);
+    const D = (n, x) => ({...x, dd:n});
+    for(let i=0;i<4;i++) W.push([D(1,f1[0]), D(3,f1[1]), D(5,f1[2]), D(2,f1[0]), D(4,f1[1])]);
+    for(let i=0;i<4;i++) W.push([D(1,f2[0]), D(3,f2[1]), D(5,f2[2]), D(2,f2[0]), D(4,f2[1])]);
+    for(let i=0;i<4;i++) W.push([D(1,f3[0]), D(3,f3[1]), D(5,f3[2]), D(6,f3[2]), D(2,f3[0])]);
+    for(let i=0;i<4;i++) W.push([D(1,p4a), D(3,p4b), D(5,p4a), D(6,p4a), D(2,p4a)]);
     return W; })()},
-  blu:{ph:[[4,"Base"],[4,"Ripetute"],[4,"Intervalli"],[4,"Soglia e test"]], n:"Blu · avanzato", d:"Per chi vuole fare sul serio: due sedute di qualità a settimana e lungo fino a 90 minuti.", days:[5,6], weeks:(() => {
-    const W = [];
-    for(let i=0;i<4;i++) W.push([S_.E(45,8), S_.L(70+i*3), S_.E(45,8), S_.E(40), S_.E(40), S_.E(35)]);
-    for(let i=0;i<4;i++) W.push([S_.R(8+i,200), S_.L(75+i*3), S_.R(5+Math.min(i,2),400), S_.E(45), S_.E(40), S_.E(35)]);
-    for(let i=0;i<4;i++) W.push([S_.I(5,3,2), S_.L(80+i*3), S_.T(3,7,1), S_.E(45,6), S_.E(40), S_.E(35)]);
-    for(let i=0;i<3;i++) W.push([S_.T(4,7,1), S_.L(85+i*2), S_.I(5,3,2), S_.E(45,6), S_.E(40), S_.E(35)]);
-    W.push([S_.T(2,7,1), S_.E(45,6), S_.TT(5000), S_.E(40), S_.E(35), S_.E(30)]);
+  rosso:{book:"8.2", ph:[[4,"Fase I · soglia"],[4,"Fase II · soglia e lungo"],[4,"Fase III · intervalli e soglia"],[4,"Fase IV · intervalli e soglia"]], n:"Rosso · intermedio", d:"Per chi ha finito il piano bianco o corre già: almeno 4 giorni a settimana, soglia e intervalli, lungo di 40-50 minuti. Tabella 8.2 di Daniels.", days:[4,5,6], weeks:(() => {
+    const X = (t, title, blocks, note) => ({t, title, blocks, note});
+    const e1 = S_.E(30,6), e1b = S_.E(30,8), L = X("L", "Lungo 40-50′", [["L",45]]);
+    const P = [
+      [X("T", "Soglia 3 × 1,6 km", [["E",10],["T",{m:1600},3,1,"W"],["E",10]]), X("T", "Soglia 6 × 1 km", [["E",10],["T",{m:1000},6,1,"W"],["E",10]]), X("E", "40′ facili", [["E",40]], "Daniels: il minore tra 40 minuti e circa 10 km.")],
+      [X("T", "Soglia 3,2 km + 1,6 km", [["E",10],["T",{m:3200}],["W",2],["T",{m:1600}],["E",10]]), X("T", "Soglia 2 × 1,6 km + 2 × 1 km", [["E",10],["T",{m:1600},2,1,"W"],["W",1],["T",{m:1000},2,1,"W"],["E",10]]), L],
+      [X("I", "Intervalli 5 × 3′", [["E",10],["ST",20/60,6,1,"W"],["I",3,5,2,"J"],["E",10]]), X("T", "Soglia continua 20′", [["E",10],["T",20],["E",10]], "Daniels: il minore tra 20 minuti e circa 4,8 km a ritmo soglia."), L],
+      [X("I", "Intervalli 2 × (5′ + 3′)", [["E",10],["ST",20/60,4,1,"W"],["SET",[["I",5],["J",4],["I",3],["J",2]],2],["E",10]]), X("T", "Soglia 2 × 3,2 km", [["E",10],["ST",20/60,6,1,"W"],["T",{m:3200},2,2,"W"],["E",10]]), X("L", "Lungo 40-50′ + allunghi", [["L",45],["ST",20/60,4,1,"W"]])]];
+    const D = (n, x) => ({...x, dd:n});
+    const W = []; P.forEach((ph, i) => { const d1 = i === 3 ? e1b : e1; for(let k=0;k<4;k++) W.push([D(3,ph[0]), D(5,ph[1]), D(7,ph[2]), D(1,d1), D(2,d1), D(4,d1)]); });
     return W; })()},
-  oro:{ph:[[4,"Base"],[4,"Ripetute"],[4,"Intervalli"],[4,"Soglia e test"]], n:"Oro · molto avanzato", d:"Per chi ha anni di corsa alle spalle: 6-7 giorni, fino a tre sedute di qualità e lungo fino a 120 minuti.", days:[6,7], weeks:(() => {
-    const W = [];
-    for(let i=0;i<4;i++) W.push([S_.E(55,8), S_.L(90+i*5), S_.E(55,8), S_.E(50), S_.E(45), S_.E(45), S_.E(40)]);
-    for(let i=0;i<4;i++) W.push([S_.R(10+i,200), S_.L(95+i*4), S_.R(6+Math.min(i,2),400), S_.E(55,6), S_.E(50), S_.E(45), S_.E(40)]);
-    for(let i=0;i<4;i++) W.push([S_.I(5+Math.min(i,1),4,3), S_.L(100+i*4), S_.T(4,8,1), S_.R(8,200), S_.E(55), S_.E(45), S_.E(40)]);
-    for(let i=0;i<3;i++) W.push([S_.T(4,8+i,1), S_.L(110+i*5), S_.I(5,4,3), S_.R(8,200), S_.E(55), S_.E(45), S_.E(40)]);
-    W.push([S_.T(2,8,1), S_.E(50,6), S_.TT(5000), S_.E(45), S_.E(40), S_.E(40), S_.E(35)]);
+  blu:{book:"8.3", ph:[[4,"Fase I · ripetute e intervalli"],[4,"Fase II · ripetute e soglia"],[4,"Fase III · ripetute e intervalli"],[4,"Fase IV · soglia, intervalli e ripetute"]], n:"Blu · avanzato", d:"Per chi ha finito il rosso o ha esperienza e qualche gara: 5-7 giorni, circa 64-84 km a settimana (da 4 ore e mezza a più di 7), lungo di 60-90 minuti. Tabella 8.3 di Daniels.", days:[5,6,7], weeks:(() => {
+    const X = (t, title, blocks, note) => ({t, title, blocks, note});
+    const e60 = X("E", "60′ facili", [["E",60]], "Anche in due uscite che sommino 60 minuti."), L = X("L", "Lungo 60-90′", [["L",75]]);
+    const e4 = st => X("E", `30-45′ facili + ${st} allunghi`, [["E",38],["ST",20/60,st,1,"W"]]);
+    const h44 = X("I", "Intervalli 4 × 4′", [["E",15],["I",4,4,3,"J"],["E",15]]);
+    const P = [
+      [X("R", "Ripetute 8 × 400 m", [["E",10],["R",{m:400},8,{m:400},"J"],["E",10]]), h44, L, e60, e4(8), e60, e4(8)],
+      [X("R", "Ripetute 4 × (200 + 200 + 400 m)", [["E",15],["SET",[["R",{m:200}],["J",{m:200}],["R",{m:200}],["J",{m:200}],["R",{m:400}],["J",{m:400}]],4],["E",15]]), X("T", "Soglia continua 20′", [["E",15],["T",20],["ST",20/60,4,1,"W"],["E",15]]), L, e60, e4(8), e60, e4(8)],
+      [X("R", "Ripetute 6 × (400 + 200 m)", [["E",15],["ST",20/60,6,1,"W"],["SET",[["R",{m:400}],["J",{m:400}],["R",{m:200}],["J",{m:200}]],6],["E",15]]), h44, L, X("E", "60′ facili", [["E",60]]), e4(8), S_.E(30,6), e4(8)],
+      [X("T", "Soglia 3 × 1 km + intervalli 3 × 3′", [["E",15],["T",{m:1000},3,1,"W"],["I",3,3,2,"J"],["E",15]]), X("T", "Soglia 3 × 1 km tra ripetute da 200 m", [["E",20],["R",{m:200},2,{m:200},"J"],["T",{m:1000},3,1,"W"],["R",{m:200},2,{m:200},"J"],["E",5]]), L, X("E", "60′ facili", [["E",60]]), e4(6), S_.E(30,4), e4(6)]];
+    const W = []; P.forEach(ph => { const w = [2,5,7,1,4,3,6].map((n, i) => ({...ph[i], dd:n})); for(let k=0;k<4;k++) W.push(w); });
+    return W; })()},
+  oro:{book:"8.4", ph:[[4,"Fase I · ripetute e soglia"],[4,"Fase II · intervalli e ripetute"],[4,"Fase III · intervalli e soglia"],[4,"Fase IV · intervalli, ripetute e soglia"]], n:"Oro · molto avanzato", d:"Per chi ha finito il blu o ha molta esperienza: 6-7 giorni, oltre 97 km a settimana, lungo di 120 minuti. Tabella 8.4 di Daniels.", days:[6,7], weeks:(() => {
+    const X = (t, title, blocks, note) => ({t, title, blocks, note});
+    const two = "Anche in due uscite.";
+    const e75 = X("E", "75′ facili", [["E",75]], two), e60 = X("E", "60′ facili", [["E",60]], two), L = X("L", "Lungo 120′", [["L",120]]);
+    const P = [
+      [X("R", "Ripetute 10 × 400 m", [["E",20],["R",{m:400},10,{m:400},"J"],["E",10]]), X("T", "Soglia continua 20′", [["E",20],["ST",20/60,6,1,"W"],["T",20],["ST",20/60,6,1,"W"],["E",10]]), L, e75, X("E", "60′ facili + 6 allunghi", [["E",60],["ST",20/60,6,1,"W"]], two), e60, X("E", "60′ facili + 6 allunghi", [["E",60],["ST",20/60,6,1,"W"]], two)],
+      [X("I", "Intervalli 5 × 3′", [["E",20],["I",3,5,2,"J"],["E",20]]), X("R", "Ripetute 2 × 8 × 200 m", [["E",20],["ST",20/60,6,1,"W"],["R",{m:200},8,{m:200},"J"],["E",5],["R",{m:200},8,{m:200},"J"],["E",5]]), L, X("E", "75′ facili", [["E",75]]), X("E", "35′ facili + 6 allunghi", [["E",35],["ST",20/60,6,1,"W"]], "Daniels: una o due corse da 30-40 minuti."), e60, X("E", "35′ facili + 6 allunghi", [["E",35],["ST",20/60,6,1,"W"]], "Daniels: una o due corse da 30-40 minuti.")],
+      [X("I", "Intervalli 5 × 4′", [["E",20],["ST",20/60,6,1,"W"],["I",4,5,3,"J"],["E",20]]), X("T", "Soglia 5 × 1,6 km", [["E",20],["T",{m:1600},5,1,"W"],["ST",20/60,6,1,"W"],["E",10]]), L, e75, e75, e60, e75],
+      [X("I", "Intervalli 3 × 3′ + ripetute 8 × 200 m", [["E",20],["I",3,3,2,"J"],["J",2],["R",{m:200},8,{m:200},"J"],["E",10]]), X("T", "Soglia 6 × 1 km", [["E",20],["T",{m:1000},6,1,"W"],["ST",20/60,6,1,"W"],["E",20]]), L, X("E", "75′ facili", [["E",75]], "Meglio in due uscite."), e75, e60, e75]];
+    const W = []; P.forEach(ph => { const w = [2,5,7,1,3,6,4].map((n, i) => ({...ph[i], dd:n})); for(let k=0;k<4;k++) W.push(w); });
     return W; })()},
   vo2:{ph:[[8,"Intervalli 4 × 4"]], n:"VO₂max · 8 settimane", d:"Blocco di intervalli 4 × 4 minuti per alzare il massimo consumo di ossigeno. Serve una base: almeno 30 minuti di corsa continua.", days:[3,4], weeks:(() => {
     const W = [[S_.H4(), S_.E(40), S_.H4(), S_.E(30)], [S_.H4(), S_.E(40), S_.H4(), S_.E(30)]];
@@ -2625,6 +2643,7 @@ const RUN_PLANS = {
 };
 function planWeek(plan, w, days){ const P = RUN_PLANS[plan]; const wk = P.weeks[w] || []; return wk.slice(0, days); }
 function blockMin(b, paces){ // durata stimata di un blocco in minuti (anche per i blocchi a distanza, dal ritmo)
+  if(b[0] === "SET") return b[2] * b[1].reduce((x, sb) => x + blockMin(sb, paces), 0); // serie ripetuta: ["SET", [blocchi], volte]
   const [k, a, reps=1, rec=0, rk] = b;
   const secPerM = kk => ((kk === "W" ? 600 : kk === "TT" ? (paces ? paces.I + 10 : 330) : paces ? (kk === "E" || kk === "L" || kk === "J" ? (paces.E[0]+paces.E[1])/2 : paces[kk] || paces.T) : 360) / 1000);
   const dur = (x, kk) => x == null ? 0 : typeof x === "object" ? x.m * secPerM(kk) / 60 : x;
@@ -2670,9 +2689,10 @@ const isAnchor = s => s.t === "L" || s.t === "TT" || s.t === "RACE";
 function runWeekPlan(w){ // {giorno della settimana: seduta}
   const c = runCfg(); const P = RUN_PLANS[c.plan]; if(w < 0 || w >= P.weeks.length) return {};
   const days = c.days.slice().sort((a,b) => a-b);
-  let ses = adaptWeek(planWeek(c.plan, w, days.length), runPaces(c.vdot || 40));
+  let ses = P.book ? JSON.parse(JSON.stringify(planWeek(c.plan, w, days.length))) : adaptWeek(planWeek(c.plan, w, days.length), runPaces(c.vdot || 40)); // tabelle di Daniels: sedute come nel libro
   const pr = comboPriority(), gd = comboGymDays();
-  if(pr === "palestra" && days.length > 3) for(const x of ses) if(x.t === "E" && x.blocks[0][1] > 30){ x.blocks[0][1] = 30; x.title = x.title.replace(/^\d+′/, "30′"); x.forGym = true; }
+  if(pr === "palestra" && days.length > 3) for(const x of ses) if(x.t === "E" && x.blocks[0][1] > 30){ x.blocks[0][1] = 30; const st = x.blocks.find(b => b[0] === "ST"); x.title = "30′ facili" + (st ? ` + ${st[2]} allunghi` : ""); x.forGym = true; }
+  if(P.book){ const out = {}; ses.slice().sort((a, b) => a.dd - b.dd).forEach((x, i) => { out[days[i]] = x; }); return out; } // ordine dei giorni della tabella
   const out = {}; const raceHere = c.raceDate && w === P.weeks.length - 1;
   if(raceHere){ const ri = ses.findIndex(s => s.t === "RACE"); if(ri >= 0){ out[dowOf(c.raceDate)] = ses[ri]; ses.splice(ri, 1); } }
   const free = days.filter(d => out[d] == null); const hard = Object.keys(out).map(Number);
@@ -2708,8 +2728,11 @@ function paceTxt(k, p, a){
   return p[k] ? `${fmtPace(p[k])} /km` : "";
 }
 function amountTxt(a){ return typeof a === "object" ? (a.m >= 1000 ? (a.m/1000).toLocaleString("it") + " km" : a.m + " m") : fmtMin(a); }
-function runSteps(s){ const out = []; for(const b of s.blocks){ const [k, a, reps=1, rec, rk] = b; for(let i=0;i<reps;i++){ out.push({k, a, i:i+1, n:reps}); if(rec && i < reps-1) out.push({k:rk || "J", a:rec, rec:true}); } } return out; }
+function runSteps(s){ const out = []; for(const b of s.blocks){ if(b[0] === "SET"){ for(let i=0;i<b[2];i++) for(const sb of b[1]){ const rec = sb[0] === "J" || sb[0] === "W"; out.push(rec ? {k:sb[0], a:sb[1], rec:true} : {k:sb[0], a:sb[1], i:i+1, n:b[2]}); } continue; } const [k, a, reps=1, rec, rk] = b; for(let i=0;i<reps;i++){ out.push({k, a, i:i+1, n:reps}); if(rec && i < reps-1) out.push({k:rk || "J", a:rec, rec:true}); } } return out; }
+const SET_N = {R:"ripetuta", I:"veloce", T:"soglia", E:"facile", J:"corsa leggera", W:"camminata"};
 function blockLine(b, s, p){ // una riga leggibile di un blocco
+  if(b[0] === "SET"){ const work = b[1].filter(x => x[0] !== "J" && x[0] !== "W"); const k = work[0][0];
+    return {n: RUN_N[k], what: `${b[2]} × (${b[1].map(x => amountTxt(x[1]) + " " + SET_N[x[0]]).join(" + ")})`, pace: work.every(x => x[0] === k) ? paceTxt(k, p, k === "R" ? work[0][1] : null) : "", hr: hrRange(k, s), feel: RUN_FEEL[k] || ""}; }
   const [k, a, reps=1, rec, rk] = b;
   const what = reps > 1 ? `${reps} × ${amountTxt(a)}` : amountTxt(a);
   const recT = reps > 1 && rec ? ` · recupero ${amountTxt(rec)} ${rk === "W" ? "camminando" : "di corsa leggera"}` : "";
@@ -2719,8 +2742,8 @@ function blockLine(b, s, p){ // una riga leggibile di un blocco
 function runDetailHtml(s, opt={}){
   const p = runPacesNow();
   const lines = s.blocks.map(b => blockLine(b, s, p));
-  return `<div class="o-list rn-list">${lines.map((l, i) => `<div class="o-row" style="cursor:default"><span class="dot" style="background:${RUN_C[s.blocks[i][0]] || "var(--surface3)"}"></span><span class="n">${esc(l.n)}<small>${esc(l.what)}</small></span><span class="p">${l.pace ? esc(l.pace) : `<span class="rn-feel">${esc(l.feel)}</span>`}${l.hr ? `<br><span class="tiny">FC ${esc(l.hr)}</span>` : ""}</span></div>`).join("")}</div>
-    ${s.hr ? `<p class="tiny muted" style="margin-top:6px">${esc(s.hr)}</p>` : ""}${s.adapted && !opt.noAdapt ? `<p class="tiny muted" style="margin-top:6px">Accorciata per stare nei limiti del volume della tua settimana.</p>` : ""}${s.forGym ? `<p class="tiny muted" style="margin-top:6px">Accorciata a 30 minuti: con la priorità alla palestra e più di 3 corse a settimana (Wilson 2012).</p>` : ""}`;
+  return `<div class="o-list rn-list">${lines.map((l, i) => `<div class="o-row" style="cursor:default"><span class="dot" style="background:${RUN_C[s.blocks[i][0] === "SET" ? s.blocks[i][1][0][0] : s.blocks[i][0]] || "var(--surface3)"}"></span><span class="n">${esc(l.n)}<small>${esc(l.what)}</small></span><span class="p">${l.pace ? esc(l.pace) : `<span class="rn-feel">${esc(l.feel)}</span>`}${l.hr ? `<br><span class="tiny">FC ${esc(l.hr)}</span>` : ""}</span></div>`).join("")}</div>
+    ${s.hr ? `<p class="tiny muted" style="margin-top:6px">${esc(s.hr)}</p>` : ""}${s.note ? `<p class="tiny muted" style="margin-top:6px">${esc(s.note)}</p>` : ""}${s.adapted && !opt.noAdapt ? `<p class="tiny muted" style="margin-top:6px">Accorciata per stare nei limiti del volume della tua settimana.</p>` : ""}${s.forGym ? `<p class="tiny muted" style="margin-top:6px">Accorciata a 30 minuti: con la priorità alla palestra e più di 3 corse a settimana (Wilson 2012).</p>` : ""}`;
 }
 const RUN_C = {W:"var(--surface3)", E:"var(--c2)", L:"var(--c2)", J:"var(--surface3)", ST:"var(--c3)", M:"var(--c4)", T:"var(--accent)", I:"var(--warn)", R:"var(--danger)", TT:"var(--danger)"};
 
@@ -2786,7 +2809,8 @@ function runTodayHtml(t){
 }
 function runKm(s, p){ // distanza stimata dai ritmi: tempo di ogni blocco diviso il suo ritmo
   const spk = k => k === "W" ? 600 : k === "E" || k === "L" ? (p.E[0]+p.E[1])/2 : k === "J" ? p.E[1] + 20 : k === "ST" ? p.R : k === "TT" ? p.I : p[k] || p.T;
-  let km = 0; for(const b of s.blocks){ const [k, a, reps=1, rec, rk] = b; const one = (x, kk) => x == null ? 0 : typeof x === "object" ? x.m/1000 : x*60/spk(kk); km += one(a, k)*reps + one(rec, rk || "J")*Math.max(0, reps-1); } return km; }
+  const bk = b => { if(b[0] === "SET") return b[2] * b[1].reduce((x, sb) => x + bk(sb), 0); const [k, a, reps=1, rec, rk] = b; const one = (x, kk) => x == null ? 0 : typeof x === "object" ? x.m/1000 : x*60/spk(kk); return one(a, k)*reps + one(rec, rk || "J")*Math.max(0, reps-1); };
+  return s.blocks.reduce((km, b) => km + bk(b), 0); }
 function runIcon(){ return `<svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4.5" r="2"/><path d="M8 21l3-6 3 2v5M6 12l3-4 4 1 3 3 3 1M11 15l2-6"/></svg>`; }
 function runSummary(r){ const bits = []; if(r.dist) bits.push(fmtKm(r.dist) + " km"); if(r.time) bits.push(fmtDur(r.time)); if(r.dist && r.time) bits.push(fmtPace(r.time / r.dist) + " /km"); if(r.hr) bits.push("FC " + r.hr); if(r.rpe) bits.push("fatica " + r.rpe + "/10"); return bits.join(" · ") || "registrata"; }
 const fmtKm = v => (Math.round(v*100)/100).toLocaleString("it");
@@ -2929,7 +2953,7 @@ function renderCorsaProgramma(){
   if(gymOn()){ const pr = (S.settings.combo || {}).priority || "palestra";
     h += `<div class="o-sec"><div class="o-label">Priorità tra pesi e corsa</div><div class="o-seg" style="margin-top:8px">${Object.entries(PRIO).map(([k, x]) => `<button class="${pr === k ? "on" : ""}" data-act="setPrio" data-v="${k}">${x.n}</button>`).join("")}</div><p class="small muted">${esc(PRIO[pr].d)}</p></div>`; }
   h += `<div class="o-sec"><div class="o-head"><span class="o-label">Ritmi e frequenza cardiaca</span><button class="rn-link" data-act="vdotOpen">${p ? "Aggiorna" : "Inserisci un tempo"}</button></div>
-    ${!p ? `<p class="o-sub" style="margin-top:8px">Senza un tempo di riferimento le corse si fanno a sensazione${m ? " e con la frequenza cardiaca" : ""}. Il primo test del piano aggiorna i ritmi da solo.</p>` : ""}
+    ${!p ? `<p class="o-sub" style="margin-top:8px">Senza un tempo di riferimento le corse si fanno a sensazione${m ? " e con la frequenza cardiaca" : ""}. Puoi inserire il tempo di una gara o di una prova a tutta recente; nei piani con un test o una gara i ritmi si aggiornano da soli.</p>` : ""}
     <div class="o-list">${[["E","Facile","Riscaldamento, recuperi, lunghi: la maggior parte dei minuti"],["M","Maratona","Ritmo della gara di maratona"],["T","Soglia","Corse a ritmo comodamente impegnativo, a blocchi o continue"],["I","Intervalli","Prove da 3-5 minuti vicine al massimo consumo di ossigeno"],["R","Ripetute","Prove brevi e veloci con recuperi completi, per la tecnica"]].map(([k, n, d]) => `<div class="o-row" style="cursor:default"><span class="dot" style="background:${RUN_C[k]}"></span><span class="n">${n}<small>${d}</small></span><span class="p">${p ? `<b style="color:var(--ink)">${k === "E" ? fmtPace(p.E[0]) + "-" + fmtPace(p.E[1]) : k === "R" ? fmtSec(p.R*0.4) + " /400" : fmtPace(p[k])}</b>${k !== "R" ? " /km" : ""}` : `<span class="rn-feel">${esc(RUN_FEEL[k])}</span>`}${hrRange(k) ? `<br><span class="tiny">FC ${hrRange(k)}</span>` : ""}</span></div>`).join("")}</div>
     <p class="tiny muted" style="margin-top:6px">${m ? `FC massima ${m}${c.hrmax ? "" : " (stimata)"}. ` : ""}La frequenza cardiaca serve a controllare che le corse facili restino facili; negli intervalli brevi sale in ritardo, quindi conta il ritmo.</p></div>`;
   h += `<div class="o-sec"><div class="o-label">Settimane</div>`;
@@ -2951,9 +2975,9 @@ function renderCorsaProgramma(){
 }
 function runPlansInfoHtml(){
   return `<div class="o-sec first"><div class="o-label">Corsa: come sono fatti i piani</div>
-    <p class="small" style="margin-top:8px">I ritmi vengono dal VDOT, un indice ricavato da un tempo di gara con le equazioni di Daniels e Gilbert. Le sedute seguono le regole di Jack Daniels: quasi tutto a ritmo facile; soglia al massimo il 10% della settimana, intervalli l'8%, ripetute il 5%; lungo entro il 30% della settimana sotto i 64 km, entro il 25% e le 2 ore e mezza da 64 km in su. Con meno giorni le sedute vengono accorciate per stare in questi limiti. I volumi restano uguali per 3-4 settimane prima di salire.</p>
-    <p class="small" style="margin-top:8px">Il piano bianco segue la struttura del piano bianco di Daniels (quattro fasi di 4 settimane, sedute da 30 a 45 minuti, niente soglia né test); alla fine Daniels suggerisce, se vuoi, una gara non competitiva di massimo 40 minuti, partendo piano. I piani rosso, blu e oro seguono le quattro fasi di Daniels: base con allunghi, ripetute, intervalli, soglia. Il blocco VO₂max riprende lo studio di Helgerud (2007): 4 × 4 minuti al 90-95% della FC massima, 3 volte a settimana per 8 settimane. È più intenso dei limiti di Daniels: serve una base di corsa.</p>
-    <p class="small" style="margin-top:8px">Settimane e sedute sono costruite dall'app su questi principi, non copiate dalle tabelle del libro.</p>
+    <p class="small" style="margin-top:8px">I ritmi vengono dal VDOT, un indice ricavato da un tempo di gara con le equazioni di Daniels e Gilbert. Per aggiornarli usa il tempo di una gara o di una prova a tutta recente.</p>
+    <p class="small" style="margin-top:8px">Bianco, rosso, blu e oro sono i quattro piani del capitolo 8 di Daniels (tabelle 8.1-8.4): quattro fasi di 4 settimane, con le sedute e le durate del libro; le distanze in miglia sono convertite (1 miglio ≈ 1,6 km). Ogni piano ha dei giorni minimi e dei giorni facoltativi, che ripetono una seduta facile della settimana: l'app aggiunge quelli facoltativi se scegli più giorni. L'app sceglie solo in che giorni mettere le sedute, con il lungo nell'ultimo giorno e le sedute dure lontane tra loro. Alla fine del bianco Daniels suggerisce, se vuoi, una gara non competitiva di massimo 40 minuti, partendo piano.</p>
+    <p class="small" style="margin-top:8px">I piani per le gare (5-10 km, mezza, maratona) sono invece costruiti dall'app con le regole di Daniels: quasi tutto a ritmo facile; in una singola seduta soglia al massimo il 10% dei km della settimana, intervalli l'8% (e non più di 10 km), ripetute il 5%; lungo entro il 30% della settimana sotto i 64 km, entro il 25% e le 2 ore e mezza da 64 km in su. Con meno giorni le sedute vengono accorciate per stare in questi limiti. Il blocco VO₂max riprende lo studio di Helgerud (2007): 4 × 4 minuti al 90-95% della FC massima, 3 volte a settimana per 8 settimane. È più intenso dei limiti di Daniels: serve una base di corsa.</p>
     <p class="tiny muted" style="margin-top:8px">J. Daniels, <i>Daniels' Running Formula</i>, 4ª ed. (2022) · Daniels e Gilbert, <i>Oxygen Power</i>, 1979 · Helgerud et al., <i>Med Sci Sports Exerc</i> 2007 · Tanaka et al., <i>J Am Coll Cardiol</i> 2001</p></div>`;
 }
 function runInfoSheet(w, dw){

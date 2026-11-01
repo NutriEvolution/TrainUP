@@ -1,2 +1,4 @@
-Novità della 1.15.2
-- Corretto: in Guida → Fonti due riferimenti (Ma 2025, Zhao 2026) comparivano fuori dal gruppo "Pallavolo e salto"
+Novità della 1.16.0
+- Piani di corsa bianco, rosso, blu e oro: ora sono le tabelle 8.1-8.4 di Daniels (sedute, durate e ordine dei giorni del libro), con giorni minimi e facoltativi
+- Sedute con serie ripetute (es. 4 × (200 + 200 + 400 m)) mostrate in una riga
+- Guida → Perché così → Corsa: spiegazione aggiornata
