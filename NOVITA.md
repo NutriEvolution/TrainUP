@@ -1,2 +1,4 @@
-Novità della 1.12.1
-- Piano bianco della corsa riallineato alla struttura del piano bianco di Daniels: quattro fasi di 4 settimane, sedute da 30 a 45 minuti, niente soglia né test
+Novità della 1.12.2
+- Pallavolo: salto d'attacco e salto a muro ora con fonti (Fuchs 2019, Ficklin 2014) e indicazioni sugli atterraggi (Tayfur 2022)
+- Bici: la durata delle uscite lunghe confrontata con il libro di Allen e Coggan (Appendice B e piano di esempio del cap. 9)
+- Nuove voci in Guida → Fonti
