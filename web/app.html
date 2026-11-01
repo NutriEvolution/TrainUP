@@ -783,8 +783,19 @@ function buildSession(pos, s){
 // Ordine: multiarticolari a peso libero prima (p. 178). Recupero: almeno 90 s, di più per i multiarticolari delle gambe (p. 201).
 // Settimana introduttiva: ~75% delle serie e un po' più lontano dal cedimento (p. 108). Conteggio frazionario: tabella 7.17 (p. 243).
 const GEN_VOL = [[6,"Minimo","4-8 serie, ~1-2,5 ore a settimana"],[10,"Basso","9-12 serie, ~3-4,5 ore"],[14,"Medio","13-16 serie, ~5-6,5 ore"],[18,"Alto","17-20 serie, ~7-8,5 ore"]];
-const GEN_SPLIT = {2:["FB","FB"], 3:["FB","FB","FB"], 4:["L","U","L","U"], 5:["L","UPS","UPL","L","U"], 6:["L","U","L","U","L","U"]};
-const GEN_ST = {FB:["Corpo intero",["quad","fem","petto","dorso","spalle","tri","bic","polp"]], L:["Gambe",["quad","fem","polp"]], U:["Parte alta",["petto","dorso","spalle","tri","bic"]], UPS:["Spinta",["petto","spalle","tri"]], UPL:["Tirata",["dorso","bic"]]};
+// Opzioni della tabella 7.2 (p. 227) per ogni numero di giorni: [sedute, frequenza per muscolo indicata nel libro]. La prima è quella proposta.
+const GEN_SPLITS = {
+  2:[[["FB","FB"],"2"], [["U","L"],"1-2"], [["FPS","FPL"],"1-2"]],
+  3:[[["FB","FB","FB"],"3"], [["L","U","FB"],"2"], [["FPS","FPL","FB"],"2"], [["L","UPS","UPL"],"1-2"]],
+  4:[[["L","U","L","U"],"2"], [["FPS","FPL","FPS","FPL"],"2"], [["U","L","FB","FB"],"3"], [["FPS","FPL","FB","FB"],"3"], [["FB","FB","FB","FB"],"4"], [["CT","BB","SH","L"],"1-2"]],
+  5:[[["L","UPS","UPL","L","U"],"2"], [["L","UPS","UPL","FPS","FPL"],"2"], [["L","UPS","UPL","FB","FB"],"3"], [["FB","FB","FB","U","L"],"4"], [["FB","FB","FB","FPS","FPL"],"4"], [["FB","FB","FB","FB","FB"],"5"], [["CH","BK","L","SH","AR"],"1-2"]],
+  6:[[["L","U","L","U","L","U"],"3"], [["L","UPS","UPL","L","UPS","UPL"],"2"], [["FPS","FPL","FPS","FPL","FPS","FPL"],"3"], [["FB","FB","FB","L","UPS","UPL"],"4"], [["FB","FB","FB","FB","U","L"],"5"], [["FB","FB","FB","FB","FPS","FPL"],"5"], [["FB","FB","FB","FB","FB","FB"],"6"], [["CH","BK","QC","SH","AR","GH"],"1-2"]]};
+const GEN_ST = {FB:["Corpo intero",["quad","fem","petto","dorso","spalle","tri","bic","polp"]], L:["Gambe",["quad","fem","polp"]], U:["Parte alta",["petto","dorso","spalle","tri","bic"]],
+  UPS:["Spinta",["petto","spalle","tri"]], UPL:["Tirata",["dorso","bic"]], FPS:["Spinta e quadricipiti",["quad","petto","spalle","tri","polp"]], FPL:["Tirata e femorali",["fem","dorso","bic"]],
+  CT:["Petto e tricipiti",["petto","tri"]], BB:["Dorso e bicipiti",["dorso","bic"]], SH:["Spalle",["spalle"]], AR:["Braccia",["bic","tri"]], CH:["Petto",["petto"]], BK:["Dorso",["dorso"]], QC:["Quadricipiti e polpacci",["quad","polp"]], GH:["Glutei e femorali",["fem"]]};
+function genSplitIdx(n){ const g = S.settings.gen || {}; const i = (g.split || {})[n]; return i != null && GEN_SPLITS[n][i] ? i : 0; }
+function genSplit(n){ return GEN_SPLITS[n][genSplitIdx(n)][0]; }
+const genSplitName = sp => sp.map(x => GEN_ST[x][0]).join(", ");
 const GEN_MUS = {quad:"Quadricipiti", fem:"Femorali e glutei", petto:"Petto", dorso:"Dorso", spalle:"Spalle", tri:"Tricipiti", bic:"Bicipiti", polp:"Polpacci"};
 // tipo di esercizio (tabella 7.7): LF = gambe multiarticolare a peso libero; PL = gambe alla macchina o spinta con peso libero; MT = spinta alla macchina e trazioni; IS = isolamento
 const GEN_TYPE = {squat:"LF", stacco:"LF", rdl:"LF", rdlManubri:"LF", splitSquat:"LF", affondiCamminati:"LF", gobletSquat:"LF",
@@ -799,22 +810,30 @@ function genRot(s){ const sq = s.legMain === "pressa" ? "pressa" : "squat"; retu
   dorso:["latMachine", "rowMachine", "latPresaStretta", "pulley"], spalle:["alzateLaterali", "lentoManubri"], tri:["tricipitiOverheadCavo", "pushdown"],
   bic:["curlManubri", "curlCavo"], polp:["calf"]}; }
 const GEN_NOTE = {rowMachine:"gomiti larghi, tirata alta", pulley:"gomiti stretti, estensione di spalla"};
+function genSpec(){ const g = S.settings.gen || {}; return genOn() && (S.settings.level === "allenato") && g.spec && g.spec.m && g.spec.m.length ? g.spec : null; }
+function genSpecWeek(sp){ return Math.floor(daysBetween(sp.start, todayStr()) / 7) + 1; }
+function genSpecVol(m, V, sp){ const top = Math.round(V*1.5); // gambe: si sale al nuovo volume in 3 settimane (p. 132)
+  if(["quad","fem"].includes(m)){ const w = genSpecWeek(sp); if(w < 3) return Math.round(V + (top - V)*w/3); } return top; }
 function genDays(){ const n = gymWeekDays().length || 3; return Math.max(2, Math.min(6, n)); }
 function genCfg(){ const g = S.settings.gen || {}; const lv = S.settings.level || "ripresa"; return {vol: g.vol || (lv === "allenato" ? 14 : 10)}; }
 function genOn(){ return S.settings.program === "principi"; }
 function genWeek(intro){ // le sedute della settimana, in ordine
-  const s = S.settings, n = genDays(), split = GEN_SPLIT[n], V = genCfg().vol, rot = genRot(s);
-  const occ = {}; split.forEach(t => GEN_ST[t][1].forEach(m => occ[m] = (occ[m] || 0) + 1));
-  // serie dirette per muscolo e seduta; braccia e spalle tengono conto del lavoro indiretto (mezza serie)
-  const per = {}; for(const m of ["quad","fem","petto","dorso","polp"]) per[m] = Math.max(2, Math.round(V / occ[m]));
+  const s = S.settings, n = genDays(), V0 = genCfg().vol, rot = genRot(s), sp = genSpec();
+  let split = genSplit(n).map(t => GEN_ST[t][1].slice());
+  // specializzazione (tabella 3.9, pp. 131-132): +50% sui muscoli scelti, ~40% in meno sugli altri; i muscoli scelti in ogni seduta e per primi
+  const Vm = m => !sp ? V0 : sp.m.includes(m) ? genSpecVol(m, V0, sp) : Math.round(V0*0.6);
+  if(sp) split = split.map(ms => sp.m.concat(ms.filter(m => !sp.m.includes(m))));
+  const occ = {}; split.forEach(ms => ms.forEach(m => occ[m] = (occ[m] || 0) + 1));
+  // serie dirette per muscolo e seduta (al massimo 11, p. 71); braccia e spalle tengono conto del lavoro indiretto (mezza serie)
+  const per = {}; for(const m of ["quad","fem","petto","dorso","polp"]) per[m] = Math.max(2, Math.round(Vm(m) / occ[m]));
   const credit = {tri:0, bic:0, spalle:0}; const cnt = {};
-  split.forEach(t => GEN_ST[t][1].forEach(m => { if(m === "petto"){ const k = cnt.petto = (cnt.petto || 0); credit.tri += 0.5*per.petto; if(rot.petto[k % rot.petto.length] === "pancaInclinataManubri") credit.spalle += 0.5*per.petto; cnt.petto++; } if(m === "dorso") credit.bic += 0.5*per.dorso; }));
-  for(const m of ["spalle","tri","bic"]) per[m] = Math.max(2, Math.round(Math.max(occ[m]*2, V - credit[m]) / occ[m]));
-  const seen = {}, typeSeen = {}, used = {};
-  return split.map((t, si) => {
+  split.forEach(ms => ms.forEach(m => { if(m === "petto"){ const k = cnt.petto = (cnt.petto || 0); credit.tri += 0.5*per.petto; if(rot.petto[k % rot.petto.length] === "pancaInclinataManubri") credit.spalle += 0.5*per.petto; cnt.petto++; } if(m === "dorso") credit.bic += 0.5*per.dorso; }));
+  for(const m of ["spalle","tri","bic"]) per[m] = Math.max(2, Math.round(Math.max(occ[m]*2, Vm(m) - (sp && !sp.m.includes(m) ? 0.6 : 1)*credit[m]) / occ[m]));
+  const seen = {}, typeSeen = {}, types = genSplit(n);
+  return split.map((ms, si) => { const t = types[si];
     const v = (typeSeen[t] = (typeSeen[t] || 0) + 1) % 2 === 1 ? 0 : 1; // A, B, A...
     const items = [];
-    for(const m of GEN_ST[t][1]){
+    for(const m of ms){
       const k = seen[m] = (seen[m] === undefined ? 0 : seen[m]); const L = rot[m];
       let sets = Math.min(11, per[m]); const parts = sets > 4 && L.length > 1 ? [Math.ceil(sets/2), Math.floor(sets/2)] : [sets];
       const inSess = new Set(items.map(x => x.ex));
@@ -824,7 +843,7 @@ function genWeek(intro){ // le sedute della settimana, in ordine
         items.push({ex, ty, p:P.range(sets2, lo, hi, buf, R[4], GEN_NOTE[ex] ? {note:GEN_NOTE[ex]} : {}), m}); });
       seen[m] = k + parts.length;
     }
-    const ord = {LF:0, PL:1, MT:2, IS:3}; items.sort((a, b) => ord[a.ty] - ord[b.ty]);
+    const ord = {LF:0, PL:1, MT:2, IS:3}; items.sort((a, b) => (sp ? (sp.m.includes(b.m) ? 1 : 0) - (sp.m.includes(a.m) ? 1 : 0) : 0) || ord[a.ty] - ord[b.ty]);
     const code = String.fromCharCode(65 + si);
     return {code, title:GEN_ST[t][0], type:t, variant:v, items};
   });
@@ -1347,6 +1366,11 @@ function renderOggi(){
       : `<label class="switch o-switch"><input type="checkbox" id="deloadToggle"><span><b>Settimana di scarico</b><br><span class="small muted">${sess.kind === "gen" ? "Serie -40%, stessi pesi e stesso margine" : "Metà delle serie, pesi -15%"}</span></span></label>${sess.kind === "gen" ? `<button class="btn ghost sm" data-act="deloadCheck" style="padding-left:0">Serve uno scarico? Controlla</button>` : ""}
       <button class="btn primary big" data-act="start" style="margin-top:12px">${svgI.play} Inizia allenamento</button></div>`}`;
   }
+  if(postDraft){ const nS = (postDraft.log||[]).flat().reduce((a,x) => a + ((x && x.sets) ? x.sets.length : 0), 0); const ora = postDraft.startedAt ? new Date(postDraft.startedAt) : null;
+    h += `<div class="o-sec"><div class="o-head"><span class="o-label">Routine posturale in corso</span></div>
+      <div class="o-inprog"><b>Interrotta</b><span>${ora ? `iniziata ${postDraft.date === t ? "oggi alle" : esc(fmtDate(postDraft.date)) + " alle"} ${pad(ora.getHours())}:${pad(ora.getMinutes())} · ` : ""}${nS} ${nS === 1 ? "serie fatta" : "serie fatte"}</span></div>
+      <button class="btn primary big" data-act="startPost" style="margin-top:12px">${svgI.play} Riprendi</button>
+      <div class="row" style="justify-content:center;gap:4px;margin-top:6px"><button class="btn ghost sm" data-act="postRestart">Ricomincia da capo</button><button class="btn ghost sm" data-act="askDiscardPost" style="color:var(--danger)">Elimina</button></div></div>`; }
   if(!anyToday){
     h += `<div class="o-sec"><div class="o-head"><span class="o-label">Oggi</span><span class="r">giorno di riposo</span></div>
       ${!next.length ? `<p class="o-sub" style="margin-top:8px">Nessun allenamento in programma: scegli i giorni in Piano.</p><button class="btn" data-act="goWeek" style="margin-top:10px">Scegli i giorni</button>` : ""}
@@ -1992,6 +2016,27 @@ function deloadCheckHtml(){ // tabella 3.2 di The Muscle and Strength Pyramid: T
     <div id="dlOut" class="hint small"><b>Sì a 0 domande:</b> vai avanti normalmente.</div>
     <p class="tiny muted">Con 2 o più sì il libro suggerisce di valutare uno scarico: circa il 30-50% di serie in meno, stessi pesi e stessa vicinanza al cedimento, stesse sedute. Non serve programmarlo in anticipo: si fa quando serve. (Helms e colleghi, <i>The Muscle and Strength Pyramid: Training</i>, tabella 3.2 e pp. 104-106.)</p></div>`;
 }
+function genSplitHtml(n, V){ // tabella 7.2 e descrizioni delle sedute (pp. 227-230)
+  const cur = genSplitIdx(n), minF = V >= 21 ? 3 : V >= 11 ? 2 : 1; // tabella 7.6: 4-10 serie → 1-2 volte, 11-20 → 2-3, 21-30 → 3+
+  return `<div class="o-sec"><div class="o-label">Schema · ${n} giorni</div><p class="small muted" style="margin-top:6px">Le opzioni del libro per ${n} giorni (tabella 7.2), con quante volte a settimana alleni ogni muscolo. Con le stesse serie i risultati sono simili: conta che le sedute non diventino troppo lunghe o pesanti.</p>
+    <div class="o-list">${GEN_SPLITS[n].map(([sp, f], i) => { const fmax = Number(String(f).split("-").pop()); const low = fmax < minF;
+      return `<button class="o-row" data-act="genSplit" data-n="${n}" data-v="${i}"><span class="dot" style="background:${i === cur ? "var(--accent)" : "var(--surface3)"}"></span><span class="n">${esc(genSplitName(sp))}<small>${f === "1-2" ? "ogni muscolo 1-2 volte" : "ogni muscolo " + f + " volte"} a settimana${i === 0 ? " · proposto dall'app" : ""}${low ? " · poche volte per " + V + " serie" : ""}</small></span><span class="p">${i === cur ? "✓" : ""}</span></button>`; }).join("")}</div>
+    <p class="tiny muted" style="margin-top:6px">Come scegliere (pp. 226-233): più serie per muscolo, più conviene allenarlo spesso (fino a 10 serie 1-2 volte, 11-20 serie 2-3 volte, oltre 3 volte). Le sedute di gambe sono le più faticose; alternare "spinta e quadricipiti" e "tirata e femorali" aiuta chi si allena in giorni consecutivi; le sedute per singoli muscoli vanno bene con volumi bassi o medi. Per la maggior parte delle persone il libro indica 3-5 sedute con ogni muscolo 2-4 volte a settimana.</p></div>`;
+}
+function genSpecHtml(V){ // tabella 3.9 e pp. 129-132
+  if(S.settings.level !== "allenato") return "";
+  const g = S.settings.gen || {}, sp = g.spec && g.spec.m && g.spec.m.length ? g.spec : null, sel = (g.specSel || []);
+  if(sp){ const w = genSpecWeek(sp);
+    return `<div class="o-sec"><div class="o-label">Fase di specializzazione</div>
+      <p class="small" style="margin-top:8px">Muscoli: <b>${esc(sp.m.map(m => GEN_MUS[m]).join(" e "))}</b> · settimana ${w} di 8-12. Loro ~${Math.round(V*1.5)} serie a settimana, all'inizio di ogni seduta; gli altri ~${Math.round(V*0.6)}.${sp.m.some(m => ["quad","fem"].includes(m)) && w < 3 ? " Le gambe salgono al nuovo volume nelle prime 3 settimane." : ""}</p>
+      ${w > 12 ? `<div class="hint small" style="margin-top:8px">Sono passate più di 12 settimane: il libro suggerisce di tornare a una fase bilanciata di 8-12 settimane.</div>` : ""}
+      <button class="btn sm" data-act="genSpecStop" style="margin-top:10px">Torna alla fase bilanciata</button></div>`; }
+  return `<div class="o-sec"><div class="o-label">Fase di specializzazione · per chi è avanzato</div>
+    <p class="small muted" style="margin-top:6px">Per chi progredisce ormai molto lentamente (qualche ripetizione in più al mese): 8-12 settimane con circa il 50% di serie in più su 1 o 2 muscoli e circa il 40% in meno sugli altri, poi 8-12 settimane bilanciate, e così via.</p>
+    <div class="chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${Object.entries(GEN_MUS).map(([m, nm]) => `<button class="btn sm ${sel.includes(m) ? "primary" : ""}" data-act="genSpecPick" data-v="${m}">${nm}</button>`).join("")}</div>
+    <button class="btn primary sm" data-act="genSpecStart" style="margin-top:10px" ${sel.length ? "" : "disabled"}>Inizia la specializzazione${sel.length ? ": " + esc(sel.map(m => GEN_MUS[m]).join(" e ")) : ""}</button>
+    <p class="tiny muted" style="margin-top:6px">Helms e colleghi, tabella 3.9 e pp. 129-132. Che ridurre gli altri muscoli funzioni meglio è un'esperienza dei bodybuilder, non un dato di ricerca; serve a non allungare le sedute.</p></div>`;
+}
 function renderGenProgramma(){
   const s = S.settings, t = todayStr(), n = genDays(), V = genCfg().vol, {pos} = nextPosition(t);
   const wk = genWeek(false), vol = genVolume(wk), gd = gymWeekDays();
@@ -1999,9 +2044,10 @@ function renderGenProgramma(){
   let h = programChoiceHtml();
   h += `<div class="o-sec"><div class="o-label">Il tuo programma</div>
     <div class="o-stats"><div><b>${n}</b><span>sedute a settimana</span></div><div><b>${V}</b><span>serie per muscolo</span></div><div><b>${pos.gen ? (pos.week === 1 ? "intro" : pos.week) : "—"}</b><span>settimana</span></div></div>
-    <p class="small" style="margin-top:10px">Schema: <b>${esc([...new Set(GEN_SPLIT[n])].map(x => GEN_ST[x][0].toLowerCase()).join(", "))}</b>, scelto dai tuoi ${n} giorni (tabella 7.2 del libro). La prima settimana è introduttiva: circa tre quarti delle serie e una ripetizione in più di margine.</p>
+    <p class="small" style="margin-top:10px">La prima settimana è introduttiva: circa tre quarti delle serie e una ripetizione in più di margine.</p>
     ${gd.length < 2 ? `<p class="small" style="color:var(--warn)">Il libro indica almeno 2 sedute a settimana: con meno giorni l'app usa 2 sedute a corpo intero.</p>` : ""}
     <div class="o-list">${gd.length ? planDaysRow(gd) : `<button class="o-row" data-act="goWeek"><span class="n">Nessun giorno scelto<small>Sceglili in Piano → La mia settimana</small></span><span class="p">›</span></button>`}</div></div>`;
+  h += genSplitHtml(n, V) + genSpecHtml(V);
   h += `<div class="o-sec"><div class="o-label">Tempo e volume</div><div class="o-seg" style="margin-top:8px">${GEN_VOL.map(([v, l]) => `<button class="${V === v ? "on" : ""}" data-act="genVol" data-v="${v}" ${allowed.some(a => a[0] === v) ? "" : "disabled"}>${l}</button>`).join("")}</div>
     <p class="small muted">${esc(GEN_VOL.find(x => x[0] === V)[2])}. Più serie danno più crescita ma ogni serie in più rende meno: il libro consiglia di partire nella fascia che puoi sostenere e di aggiungere serie solo se ti fermi pur dormendo, mangiando e recuperando bene.${n < 4 ? ` Con ${n} sedute i volumi più alti renderebbero le sedute troppo lunghe.` : ""}</p>
     <div class="o-list" style="margin-top:6px">${Object.entries(GEN_MUS).map(([m, nm]) => `<div class="o-row" style="cursor:default"><span class="n">${nm}</span><span class="p">${String(Math.round(vol[m]*2)/2).replace(".", ",")} serie</span></div>`).join("")}</div>
@@ -2059,7 +2105,8 @@ function whyGenHtml(){
   const R = (c, n, t, src) => `<div class="o-row" style="cursor:default;align-items:flex-start"><span class="dot" style="background:${c};margin-top:7px"></span><span class="n">${n}<small>${t} <span class="cite">${src}</span></small></span></div>`;
   return `<div class="o-sec"><div class="o-label">Programma su misura: le regole</div><p class="small muted" style="margin-top:6px">Il programma "Su misura" applica le regole del libro di Helms, Morgan e Valdez; dove una scelta è dell'app è scritto.</p>
     <div class="o-list">
-      ${R("var(--accent)", "Giorni e schema", "Il libro propone per ogni numero di giorni alcuni schemi possibili; l'app usa: 2-3 giorni corpo intero, 4 giorni gambe e parte alta alternate, 5 giorni gambe, spinta, tirata, gambe, parte alta, 6 giorni gambe e parte alta tre volte. Per la massa conta il totale delle serie più di come le dividi.", "Pyramid tab. 7.2, p. 226")}
+      ${R("var(--accent)", "Giorni e schema", "Per ogni numero di giorni il libro elenca più schemi (da 3 opzioni con 2 giorni a 8 con 6 giorni), che si possono scegliere in Piano → Palestra. Per la massa conta il totale delle serie più di come le dividi: si sceglie in base a quante serie fai (più serie, più conviene allenare ogni muscolo spesso), alla durata delle sedute e ai giorni in cui ti alleni.", "Pyramid tab. 7.2 e 7.6, pp. 226-233")}
+      ${R("var(--accent)", "Fase di specializzazione", "Per chi è avanzato: 8-12 settimane con circa il 50% di serie in più su 1 o 2 muscoli, allenati all'inizio di ogni seduta, e 1/3-1/2 in meno sugli altri (l'app usa il 40%), alternate a fasi bilanciate. Per quadricipiti e femorali si sale al nuovo volume in 2-4 settimane (l'app usa 3).", "Pyramid tab. 3.9, pp. 129-132")}
       ${R("var(--accent)", "Serie a settimana", "Da 4 serie per muscolo si vedono già risultati in 2-3 mesi; la fascia pratica è 10-20; oltre ~30 non si guadagna più. Più serie fanno crescere di più ma ogni serie in più rende meno: il libro dice di fare abbastanza per progredire, non il più possibile.", "Pyramid tab. 2.2 e 7.4, Pelland 2026")}
       ${R("var(--accent)", "Serie per seduta", "Oltre circa 11 serie per lo stesso muscolo nella stessa seduta il beneficio delle serie in più diventa incerto: in quel caso si allena il muscolo più volte a settimana.", "Pyramid p. 71 (Remmert 2025)")}
       ${R("var(--g-legs)", "Ripetizioni e margine", "Dipendono dal tipo di esercizio: squat e stacchi 4-8 ripetizioni con 2-4 in canna (sono pesanti e tecnici), pressa e panche 4-12, macchine e trazioni 6-15, isolamento 8-20 fino quasi al cedimento. Le serie devono avere almeno 4 ripetizioni.", "Pyramid tab. 7.7, p. 235")}
@@ -3591,7 +3638,8 @@ function act(a, d, e){
     case "resume": resumeSession(); break;
     case "askDiscard": showSheet(`<div class="grab"></div><div class="stack"><h2>Eliminare l'allenamento in corso?</h2><p class="small muted">Le serie registrate finora vanno perse e la seduta non viene salvata. Il programma resta alla stessa seduta.</p><div class="row" style="gap:10px"><button class="btn" data-act="closeSheet" style="flex:1">Annulla</button><button class="btn" data-act="discardDraft" style="flex:1;background:var(--danger);color:#fff">Elimina</button></div></div>`); break;
     case "discardDraft": clearDraft(); R = null; try{ window.Android && Android.cancelAlarm(); }catch(err){} closeSheet(); render(); break;
-    case "discardDraft": clearDraft(); render(); break;
+    case "postRestart": clearDraft(); R = null; startPosture(); break;
+    case "askDiscardPost": showSheet(`<div class="grab"></div><div class="stack"><h2>Eliminare la routine posturale in corso?</h2><p class="small muted">Le serie segnate finora non vengono salvate.</p><div class="row" style="gap:10px"><button class="btn" data-act="closeSheet" style="flex:1">Annulla</button><button class="btn" data-act="discardDraft" style="flex:1;background:var(--danger);color:#fff">Elimina</button></div></div>`); break;
     case "openDay": openDay(d.d); break;
     case "exInfo": exSheet(d.k, d.slot); break;
     case "mediaAdd": try{ Android.mediaAdd(d.k, d.m); }catch(err){} break;
@@ -3684,6 +3732,10 @@ function act(a, d, e){
     case "openSettings": if(view !== "impostazioni"){ setPrev = view; view = "impostazioni"; render(); window.scrollTo(0,0); } break;
     case "closeSettings": view = setPrev || "oggi"; render(); window.scrollTo(0,0); break;
     case "setProgram": if((S.settings.program || "liparoti") !== d.v){ S.settings.program = d.v; pushMeta(); render(); } break;
+    case "genSplit": { const g = {...(S.settings.gen || {})}; g.split = {...(g.split || {}), [d.n]:Number(d.v)}; S.settings.gen = g; pushMeta(); render(); break; }
+    case "genSpecPick": { const g = {...(S.settings.gen || {})}; let a = (g.specSel || []).slice(); a = a.includes(d.v) ? a.filter(x => x !== d.v) : a.concat([d.v]).slice(-2); g.specSel = a; S.settings.gen = g; render(); break; }
+    case "genSpecStart": { const g = {...(S.settings.gen || {})}; g.spec = {m:(g.specSel || []).slice(0, 2), start:mondayStr(todayStr())}; g.specSel = []; S.settings.gen = g; pushMeta(); render(); break; }
+    case "genSpecStop": if(confirm("Tornare alla fase bilanciata?")){ const g = {...(S.settings.gen || {})}; g.spec = null; S.settings.gen = g; pushMeta(); render(); } break;
     case "genVol": S.settings.gen = {...(S.settings.gen || {}), vol:Number(d.v)}; pushMeta(); render(); break;
     case "deloadCheck": showSheet(deloadCheckHtml()); break;
     case "dlAns": { const b = document.querySelectorAll("#sheet [data-dl]"); const yes = [...b].filter(x => x.checked).length; $("#dlOut").innerHTML = yes >= 2 ? `<b>Sì a ${yes} domande:</b> il libro suggerisce di valutare una settimana di scarico: se la fai, attiva l'interruttore "Settimana di scarico" nelle sedute di questa settimana.` : `<b>Sì a ${yes} ${yes === 1 ? "domanda" : "domande"}:</b> vai avanti normalmente.`; break; }
