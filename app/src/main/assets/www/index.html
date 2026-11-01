@@ -1452,6 +1452,23 @@ function bfFromFolds(eq, sex, age, heightCm, f, c, withCirc){
   const warn = (age < E.age[0] || age > E.age[1]) ? `Età fuori dall'intervallo dello studio (${E.age[0]}-${E.age[1]} anni): stima meno affidabile.` : "";
   return {pct, sum, warn};
 }
+// Percentili di FFMI e FMI per età e sesso: Schutz, Kyle & Pichard 2002, Int J Obes 26:953-960, Tabella 2
+// (5.635 adulti svizzeri caucasici sani, 18-98 anni, composizione da BIA). Colonne: P5, P10, P25, P50, P75, P90, P95.
+const PCT_COLS = [5,10,25,50,75,90,95];
+const SCHUTZ = {
+  ffmi:{M:[[34,[16.8,17.2,18.0,18.9,19.8,20.5,21.1]],[54,[17.2,17.6,18.3,19.2,20.1,21.1,21.7]],[74,[17.0,17.6,18.4,19.4,20.3,21.1,22.1]],[999,[16.6,16.9,17.6,18.5,19.4,20.9,21.2]]],
+        F:[[34,[13.8,14.1,14.7,15.4,16.2,17.1,17.6]],[54,[14.4,14.7,15.3,15.9,16.7,17.5,18.0]],[74,[14.1,14.6,15.4,16.2,17.4,18.4,19.0]],[999,[12.9,13.7,14.7,15.9,17.0,18.1,18.7]]]},
+  fmi:{M:[[34,[2.2,2.5,3.2,4.0,5.0,6.1,7.0]],[54,[2.5,2.9,3.7,4.8,6.0,7.2,7.9]],[74,[2.8,3.4,4.3,5.7,7.2,8.4,9.3]],[999,[3.7,4.3,5.2,6.4,7.6,9.0,10.1]]],
+       F:[[34,[3.5,3.9,4.6,5.5,6.6,7.8,8.7]],[54,[3.4,3.9,4.8,5.9,7.3,8.8,9.9]],[74,[4.5,5.4,6.5,8.3,10.3,12.0,13.5]],[999,[4.9,5.6,7.5,9.3,11.4,13.5,14.3]]]}
+};
+function pctBand(kind, v){
+  const a = ageNow(), sx = (S.profile||{}).sex === "F" ? "F" : "M"; if(!(a >= 18) || v == null) return "";
+  const row = SCHUTZ[kind][sx].find(r => a <= r[0])[1];
+  if(v < row[0]) return "sotto il 5° percentile";
+  if(v >= row[6]) return "oltre il 95° percentile";
+  for(let i=0;i<6;i++) if(v >= row[i] && v < row[i+1]) return `tra il ${PCT_COLS[i]}° e il ${PCT_COLS[i+1]}° percentile`;
+  return "";
+}
 function ageNow(){ const p = S.profile || {}; return p.birthYear ? new Date().getFullYear() - p.birthYear : null; }
 function heightM(){ const h = (S.profile || {}).height; return h > 0 ? h/100 : null; }
 function bodySorted(){ return (S.body || []).slice().sort((a,b) => a.date === b.date ? (a.t||0) - (b.t||0) : a.date.localeCompare(b.date)); }
@@ -1546,6 +1563,11 @@ function renderCorpo(){
       if(e.comp) parts.push("grasso " + fmtKg(e.comp.pct) + "%" + (e.comp.ffm ? " · FFM " + fmtKg(e.comp.ffm) + " kg" : "") + " (" + (e.comp.method === "bia" ? "BIA" : BF_EQ[e.comp.eq] ? BF_EQ[e.comp.eq].n : "pliche") + ")");
       if(e.circ) parts.push(Object.entries(e.circ).map(([k,v]) => CIRC_N[k].replace(" (contratto)","").toLowerCase() + " " + fmtKg(v)).join(", ") + " cm");
       return `<div class="o-row" style="cursor:default"><span class="n">${esc(fmtDate(e.date).replace(/^./, c => c.toUpperCase()))}<small>${esc(parts.join(" · "))}</small></span><button class="btn icon ghost" data-act="bodyDel" data-id="${e.id}" aria-label="Elimina">${svgI.close}</button></div>`; }).join("")}</div></div>`;
+  if(lc && h && lc.comp.fm != null){ const fmi = lc.comp.fm/(h*h);
+    s += `<div class="o-sec"><div class="o-head"><span class="o-label">Confronto con la popolazione</span><span class="r">tuo sesso ed età</span></div>
+      <div class="o-lift"><span>FFMI <b style="font-size:17px">${fmtKg(Math.round(ffmi*10)/10)}</b></span><span class="small muted">${pctBand("ffmi", ffmi) || "—"}</span></div>
+      <div class="o-lift"><span>FMI <b style="font-size:17px">${fmtKg(Math.round(fmi*10)/10)}</b></span><span class="small muted">${pctBand("fmi", fmi) || "—"}</span></div>
+      <p class="tiny muted" style="margin-top:6px">Percentili di adulti sani non selezionati per lo sport (Schutz et al. 2002, adulti svizzeri, composizione misurata con BIA): chi si allena con i pesi supera spesso il 95° percentile di FFMI. FMI = massa grassa / altezza².</p></div>`; }
   s += `<div class="o-sec"><p class="tiny muted">FFMI = massa magra / altezza². Le equazioni plicometriche non sono validate sulla popolazione italiana: usale soprattutto per confrontare le tue misure nel tempo, con lo stesso metodo e la stessa equazione.</p></div>`;
   return s;
 }
