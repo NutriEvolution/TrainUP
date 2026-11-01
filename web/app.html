@@ -277,6 +277,7 @@ details.wk[open] summary::after{transform:rotate(-135deg)}
 .cal .day{position:relative}
 .cal .day .rnd{position:absolute;right:5px;top:5px;width:7px;height:7px;border-radius:50%;border:1.6px solid var(--c2)}
 .cal .day.rundone .rnd{background:var(--c2)}
+.topgear{width:36px;height:36px;color:var(--ink2)}.topgear svg{width:21px;height:21px}.topgear[aria-current]{color:var(--accent)}
 .o-sec{padding:18px 0;border-top:1px solid var(--line)}
 .o-sec.first{border-top:0;padding-top:6px}
 .o-label{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
@@ -994,6 +995,7 @@ const svgI = {
   programma:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4h14v16H5zM8.5 8.5h7M8.5 12h7M8.5 15.5h4"/></svg>',
   guida:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5zM4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg>',
   chev:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg>',
+  gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
   close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
   info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>',
   play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>'
@@ -1004,9 +1006,9 @@ let view = "oggi", guideTab = "esercizi", guideQ = "";
 let calMonth = (() => { const d = new Date(); return {y:d.getFullYear(), m:d.getMonth()}; })();
 const TABS = [["oggi","Oggi"],["calendario","Calendario"],["progressi","Progressi"],["programma","Programma"],["guida","Guida"]];
 function render(){
-  const body = {oggi:renderOggi, calendario:renderCal, progressi:renderProgressi, programma:renderProgramma, guida:renderGuida}[view]();
-  const title = view === "oggi" ? "" : TABS.find(t => t[0] === view)[1];
-  $("#app").innerHTML = `<div class="wrap"><header class="top"><div class="brand">${svgI.logo}<span>TrainUP</span></div><div class="sync"><span id="syncDot" class="dot"></span><span id="syncTxt"></span></div></header>${title ? `<h1 class="ltitle">${title}</h1>` : ""}${body}</div>
+  const body = {oggi:renderOggi, calendario:renderCal, progressi:renderProgressi, programma:renderProgramma, guida:renderGuida, impostazioni:renderImpostazioni}[view]();
+  const title = view === "oggi" ? "" : view === "impostazioni" ? "Impostazioni" : TABS.find(t => t[0] === view)[1];
+  $("#app").innerHTML = `<div class="wrap"><header class="top"><div class="brand">${svgI.logo}<span>TrainUP</span></div><div class="row" style="gap:6px"><div class="sync"><span id="syncDot" class="dot"></span><span id="syncTxt"></span></div><button class="btn icon ghost topgear" data-act="openSettings" aria-label="Impostazioni" ${view === "impostazioni" ? 'aria-current="page"' : ""}>${svgI.gear}</button></div></header>${title ? `<h1 class="ltitle">${title}</h1>` : ""}${body}</div>
   <nav class="nav" aria-label="Sezioni">${TABS.map(([v,l]) => `<button data-nav="${v}" ${view===v ? 'aria-current="page"' : ""}>${svgI[v]}<span>${l}</span></button>`).join("")}</nav>`;
   setSync(sync.state);
 }
@@ -1667,18 +1669,7 @@ function renderPalestraProgramma(){
   const s = S.settings;
   const {pos} = nextPosition(todayStr());
   let h = `<div class="stack">
-  <div class="card stack"><h2>Impostazioni</h2>
-    <button class="o-row" data-act="editProfile" style="padding-top:2px"><span class="n">Il tuo profilo<small>${(() => { const p = S.profile || {}, a = ageNow(); return [p.sex === "F" ? "donna" : p.sex === "M" ? "uomo" : "", a ? a + " anni" : "", p.height ? p.height + " cm" : ""].filter(Boolean).join(" · ") || "sesso, età, altezza"; })()}</small></span><span class="p">Modifica ›</span></button>
-    <button class="o-row" data-act="openLevel"><span class="n">Il tuo livello<small>${esc(LEVELS[s.level || "ripresa"].n)}${(s.level === "allenato") ? (s.startFrom === "f3" ? " · parti dalla Fase 3" : " · parti dalla Fase 2") : ""}</small></span><span class="p">Cambia ›</span></button>
-    <div class="field"><label for="setName">Il tuo nome (per il saluto nella home)</label><input id="setName" type="text" data-set="name" value="${esc(s.name || "")}" placeholder="Facoltativo" autocomplete="given-name"></div>
-    <div class="field"><label for="setLeg">Esercizio principale per le gambe</label>
-      <select id="setLeg" data-set="legMain"><option value="squat" ${s.legMain==="squat"?"selected":""}>Squat con bilanciere (consigliato per la forza)</option><option value="pressa" ${s.legMain==="pressa"?"selected":""}>Pressa (come Liparoti)</option></select></div>
-    <div class="field"><label for="setF3">Sedute a settimana nella Fase 3</label>
-      <select id="setF3" data-set="f3freq"><option value="3" ${s.f3freq!==4?"selected":""}>3 sedute: pesante, media, volume</option><option value="4" ${s.f3freq===4?"selected":""}>4 sedute: Intensity Loading di Liparoti</option></select></div>
-    <label class="switch"><input type="checkbox" data-set="posture" ${s.posture!==false?"checked":""}><span><b>Routine posturale nelle sedute</b><br><span class="small muted">3 esercizi prima dei pesi e 3 alla fine (circa 12 minuti)</span></span></label>
-    <label class="switch"><input type="checkbox" data-set="rdlInC" ${s.rdlInC?"checked":""}><span><b>Stacco rumeno nella scheda C</b><br><span class="small muted">Fase 2, al posto del leg curl</span></span></label>
-    <label class="switch"><input type="checkbox" data-set="sound" ${s.sound?"checked":""}><span><b>Suono e vibrazione</b><br><span class="small muted">Alla fine del recupero e a ogni minuto degli EMOM</span></span></label>
-  </div>
+  <button class="o-row" data-act="openSettings" style="border-bottom:1px solid var(--line);margin-bottom:6px"><span class="n">Impostazioni della palestra<small>Livello, esercizio per le gambe, sedute della Fase 3, posturale</small></span><span class="p">›</span></button>
   <div class="card stack"><h2>Come funziona</h2>
     <p>Il programma è una sequenza di sedute: ogni allenamento completato fa passare alla seduta successiva, qualunque sia il giorno. Se salti un giorno non perdi niente.</p>
     <p class="small muted">Più di 2 settimane di stop: ripeti la settimana precedente. Più di 5 settimane: si riparte dalla Fase 1, settimana 3. Dopo la settimana 19 riparte la Fase 2 con un nuovo ciclo.</p>
@@ -1736,6 +1727,8 @@ document.addEventListener("change", e => {
     else S.settings[k] = el.value;
     pushMeta(); render(); return;
   }
+  const av = e.target.closest("[data-actv]");
+  if(av){ const k = av.dataset.actv; let a = (S.settings.activities || ["palestra"]).slice(); a = av.checked ? [...new Set(a.concat([k]))] : a.filter(x => x !== k); if(!a.length){ av.checked = true; return; } S.settings.activities = a; pushMeta(); render(); return; }
   if(e.target.closest("#sheet [data-bfsel]")){ readBodyForm(); showSheet(bodySheetHtml()); updateBfResult(); return; }
   const w = e.target.closest("[data-warm]"); if(w && R){ if(!R.warm || Array.isArray(R.warm)) R.warm = {}; R.warm[w.dataset.warm] = w.checked; saveDraft(); }
 });
@@ -1800,6 +1793,40 @@ const REFS = [
 function renderFonti(){
   const link = t => { const m = /doi:(\S+)/.exec(t); return m ? t.replace(m[0], `<a href="https://doi.org/${esc(m[1])}" target="_blank" rel="noopener">doi:${esc(m[1])}</a>`) : esc(t); };
   return `<p class="small muted" style="margin:4px 0 6px">Riferimenti completi delle fonti usate nell'app. Dove una scelta è dell'app e non di una fonte, nell'app è scritto.</p>` + REFS.map(([g, list]) => `<div class="o-sec"><div class="o-label">${esc(g)}</div><div class="o-list">${list.map(([a, t, j, n]) => `<div class="o-row" style="cursor:default;align-items:flex-start;display:block"><span class="n" style="display:block">${esc(a)} <i style="font-weight:500">${esc(t)}</i><small>${esc(j)}${n ? " · " : ""}${link(n)}</small></span></div>`).join("")}</div></div>`).join("");
+}
+
+
+/* ============ Impostazioni ============ */
+let setPrev = "oggi";
+function renderImpostazioni(){
+  const s = S.settings, p = S.profile || {}, a = ageNow(), acts = s.activities || ["palestra"];
+  const rc = runCfg() || {}, vc = vbCfg() || {}, bc = bkCfg() || {};
+  const row = (act, n, sub, extra="") => `<button class="o-row" data-act="${act}" ${extra}><span class="n">${n}<small>${sub}</small></span><span class="p">›</span></button>`;
+  const sw = (key, n, sub, on) => `<label class="switch"><input type="checkbox" data-set="${key}" ${on ? "checked" : ""}><span><b>${n}</b><br><span class="small muted">${sub}</span></span></label>`;
+  let h = `<button class="btn ghost sm" data-act="closeSettings" style="padding-left:0;margin-bottom:4px">‹ Indietro</button>`;
+  h += `<div class="o-sec first"><div class="o-label">Tu</div>
+    <div class="field" style="margin-top:10px"><label for="setName">Nome (per il saluto nella home)</label><input id="setName" type="text" data-set="name" value="${esc(s.name || "")}" placeholder="Facoltativo" autocomplete="given-name"></div>
+    <div class="o-list">${row("editProfile", "Profilo", esc([p.sex === "F" ? "donna" : p.sex === "M" ? "uomo" : "", a ? a + " anni" : "", p.height ? p.height + " cm" : ""].filter(Boolean).join(" · ") || "sesso, età, altezza"))}</div></div>`;
+  h += `<div class="o-sec"><div class="o-label">Cosa pratichi</div><div class="o-list">${ACTIVITIES.filter(([k]) => k !== "combinato").map(([k, l]) => `<label class="switch"><input type="checkbox" data-actv="${k}" ${acts.includes(k) ? "checked" : ""}><span><b>${l}</b></span></label>`).join("")}</div>
+    <p class="tiny muted" style="margin-top:6px">Togliere un'attività la nasconde da Oggi e dal Calendario; piani e storico restano. Con palestra e corsa insieme compare in Programma la scheda Settimana.</p></div>`;
+  if(gymOn()) h += `<div class="o-sec"><div class="o-label">Palestra</div>
+    <div class="o-list">${row("openLevel", "Livello", esc(LEVELS[s.level || "ripresa"].n) + (s.level === "allenato" ? (s.startFrom === "f3" ? " · parti dalla Fase 3" : " · parti dalla Fase 2") : ""))}</div>
+    <div class="field"><label for="setLeg">Esercizio principale per le gambe</label>
+      <select id="setLeg" data-set="legMain"><option value="squat" ${s.legMain==="squat"?"selected":""}>Squat con bilanciere (consigliato per la forza)</option><option value="pressa" ${s.legMain==="pressa"?"selected":""}>Pressa (come Liparoti)</option></select></div>
+    <div class="field"><label for="setF3">Sedute a settimana nella Fase 3</label>
+      <select id="setF3" data-set="f3freq"><option value="3" ${s.f3freq!==4?"selected":""}>3 sedute: pesante, media, volume</option><option value="4" ${s.f3freq===4?"selected":""}>4 sedute: Intensity Loading di Liparoti</option></select></div>
+    ${sw("posture", "Routine posturale nelle sedute", "3 esercizi prima dei pesi e 3 alla fine (circa 12 minuti)", s.posture !== false)}
+    ${sw("rdlInC", "Stacco rumeno nella scheda C", "Fase 2, al posto del leg curl", !!s.rdlInC)}
+    <div class="o-list">${row("goSwaps", "Esercizi cambiati", Object.keys(s.swaps || {}).length ? Object.keys(s.swaps).length + " cambiati" : "nessuno")}</div></div>`;
+  h += `<div class="o-sec"><div class="o-label">Piani</div><div class="o-list">
+    ${acts.includes("corsa") ? row("goSport", "Corsa", runActive() ? esc(RUN_PLANS[rc.plan].n) + (rc.vdot ? " · VDOT " + rc.vdot.toFixed(0) : "") : "nessun piano", 'data-v="corsa"') + row("vdotOpen", "Ritmi e FC massima", rc.vdot ? "VDOT " + rc.vdot.toFixed(1) : "inserisci un tempo") : ""}
+    ${acts.includes("pallavolo") ? row("vbSetup", "Pallavolo", vbActive() ? esc(VB_LV[vc.level].n) + " · " + (vc.season ? "in stagione" : "fuori stagione") : "non impostato") : ""}
+    ${acts.includes("ciclismo") ? row("bkSetup", "Bici", bkActive() ? (bc.power ? "con misuratore · FTP " + (bc.ftp || "—") : "senza misuratore · FC soglia " + (bc.fthr || "—")) : "non impostato") : ""}
+    ${comboOn() ? row("goSport", "Settimana di pesi e corsa", comboCfg() ? "priorità: " + PRIO[comboCfg().priority || "equilibrio"].n.toLowerCase() : "non impostata", 'data-v="settimana"') : ""}
+    </div></div>`;
+  h += `<div class="o-sec"><div class="o-label">Durante l'allenamento</div>${sw("sound", "Suono e vibrazione", "Fine del recupero, minuti degli EMOM, cambi di passo nella corsa", !!s.sound)}</div>`;
+  h += `<div class="o-sec" id="appDati"><div class="o-label">App e dati</div><p class="small muted" style="margin-top:8px">Nella versione per il browser aggiornamenti e backup non sono disponibili.</p></div>`;
+  return h;
 }
 
 /* ============ Guida ============ */
@@ -3191,6 +3218,10 @@ function act(a, d, e){
     case "testEnd": endTestEx(); break;
     case "finish": finishSession(); break;
     case "progSport": runProgTab = d.v; comboDraft = null; render(); break;
+    case "openSettings": if(view !== "impostazioni"){ setPrev = view; view = "impostazioni"; render(); window.scrollTo(0,0); } break;
+    case "closeSettings": view = setPrev || "oggi"; render(); window.scrollTo(0,0); break;
+    case "goSport": runProgTab = d.v; comboDraft = null; view = "programma"; render(); window.scrollTo(0,0); break;
+    case "goSwaps": runProgTab = "palestra"; view = "programma"; render(); setTimeout(() => { const el = [...document.querySelectorAll("h2")].find(x => x.textContent === "Esercizi cambiati"); if(el) el.scrollIntoView({behavior:"smooth", block:"start"}); }, 50); break;
     case "cbPrio": comboDraft.priority = d.v; render(); break;
     case "cbTog": { const a = comboDraft[d.k], v = Number(d.v); comboDraft[d.k] = a.includes(v) ? a.filter(x => x !== v) : a.concat([v]); render(); break; }
     case "cbPropose": { const P = runActive() ? RUN_PLANS[runCfg().plan] : null; const g = comboDraft.priority === "corsa" ? 2 : 3; let r = comboDraft.runDays.length || 3; if(P) r = Math.min(Math.max(r, P.days[0]), P.days[P.days.length-1]); if(comboDraft.priority === "palestra" && (!P || P.days[0] <= 3)) r = Math.min(r, 3); const x = comboPropose(g, r, comboDraft.priority); comboDraft.gymDays = x.gymDays; comboDraft.runDays = x.runDays; render(); break; }

@@ -1,4 +1,5 @@
-Novità della 1.12.2
-- Pallavolo: salto d'attacco e salto a muro ora con fonti (Fuchs 2019, Ficklin 2014) e indicazioni sugli atterraggi (Tayfur 2022)
-- Bici: la durata delle uscite lunghe confrontata con il libro di Allen e Coggan (Appendice B e piano di esempio del cap. 9)
-- Nuove voci in Guida → Fonti
+Novità della 1.13.0
+- Impostazioni: pagina unica (ingranaggio in alto a destra) con profilo, attività praticate, palestra, piani, suono, aggiornamenti e backup
+- Backup: si vede quando hai salvato l'ultimo, con un avviso dopo un mese; ora include anche la corsa in corso
+- Dopo una reinstallazione, la prima schermata permette di ripristinare subito un backup
+- Il backup automatico di Android esclude foto e video personali, che potevano superare il limite di spazio e bloccarlo
