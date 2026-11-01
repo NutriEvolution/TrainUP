@@ -1,4 +1,4 @@
-Novità della 1.16.0
-- Piani di corsa bianco, rosso, blu e oro: ora sono le tabelle 8.1-8.4 di Daniels (sedute, durate e ordine dei giorni del libro), con giorni minimi e facoltativi
-- Sedute con serie ripetute (es. 4 × (200 + 200 + 400 m)) mostrate in una riga
-- Guida → Perché così → Corsa: spiegazione aggiornata
+Novità della 1.17.0
+- Maratona: ora è il piano per principianti di Daniels (tabella 16.2, 18 settimane, 3-5 giorni)
+- Nuovo piano 5-10 km di Daniels per chi corre 64-80 km a settimana (tabella 13.1, fasi II-IV)
+- I piani 5-10 km in 12 settimane e mezza maratona restano costruiti dall'app e sono indicati come tali
