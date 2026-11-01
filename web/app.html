@@ -249,6 +249,7 @@ details.wk[open] summary::after{transform:rotate(-135deg)}
 
 /* ===== stile aperto (home e progressi): niente riquadri, sezioni separate da linee sottili ===== */
 /* corsa */
+.cal .day .vbd{position:absolute;left:5px;top:5px;width:7px;height:7px;border-radius:2px;border:1.6px solid var(--c3)}.cal .day .vbd.on{background:var(--c3)}
 .cb-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:12px}
 .cb-day{display:flex;flex-direction:column;align-items:center;gap:6px}
 .cb-l{font-size:12px;font-weight:700;color:var(--muted)}
@@ -779,7 +780,7 @@ function load(){
 }
 function saveLocal(){ try{ localStorage.setItem(LS, JSON.stringify(S)); }catch(e){} }
 function postureOn(d){ return Object.values(S.sessions).find(x => x && !x.deleted && x.kind === "post" && x.date === d); }
-function doneSessions(){ return Object.values(S.sessions).filter(x => x && !x.deleted && x.kind !== "post" && x.kind !== "run").sort((a,b) => a.date === b.date ? a.finishedAt - b.finishedAt : (a.date < b.date ? -1 : 1)); }
+function doneSessions(){ return Object.values(S.sessions).filter(x => x && !x.deleted && x.kind !== "post" && x.kind !== "run" && x.kind !== "volley").sort((a,b) => a.date === b.date ? a.finishedAt - b.finishedAt : (a.date < b.date ? -1 : 1)); }
 
 /* ============ motore: prossima seduta ============ */
 /* Livello: principiante (Fase 1 di apprendimento + Fase 1 normale), ripresa (Fase 1), allenato (test, poi Fase 2 o Fase 3) */
@@ -1104,7 +1105,7 @@ function renderOggi(){
         <button class="btn primary big" data-act="resume" style="margin-top:12px">${svgI.play} Riprendi allenamento</button><button class="btn ghost sm" data-act="askDiscard" style="display:block;margin:8px auto 0;color:var(--danger)">Elimina l'allenamento in corso</button></div>`; })()
       : `<label class="switch o-switch"><input type="checkbox" id="deloadToggle"><span><b>Settimana di scarico</b><br><span class="small muted">Metà delle serie, pesi -15%</span></span></label>
       <button class="btn primary big" data-act="start" style="margin-top:12px">${svgI.play} Inizia allenamento</button></div>`}`;
-  } else if(!(runToday && (runPlannedOn(t) || runDoneOn(t) || loadRunDraft()))){
+  } else if(!(runToday && (runPlannedOn(t) || runDoneOn(t) || loadRunDraft())) && !vbPlannedOn(t) && !vbDoneOn(t)){
     const nextUp = Object.entries(fc).find(([d]) => d > t);
     h += `<div class="o-sec"><div class="o-head"><span class="o-label">Oggi</span><span class="r">giorno di riposo</span></div>
       ${nextUp ? `<div class="o-today"><div class="big" style="font-size:44px;color:var(--accent-mint)">${parseYmd(nextUp[0]).getDate()}</div><div><span class="o-sub" style="margin:0">Prossimo allenamento</span><h2>${esc(fmtDate(nextUp[0]).replace(/^./, c => c.toUpperCase()))}</h2><div class="o-sub">${esc(dn(buildSession(nextUp[1], S.settings)))} · ${esc(posLabel(nextUp[1]))}</div></div></div>`
@@ -1112,11 +1113,12 @@ function renderOggi(){
       <button class="btn ghost sm" data-act="trainToday" style="margin-top:10px;padding-left:0">Allenati oggi lo stesso</button></div>`;
   }
   h += runToday;
+  h += vbTodayHtml(t);
   if(!runPlannedOn(t) && !runDoneOn(t) && !loadRunDraft() && runActive()){ const nr = nextRun(t); if(nr) h += `<div class="o-sec"><div class="o-head"><span class="o-label">Prossima corsa</span><span class="r">${esc(fmtDate(nr[0]))}</span></div><button class="o-row" data-act="openDay" data-d="${nr[0]}" style="margin-top:6px"><span class="dot" style="background:${RUN_C[nr[1].t] || "var(--c2)"}"></span><span class="n">${esc(nr[1].title)}<small>~${Math.round(sessionMin(nr[1], runPacesNow()))} min · settimana ${nr[1].week+1}</small></span><span class="p">›</span></button></div>`; }
   // settimana
   const td = parseYmd(t); const mon = monday(td); const L = ["L","M","M","G","V","S","D"]; let days = "";
   let runsDone = 0, runsPl = 0;
-  for(let i=0;i<7;i++){ const d = new Date(mon); d.setDate(mon.getDate()+i); const ds = ymd(d); const rd = runDoneOn(ds), rp = runPlannedOn(ds); if(rd) runsDone++; if(rp || rd) runsPl++; const done = (gymOn() && sessionOn(ds)) || rd, pl = (gymOn() && !!S.planned[ds]) || !!rp;
+  for(let i=0;i<7;i++){ const d = new Date(mon); d.setDate(mon.getDate()+i); const ds = ymd(d); const rd = runDoneOn(ds) || vbDoneOn(ds), rp = runPlannedOn(ds) || vbPlannedOn(ds); if(runDoneOn(ds)) runsDone++; if(vbDoneOn(ds)) runsDone++; if(runPlannedOn(ds) || runDoneOn(ds)) runsPl++; if(vbPlannedOn(ds) || vbDoneOn(ds)) runsPl++; const done = (gymOn() && sessionOn(ds)) || rd, pl = (gymOn() && !!S.planned[ds]) || !!rp;
     let c = done ? "d" : pl && ds >= t ? "p" : pl ? "m" : ""; if(ds === t) c += " t";
     days += `<button class="${c}" data-act="openDay" data-d="${ds}" aria-label="${esc(fmtDate(ds))}">${L[i]}<b>${d.getDate()}</b></button>`; }
   const streak = weekStreak();
@@ -1164,14 +1166,14 @@ function renderCal(){
     if(po) cls += " posture";
     const rd = runDoneOn(ds), rp = !rd && ds >= t ? runPlannedOn(ds) : null;
     if(rd || rp){ cls += rd ? " rundone" : " runplan"; if(!lbl) lbl = rd ? "✓" : ""; }
-    if(!gymOn() && !rd && !rp){ cls = cls.replace(/ (done|planned|missed)/g, ""); lbl = ""; }
-    cells += `<button class="${cls}" data-act="openDay" data-d="${ds}" aria-label="${esc(fmtDate(ds))}"><span class="n">${d.getDate()}</span><span class="lbl">${esc(lbl)}</span>${rd || rp ? '<i class="rnd"></i>' : ""}</button>`;
+    if(!gymOn() && !rd && !rp && !vbDoneOn(ds) && !vbPlannedOn(ds)){ cls = cls.replace(/ (done|planned|missed)/g, ""); lbl = ""; }
+    cells += `<button class="${cls}" data-act="openDay" data-d="${ds}" aria-label="${esc(fmtDate(ds))}"><span class="n">${d.getDate()}</span><span class="lbl">${esc(lbl)}</span>${rd || rp ? '<i class="rnd"></i>' : ""}${vbDoneOn(ds) || (ds >= t && vbPlannedOn(ds)) ? `<i class="vbd ${vbDoneOn(ds) ? "on" : ""}"></i>` : ""}</button>`;
   }
   return `<div class="stack">
     <div class="card stack">
       <div class="row between"><button class="btn icon ghost" data-act="month" data-dir="-1" aria-label="Mese precedente">‹</button><h2 style="text-transform:capitalize">${MESI[m]} ${y}</h2><button class="btn icon ghost" data-act="month" data-dir="1" aria-label="Mese successivo">›</button></div>
       <div class="cal">${["L","M","M","G","V","S","D"].map(x => `<div class="dow">${x}</div>`).join("")}${cells}</div>
-      <div class="legend"><span><i class="sw" style="background:var(--accent)"></i>Fatto</span><span><i class="sw" style="border:2px solid var(--accent)"></i>In programma</span><span><i class="sw" style="border:1px dashed var(--muted)"></i>Saltato</span><span><i class="sw" style="background:var(--post)"></i>Posturale a casa</span>${runActive() || runSessions().length ? `<span><i class="sw" style="background:var(--c2);border-radius:50%;width:8px;height:8px"></i>Corsa</span>` : ""}</div>
+      <div class="legend"><span><i class="sw" style="background:var(--accent)"></i>Fatto</span><span><i class="sw" style="border:2px solid var(--accent)"></i>In programma</span><span><i class="sw" style="border:1px dashed var(--muted)"></i>Saltato</span><span><i class="sw" style="background:var(--post)"></i>Posturale a casa</span>${runActive() || runSessions().length ? `<span><i class="sw" style="background:var(--c2);border-radius:50%;width:8px;height:8px"></i>Corsa</span>` : ""}${vbActive() || vbSessions().length ? `<span><i class="sw" style="background:var(--c3);border-radius:2px;width:8px;height:8px"></i>Salto</span>` : ""}</div>
     </div>
     <div class="card stack"><h3>Come funziona</h3><p class="small muted">Tocca un giorno per segnarlo come giorno di allenamento. La lettera è la scheda che ti verrà assegnata: se salti un giorno, la scheda passa al giorno successivo segnato.</p>
       <div class="row"><button class="btn" data-act="planLMV">Segna lun, mer, ven · 4 settimane</button><button class="btn ghost" data-act="clearFuture">Togli i giorni futuri</button></div>
@@ -1183,8 +1185,8 @@ function openDay(ds){
   const done = sessionOn(ds), pl = !!S.planned[ds], po = postureOn(ds);
   const fc = forecast();
   let h = `<div class="grab"></div><div class="stack"><div class="row between"><h2 style="text-transform:capitalize">${esc(fmtDate(ds))}</h2><button class="btn icon ghost" data-act="closeSheet" aria-label="Chiudi">${svgI.close}</button></div>`;
-  const runHere = runDoneOn(ds) || runPlannedOn(ds);
-  if(runHere) h += runDayHtml(ds);
+  const runHere = runDoneOn(ds) || runPlannedOn(ds) || vbDoneOn(ds) || vbPlannedOn(ds);
+  if(runHere){ h += runDayHtml(ds); h += vbDayHtml(ds); }
   if(!gymOn() && !done){ /* solo corsa */ }
   else if(runHere && !done && !pl){ h += `<div class="o-sec" style="padding-bottom:0"><div class="o-label">Palestra</div><p class="small muted" style="margin-top:6px">Nessuna seduta.</p><button class="btn sm" data-act="togglePlan" data-d="${ds}" style="margin-top:8px">Aggiungi un allenamento in palestra</button></div>`; }
   else if(done){
@@ -1316,9 +1318,9 @@ function sparkSvg(vals){
 }
 let progPeriod = "3m", progLift = null, progTab = "allenamento";
 function renderProgressi(){
-  const tabs = `<div class="o-seg" style="margin-bottom:10px">${[["allenamento","Palestra"],["corsa","Corsa"],["corpo","Corpo"]].filter(([k]) => k !== "corsa" || runActive() || runSessions().length || (S.settings.activities||[]).includes("corsa")).filter(([k]) => k !== "allenamento" || gymOn() || doneSessions().length).map(([k,l]) => `<button class="${progTab===k?"on":""}" data-act="progTab" data-v="${k}">${l}</button>`).join("")}</div>`;
+  const tabs = `<div class="o-seg" style="margin-bottom:10px">${[["allenamento","Palestra"],["corsa","Corsa"],["salto","Salto"],["corpo","Corpo"]].filter(([k]) => k !== "corsa" || runActive() || runSessions().length || (S.settings.activities||[]).includes("corsa")).filter(([k]) => k !== "salto" || vbActive() || vbSessions().length).filter(([k]) => k !== "allenamento" || gymOn() || doneSessions().length).map(([k,l]) => `<button class="${progTab===k?"on":""}" data-act="progTab" data-v="${k}">${l}</button>`).join("")}</div>`;
   if(progTab === "allenamento" && !gymOn() && !doneSessions().length) progTab = "corsa";
-  return tabs + (progTab === "corpo" ? renderCorpo() : progTab === "corsa" ? renderCorsaProgressi() : renderAllenamento());
+  return tabs + (progTab === "corpo" ? renderCorpo() : progTab === "corsa" ? renderCorsaProgressi() : progTab === "salto" ? renderVolleyProgressi() : renderAllenamento());
 }
 function renderAllenamento(){
   const list = doneSessions();
@@ -1597,7 +1599,7 @@ function renderCorpo(){
 }
 
 /* ============ primo avvio: profilo, attività, livello ============ */
-const ACTIVITIES = [["palestra","Palestra (pesi)",true],["corsa","Corsa",true],["ciclismo","Ciclismo",false],["pallavolo","Pallavolo",false],["combinato","Pesi e corsa insieme",true]];
+const ACTIVITIES = [["palestra","Palestra (pesi)",true],["corsa","Corsa",true],["ciclismo","Ciclismo",false],["pallavolo","Pallavolo",true],["combinato","Pesi e corsa insieme",true]];
 let onb = null;
 function onbHtml(){
   const d = onb, st = d.step, p = 4;
@@ -1613,7 +1615,7 @@ function onbHtml(){
     ${d.err ? `<div class="hint warn small">${esc(d.err)}</div>` : ""}`;
   else if(st === 2) b = `<h1>Cosa pratichi?</h1><p class="o-sub">Puoi sceglierne più di una.</p>
     <div class="o-list">${ACTIVITIES.map(([k,l,ok]) => `<button class="o-row" data-act="onbAct" data-v="${k}"><span class="dot" style="background:${(d.acts||[]).includes(k) ? "var(--accent)" : "var(--surface3)"}"></span><span class="n">${l}${ok ? "" : "<small>Programma in arrivo</small>"}</span><span class="p">${(d.acts||[]).includes(k) ? "✓" : ""}</span></button>`).join("")}</div>
-    ${(d.acts||[]).some(k => !ACTIVITIES.find(a => a[0] === k)[2]) ? `<div class="hint small">Per ora TrainUP ha i programmi per palestra e corsa. Ciclismo e pallavolo arriveranno con i prossimi aggiornamenti.</div>` : ""}`;
+    ${(d.acts||[]).some(k => !ACTIVITIES.find(a => a[0] === k)[2]) ? `<div class="hint small">Per ora TrainUP ha i programmi per palestra, corsa e pallavolo. Il ciclismo arriverà con i prossimi aggiornamenti.</div>` : ""}`;
   else b = levelSheetHtml(true, true);
   return `<div class="onb-in">${dots}<div class="stack">${b}</div>
     <div class="row" style="gap:10px;margin-top:auto;padding-top:20px">${st > 0 ? `<button class="btn" data-act="onbBack" style="flex:none">Indietro</button>` : ""}<button class="btn primary big" data-act="onbNext" style="flex:1">${st === 3 || (st === 2 && !(d.acts||[]).some(k => k === "palestra" || k === "combinato")) ? "Inizia" : "Avanti"}</button></div></div>`;
@@ -1650,9 +1652,10 @@ function profileSheetHtml(){ const p = S.profile || {}; const a = ageNow();
 function renderProgramma(){
   const showRun = (S.settings.activities||[]).includes("corsa") || runActive();
   if(runProgTab == null) runProgTab = gymOn() ? "palestra" : "corsa";
-  const seg = `<div class="o-seg" style="margin-bottom:10px">${[["palestra","Palestra"],["corsa","Corsa"]].concat(comboOn() ? [["settimana","Settimana"]] : []).map(([k,l]) => `<button class="${runProgTab===k?"on":""}" data-act="progSport" data-v="${k}">${l}</button>`).join("")}</div>`;
+  const seg = `<div class="o-seg" style="margin-bottom:10px">${[["palestra","Palestra"],["corsa","Corsa"]].concat((S.settings.activities||[]).includes("pallavolo") || vbActive() ? [["pallavolo","Pallavolo"]] : []).concat(comboOn() ? [["settimana","Settimana"]] : []).map(([k,l]) => `<button class="${runProgTab===k?"on":""}" data-act="progSport" data-v="${k}">${l}</button>`).join("")}</div>`;
   if(runProgTab === "corsa") return seg + renderCorsaProgramma();
   if(runProgTab === "settimana" && comboOn()) return seg + renderSettimana();
+  if(runProgTab === "pallavolo") return seg + renderPallavoloProgramma();
   return seg + renderPalestraProgramma();
 }
 function renderPalestraProgramma(){
@@ -2366,6 +2369,7 @@ function comboWarnings(gd, rd, prio, runN){
   if(prio === "palestra" && runN > 3) w.push(["warn", `Più di 3 corse a settimana: frequenza e durata della corsa riducono un po' i guadagni delle gambe (Wilson 2012). Con questa priorità le corse facili si fermano a 30 minuti.`]);
   const consec = gd.filter(d => gd.includes((d+1)%7)); if(gd.length <= 3 && consec.length) w.push(["warn", "Due sedute di pesi in giorni consecutivi: con sedute a corpo intero è meglio un giorno di riposo in mezzo."]);
   if(runActive()){ const m = runWeekPlan(Math.max(0, runWeekIdx(todayStr()))); for(const [d, x] of Object.entries(m)){ const dd = Number(d); if(x.t === "L" && gd.includes((dd+1)%7)) w.push(["info", `Lungo di ${DOW_N[dd]} e pesi il giorno dopo: le gambe possono essere stanche. Se succede, alleggerisci gli esercizi per le gambe (indicazione generale).`]); } }
+  if(vbActive()){ const vc = vbCfg().days.filter(x => gd.includes(x)); if(vc.length) w.push(["warn", `${vc.map(x => DOW_N[x]).join(", ")}: salti e pesi nello stesso giorno. Il manuale NSCA sconsiglia pesi pesanti per le gambe insieme ai salti.`]); const vr = vbCfg().days.filter(x => rd.includes(x)); if(vr.length) w.push(["info", `${vr.map(x => DOW_N[x]).join(", ")}: salti e corsa. Prima i salti, poi la corsa (NSCA).`]); }
   return w;
 }
 let comboDraft = null;
@@ -2627,6 +2631,193 @@ function renderCorsaProgressi(){
   return h;
 }
 
+
+/* ============ pallavolo: salto e rapidità ============ */
+// Pliometria: NSCA, Essentials 4ª ed., cap. 18 (intensità degli esercizi, 48-72 h tra le sedute, volumi per seduta 80-100 / 100-120 /
+// 120-140 appoggi, progressione da bassa ad alta intensità con volume che scende, niente pesi pesanti per le gambe nello stesso giorno,
+// salti prima della corsa, sopra i 100 kg niente volumi alti, alta intensità e salti in basso da oltre 46 cm).
+// Agilità: NSCA cap. 19 (blocchi di 10-15 min, prima frenate e spostamenti laterali, poi cambi di direzione e reazione).
+// Effetto atteso: Markovic 2007, salto con contromovimento +8,7% in media.
+const PLY = { // n, intensità (B/M/A), appoggi per ripetizione, unità, descrizione
+  caviglie:{n:"Saltelli sulle caviglie", i:"B", c:1, d:"Piedi alla larghezza delle spalle, piccoli salti consecutivi spingendo quasi solo con le caviglie: ginocchia poco piegate, contatto breve con il suolo."},
+  squatJump:{n:"Squat jump", i:"B", c:1, d:"Parti da accosciato con le cosce poco sopra il parallelo e le mani dietro la testa; salta più in alto che puoi senza contromovimento, atterra morbido e fermati prima del salto successivo."},
+  saltoTocco:{n:"Salto con tocco", i:"B", c:1, d:"In piedi, piegati rapidamente e salta portando le braccia in alto per toccare un punto sopra di te (un ramo, un segno sul muro). Atterra e riparti da fermo."},
+  lungoFermo:{n:"Salto in lungo da fermo", i:"B", c:1, d:"Piedi paralleli, piegati e salta in avanti il più lontano possibile aiutandoti con le braccia. Atterra con ginocchia sopra le punte e tieni la posizione un secondo."},
+  skip:{n:"Skip", i:"B", c:10, u:"20 m", d:"Corsa saltellata: a ogni passo un piccolo salto sullo stesso piede, braccio opposto alla gamba che sale. Per 20 metri."},
+  skipPotente:{n:"Skip potente", i:"B", c:10, u:"20 m", d:"Come lo skip ma spingendo verso l'alto il più possibile a ogni passo, ginocchio alto e braccio opposto deciso."},
+  spinteBox:{n:"Spinte alternate sul gradino", i:"B", c:1, d:"Un piede su un gradino o box basso (15-30 cm), l'altro a terra. Spingi con il piede sul box e cambia piede in aria. Conta un appoggio per ogni cambio."},
+  boxSalita:{n:"Salto sul box", i:"B", c:1, d:"Box di 30-45 cm. Piegati e salta sul box atterrando con entrambi i piedi, morbido. Scendi camminando: niente salto all'indietro."},
+  atterraggio:{n:"Atterraggio dal box", i:"M", c:1, d:"Da un box di 30 cm fai un passo avanti e atterra a piedi uniti fermandoti di colpo: ginocchia sopra le punte, mai verso l'interno. Insegna ad assorbire l'atterraggio."},
+  saltelli1:{n:"Saltelli su una gamba", i:"M", c:1, d:"Come i saltelli sulle caviglie ma su una gamba sola. Ripetizioni per gamba."},
+  tuck:{n:"Salto raccolto (tuck jump)", i:"M", c:1, d:"Salta in alto e porta le ginocchia al petto, toccale con le mani e lasciale prima di atterrare. Riparti subito."},
+  splitJump:{n:"Salto in affondo", i:"M", c:1, d:"In affondo con le ginocchia a circa 90°. Salta in alto con l'aiuto delle braccia e riatterra nella stessa posizione. Ripetizioni per gamba."},
+  ostacolo:{n:"Salto sopra l'ostacolo", i:"M", c:1, d:"Un cono o un ostacolo basso davanti: salta oltre a piedi uniti, alto più che lungo. Riparti da fermo."},
+  ostacoloLat:{n:"Salti laterali sopra l'ostacolo", i:"M", c:1, d:"Ostacolo basso a fianco: salta di lato oltre l'ostacolo e torna, a piedi uniti, con contatti brevi."},
+  hop2:{n:"Balzi in avanti a piedi uniti", i:"M", c:1, d:"Salti in avanti consecutivi a piedi uniti, il più lontano possibile, ripartendo subito a ogni atterraggio."},
+  skipLat:{n:"Skip laterale", i:"M", c:10, u:"20 m", d:"Skip di lato, spingendo con la gamba esterna. 20 metri, poi torna dall'altro lato."},
+  boxLat:{n:"Salti laterali sul box", i:"M", c:1, d:"Box basso a fianco: salta sopra, poi scendi dall'altra parte e ripeti tornando indietro."},
+  depth:{n:"Salto in basso con rimbalzo (depth jump)", i:"A", c:1, d:"Da un box di 30 cm (non più alto) fai un passo avanti, atterra a piedi uniti e salta subito più in alto che puoi. Il contatto con il suolo deve essere brevissimo. 5-10 secondi tra un salto e l'altro."},
+  tuck1:{n:"Salto raccolto su una gamba", i:"A", c:1, d:"Tuck jump su una gamba sola. Ripetizioni per gamba."},
+  splitCiclico:{n:"Salto in affondo con cambio", i:"A", c:1, d:"Come il salto in affondo, ma in aria scambi le gambe e riatterri con l'altra davanti."},
+  vert1:{n:"Salto verticale su una gamba", i:"A", c:1, d:"Su una gamba, piegati e salta più in alto che puoi, atterra sulla stessa gamba. Ripetizioni per gamba."},
+  zigzag:{n:"Balzi a zigzag a piedi uniti", i:"A", c:1, d:"Coni a zigzag a 45-60 cm: salta da un lato all'altro avanzando in diagonale, contatti brevi."},
+  rincorsa:{n:"Salto d'attacco con rincorsa", i:"A", c:1, d:"La rincorsa che usi in partita (2-4 passi) e stacco a due piedi con le braccia che salgono, come per schiacciare. Atterra su due piedi. Indicazione generale, non presa dal manuale."},
+  muro:{n:"Salto a muro con spostamento", i:"M", c:1, d:"Un passo laterale (o incrociato) e salto a muro con le mani alte davanti, come sotto rete. Atterra su due piedi. Indicazione generale, non presa dal manuale."}
+};
+const UP = {
+  petto:{n:"Lancio dal petto", i:"B", d:"Palla medica da 1-3 kg al petto, lanciala con forza verso un muro o un compagno a 3 metri e riprendila."},
+  sopraTesta:{n:"Lancio sopra la testa a due mani", i:"B", d:"Palla medica sopra la testa, lancia in avanti e verso il basso come una rimessa laterale del calcio."},
+  unBraccio:{n:"Lancio a un braccio", i:"M", d:"Palla medica leggera (1-2 kg) in una mano, gomito alto: lancia come una schiacciata. Ripetizioni per braccio."}
+};
+const AGI = {
+  frenate:{n:"Frenate in avanti", d:"Corri 5-10 metri e fermati in 2-3 passi, basso, con il peso sopra i piedi. Alterna la gamba che frena."},
+  frenateLat:{n:"Frenate laterali", d:"Spostamento laterale veloce per 5 metri e frenata sulla gamba esterna, restando bassi."},
+  passiLat:{n:"Passi laterali bassi", d:"Spostamenti laterali per 10 metri tenendo le anche basse, come in difesa. Testa sempre alla stessa altezza."},
+  transizioni:{n:"Laterale-scatto-laterale", d:"Due passi laterali, scatto in avanti di 5 metri, due passi laterali dall'altra parte. Come in campo: cambiare modo di muoversi senza rialzarsi."},
+  t505:{n:"505 modificato", d:"Corri 5 metri fino a una linea, giri di 180° e torni indietro di 5 metri il più veloce possibile. Alterna il piede con cui giri."},
+  tTest:{n:"Percorso a T", d:"Quattro coni a T (10 metri avanti, 5 a destra e a sinistra): avanti di corsa, laterale a destra, laterale a sinistra fino all'altro cono, laterale al centro, indietro."},
+  reazione:{n:"Reazione al segnale", d:"Un compagno indica una direzione o lancia una palla: parti appena vedi il segnale e fermati dopo 3-5 metri. Allena la lettura, non solo le gambe."}
+};
+const VB_WARM = "Riscaldamento (8-10 minuti): marcia e corsa leggera, corsa sulle punte e calciata, skip leggero, passi laterali e incrociati, affondi in avanti, di lato e indietro.";
+// Settimane: per ogni seduta il volume obiettivo (appoggi, principiante) e gli esercizi [chiave, ripetizioni per serie]
+const VB_WEEKS = [
+  {ph:"Tecnica e atterraggi", A:{v:80, p:[["caviglie",10],["squatJump",5],["saltoTocco",5],["lungoFermo",3]], u:[["petto",10]]}, B:{v:80, p:[["skip",1],["spinteBox",10],["boxSalita",5],["lungoFermo",3]], a:[["frenate",2,4],["passiLat",1,4]]}},
+  {ph:"Tecnica e atterraggi", A:{v:90, p:[["caviglie",10],["squatJump",5],["saltoTocco",5],["atterraggio",5]], u:[["petto",10],["sopraTesta",10]]}, B:{v:90, p:[["skipPotente",1],["spinteBox",10],["boxSalita",5],["atterraggio",5]], a:[["frenate",2,4],["passiLat",1,4]]}},
+  {ph:"Salti medi", A:{v:90, p:[["caviglie",10],["tuck",5],["saltoTocco",5],["ostacolo",5]], u:[["petto",10],["sopraTesta",10]]}, B:{v:90, p:[["skipLat",1],["ostacoloLat",8],["hop2",4],["atterraggio",5]], a:[["frenate",2,4],["frenateLat",2,4]]}},
+  {ph:"Salti medi", A:{v:100, p:[["saltelli1",8],["tuck",6],["splitJump",5],["ostacolo",5]], u:[["sopraTesta",10],["unBraccio",8]]}, B:{v:100, p:[["skipLat",1],["ostacoloLat",8],["hop2",5],["boxLat",6]], a:[["frenateLat",2,4],["transizioni",2,4]]}},
+  {ph:"Salti medi", A:{v:100, p:[["saltelli1",8],["tuck",6],["splitJump",5],["ostacolo",6]], u:[["sopraTesta",10],["unBraccio",8]]}, B:{v:100, p:[["skipLat",1],["ostacoloLat",10],["hop2",5],["boxLat",6]], a:[["frenateLat",2,4],["transizioni",2,4]]}},
+  {ph:"Salti intensi", A:{v:100, p:[["caviglie",10],["depth",5],["tuck",6],["splitCiclico",6]], u:[["unBraccio",8]]}, B:{v:100, p:[["ostacoloLat",8],["zigzag",8],["vert1",4],["muro",5]], a:[["t505",2,4],["transizioni",1,4]]}},
+  {ph:"Salti intensi", A:{v:100, p:[["caviglie",10],["depth",5],["tuck1",4],["splitCiclico",6]], u:[["unBraccio",8]]}, B:{v:100, p:[["ostacoloLat",8],["zigzag",8],["vert1",4],["muro",5]], a:[["t505",2,4],["tTest",1,4]]}},
+  {ph:"Salti intensi", A:{v:80, p:[["caviglie",10],["depth",5],["tuck1",4],["saltoTocco",5]], u:[["unBraccio",8]]}, B:{v:80, p:[["zigzag",8],["vert1",4],["muro",5]], a:[["tTest",1,4],["reazione",2,4]]}},
+  {ph:"Salti da pallavolo", A:{v:90, p:[["caviglie",10],["rincorsa",5],["depth",5],["muro",5]], u:[["unBraccio",8]]}, B:{v:90, p:[["muro",6],["rincorsa",5],["ostacoloLat",8]], a:[["reazione",2,4],["t505",1,4]]}},
+  {ph:"Test", A:{v:60, p:[["caviglie",10],["saltoTocco",3],["rincorsa",4]], u:[], test:true}, B:{v:60, p:[["skip",1],["muro",5],["ostacoloLat",6]], a:[["tTest",1,3]], testT:true}}
+];
+const VB_SCALE = {principiante:1, intermedio:1.2, avanzato:1.4};
+const VB_LV = {principiante:{n:"Prime volte", d:"Non hai mai fatto lavori di salto strutturati"}, intermedio:{n:"Un po' di esperienza", d:"Hai già fatto salti e balzi in allenamento"}, avanzato:{n:"Esperto", d:"Pliometria regolare da più stagioni"}};
+const SOFT = {depth:"atterraggio", tuck1:"tuck", splitCiclico:"splitJump", vert1:"saltelli1", zigzag:"ostacoloLat", rincorsa:"saltoTocco"}; // sostituti a media intensità
+function vbCfg(){ return S.settings.volley || null; }
+function vbActive(){ const c = vbCfg(); return !!(c && c.on && c.start && (c.days||[]).length); }
+function vbNoHigh(){ const c = vbCfg() || {}; const w = latestWeight(); return c.level === "principiante" || (w && w > 100); }
+function vbSession(w, k){ // costruisce la seduta: serie calcolate per arrivare al volume obiettivo
+  const c = vbCfg() || {}; const W = VB_WEEKS[w]; if(!W) return null; const base = W[k];
+  const season = c.season; const target = Math.round(base.v * (VB_SCALE[c.level] || 1) * (season ? 0.6 : 1));
+  const items = base.p.map(([key, reps]) => { let kk = key; if(vbNoHigh() && PLY[key].i === "A") kk = SOFT[key] || "saltoTocco"; return {k:kk, reps}; });
+  const perSet = items.map(it => it.reps * PLY[it.k].c * (["saltelli1","splitJump","tuck1","vert1"].includes(it.k) ? 2 : 1));
+  const sets = items.map(() => 1); let tot = perSet.reduce((a,b) => a+b, 0); let i = 0;
+  while(i < 80){ const j = i % items.length; if(sets[j] < 6 && tot + perSet[j] <= target + 4){ sets[j]++; tot += perSet[j]; } i++; }
+  items.forEach((it, j) => it.sets = sets[j]);
+  return {w, k, ph:W.ph, title:(k === "A" ? "Salto verticale" : "Salti laterali e agilità") + (base.test ? " · test" : base.testT ? " · test" : ""), ply:items, contacts:tot, target, up:c.ball === false ? [] : base.u || [], agi:base.a || [], test:base.test, testT:base.testT};
+}
+function vbWeekIdx(ds){ return Math.floor(daysBetween(vbCfg().start, ds) / 7); }
+function vbPlannedOn(ds){
+  if(!vbActive()) return null; const c = vbCfg(); if(ds < c.start) return null; const w = vbWeekIdx(ds); if(w >= VB_WEEKS.length) return null;
+  const days = c.days.slice().sort((a,b) => a-b); const i = days.indexOf(dowOf(ds)); if(i < 0) return null;
+  return vbSession(w, days.length === 1 ? (w % 2 ? "B" : "A") : i % 2 ? "B" : "A");
+}
+function vbSessions(){ return Object.values(S.sessions).filter(x => x && !x.deleted && x.kind === "volley").sort((a,b) => a.date < b.date ? -1 : a.date > b.date ? 1 : a.finishedAt - b.finishedAt); }
+function vbDoneOn(ds){ return vbSessions().find(x => x.date === ds); }
+function vbMin(s){ return Math.round(10 + s.ply.reduce((a, it) => a + it.sets * 1.5, 0) + s.up.length * 3 + s.agi.reduce((a, x) => a + x[1] * 2.5, 0)); }
+const VB_IC = {B:"bassa", M:"media", A:"alta"}, VB_C = {B:"var(--c2)", M:"var(--warn)", A:"var(--danger)"};
+function vbRepsTxt(it){ const p = PLY[it.k]; const per = ["saltelli1","splitJump","tuck1","vert1"].includes(it.k) ? " per gamba" : ""; return `${it.sets} × ${p.u || it.reps}${per}`; }
+function vbDetailHtml(s){
+  let h = `<p class="small muted" style="margin-top:6px">${esc(VB_WARM)}</p><div class="o-label" style="margin-top:12px">Salti · ${s.contacts} appoggi</div><div class="o-list">`;
+  h += s.ply.map(it => `<button class="o-row" data-act="vbEx" data-k="${it.k}"><span class="dot" style="background:${VB_C[PLY[it.k].i]}"></span><span class="n">${esc(PLY[it.k].n)}<small>intensità ${VB_IC[PLY[it.k].i]}</small></span><span class="p">${esc(vbRepsTxt(it))}</span></button>`).join("") + `</div>`;
+  if(s.up.length) h += `<div class="o-label" style="margin-top:12px">Lanci con la palla medica</div><div class="o-list">${s.up.map(([k, r]) => `<button class="o-row" data-act="vbEx" data-k="${k}" data-t="up"><span class="dot" style="background:var(--c3)"></span><span class="n">${esc(UP[k].n)}</span><span class="p">2 × ${r}${k === "unBraccio" ? " per braccio" : ""}</span></button>`).join("")}</div>`;
+  if(s.agi.length) h += `<div class="o-label" style="margin-top:12px">Agilità · 10-15 minuti</div><div class="o-list">${s.agi.map(([k, sets, reps]) => `<button class="o-row" data-act="vbEx" data-k="${k}" data-t="agi"><span class="dot" style="background:var(--c4)"></span><span class="n">${esc(AGI[k].n)}<small>30″ tra le prove, 2′ tra le serie</small></span><span class="p">${sets} × ${reps}</span></button>`).join("")}</div>`;
+  if(s.test) h += `<div class="hint small" style="margin-top:10px"><b>Test del salto</b>: segna sul muro il punto più alto che tocchi da fermo con il braccio teso, poi salta con contromovimento e tocca il punto più alto. La differenza in centimetri è il tuo salto. Fai 3 prove con 1-2 minuti di pausa e tieni la migliore.</div>`;
+  if(s.testT) h += `<div class="hint small" style="margin-top:10px"><b>Test a T</b>: cronometra il percorso a T (3 prove, 2 minuti di pausa), tieni il tempo migliore.</div>`;
+  h += `<p class="tiny muted" style="margin-top:8px">Recupero: 1-2 minuti tra le serie di salti (5-10 volte il tempo di lavoro), 2-3 minuti per i salti in basso. Ogni salto al massimo e atterraggi silenziosi: se la tecnica cala, fermati.</p>`;
+  return h;
+}
+function vbExSheet(k, t){
+  const x = t === "up" ? UP[k] : t === "agi" ? AGI[k] : PLY[k];
+  showSheet(`<div class="grab"></div><div class="stack"><div class="row between"><h2>${esc(x.n)}</h2><button class="btn icon ghost" data-act="closeSheet" aria-label="Chiudi">${svgI.close}</button></div>${x.i ? `<span class="pill" style="align-self:flex-start">intensità ${VB_IC[x.i]}</span>` : ""}<p>${esc(x.d)}</p>${t ? "" : `<div class="hint small">Atterra con le spalle sopra le ginocchia e le ginocchia sopra le punte: se le ginocchia cadono verso l'interno il rischio per il crociato aumenta (NSCA).</div>`}</div>`);
+}
+
+/* ============ pallavolo: Oggi, Programma, registrazione ============ */
+function vbTodayHtml(t){
+  if(!(S.settings.activities||[]).includes("pallavolo")) return "";
+  if(!vbActive()) return `<div class="o-sec"><div class="o-head"><span class="o-label">Pallavolo</span></div><p class="o-sub" style="margin-top:8px">Il programma di salto e rapidità parte quando scegli i giorni.</p><button class="btn" data-act="vbSetup" style="margin-top:10px">Imposta il programma</button></div>`;
+  const done = vbDoneOn(t), s = vbPlannedOn(t);
+  if(done) return `<div class="o-sec"><div class="o-head"><span class="o-label">Salto e rapidità</span><span class="r" style="color:var(--accent-text);font-weight:600">fatto ✓</span></div><div class="o-today"><div class="big">✓</div><div><h2>${esc(done.title)}</h2><div class="o-sub">${esc(vbSummary(done))}</div></div></div></div>`;
+  if(!s) return "";
+  return `<div class="o-sec"><div class="o-head"><span class="o-label">Salto e rapidità</span><span class="r">settimana ${s.w+1} di ${VB_WEEKS.length}</span></div>
+    <div class="o-today"><div class="big" style="color:var(--c3)">${s.k}</div><div><h2>${esc(s.title)}</h2><div class="o-sub">${esc(s.ph)}</div></div></div>
+    <div class="o-stats"><div><b>${vbMin(s)}′</b><span>durata stimata</span></div><div><b>${s.contacts}</b><span>appoggi</span></div><div><b>${s.ply.length + s.up.length + s.agi.length}</b><span>esercizi</span></div></div>
+    ${vbDetailHtml(s)}
+    <button class="btn primary big" data-act="vbLog" data-d="${t}" style="margin-top:12px">Fatto: registra</button></div>`;
+}
+function vbSummary(r){ const b = []; if(r.contacts) b.push(r.contacts + " appoggi"); if(r.jump) b.push("salto " + r.jump + " cm"); if(r.tt) b.push("test a T " + String(r.tt).replace(".", ",") + " s"); if(r.rpe) b.push("fatica " + r.rpe + "/10"); return b.join(" · ") || "registrata"; }
+function vbLogForm(ds){
+  const s = vbPlannedOn(ds);
+  return `<div class="grab"></div><div class="stack"><span class="eyebrow">${esc(fmtDate(ds))}</span><h2>${s ? esc(s.title) : "Salto e rapidità"}</h2>
+    ${s && s.test ? `<label class="bf-in"><span>Salto (differenza tra tocco in volo e da fermo)</span><span class="bf-f"><input type="text" inputmode="decimal" id="vbJump"><em>cm</em></span></label>` : ""}
+    ${s && s.testT ? `<label class="bf-in"><span>Test a T, tempo migliore</span><span class="bf-f"><input type="text" inputmode="decimal" id="vbT"><em>s</em></span></label>` : ""}
+    <div><div class="o-label" style="margin-bottom:6px">Quanto è stata faticosa (1-10)</div><div class="o-seg rl-rpe">${[1,2,3,4,5,6,7,8,9,10].map(v => `<button data-act="rlRpe" data-v="${v}">${v}</button>`).join("")}</div></div>
+    <div class="field"><label for="vbNotes">Note</label><textarea id="vbNotes" rows="2" placeholder="Dolori, atterraggi, sensazioni…"></textarea></div>
+    <button class="btn primary big" data-act="vbSave" data-d="${ds}">Salva</button><button class="btn ghost sm" data-act="closeSheet">Annulla</button></div>`;
+}
+function vbSave(ds){
+  const s = vbPlannedOn(ds); const j = $("#vbJump") ? numOf($("#vbJump").value) : null, tt = $("#vbT") ? numOf($("#vbT").value) : null;
+  const r = {id:uid(), kind:"volley", date:ds, week: s ? s.w : null, title: s ? s.title : "Salto e rapidità", contacts: s ? s.contacts : null, jump: j && j > 5 && j < 120 ? j : null, tt: tt && tt > 6 && tt < 30 ? tt : null, rpe: rlRpe, notes: $("#vbNotes").value.trim(), finishedAt:Date.now(), updatedAt:Date.now()};
+  S.sessions[r.id] = r; pushSession(r); rlRpe = null; return r;
+}
+let vbDraft = null;
+function vbSetupSheet(){
+  const d = vbDraft; const n = d.days.length;
+  const consec = d.days.some(x => d.days.includes((x+1)%7));
+  const gd = comboGymDays().length ? comboGymDays() : [...new Set(Object.keys(S.planned).filter(k => k >= todayStr()).slice(0, 8).map(dowOf))];
+  const clash = d.days.filter(x => gd.includes(x));
+  return `<div class="grab"></div><div class="stack"><div class="row between"><h2>Salto e rapidità</h2><button class="btn icon ghost" data-act="closeSheet" aria-label="Chiudi">${svgI.close}</button></div>
+    <p class="small muted">10 settimane di salti (pliometria) e agilità per la pallavolo, da fare oltre agli allenamenti di squadra o alla palestra.</p>
+    <div><div class="o-label" style="margin-bottom:6px">Esperienza con i salti</div><div class="o-seg">${Object.entries(VB_LV).map(([k, x]) => `<button class="${d.level === k ? "on" : ""}" data-act="vbLv" data-v="${k}">${x.n}</button>`).join("")}</div><p class="tiny muted">${esc(VB_LV[d.level].d)}.${d.level === "principiante" ? " Niente salti ad alta intensità: al loro posto le versioni medie." : ""}</p></div>
+    <div><div class="o-label" style="margin-bottom:6px">Periodo</div><div class="o-seg">${[[false,"Fuori stagione"],[true,"In stagione"]].map(([v, l]) => `<button class="${!!d.season === v ? "on" : ""}" data-act="vbSeason" data-v="${v ? 1 : 0}">${l}</button>`).join("")}</div><p class="tiny muted">${d.season ? "Con le partite: una seduta a settimana e volumi ridotti." : "Senza partite: due sedute a settimana."}</p></div>
+    <div><div class="o-label" style="margin-bottom:6px">Giorni · ${d.season ? 1 : 2} a settimana</div><div class="o-seg rn-days">${DOW_L.map((l, i) => `<button class="${d.days.includes(i) ? "on" : ""}" data-act="vbDay" data-v="${i}" aria-label="${DOW_N[i]}">${l}</button>`).join("")}</div>
+      ${consec ? `<p class="tiny" style="color:var(--warn);margin-top:6px">Lascia 48-72 ore tra due sedute di salti.</p>` : ""}
+      ${clash.length ? `<p class="tiny" style="color:var(--warn);margin-top:6px">${clash.map(x => DOW_N[x]).join(", ")}: ci sono anche i pesi. Il manuale NSCA sconsiglia pesi pesanti per le gambe e salti nello stesso giorno: meglio un giorno senza pesi.</p>` : ""}</div>
+    <label class="switch"><input type="checkbox" id="vbBall" ${d.ball !== false ? "checked" : ""}><span><b>Ho una palla medica</b><br><span class="small muted">Per i lanci a fine seduta (1-3 kg)</span></span></label>
+    ${(() => { const w = latestWeight(); return w && w > 100 ? `<div class="hint warn small">Sopra i 100 kg il manuale sconsiglia volumi alti e salti ad alta intensità: il programma usa le versioni medie.</div>` : ""; })()}
+    <div class="hint small">Prima di iniziare: devi stare 30 secondi su una gamba senza perdere l'equilibrio, e negli atterraggi le ginocchia non devono cadere verso l'interno.</div>
+    <button class="btn primary big" data-act="vbConfirm" ${n === (d.season ? 1 : 2) && !consec ? "" : "disabled"}>Inizia ${dowOf(todayStr()) <= 1 ? "questa settimana" : "lunedì prossimo"}</button></div>`;
+}
+function renderPallavoloProgramma(){
+  const c = vbCfg() || {};
+  if(!vbActive()) return `<div class="o-sec first"><div class="o-label">Pallavolo</div><p class="o-sub" style="margin-top:8px">Programma di salto e rapidità: 10 settimane di pliometria e agilità, una o due sedute a settimana.</p><button class="btn primary" data-act="vbSetup" style="margin-top:12px">Imposta il programma</button></div>${vbInfoHtml()}`;
+  const t = todayStr(); const w = Math.max(0, vbWeekIdx(t)); const ended = w >= VB_WEEKS.length; const tests = vbSessions().filter(r => r.jump);
+  let h = `<div class="o-sec first"><div class="o-head"><span class="o-label">Salto e rapidità</span><button class="rn-link" data-act="vbSetup">Cambia</button></div>
+    <div class="o-stats"><div><b>${ended ? "✓" : t < c.start ? "—" : w+1}</b><span>${ended ? "finito" : "settimana di " + VB_WEEKS.length}</span></div><div><b>${c.days.length}</b><span>${c.days.slice().sort().map(i => DOW_L[i]).join(" ")}</span></div><div><b>${tests.length ? tests[tests.length-1].jump : "—"}</b><span>salto (cm)</span></div></div>
+    <p class="small muted" style="margin-top:8px">${esc(VB_LV[c.level].n)} · ${c.season ? "in stagione" : "fuori stagione"}</p>${ended ? `<p class="small" style="margin-top:8px">Programma finito: rifallo dall'inizio con il livello successivo.</p>` : ""}</div>`;
+  h += `<div class="o-sec"><div class="o-label">Settimane</div>`; let last = "";
+  VB_WEEKS.forEach((W, i) => { if(W.ph !== last){ h += `<div class="rn-ph"><h3>${esc(W.ph)}</h3></div>`; last = W.ph; }
+    const ks = c.season ? [i % 2 ? "B" : "A"] : ["A","B"];
+    h += `<details class="wk" ${i === w ? "open" : ""}><summary><span>Settimana ${i+1}${i === w && !ended ? ' <span class="pill acc">adesso</span>' : ""}</span><span class="small muted">${ks.map(k => vbSession(i, k).contacts).join(" + ")} appoggi</span></summary><div class="o-list">${ks.map(k => { const s = vbSession(i, k); return `<button class="o-row" data-act="vbInfo" data-w="${i}" data-k="${k}"><span class="dot" style="background:var(--c3)"></span><span class="n">${k} · ${esc(s.title)}<small>${s.ply.map(x => PLY[x.k].n).join(", ")}</small></span><span class="p">›</span></button>`; }).join("")}</div></details>`; });
+  h += `</div>${vbInfoHtml()}<div class="o-sec"><button class="btn ghost sm" data-act="vbStop" style="color:var(--danger);padding-left:0">Togli il programma</button></div>`;
+  return h;
+}
+function vbInfoHtml(){
+  return `<div class="o-sec"><div class="o-label">Come è fatto</div>
+    <p class="small" style="margin-top:8px">Si parte da salti a bassa intensità e atterraggi, poi salti medi, poi intensi; quando l'intensità sale il numero di appoggi scende. Ogni seduta ha 80-100 appoggi per chi comincia, 100-120 con un po' di esperienza, 120-140 per gli esperti. Tra due sedute di salti 48-72 ore. L'agilità segue la progressione del manuale: frenate e spostamenti laterali, poi cambi di direzione, poi reazione a un segnale. Settimane e sedute sono costruite dall'app su queste regole.</p>
+    <p class="small" style="margin-top:8px">Cosa aspettarsi: in media il salto con contromovimento migliora di circa il 9% (Markovic 2007), già dopo 4-6 settimane.</p>
+    <p class="small" style="margin-top:8px">Con la palestra: niente pesi pesanti per le gambe nello stesso giorno dei salti. Con la corsa: prima i salti, poi la corsa.</p>
+    <p class="tiny muted" style="margin-top:8px">NSCA, <i>Essentials of Strength Training and Conditioning</i>, 4ª ed., cap. 18 e 19 · Markovic, <i>Br J Sports Med</i> 2007. I salti d'attacco e a muro sono un'indicazione generale.</p></div>`;
+}
+
+function vbDayHtml(ds){
+  const t = todayStr(); const d = vbDoneOn(ds), p = vbPlannedOn(ds);
+  if(!d && !p) return "";
+  let h = `<div class="o-sec" style="padding-bottom:0"><div class="o-head"><span class="o-label">Salto e rapidità</span>${p ? `<span class="r">settimana ${p.w+1}</span>` : ""}</div>`;
+  if(d) h += `<h3 style="margin-top:8px">${esc(d.title)}</h3><p class="small">${esc(vbSummary(d))}</p>${d.notes ? `<div class="hint"><b>Note</b><br>${esc(d.notes)}</div>` : ""}<button class="btn danger sm" data-act="runDel" data-id="${esc(d.id)}" style="margin-top:10px">Elimina</button>`;
+  else { h += `<h3 style="margin-top:8px">${esc(p.title)}</h3><p class="small muted">~${vbMin(p)} minuti · ${p.contacts} appoggi</p>${vbDetailHtml(p)}`; if(ds <= t) h += `<button class="btn" data-act="vbLog" data-d="${ds}" style="margin-top:10px">Registra</button>`; }
+  return h + `</div>`;
+}
+function renderVolleyProgressi(){
+  const L = vbSessions(); if(!L.length) return `<p class="o-empty">Qui compariranno le sedute di salto e i risultati dei test.</p>`;
+  const J = L.filter(r => r.jump), T = L.filter(r => r.tt);
+  let h = `<div class="o-stats" style="margin-top:4px"><div><b>${L.length}</b><span>sedute</span></div><div><b>${J.length ? J[J.length-1].jump : "—"}</b><span>salto (cm)</span></div><div><b>${T.length ? String(T[T.length-1].tt).replace(".", ",") : "—"}</b><span>test a T (s)</span></div></div>`;
+  if(J.length >= 2) h += `<div class="o-sec"><div class="o-head"><span class="o-label">Salto</span><span class="r">${J[J.length-1].jump - J[0].jump >= 0 ? "+" : ""}${Math.round((J[J.length-1].jump/J[0].jump - 1)*100)}% dal primo test</span></div><div class="o-chart">${lineChartSvg([{pts:J.map(r => ({date:r.date, v:r.jump})), c:"var(--c3)"}], {label:"Salto nel tempo"})}</div></div>`;
+  h += `<div class="o-sec"><div class="o-label">Ultime sedute</div><div class="o-list">${L.slice(-10).reverse().map(r => `<button class="o-row" data-act="openDay" data-d="${r.date}"><span class="dot" style="background:var(--c3)"></span><span class="n">${esc(r.title)}<small>${esc(fmtDate(r.date))}</small></span><span class="p">${esc(vbSummary(r)).split(" · ").slice(0,2).join("<br>")}</span></button>`).join("")}</div></div>`;
+  return h;
+}
 function runDayHtml(ds){
   const t = todayStr(); const rd = runDoneOn(ds); const rp = runPlannedOn(ds);
   const corsa = (S.settings.activities||[]).includes("corsa") || runActive();
@@ -2743,6 +2934,20 @@ function act(a, d, e){
     case "cbTog": { const a = comboDraft[d.k], v = Number(d.v); comboDraft[d.k] = a.includes(v) ? a.filter(x => x !== v) : a.concat([v]); render(); break; }
     case "cbPropose": { const P = runActive() ? RUN_PLANS[runCfg().plan] : null; const g = comboDraft.priority === "corsa" ? 2 : 3; let r = comboDraft.runDays.length || 3; if(P) r = Math.min(Math.max(r, P.days[0]), P.days[P.days.length-1]); if(comboDraft.priority === "palestra" && (!P || P.days[0] <= 3)) r = Math.min(r, 3); const x = comboPropose(g, r, comboDraft.priority); comboDraft.gymDays = x.gymDays; comboDraft.runDays = x.runDays; render(); break; }
     case "cbApply": comboApply(); render(); break;
+    case "vbSetup": { const c = vbCfg() || {}; vbDraft = {level:c.level || "principiante", season:!!c.season, days:(c.days || [1,4]).slice(), ball:c.ball}; showSheet(vbSetupSheet()); break; }
+    case "vbLv": vbDraft.level = d.v; vbDraft.ball = $("#vbBall").checked; showSheet(vbSetupSheet()); break;
+    case "vbSeason": vbDraft.season = d.v === "1"; vbDraft.ball = $("#vbBall").checked; if(vbDraft.season) vbDraft.days = vbDraft.days.slice(0,1); showSheet(vbSetupSheet()); break;
+    case "vbDay": { const v = Number(d.v); vbDraft.ball = $("#vbBall").checked; const max = vbDraft.season ? 1 : 2; let a = vbDraft.days.includes(v) ? vbDraft.days.filter(x => x !== v) : vbDraft.days.concat([v]); if(a.length > max) a = a.slice(-max); vbDraft.days = a; showSheet(vbSetupSheet()); break; }
+    case "vbConfirm": { const t = todayStr(); const nm = (() => { const x = parseYmd(mondayStr(t)); x.setDate(x.getDate()+7); return ymd(x); })(); const c = vbCfg() || {};
+      const same = c.on && c.level === vbDraft.level && !!c.season === vbDraft.season;
+      S.settings.volley = {on:true, level:vbDraft.level, season:vbDraft.season, days:vbDraft.days.slice().sort((a,b) => a-b), ball:$("#vbBall").checked, start: same && c.start ? c.start : (dowOf(t) <= 1 ? mondayStr(t) : nm)};
+      if(!(S.settings.activities||[]).includes("pallavolo")) S.settings.activities = (S.settings.activities||[]).concat(["pallavolo"]);
+      pushMeta(); vbDraft = null; closeSheet(); runProgTab = "pallavolo"; render(); break; }
+    case "vbStop": if(confirm("Togliere il programma di salto e rapidità? Le sedute registrate restano.")){ S.settings.volley = {...(vbCfg()||{}), on:false}; pushMeta(); render(); } break;
+    case "vbInfo": { const ss = vbSession(Number(d.w), d.k); showSheet(`<div class="grab"></div><div class="stack"><div class="row between"><div><span class="eyebrow">Settimana ${ss.w+1} · seduta ${ss.k}</span><h2>${esc(ss.title)}</h2></div><button class="btn icon ghost" data-act="closeSheet" aria-label="Chiudi">${svgI.close}</button></div><p class="small muted">~${vbMin(ss)} minuti · ${esc(ss.ph)}</p>${vbDetailHtml(ss)}</div>`); break; }
+    case "vbEx": vbExSheet(d.k, d.t); break;
+    case "vbLog": rlRpe = null; showSheet(vbLogForm(d.d)); break;
+    case "vbSave": vbSave(d.d); closeSheet(); render(); break;
     case "runPlans": showSheet(runPlansSheet()); break;
     case "runPick": { const P = RUN_PLANS[d.v]; const c = runCfg() || {}; const t = todayStr(); const nm = (() => { const x = parseYmd(mondayStr(t)); x.setDate(x.getDate()+7); return ymd(x); })();
       const def = {3:[1,3,5], 4:[1,3,5,6], 5:[0,1,3,4,6], 6:[0,1,2,3,4,6], 7:[0,1,2,3,4,5,6]};
@@ -2775,7 +2980,7 @@ function act(a, d, e){
     case "runSave": { const r = runSave(d.d); if(!r) break; const wasRunner = !!(RR && $("#runr") && !$("#runr").hidden); clearRunDraft(); RR = null; if(wasRunner) runClose(); else { closeSheet(); render(); }
       if(r.vdot) setTimeout(() => showSheet(`<div class="grab"></div><div class="stack"><h2>Ritmi aggiornati</h2><p>Dal test: VDOT <b>${r.vdot.toFixed(1)}</b>. Le prossime corse useranno i nuovi ritmi.</p><button class="btn primary big" data-act="closeSheet">Ok</button></div>`), 50);
       break; }
-    case "runDel": { const r = S.sessions[d.id]; if(r && confirm("Eliminare questa corsa?")){ r.deleted = true; r.updatedAt = Date.now(); pushSession(r); closeSheet(); render(); } break; }
+    case "runDel": { const r = S.sessions[d.id]; if(r && confirm("Eliminare questa seduta?")){ r.deleted = true; r.updatedAt = Date.now(); pushSession(r); closeSheet(); render(); } break; }
   }
 }
 
