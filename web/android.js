@@ -81,10 +81,22 @@
     }catch(e){ U.bmsg = "Questo file non è un backup di TrainUP."; if(document.getElementById("onb")) alert("Questo file non è un backup di TrainUP."); }
     render();
   };
-  function exportBackup(){
-    const o = {app:"ripresa-forza", v:2, savedAt:new Date().toISOString(), data:S, draft:loadDraft(), runDraft:loadRunDraft()};
-    A.saveFile(`trainup-backup-${todayStr()}.json`, JSON.stringify(o));
-  }
+  function backupObj(){ return {app:"ripresa-forza", v:2, savedAt:new Date().toISOString(), data:S, draft:loadDraft(), runDraft:loadRunDraft()}; }
+  function exportBackup(){ A.saveFile(`trainup-backup-${todayStr()}.json`, JSON.stringify(backupObj())); }
+
+  // --- backup automatico in una cartella del telefono: un file al giorno, gli ultimi 14 ---
+  const AUTO_LAST = "ripresa.autob.last", AUTO_DIRTY = "ripresa.autob.dirty", AUTO_KEEP = 14;
+  let autoDir = ""; try{ autoDir = A.backupDirName ? A.backupDirName() : ""; }catch(e){}
+  let autoTimer = null;
+  const lsGet = k => { try{ return localStorage.getItem(k); }catch(e){ return null; } }, lsSet = (k, v) => { try{ localStorage.setItem(k, v); }catch(e){} };
+  function autoBackupNow(){ clearTimeout(autoTimer); if(!autoDir || !A.autoBackup) return; U.amsg = ""; A.autoBackup(todayStr(), JSON.stringify(backupObj()), AUTO_KEEP); }
+  window.onAutoBackup = function(err){ if(!err){ lsSet(AUTO_LAST, String(Date.now())); lsSet(AUTO_DIRTY, "0"); U.amsg = ""; } else U.amsg = "Backup automatico non riuscito: " + err + "."; if(document.getElementById("appDati")) render(); };
+  window.onBackupDir = function(name){ if(name != null){ autoDir = name || "cartella scelta"; autoBackupNow(); } render(); };
+  const _save = saveLocal;
+  saveLocal = function(){ _save.apply(this, arguments); if(!autoDir) return; lsSet(AUTO_DIRTY, "1"); clearTimeout(autoTimer); autoTimer = setTimeout(autoBackupNow, 30000); };
+  const _resume = window.onAndroidResume;
+  window.onAndroidResume = function(){ if(_resume) _resume.apply(this, arguments); if(autoDir && lsGet(AUTO_DIRTY) === "1") autoBackupNow(); };
+  if(autoDir && lsGet(AUTO_DIRTY) === "1") setTimeout(autoBackupNow, 5000);
 
   // --- "App e dati" nelle Impostazioni ---
   const _imp = renderImpostazioni;
@@ -93,6 +105,7 @@
     const i = U.info, ver = A.version();
     let last = 0; try{ last = Number(localStorage.getItem(LASTB) || 0); }catch(e){}
     const days = last ? Math.floor((Date.now() - last) / 864e5) : null;
+    const autoLast = Number(lsGet(AUTO_LAST) || 0);
     const sec = `<div class="o-sec" id="appDati"><div class="o-label">App e dati</div>
       <div class="o-list" style="margin-top:4px"><div class="o-row" style="cursor:default"><span class="n">Versione installata</span><span class="p"><b style="color:var(--ink)">${esc(ver)}</b></span></div>
       ${i && i.available ? `<div class="o-row" style="cursor:default"><span class="n">Disponibile</span><span class="p"><b style="color:var(--ink)">${esc(i.version)}</b></span></div>` : ""}</div>
@@ -103,7 +116,14 @@
       <p class="small" style="margin-top:6px">${last ? `Ultimo backup: <b>${days === 0 ? "oggi" : days === 1 ? "ieri" : days + " giorni fa"}</b>.` : "Nessun backup salvato da questo telefono."}${days != null && days > 30 ? " È passato più di un mese: conviene farne uno nuovo." : ""}</p>
       <p class="small muted" style="margin-top:6px">I dati stanno su questo telefono. Il backup è un file che salvi dove vuoi (Download, Google Drive): se disinstalli l'app o cambi telefono, lo riapri con Ripristina. Le tue foto e i tuoi video degli esercizi non sono nel file.</p>
       <div class="row" style="margin-top:10px"><button class="btn" data-aact="export">Salva backup</button><button class="btn ghost" data-aact="import">Ripristina</button></div>
-      ${U.bmsg ? `<p class="small muted" style="margin-top:6px">${esc(U.bmsg)}</p>` : ""}</div>`;
+      ${U.bmsg ? `<p class="small muted" style="margin-top:6px">${esc(U.bmsg)}</p>` : ""}
+      <div class="o-label" style="margin-top:18px">Backup automatico</div>
+      ${autoDir ? `<p class="small" style="margin-top:6px">Cartella: <b>${esc(autoDir)}</b>. ${autoLast ? `Ultimo: <b>${esc(new Date(autoLast).toLocaleString("it-IT", {day:"numeric", month:"short", hour:"2-digit", minute:"2-digit"}))}</b>.` : "Nessun backup ancora."}</p>
+        <p class="small muted" style="margin-top:6px">Dopo ogni modifica (un allenamento, una misura, un'impostazione) l'app salva il file del giorno in questa cartella e tiene gli ultimi ${AUTO_KEEP}. Per ripristinare usa Ripristina e scegli uno di quei file.</p>
+        <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:8px"><button class="btn sm" data-aact="autoNow">Fai il backup ora</button><button class="btn sm ghost" data-aact="autoDir">Cambia cartella</button><button class="btn sm ghost" data-aact="autoOff" style="color:var(--danger)">Disattiva</button></div>`
+        : `<p class="small muted" style="margin-top:6px">Scegli una cartella del telefono (per esempio una nuova cartella "TrainUP" in Documenti): l'app ci salverà da sola un backup ogni giorno in cui cambi qualcosa, tenendo gli ultimi ${AUTO_KEEP}. Il file non è cifrato e contiene anche peso e misure: scegli una cartella tua.</p>
+        <button class="btn sm" data-aact="autoDir" style="margin-top:10px">Scegli la cartella</button>`}
+      ${U.amsg ? `<p class="small" style="margin-top:6px;color:var(--warn)">${esc(U.amsg)}</p>` : ""}</div>`;
     const k = h.indexOf('<div class="o-sec" id="appDati">');
     return k >= 0 ? h.slice(0, k) + sec : h + sec;
   };
@@ -124,6 +144,9 @@
     else if(a === "export") exportBackup();
     else if(a === "import"){ if(confirm("Ripristinare il backup? I dati attuali verranno sostituiti.")) A.openFile(); }
     else if(a === "importOnb") A.openFile();
+    else if(a === "autoDir") A.chooseBackupDir();
+    else if(a === "autoNow") autoBackupNow();
+    else if(a === "autoOff"){ if(confirm("Disattivare il backup automatico? I file già salvati restano nella cartella.")){ A.clearBackupDir(); autoDir = ""; render(); } }
   });
 
   const st = document.createElement("style");

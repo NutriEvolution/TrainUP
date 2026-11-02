@@ -1,3 +1,3 @@
-Novità della 1.24.0
-- Allungamento a fine seduta: stretching statico dei muscoli allenati (fino a 6 posizioni, 30 secondi ciascuna), con la tecnica dal manuale NSCA. Si può togliere dalle opzioni del programma
-- Esercizi con elastico: quando arrivi in cima alle ripetizioni in tutte le serie, l'app ti suggerisce come renderli più duri
+Novità della 1.25.0
+- Backup automatico: in Impostazioni → App e dati scegli una cartella del telefono e l'app ci salva da sola un backup ogni giorno in cui cambi qualcosa, tenendo gli ultimi 14
+- Tempo sotto tensione (Overcoming Gravity): negli esercizi a corpo libero senza un livello successivo, quando chiudi il massimo delle ripetizioni la discesa si allunga (2 secondi, poi 3), poi si aggiunge una pausa; dopo, l'app suggerisce una serie in più o recuperi più brevi

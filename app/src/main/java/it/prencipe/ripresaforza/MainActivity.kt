@@ -52,6 +52,16 @@ class MainActivity : ComponentActivity() {
 
   private val askNotif = registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
 
+  private val pickDir = registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
+    if (uri != null) {
+      try {
+        contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        Backup.setDir(this, uri)
+        Thread { val n = Backup.dirName(this); js("window.onBackupDir && window.onBackupDir(${JSONObject.quote(n)})") }.start()
+      } catch (e: Exception) { js("window.onBackupDir && window.onBackupDir(null)") }
+    } else js("window.onBackupDir && window.onBackupDir(null)")
+  }
+
   // ---- foto e video personali degli esercizi ----
   private var mediaEx: String? = null
   private var pendingCapture: File? = null
@@ -148,6 +158,19 @@ class MainActivity : ComponentActivity() {
 
     @JavascriptInterface fun openFile() = runOnUiThread {
       openDoc.launch(arrayOf("application/json", "text/plain", "application/octet-stream", "*/*"))
+    }
+
+    @JavascriptInterface fun chooseBackupDir() = runOnUiThread { try { pickDir.launch(null) } catch (e: Exception) { js("window.onBackupDir && window.onBackupDir(null)") } }
+
+    @JavascriptInterface fun backupDirName(): String = Backup.dirName(this@MainActivity)
+
+    @JavascriptInterface fun clearBackupDir() {
+      Backup.dir(this@MainActivity)?.let { try { contentResolver.releasePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION) } catch (_: Exception) {} }
+      Backup.setDir(this@MainActivity, null)
+    }
+
+    @JavascriptInterface fun autoBackup(day: String, content: String, keep: Int) {
+      Thread { val r = Backup.write(this@MainActivity, day, content, keep); js("window.onAutoBackup && window.onAutoBackup(${JSONObject.quote(r)})") }.start()
     }
 
     @JavascriptInterface fun checkUpdate() { Updater.check(this@MainActivity) }
