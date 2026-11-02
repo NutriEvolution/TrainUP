@@ -600,6 +600,31 @@ const EX = {
   plank:{n:"Plank", step:0, inc:0, unit:"corpo libero", yt:"plank tecnica", src:"PE2 pp. 129-130; Neri, Project Calisthenics, pp. 409-410; Low, Overcoming Gravity, cap. 27 (plank: 25 s livello 2, 60 s livello 3)", bw:true, goal:60, ladP:p => coreTime(p),
     how:["Avambracci a terra sotto le spalle, corpo in linea: spalle, tronco e bacino allineati.", "Zona lombare piatta (bacino leggermente in retroversione), addominali e glutei contratti, respira normalmente."],
     err:["Schiena che si inarca e bacino che cede verso il basso.", "Bacino troppo alto."]},
+  // stretching statico a fine seduta: NSCA, Essentials of Strength Training and Conditioning, 5ª ed. (2026), cap. 15, pp. 383-394 (tecniche) e "Programming Considerations for Stretching"
+  strQuad:{n:"Allungamento dei quadricipiti sul fianco", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"side lying quad stretch", src:"NSCA, Essentials 5ª ed., cap. 15, p. 391 (Side Quadriceps Stretch)", bw:true,
+    how:["Sdraiato su un fianco con le gambe tese, appoggiato sull'avambraccio.","Piega la gamba che sta sopra e prendi la caviglia con la mano dello stesso lato.","Porta piano il tallone verso il gluteo: senti allungare la parte davanti della coscia e dell'anca."],
+    err:["Inarcare la schiena invece di portare indietro la coscia.","Tirare fino al dolore: basta un leggero fastidio."]},
+  strAffondo:{n:"Allungamento dei flessori dell'anca in affondo", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"kneeling hip flexor stretch lunge", src:"NSCA, Essentials 5ª ed., cap. 15, p. 388 (Forward Lunge)", bw:true,
+    how:["Fai un passo lungo in avanti e piega il ginocchio davanti fino a portarlo sopra il piede, pianta a terra.","Gamba dietro con il ginocchio un po' piegato, punte nella stessa direzione; busto dritto.","Abbassa lentamente il bacino in avanti e in basso: l'allungamento si sente davanti all'anca della gamba dietro."],
+    err:["Busto che si piega in avanti.","Ginocchio davanti oltre la punta o verso l'interno."]},
+  strFemorali:{n:"Allungamento dei femorali da seduto", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"seated single leg hamstring stretch", src:"NSCA, Essentials 5ª ed., cap. 15, p. 392 (Semistraddle)", bw:true,
+    how:["Seduto, una gamba tesa e la pianta dell'altra appoggiata all'interno del ginocchio teso.","Piegati in avanti dalle anche verso la gamba tesa e prendi la punta del piede (o la caviglia, se non ci arrivi).","Porta il petto verso la gamba senza strattoni."],
+    err:["Arrotondare tutta la schiena invece di piegarsi dalle anche.","Molleggiare."]},
+  strGlutei:{n:"Allungamento dei glutei a figura quattro", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"figure four stretch supine", src:"NSCA, Essentials 5ª ed., cap. 15, p. 389 (Figure Four Stretch)", bw:true,
+    how:["Supino, appoggia la caviglia sinistra sopra la coscia destra, ginocchio sinistro aperto verso l'esterno.","Porta la coscia destra verso il petto finché senti un allungamento comodo nel gluteo sinistro.","Tieni, poi cambia lato."],
+    err:["Sollevare la testa e le spalle da terra.","Forzare il ginocchio aperto."]},
+  strPolpacci:{n:"Allungamento dei polpacci al muro", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"wall calf stretch", src:"NSCA, Essentials 5ª ed., cap. 15, p. 393 (Wall Stretch)", bw:true,
+    how:["Mani al muro, una gamba avanti e una indietro.","La gamba dietro resta tesa con il tallone a terra.","Porta il bacino verso il muro finché senti allungare il polpaccio dietro."],
+    err:["Sollevare il tallone dietro.","Punta del piede dietro girata verso l'esterno."]},
+  strPetto:{n:"Allungamento del petto con le braccia dietro la schiena", step:0, inc:0, unit:"corpo libero", yt:"standing chest stretch hands behind back", src:"NSCA, Essentials 5ª ed., cap. 15, p. 384 (Straight Arms Behind Back)", bw:true,
+    how:["In piedi, intreccia le dita dietro la schiena.","Distendi del tutto i gomiti.","Solleva piano le braccia tenendole tese, testa dritta e collo rilassato."],
+    err:["Piegarsi in avanti per alzare di più le braccia.","Spalle che salgono verso le orecchie."]},
+  strDorsale:{n:"Allungamento del gran dorsale a braccia in alto", step:0, inc:0, unit:"corpo libero", yt:"overhead lat stretch standing", src:"NSCA, Essentials 5ª ed., cap. 15, p. 386 (Arms Straight Up Above Head)", bw:true,
+    how:["In piedi, intreccia le dita con i palmi verso l'esterno.","Distendi le braccia sopra la testa, palmi in alto, e continua a spingere verso l'alto.","Mentre spingi, porta le braccia leggermente indietro."],
+    err:["Inarcare la zona lombare.","Trattenere il fiato."]},
+  strTricipiti:{n:"Allungamento dei tricipiti dietro la testa", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"overhead triceps stretch", src:"NSCA, Essentials 5ª ed., cap. 15, p. 385 (Behind-Neck Stretch)", bw:true,
+    how:["Alza un braccio, piega il gomito e porta la mano verso la scapola opposta.","Con l'altra mano prendi il gomito.","Tiralo piano dietro la testa: l'allungamento è nel tricipite e lungo il fianco."],
+    err:["Spingere la testa in avanti.","Inarcare la schiena."]},
   plankAvanzato:{n:"Plank con i gomiti avanti", step:0, inc:0, unit:"corpo libero", yt:"long lever plank", src:"Neri, Project Calisthenics, pp. 409-410", bw:true, goal:60, ladP:p => coreTime(p),
     how:["Come il plank, ma con i gomiti più avanti rispetto alle spalle: aumenta la distanza fra gli appoggi e quindi la difficoltà.","Spalle che spingono via il pavimento (protratte e abbassate), bacino in retroversione, addome contratto."],
     err:["Lasciarsi andare sugli appoggi.","Schiena che si inarca."]},
@@ -875,7 +900,7 @@ function buildSession(pos, s){
       title = ["Giornata pesante","Giornata media","Giornata di volume"][slot];
     }
   }
-  { const pg = postureGymBlocks(); blocks = pg.pre.concat(blocks).concat(coreBlocks()).concat(pg.end); }
+  { const pg = postureGymBlocks(); const cb = coreBlocks(); blocks = pg.pre.concat(blocks).concat(cb).concat(pg.end).concat(stretchBlocks(blocks.concat(cb))); }
   if(pos.learn) blocks = learnVersion(blocks);
   return applyLadders(applyHome(applyVariants(applySwaps({code, title, kind:k, phase:PHASES[k], blocks}, s), pos)));
 }
@@ -1008,7 +1033,7 @@ function buildGenSession(pos, s){
     return applyHome(applySwaps({code:"T", title:"Test dei massimali", kind:"gen", phase:{name:"Programma su misura", short:"Su misura", desc:""}, blocks}, s)); }
   const ph = genPhase(pos.week), wk = genWeek(genGoal() === "massa" ? pos.week === 1 : ph.k === "vol" && ph.i === 1, pos.week); const x = wk[pos.slot % wk.length];
   let blocks = x.items.map(it => ({type:"single", items:[{ex:it.ex, p:it.p}]}));
-  { const pg = postureGymBlocks(); blocks = pg.pre.concat(blocks).concat(coreBlocks()).concat(pg.end); }
+  { const pg = postureGymBlocks(); const cb = coreBlocks(); blocks = pg.pre.concat(blocks).concat(cb).concat(pg.end).concat(stretchBlocks(blocks.concat(cb))); }
   return applyLadders(applyHome(applySwaps({code:x.code, title:x.title, kind:"gen", phase:{name:"Programma su misura", short:"Su misura", desc:""}, blocks}, s)));
 }
 /* ============ Project Strength: il "Faleev 2.0" (Ferlito, Project Strength, Project Invictus 2016, cap. VI) ============ */
@@ -1075,7 +1100,7 @@ function buildFsSession(pos, s){
     if(dl) title += " · scarico";
   }
   const pg = postureGymBlocks();
-  return applyLadders(applyHome(applySwaps({code, title, kind:"fs", phase:{name:phaseName, short:"Project Strength", desc:""}, blocks:pg.pre.concat(blocks).concat(pos.test ? [] : coreBlocks()).concat(pg.end)}, s)));
+  return applyLadders(applyHome(applySwaps({code, title, kind:"fs", phase:{name:phaseName, short:"Project Strength", desc:""}, blocks:pg.pre.concat(blocks).concat(pos.test ? [] : coreBlocks()).concat(pg.end).concat(pos.test ? [] : stretchBlocks(blocks))}, s)));
 }
 function fsNext(onDate){
   const lg = [...programSessions()].reverse().find(x => x.pos && x.pos.fs);
@@ -1190,7 +1215,7 @@ function postureGymBlocks(){
 const EQUIP = [["m","Manubri"],["pa","Panca"],["sb","Sbarra per trazioni"],["an","Anelli o TRX"],["el","Elastici"],["bil","Bilanciere e rack"],["rul","Rullo (foam roller)"]];
 const REQ = {gobletSquat:["m"], squat:["bil"], splitSquat:["m"], affondiCamminati:["m"], splitSquatCorpo:[], affondiCorpo:[], alzateProno:["m"], diagManubrio:["m"], mobRullo:["rul"], pancaManubri:["m","pa"], panca:["bil","pa"], pancaInclinataManubri:["m","pa"], pancaStretta:["bil","pa"],
   piegamenti:[], military:["bil"], lentoManubri:["m"], alzateLaterali:["m"], trazioni:["sb"], rematoreManubrio:["m"], rematoreBil:["bil"], stacco:["bil"], rdlManubri:["m"], rdl:["bil"],
-  curlEZ:["bil"], curlManubri:["m"], curlMartello:["m"], tricipitiOverheadManubrio:["m"], deadBug:[], plank:[], plankAvanzato:[], supermanHold:[], barchettaRaccolta:[], barchetta:[], barchettaBraccia:[], lsitRaccolta:[], lsitUnaGamba:[], lsit:[], legRaiseRaccolte:["sb"], legRaiseParallelo:["sb"], legRaise:["sb"], crunch:[], crunchInverso:[], squatCorpo:[],
+  curlEZ:["bil"], curlManubri:["m"], curlMartello:["m"], tricipitiOverheadManubrio:["m"], deadBug:[], plank:[], strQuad:[], strAffondo:[], strFemorali:[], strGlutei:[], strPolpacci:[], strPetto:[], strDorsale:[], strTricipiti:[], plankAvanzato:[], supermanHold:[], barchettaRaccolta:[], barchetta:[], barchettaBraccia:[], lsitRaccolta:[], lsitUnaGamba:[], lsit:[], legRaiseRaccolte:["sb"], legRaiseParallelo:["sb"], legRaise:["sb"], crunch:[], crunchInverso:[], squatCorpo:[],
   piegamentiFacili:[], piegamentiStretti:[], archerPushup:[], pikePushup:[], pikeRialzato:[], hspuNegativo:[], trazioniSaltate:["sb"], trazioniNegative:["sb"], trazioniLsit:["sb"], rematoreAnelliFacile:["an"], rematoreAnelli:["an"], rematoreAnelliLargo:["an"], rematoreArcher:["an"], squatLibero:[], archerSquat:[], bulgarianCorpo:[], pistolBoxAssistito:[], pistolAssistito:[], pistolBox:[], pistol:[],
   rematoreElastico:["el"], latElastico:["el"], alzateLateraliElastico:["el"], curlElastico:["el"], pushdownElastico:["el"], stabElastico:["el"], pallof:["el"]};
 const HOME_ALT = {
@@ -1235,6 +1260,18 @@ const LADDERS = {
 // tenute a tempo: plank e barchetta 30-60 s (Overcoming Gravity, cap. 17, esercizi di posizione); L-sit 60 s in totale in quante serie servono, mai a cedimento (cap. 17).
 // Come dividere i 60 s della L-sit (3 da 20) è una scelta dell'app.
 function coreTime(p, lsit){ if(p && p.t === "time" && !!p.lsit === !!lsit) return p; return lsit ? {t:"time", sets:3, sec:20, rest:60, lsit:true, note:"60 secondi in totale, mai a cedimento"} : {t:"time", sets:2, sec:30, rest:60, lsit:false}; }
+// Allungamento a fine seduta (NSCA, Essentials 5ª ed., cap. 15): statico, 15-30 s per posizione (le prove sostengono 30 s, oltre il beneficio cala),
+// fino a un leggero fastidio e mai dolore, entro 5-10 minuti dalla fine; conta più la frequenza settimanale della durata della singola seduta.
+// Scelte dell'app: una tenuta da 30 s per lato, solo per i gruppi allenati nella seduta, al massimo 6 posizioni.
+const STRETCH_OF = {legs:["strQuad","strAffondo","strFemorali","strGlutei","strPolpacci"], chest:["strPetto"], back:["strDorsale"], shoulders:["stretchCross"], arms:["strTricipiti"]};
+function stretchBlocks(blocks){
+  if(S.settings.stretch === false) return [];
+  const gs = new Set(); blocks.forEach(b => b.items.forEach(it => { const g = EXG[it.ex]; if(g && STRETCH_OF[g]) gs.add(g); }));
+  const order = ["legs","chest","back","shoulders","arms"], out = [];
+  for(const g of order) if(gs.has(g)) for(const k of STRETCH_OF[g]) if(!out.includes(k)) out.push(k);
+  for(const k of ["strPolpacci","strAffondo"]) if(out.length > 6 && out.includes(k)) out.splice(out.indexOf(k), 1);
+  return out.slice(0, 6).map(k => ({type:"single", sec:"stretch", items:[{ex:k, p:P.time(1, 30, 10)}]}));
+}
 function coreBlocks(){ // addominali a corpo libero a fine seduta (facoltativi)
   if(!S.settings.core) return [];
   const one = (ex, p) => ({type:"single", sec:"main", items:[{ex, p}]});
@@ -1259,6 +1296,11 @@ function ladAdvice(k, p){ // dopo l'ultima seduta con questo livello: in cima al
   if(last.p.t !== "range") return null;
   const sets = last.sets.filter(z => z.reps != null), top = last.p.rmax;
   if(next && sets.length >= last.p.sets && sets.every(z => z.reps >= top)) return {up:true, next, msg:`L'ultima volta hai fatto ${top} ripetizioni in tutte le serie: puoi passare a "${EX[next].n}" (tocca Livello).`};
+  return null;
+}
+function bandAdvice(k, p){ // elastici: tensione = rigidità × allungamento (NSCA, Essentials 5ª ed., cap. 17, «Determining Resistance With Resistance Bands»)
+  if(!/elastico/.test(EX[k].unit) || EXG[k] === "post") return null; const h = bwHistory(k), last = h[h.length - 1]; if(!last || last.p.t !== "range") return null;
+  const sets = last.sets.filter(z => z.reps != null); if(sets.length >= last.p.sets && sets.every(z => z.reps >= last.p.rmax)) return {msg:`L'ultima volta hai fatto ${last.p.rmax} ripetizioni in tutte le serie: rendilo più duro con un elastico più resistente, oppure allontanandoti dal punto in cui è fissato (più l'elastico si allunga, più tira).`};
   return null;
 }
 function ladSheet(ii){
@@ -1466,7 +1508,7 @@ async function initSync(){
 /* ============ gruppi muscolari e sezioni ============ */
 const GROUPS = {
   legs:{n:"Gambe", c:"var(--g-legs)"}, chest:{n:"Petto", c:"var(--g-chest)"}, back:{n:"Schiena", c:"var(--g-back)"},
-  shoulders:{n:"Spalle", c:"var(--g-shoulders)"}, arms:{n:"Braccia", c:"var(--g-arms)"}, core:{n:"Core", c:"var(--g-core)"}, post:{n:"Posturale", c:"var(--g-post)"}, warm:{n:"Riscaldamento", c:"var(--muted)"}
+  shoulders:{n:"Spalle", c:"var(--g-shoulders)"}, arms:{n:"Braccia", c:"var(--g-arms)"}, core:{n:"Core", c:"var(--g-core)"}, post:{n:"Posturale", c:"var(--g-post)"}, stretch:{n:"Allungamento", c:"var(--g-post)"}, warm:{n:"Riscaldamento", c:"var(--muted)"}
 };
 const EXG = {
   gobletSquat:"legs", squat:"legs", squatLibero:"legs", archerSquat:"legs", bulgarianCorpo:"legs", pistolBoxAssistito:"legs", pistolAssistito:"legs", pistolBox:"legs", pistol:"legs", splitSquat:"legs", affondiCamminati:"legs", splitSquatCorpo:"legs", affondiCorpo:"legs", stacco:"legs", rdlManubri:"legs", rdl:"legs", pressa:"legs", hackSquat:"legs", legCurl:"legs", legCurlSeduto:"legs", smithSquat:"legs", legExtension:"legs", calf:"legs",
@@ -1474,14 +1516,14 @@ const EXG = {
   latMachine:"back", trazioni:"back", trazioniSaltate:"back", trazioniNegative:"back", trazioniLsit:"back", rematoreAnelliFacile:"back", rematoreAnelli:"back", rematoreAnelliLargo:"back", rematoreArcher:"back", pulley:"back", rowMachine:"back", rematoreManubrio:"back", rematoreBil:"back", pulldown:"back", latPresaStretta:"back",
   military:"shoulders", lentoManubri:"shoulders", shoulderPress:"shoulders", alzateLaterali:"shoulders", facePull:"shoulders", alzateLateraliCavo:"shoulders",
   curlEZ:"arms", curlManubri:"arms", curlMartello:"arms", frenchPress:"arms", pushdown:"arms", curlCavo:"arms", curlScott:"arms", tricipitiOverheadCavo:"arms", tricipitiOverheadManubrio:"arms",
-  deadBug:"core", pallof:"core", plank:"core", plankAvanzato:"core", supermanHold:"core", barchettaRaccolta:"core", barchetta:"core", barchettaBraccia:"core", lsitRaccolta:"core", lsitUnaGamba:"core", lsit:"core", legRaiseRaccolte:"core", legRaiseParallelo:"core", legRaise:"core", crunch:"core", crunchInverso:"core", backExt:"core",
+  deadBug:"core", pallof:"core", strQuad:"stretch", strAffondo:"stretch", strFemorali:"stretch", strGlutei:"stretch", strPolpacci:"stretch", strPetto:"stretch", strDorsale:"stretch", strTricipiti:"stretch", plank:"core", plankAvanzato:"core", supermanHold:"core", barchettaRaccolta:"core", barchetta:"core", barchettaBraccia:"core", lsitRaccolta:"core", lsitUnaGamba:"core", lsit:"core", legRaiseRaccolte:"core", legRaiseParallelo:"core", legRaise:"core", crunch:"core", crunchInverso:"core", backExt:"core",
   cardioLeggero:"warm", legSwing:"warm", worldsGreatest:"warm", squatCorpo:"warm", hingeBastone:"warm", rotBraccia:"warm", dislocazioni:"warm", pushupScapolari:"warm",
   rematoreElastico:"back", latElastico:"back", alzateLateraliElastico:"shoulders", curlElastico:"arms", pushdownElastico:"arms",
   allineamentoCerv:"post", estensoriCerv:"post", stretchCollo:"post", ritornoEstensione:"post", rotazioneCerv:"post", mobToracica:"post", stabRitmiche:"post", plankPlus:"post", propScapPalla:"post", stabElastico:"post", sleeper:"post", mobRullo:"post", diagManubrio:"post",
   mobQuad:"post", mobProno:"post", neckFlex:"post", alzateProno:"post", alzateY:"post", wallSlide:"post", stretchPetto:"post", stretchCross:"post", stretchNuca:"post"
 };
 const PRE = ["mobQuad","mobProno","neckFlex"], POSTEND = ["alzateProno","alzateY","wallSlide"];
-const SECT = {pre:{n:"Prima dei pesi · posturale", cls:"post"}, main:{n:"Allenamento", cls:""}, end:{n:"Fine seduta · posturale", cls:"post"}, home:{n:"Routine a casa", cls:"post"}};
+const SECT = {pre:{n:"Prima dei pesi · posturale", cls:"post"}, main:{n:"Allenamento", cls:""}, end:{n:"Fine seduta · posturale", cls:"post"}, stretch:{n:"Fine seduta · allungamento", cls:"post"}, home:{n:"Routine a casa", cls:"post"}};
 const grp = k => GROUPS[EXG[k] || "core"];
 const secOf = (b, kind) => kind === "post" ? "home" : b.sec ? b.sec : (EXG[b.items[0].ex] === "post" && (PRE.includes(b.items[0].ex) || POSTEND.includes(b.items[0].ex))) ? (PRE.includes(b.items[0].ex) ? "pre" : "end") : "main";
 function shortP(p, ex){
@@ -2359,7 +2401,7 @@ function renderGenProgramma(){
   h += `<div class="o-sec"><button class="btn ghost sm" data-act="clearFutureSet" style="color:var(--danger);padding-left:0">Togli i giorni di palestra da domani in poi</button></div>`;
   return h;
 }
-function coreSwitchHtml(){ return `<div class="o-list" style="margin-top:8px"><label class="switch"><input type="checkbox" data-set="core" ${S.settings.core ? "checked" : ""}><span><b>Addominali a corpo libero</b><br><span class="small muted">A fine seduta: L-sit (60 secondi in totale), barchetta e plank${ladAvail("legRaiseRaccolte") ? ", leg raise alla sbarra" : ""}, ognuno al tuo livello.</span></span></label></div>`; }
+function coreSwitchHtml(){ return `<div class="o-list" style="margin-top:8px"><label class="switch"><input type="checkbox" data-set="stretch" ${S.settings.stretch !== false ? "checked" : ""}><span><b>Allungamento a fine seduta</b><br><span class="small muted">Stretching statico dei muscoli allenati: 30 secondi per posizione, fino a un leggero fastidio, mai dolore (NSCA, cap. 15). Circa 5 minuti.</span></span></label><label class="switch"><input type="checkbox" data-set="core" ${S.settings.core ? "checked" : ""}><span><b>Addominali a corpo libero</b><br><span class="small muted">A fine seduta: L-sit (60 secondi in totale), barchetta e plank${ladAvail("legRaiseRaccolte") ? ", leg raise alla sbarra" : ""}, ognuno al tuo livello.</span></span></label></div>`; }
 function renderFsProgramma(){
   const s = S.settings, t = todayStr(), {pos} = nextPosition(t), c = pos.c || 1, gd = gymWeekDays(), leg = fsLeg(s);
   const phN = st => st.done ? "6×3 finito" : st.ph === "8" ? "5×8" : st.ph === "5" ? "5×5" : "6×3";
@@ -2804,7 +2846,7 @@ function scrWarmup(){
 }
 function sugHtml(exKey, p){
   const ex = EX[exKey];
-  if(ex.bw){ const lo = LAD_OF[exKey], adv = ladAdvice(exKey, p); return (adv ? `<div class="hint"><b>Pronto per il livello successivo</b><br><span class="small">${esc(adv.msg)}</span></div>` : "") + `<div class="hint small">A corpo libero: annota solo ripetizioni o secondi.${lo ? ` Livello ${lo.i + 1} di ${LADDERS[lo.id].steps.length} della progressione "${esc(LADDERS[lo.id].n.toLowerCase())}".` : ""}</div>`; }
+  if(ex.bw){ const lo = LAD_OF[exKey], adv = ladAdvice(exKey, p) || bandAdvice(exKey, p); return (adv ? `<div class="hint"><b>Pronto per il livello successivo</b><br><span class="small">${esc(adv.msg)}</span></div>` : "") + `<div class="hint small">A corpo libero: annota solo ripetizioni o secondi.${lo ? ` Livello ${lo.i + 1} di ${LADDERS[lo.id].steps.length} della progressione "${esc(LADDERS[lo.id].n.toLowerCase())}".` : ""}</div>`; }
   const s = suggest(exKey, p, R.deload && R.kind !== "gen");
   if(s && s.stall) return `<div class="hint warn"><b>Peso consigliato: ${fmtKg(s.kg)} kg</b>${ex.unit.includes("manubri") ? " (un manubrio)" : ""}<br><span class="small">${esc(s.why)}. Capita a tutti: ripartire un po' più leggeri di solito sblocca la situazione in poche sedute. Se preferisci, tocca "Cambia" per passare a un esercizio simile.</span></div>`;
   if(s) return `<div class="hint"><b>Peso consigliato: ${fmtKg(s.kg)} kg</b>${ex.unit.includes("manubri") ? " (un manubrio)" : ""}<br><span class="small">${esc(s.why)}.</span></div>`;

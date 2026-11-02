@@ -1,2 +1,3 @@
-Novità della 1.23.0
-- Su misura, obiettivo Forza o Entrambi: nuova opzione "Chiudi il picco con il test dei massimali". Le ultime 2 settimane del picco diventano uno scarico graduale come nel Pyramid (singole sempre più leggere, prova del primo tentativo, seduta di attivazione), poi c'è la giornata di test guidata
+Novità della 1.24.0
+- Allungamento a fine seduta: stretching statico dei muscoli allenati (fino a 6 posizioni, 30 secondi ciascuna), con la tecnica dal manuale NSCA. Si può togliere dalle opzioni del programma
+- Esercizi con elastico: quando arrivi in cima alle ripetizioni in tutte le serie, l'app ti suggerisce come renderli più duri
