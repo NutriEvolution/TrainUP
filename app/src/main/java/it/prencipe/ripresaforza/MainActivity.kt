@@ -57,7 +57,8 @@ class MainActivity : ComponentActivity() {
       try {
         contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
         Backup.setDir(this, uri)
-        Thread { val n = Backup.dirName(this); js("window.onBackupDir && window.onBackupDir(${JSONObject.quote(n)})") }.start()
+        Mirror.forget(this)
+        Thread { val n = Backup.dirName(this); js("window.onBackupDir && window.onBackupDir(${JSONObject.quote(n)})"); mirror() }.start()
       } catch (e: Exception) { js("window.onBackupDir && window.onBackupDir(null)") }
     } else js("window.onBackupDir && window.onBackupDir(null)")
   }
@@ -65,7 +66,32 @@ class MainActivity : ComponentActivity() {
   // ---- foto e video personali degli esercizi ----
   private var mediaEx: String? = null
   private var pendingCapture: File? = null
-  private fun mediaChanged(ex: String) = js("window.onMediaChanged && window.onMediaChanged(${JSONObject.quote(ex)})")
+  private fun mediaChanged(ex: String) { js("window.onMediaChanged && window.onMediaChanged(${JSONObject.quote(ex)})"); Thread { mirror() }.start() }
+
+  // copia di foto, video e figure nella cartella del backup (chiamata fuori dal thread principale)
+  fun mirror() {
+    if (Backup.dir(this) == null) return
+    val before = File(filesDir, Mirror.PACK).exists()
+    val r = Mirror.sync(this)
+    if (!before && File(filesDir, Mirror.PACK).exists()) js("window.onFigureImported && window.onFigureImported(-2)")
+    js("window.onMirror && window.onMirror(${JSONObject.quote(r)})")
+  }
+
+  // ---- figure dei manuali (pacchetto .zip) ----
+  private val pickFigure = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+    if (uri == null) { js("window.onFigureImported && window.onFigureImported(null)"); return@registerForActivityResult }
+    Thread {
+      val pack = File(filesDir, Mirror.PACK); val tmp = File(filesDir, Mirror.PACK + ".new")
+      val n = try {
+        contentResolver.openInputStream(uri)?.use { inp -> tmp.outputStream().use { inp.copyTo(it) } }
+        val k = tmp.inputStream().use { Figure.importZip(this, it) }
+        if (k >= 0) { pack.delete(); tmp.renameTo(pack) } else tmp.delete()
+        k
+      } catch (e: Exception) { tmp.delete(); -1 }
+      js("window.onFigureImported && window.onFigureImported($n)")
+      if (n >= 0) mirror()
+    }.start()
+  }
   private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
     val ex = mediaEx ?: return@registerForActivityResult
     if (uri != null) Thread { Media.importUri(this, ex, uri); mediaChanged(ex) }.start()
@@ -167,7 +193,19 @@ class MainActivity : ComponentActivity() {
     @JavascriptInterface fun clearBackupDir() {
       Backup.dir(this@MainActivity)?.let { try { contentResolver.releasePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION) } catch (_: Exception) {} }
       Backup.setDir(this@MainActivity, null)
+      Mirror.forget(this@MainActivity)
     }
+
+    @JavascriptInterface fun figureList(): String = Figure.list(this@MainActivity)
+
+    @JavascriptInterface fun figureImport() = runOnUiThread {
+      try { pickFigure.launch(arrayOf("application/zip", "application/x-zip-compressed", "application/octet-stream")) }
+      catch (e: Exception) { js("window.onFigureImported && window.onFigureImported(-1)") }
+    }
+
+    @JavascriptInterface fun figureClear() { Figure.clear(this@MainActivity); File(filesDir, Mirror.PACK).delete(); Thread { mirror() }.start() }
+
+    @JavascriptInterface fun mirrorNow() { Thread { mirror() }.start() }
 
     @JavascriptInterface fun autoBackup(day: String, content: String, keep: Int) {
       Thread { val r = Backup.write(this@MainActivity, day, content, keep); js("window.onAutoBackup && window.onAutoBackup(${JSONObject.quote(r)})") }.start()
@@ -181,7 +219,9 @@ class MainActivity : ComponentActivity() {
 
     @JavascriptInterface fun mediaList(ex: String): String = Media.list(this@MainActivity, ex)
 
-    @JavascriptInterface fun mediaDelete(ex: String, name: String): Boolean = Media.delete(this@MainActivity, ex, name)
+    @JavascriptInterface fun mediaDelete(ex: String, name: String): Boolean {
+      val ok = Media.delete(this@MainActivity, ex, name); if (ok) Thread { mirror() }.start(); return ok
+    }
 
     @JavascriptInterface fun mediaAdd(ex: String, mode: String) = runOnUiThread {
       mediaEx = ex

@@ -377,6 +377,7 @@ details summary{cursor:pointer}
 .refpic .flip img+img{animation:flipimg 2.4s steps(1) infinite}
 @keyframes flipimg{0%{opacity:0}50%{opacity:1}}
 .refpic figcaption{font-size:11.5px;color:var(--muted)}
+.manfig{margin:0;display:flex;flex-direction:column;gap:6px}.manfig img{display:block;width:100%;max-height:62vh;object-fit:contain;border-radius:14px;background:#fff}.manfig.sm img{max-height:190px}.manfig figcaption{font-size:11.5px;color:var(--muted)}
 .refpic.sm .flip{border-radius:12px;aspect-ratio:auto;height:170px}
 .vidcard{display:flex;gap:12px;align-items:center;padding:8px;border-radius:14px;background:var(--surface2);color:inherit;text-decoration:none}
 .vthumb{position:relative;width:120px;flex:none;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:var(--surface3)}
@@ -1942,7 +1943,16 @@ const FEDB = {gobletSquat:"Goblet_Squat",squat:"Barbell_Full_Squat",splitSquat:"
 const FEDB_VB = {boxSalita:"Front_Box_Jump", tuck:"Knee_Tuck_Jump", splitCiclico:"Scissors_Jump", lungoFermo:"Standing_Long_Jump", ostacoloLat:"Lateral_Cone_Hops", boxLat:"Lateral_Box_Jump", petto:"Medicine_Ball_Chest_Pass", skip:"Fast_Skipping"};
 for(const [k, v] of Object.entries(FEDB_VB)) FEDB["vb:" + k] = v;
 const VID = {squat:["H1_YLMIkoCU","Squat: come eseguirlo correttamente?"],gobletSquat:["H1_YLMIkoCU","Squat: come eseguirlo correttamente?"],splitSquat:["zvaJ9MdWzdM","Affondi e glutei: facciamoli correttamente"],splitSquatCorpo:["zvaJ9MdWzdM","Affondi e glutei: facciamoli correttamente"],affondiCorpo:["zvaJ9MdWzdM","Affondi e glutei: facciamoli correttamente"],affondiCamminati:["zvaJ9MdWzdM","Affondi e glutei: facciamoli correttamente"],panca:["tNC8yI5wo4M","Panca piana: come eseguirla correttamente?"],pancaStretta:["tNC8yI5wo4M","Panca piana: come eseguirla correttamente?"],chestPress:["lAkcFUulVn4","Chest press: come farla correttamente"],piegamenti:["MgCSo0xWj1M","Piegamenti sulle braccia: come eseguirli correttamente?"],crociCavi:["l9vGijqXG5s","Tutorial croci: manubri e cavi"],pecDeck:["6dExVifvwR8","Pectoral machine: esecuzione e consigli pratici"],military:["M6rkLOz29QQ","Tutorial lento in piedi"],lentoManubri:["m3UHlrhQ2IU","Biomeccanica del lento manubri"],shoulderPress:["m3UHlrhQ2IU","Biomeccanica del lento manubri"],alzateLaterali:["CGJiLSRpEFg","Alzate laterali, frontali e posteriori"],alzateLateraliCavo:["CGJiLSRpEFg","Alzate laterali, frontali e posteriori"],alzateProno:["CGJiLSRpEFg","Alzate laterali, frontali e posteriori"],latMachine:["bnSooG_TuRI","Lat machine: tutorial ed esecuzione"],latPresaStretta:["bnSooG_TuRI","Lat machine: tutorial ed esecuzione"],trazioni:["oN7zZJd4KnI","Trazioni alla sbarra: tutorial ed esecuzione"],rematoreBil:["wTeZWsf2i8o","Rematore bilanciere e manubrio"],rematoreManubrio:["wTeZWsf2i8o","Rematore bilanciere e manubrio"],stacco:["xPs2VFWDWTI","Tutorial stacco da terra"],rdl:["_ml0wRUcIRE","Tutorial breve sull'RDL (stacco rumeno)"],rdlManubri:["_ml0wRUcIRE","Tutorial breve sull'RDL (stacco rumeno)"],pressa:["LMTyPl_oo38","Leg press: tutorial, esecuzione e varianti"],legCurl:["1zevKZn_n1E","Leg curl: come si esegue correttamente?"],legCurlSeduto:["1zevKZn_n1E","Leg curl: come si esegue correttamente?"],curlEZ:["3SkazbN3l8w","Curl bilanciere e su panca inclinata"],curlManubri:["3SkazbN3l8w","Curl bilanciere e su panca inclinata"],pushdown:["uJAuEE_RCL0","Push down e french press"],frenchPress:["uJAuEE_RCL0","Push down e french press"],tricipitiOverheadCavo:["uJAuEE_RCL0","Push down e french press"],tricipitiOverheadManubrio:["uJAuEE_RCL0","Push down e french press"],plank:["Is-7PPaBcsM","Plank: esecuzione corretta"]};
+// Figure dei manuali: pacchetto importato dall'utente (Impostazioni → Backup), solo sul telefono, mai nell'app pubblicata.
+let FIGS = null;
+function figs(){ if(FIGS === null){ FIGS = {}; try{ if(window.Android && Android.figureList) FIGS = JSON.parse(Android.figureList()) || {}; }catch(e){ FIGS = {}; } } return FIGS; }
+function figHtml(k, small){
+  const F = figs(), list = (F.ex && F.ex[k]) || []; if(!list.length) return "";
+  const one = f => `<figure class="manfig${small ? " sm" : ""}"><img src="${esc(F.base + f.f)}" alt="${esc(f.cap || "")}"><figcaption>${esc(f.cap || "")}${f.cap && f.src ? " · " : ""}${esc(f.src || "")}</figcaption></figure>`;
+  return small ? one(list[0]) : `<div class="stack-sm">${list.map(one).join("")}</div>`;
+}
 function photoHtml(k, small){
+  const fh = figHtml(k, small); if(fh) return fh;
   const id = FEDB[k]; if(!id) return "";
   const b = "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/" + encodeURIComponent(id) + "/";
   return `<figure class="refpic${small ? " sm" : ""}"><div class="flip"><img src="${b}0.jpg" alt="Posizione di partenza"><img src="${b}1.jpg" alt="Posizione finale"></div><figcaption>Foto: Free Exercise DB${small ? "" : " · l'esecuzione consigliata è quella scritta qui sotto"}</figcaption></figure>`;
