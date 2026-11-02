@@ -514,14 +514,14 @@ const EX = {
     how:["Come il pike push up, ma con i piedi su una sedia, una scatola o un gradino stabile.","Più è alto il rialzo, più peso va sulle braccia.","Gomiti stretti; la testa scende in linea fino a toccare terra."],
     err:["Testa troppo in fuori: la schiena si inarca.","Scaricare il peso sui piedi per alleggerire le braccia."]},
   hspuNegativo:{n:"Piegamenti in verticale al muro, solo discesa", step:0, inc:0, unit:"corpo libero", yt:"wall handstand push up negative", src:"Low, Overcoming Gravity, cap. 24 (Wall Headstand Pushup Eccentric, livello 3)", bw:true,
-    ladP:p => P.range(Math.min(p.sets || 3, 3), 2, 3, "", 120, {note:"discesa lenta di 5-10 secondi"}),
+    ladP:p => P.range(Math.min(p.sets || 3, 3), 2, 3, "", 120, {note:"discesa 5-10″"}),
     how:["In verticale con la pancia verso il muro (o la schiena, se non sei ancora a tuo agio), corpo dritto, mani vicine al muro.","Scendi lentamente e in modo uniforme, in 5-10 secondi, finché la testa tocca terra.","Poi scendi dalla verticale e ricomincia: si lavora solo la discesa."],
     err:["Inarcare la schiena.","Gomiti che si aprono.","Polsi doloranti: riduci e rinforzali con calma."]},
   trazioniSaltate:{n:"Trazioni saltate", step:0, inc:0, unit:"corpo libero", yt:"jumping pull up tecnica", src:"Low, Overcoming Gravity, cap. 25 (Jumping Pull-ups, livello 1)", bw:true,
     how:["Sbarra bassa o un rialzo sotto i piedi: parti a braccia tese e ginocchia un po' piegate.","Salta il meno possibile: devono lavorare soprattutto le braccia.","Porta le clavicole verso la sbarra senza allungare il collo, gomiti stretti davanti a te; scendi controllando."],
     err:["Saltare forte e lasciare il lavoro alle gambe.","Allungare il collo per superare la sbarra con il mento."]},
   trazioniNegative:{n:"Trazioni negative", step:0, inc:0, unit:"corpo libero", yt:"negative pull up tecnica", src:"Low, Overcoming Gravity, cap. 25 (Bar Pull-up Eccentrics, livello 2) e cap. 10; Neri, Project Calisthenics, p. 138", bw:true,
-    ladP:p => P.range(Math.min(p.sets || 3, 3), 2, 3, "", 120, {note:"discesa lenta di 6-8 secondi"}),
+    ladP:p => P.range(Math.min(p.sets || 3, 3), 2, 3, "", 120, {note:"discesa 6-8″"}),
     how:["Parti in alto, con il mento sopra la sbarra (aiutati con un salto o un rialzo).","Scendi lentamente fino a braccia tese: obiettivo 6-8 secondi, poi 7-10.","Quando fai 3 discese da 10 secondi di fila, di solito riesci a fare almeno una trazione completa."],
     err:["Scendere veloce nell'ultima parte.","Lasciarsi cadere a braccia tese senza controllo."]},
   trazioniLsit:{n:"Trazioni in L-sit", step:0, inc:0, unit:"corpo libero", yt:"l-sit pull up tecnica", src:"Low, Overcoming Gravity, cap. 25 (L-Sit Pull-ups, livello 4); Neri, Project Calisthenics, Trazioni in L-Sit", bw:true,
@@ -990,8 +990,8 @@ function genMockMain(st, si, n, main){ const first = si === 0, last = si === n -
   const lifts = first || last ? main : main.filter(x => x !== "stacco");
   const rx = st.mock === 2 ? (first ? ["0-1","9-10"] : last ? ["2","~8"] : ["1-2","8-9"]) : (first ? ["2-3","7-8"] : last ? ["5-6","4-5"] : ["3-4","6-7"]);
   const out = [];
-  lifts.forEach(ex => { out.push({ex, ty:"MAIN", m:GEN_MAIN_M[ex], p:P.range(1, 1, 1, rx[0], 180, {note: st.mock === 2 && last ? "prova del primo tentativo del test: circa il 90-92% del massimale stimato" : st.mock === 1 && last ? "seduta di attivazione a RPE 4-5, nient'altro" : `singola a RPE ${rx[1]}`})});
-    if(st.mock === 2 && !last) out.push({ex, ty:"MAIN", m:GEN_MAIN_M[ex], p:P.range(1, 2, 2, "2-5", 180, {note:"richiamo a RPE 5-8 (circa l'85% del massimale stimato se non sei sicuro)"})}); });
+  lifts.forEach(ex => { out.push({ex, ty:"MAIN", m:GEN_MAIN_M[ex], p:P.range(1, 1, 1, rx[0], 180, {note: st.mock === 2 && last ? "prova del 1° tentativo, ~90%" : st.mock === 1 && last ? "attivazione" : ""})});
+    if(st.mock === 2 && !last) out.push({ex, ty:"MAIN", m:GEN_MAIN_M[ex], p:P.range(1, 2, 2, "2-5", 180, {note:"richiamo"})}); });
   return out;
 }
 function genE1rm(ex){ let best = 0; for(const x of history(ex).slice(-8)) for(const z of x.e.sets) if(z.kg != null && z.reps > 0 && z.reps <= 6){ const r = z.reps + (z.rir != null && z.rir !== "" ? Number(z.rir) : 0); best = Math.max(best, e1rm(z.kg, Math.min(r, 10))); } return best ? roundStep(best, EX[ex].step || 2.5) : null; }
@@ -1038,7 +1038,7 @@ function genWeek(intro, week){ // le sedute della settimana, in ordine
       const main = genMain(s), pre = [];
       main.forEach((ex, j) => { const ses = []; for(let k = 0; k < st.singles; k++) ses.push((j + Math.floor(k*n/st.singles)) % n);
         if(!ses.includes(si)) return;
-        pre.push({ex, ty:"MAIN", m:GEN_MAIN_M[ex], p:P.range(1, 1, 1, String(10 - st.rpe), 180, {note:`sali per gradi fino a 1 ripetizione a RPE ${st.rpe} (te ne restavano circa ${10 - st.rpe}): pratica con i carichi pesanti e stima del massimale`})});
+        pre.push({ex, ty:"MAIN", m:GEN_MAIN_M[ex], p:P.range(1, 1, 1, String(10 - st.rpe), 180)});
         if(st.bo) pre.push({ex, ty:"MAIN", m:GEN_MAIN_M[ex], p:P.range(st.bo, st.boReps, st.boReps, String(10 - st.boRpe), 180, {note:`richiami a RPE ${st.boRpe}`})}); });
       items.unshift(...pre); }
     const code = String.fromCharCode(65 + si);
@@ -1107,14 +1107,14 @@ function buildFsSession(pos, s){
   let code, title, phaseName = "Project Strength · Faleev 2.0";
   if(pos.test){
     code = "T" + pos.test;
-    if(pos.test < 3){ title = "Scarico prima del test"; for(const l of [leg, "panca", "stacco"]){ const rm = fsRM(l, c); blocks.push(single(l, rx(l, "scarico", 2, 5, rm ? roundStep(rm.kg * 0.6, EX[l].step || 2.5) : null, "facoltativo: un paio di serie intorno al 60%, al massimo 5 ripetizioni (oppure riposo)"))); } }
+    if(pos.test < 3){ title = "Scarico prima del test"; for(const l of [leg, "panca", "stacco"]){ const rm = fsRM(l, c); blocks.push(single(l, rx(l, "scarico", 2, 5, rm ? roundStep(rm.kg * 0.6, EX[l].step || 2.5) : null, "facoltativo, ~60%"))); } }
     else { title = "Test dei massimali"; for(const l of [leg, "panca", "stacco"]){ const rm = fsRM(l, c); let ex1 = rm ? rm.kg : 0; for(const e of fsEntries(c, l, "s")) for(const z of e.sets) if(z.kg != null && z.reps > 0 && z.reps <= 10) ex1 = Math.max(ex1, e1rm(z.kg, z.reps)); blocks.push(single(l, P.max(l === "panca", ex1 ? roundStep(ex1, EX[l].step || 2.5) : null, {fs:{l, r:"test"}}))); } }
   } else {
     const dl = fsWeekIsDeload(pos.week), sl = pos.slot % 4, acc = s.fsAcc !== false && !dl;
     const sq = fsState(leg, c), be = fsState("panca", c), de = fsState("stacco", c);
     const schema = (l, st) => { const [n, r] = FS_PH[st.ph], d = dl && l !== "stacco"; const sets = d ? (st.ph === "8" ? 5 : 3) : n, reps = d && st.ph === "8" ? 5 : r;
-      return single(l, rx(l, "s", sets, reps, st.kg, d ? "settimana di scarico: stesso peso, meno lavoro" : "schema: mai a cedimento" + (st.done ? " · fase finita, si aspetta l'altra alzata per il test" : ""), {ph:st.ph, dl:d})); };
-    const tec = (l, st) => single(l, rx(l, "t", l === "stacco" ? 5 : 6, 4, fsTecKg(st, l), "tecnica: peso leggero, ripetizioni pulite"));
+      return single(l, rx(l, "s", sets, reps, st.kg, d ? "scarico" : "schema" + (st.done ? " · fase finita" : ""), {ph:st.ph, dl:d})); };
+    const tec = (l, st) => single(l, rx(l, "t", l === "stacco" ? 5 : 6, 4, fsTecKg(st, l), "tecnica"));
     if(sl === 0 || sl === 2){ code = sl === 0 ? "A" : "C"; title = "Squat e panca · schema"; blocks.push(schema(leg, sq), schema("panca", be));
       if(acc) blocks.push(sl === 0 ? single("trazioni", P.range(3, 6, 10, "2-3", 120)) : single("rematoreManubrio", P.range(3, 8, 12, "2-3", 90)), sl === 0 ? single("curlManubri", P.range(3, 8, 12, "2-3", 60)) : single("facePull", P.range(3, 12, 15, "2-3", 60))); }
     else { code = sl === 1 ? "B" : "D"; title = sl === 1 ? "Stacco · schema, tecnica di squat e panca" : "Tecnica di squat, stacco e panca";
@@ -1283,7 +1283,7 @@ const LADDERS = {
 };
 // tenute a tempo: plank e barchetta 30-60 s (Overcoming Gravity, cap. 17, esercizi di posizione); L-sit 60 s in totale in quante serie servono, mai a cedimento (cap. 17).
 // Come dividere i 60 s della L-sit (3 da 20) è una scelta dell'app.
-function coreTime(p, lsit){ if(p && p.t === "time" && !!p.lsit === !!lsit) return p; return lsit ? {t:"time", sets:3, sec:20, rest:60, lsit:true, note:"60 secondi in totale, mai a cedimento"} : {t:"time", sets:2, sec:30, rest:60, lsit:false}; }
+function coreTime(p, lsit){ if(p && p.t === "time" && !!p.lsit === !!lsit) return p; return lsit ? {t:"time", sets:3, sec:20, rest:60, lsit:true, note:"60″ in totale"} : {t:"time", sets:2, sec:30, rest:60, lsit:false}; }
 // Allungamento a fine seduta (NSCA, Essentials 5ª ed., cap. 15): statico, 15-30 s per posizione (le prove sostengono 30 s, oltre il beneficio cala),
 // fino a un leggero fastidio e mai dolore, entro 5-10 minuti dalla fine; conta più la frequenza settimanale della durata della singola seduta.
 // Scelte dell'app: una tenuta da 30 s per lato, solo per i gruppi allenati nella seduta, al massimo 6 posizioni.
@@ -1315,7 +1315,7 @@ function applyLadders(sess){ // l'esercizio a corpo libero diventa il livello sc
 // Tempo sotto tensione (Low, Overcoming Gravity 2ª ed., cap. 10: "Tempo Change", "Additional Set", "Density"): per gli esercizi a corpo libero senza un
 // livello successivo, quando chiudi il massimo delle ripetizioni in tutte le serie la discesa si allunga (2 s, poi 3 s), poi si aggiunge una pausa nel punto
 // più difficile; chiuso anche quello, il libro propone una serie in più o recuperi più brevi. Le tappe e la pausa di 2 s sono una scelta dell'app tra gli esempi del libro.
-const TUT_TXT = ["", "discesa in 2 secondi", "discesa in 3 secondi", "discesa in 3 secondi e 2 secondi di pausa nel punto più difficile"];
+const TUT_TXT = ["", "discesa 2″", "discesa 3″", "discesa 3″ + pausa 2″"];
 function tutEligible(k, p){ const ex = EX[k]; if(!ex || !ex.bw || !p || p.t !== "range" || /elastico/.test(ex.unit) || ["post","warm","stretch"].includes(EXG[k])) return false; const lo = LAD_OF[k]; return !lo || lo.i === LADDERS[lo.id].steps.length - 1; }
 function tutState(k){ let stage = 0, maxed = false; for(const e of bwHistory(k)){ if(!e.p || e.p.t !== "range") continue; const st = e.p.tut || 0, sets = e.sets.filter(z => z.reps != null);
   const closed = sets.length >= e.p.sets && sets.every(z => z.reps >= e.p.rmax); stage = closed ? Math.min(3, st + 1) : st; maxed = closed && st === 3; } return {stage, maxed}; }
