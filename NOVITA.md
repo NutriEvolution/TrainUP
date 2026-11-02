@@ -1,3 +1,3 @@
-Novità della 1.26.0
-- Programma Su misura: nuova sezione "Il tuo livello" (Principiante, Ripresa, Allenato) con le regole del Pyramid. Il livello si riconosce da quanto in fretta progredisci; cambia il volume di partenza, la specializzazione (solo per chi è allenato) e quando un esercizio è considerato fermo (per chi è allenato dopo 4 settimane senza progressi, non dopo 3 sedute)
-- Con l'obiettivo Forza o Entrambi: cosa aspettarsi dal massimale stimato in base al livello
+Novità della 1.27.0
+- Pagine più pulite: le spiegazioni delle sezioni del Piano e delle Impostazioni sono nascoste dietro un "?" accanto al titolo; toccalo per leggerle
+- Su misura, obiettivo Forza o Entrambi: la singola ora spiega cosa fare ("sali per gradi fino a 1 ripetizione a RPE 5…") e a cosa serve

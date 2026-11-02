@@ -299,6 +299,9 @@ details.wk[open] summary::after{transform:rotate(-135deg)}
 .o-sec{padding:18px 0;border-top:1px solid var(--line)}
 .o-sec.first{border-top:0;padding-top:6px}
 .o-label{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hbtn{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;margin-left:8px;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--muted);font:700 11.5px/1 inherit;letter-spacing:0;vertical-align:1px;cursor:pointer;padding:0}
+.hx-open .hbtn{background:var(--accent);border-color:var(--accent);color:#fff}
+.o-sec:not(.hx-open) .xh{display:none}
 .o-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
 .o-head .r{font-size:13px;color:var(--muted)}
 .o-hello h1{font-size:30px;line-height:1.12;margin-top:6px}
@@ -1015,7 +1018,7 @@ function genWeek(intro, week){ // le sedute della settimana, in ordine
       const main = genMain(s), pre = [];
       main.forEach((ex, j) => { const ses = []; for(let k = 0; k < st.singles; k++) ses.push((j + Math.floor(k*n/st.singles)) % n);
         if(!ses.includes(si)) return;
-        pre.push({ex, ty:"MAIN", m:GEN_MAIN_M[ex], p:P.range(1, 1, 1, String(10 - st.rpe), 180, {note:`singola a RPE ${st.rpe}`})});
+        pre.push({ex, ty:"MAIN", m:GEN_MAIN_M[ex], p:P.range(1, 1, 1, String(10 - st.rpe), 180, {note:`sali per gradi fino a 1 ripetizione a RPE ${st.rpe} (te ne restavano circa ${10 - st.rpe}): pratica con i carichi pesanti e stima del massimale`})});
         if(st.bo) pre.push({ex, ty:"MAIN", m:GEN_MAIN_M[ex], p:P.range(st.bo, st.boReps, st.boReps, String(10 - st.boRpe), 180, {note:`richiami a RPE ${st.boRpe}`})}); });
       items.unshift(...pre); }
     const code = String.fromCharCode(65 + si);
@@ -1600,7 +1603,24 @@ function render(){
   $("#app").innerHTML = `<div class="wrap"><header class="top"><div class="brand">${svgI.logo}<span>TrainUP</span></div><div class="row" style="gap:6px"><div class="sync"><span id="syncDot" class="dot"></span><span id="syncTxt"></span></div><button class="btn icon ghost topgear" data-act="openSettings" aria-label="Impostazioni" ${view === "impostazioni" ? 'aria-current="page"' : ""}>${svgI.gear}</button></div></header>${title ? `<h1 class="ltitle">${title}</h1>` : ""}${body}</div>
   <nav class="nav" aria-label="Sezioni">${TABS.map(([v,l]) => `<button data-nav="${v}" ${view===v ? 'aria-current="page"' : ""}>${svgI[v]}<span>${l}</span></button>`).join("")}</nav>`;
   setSync(sync.state);
+  if(view === "piano" || view === "impostazioni") addHelp($("#app"));
 }
+// Spiegazioni a comparsa: i testi descrittivi delle sezioni (paragrafi attenuati) restano nascosti finché non si tocca "?" accanto al titolo della sezione
+const helpOpen = new Set();
+function addHelp(root){
+  root.querySelectorAll(".o-sec").forEach(sec => {
+    const lab = sec.querySelector(".o-label"); if(!lab) return;
+    const ps = [...sec.querySelectorAll("p.tiny.muted, p.small.muted")].filter(p => !p.closest(".o-row, button, label, details, .card, .hint") && !p.classList.contains("keep"));
+    if(!ps.length) return;
+    const key = lab.textContent.trim(); ps.forEach(p => p.classList.add("xh"));
+    if(helpOpen.has(key)) sec.classList.add("hx-open");
+    const b = document.createElement("button"); b.className = "hbtn"; b.type = "button"; b.textContent = "?"; b.setAttribute("aria-label", "Spiegazione"); b.dataset.hkey = key;
+    lab.appendChild(b);
+  });
+}
+document.addEventListener("click", e => {
+  const hb = e.target.closest(".hbtn"); if(hb){ const sec = hb.closest(".o-sec"); const k = hb.dataset.hkey; if(sec.classList.toggle("hx-open")) helpOpen.add(k); else helpOpen.delete(k); return; }
+}, true);
 document.addEventListener("click", e => {
   const n = e.target.closest("[data-nav]"); if(n){ view = n.dataset.nav; planOpen = null; weekDraft = null; render(); window.scrollTo(0,0); return; }
   const a = e.target.closest("[data-act]"); if(a) act(a.dataset.act, a.dataset, e);
