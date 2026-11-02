@@ -1,4 +1,2 @@
-Novità della 1.22.0
-- Addominali a corpo libero (Project Calisthenics e Overcoming Gravity): plank, barchetta, L-sit e leg raise alla sbarra, ognuno con i suoi livelli. Si attivano con "Addominali a corpo libero" nelle opzioni del programma e si fanno a fine seduta
-- Programma: un solo pulsante "Project Invictus", dentro scegli la scheda Bodybuilding o Forza
-- Test dei massimali guidato: riscaldamento in percentuale del massimale previsto, poi tentativi singoli con il peso del successivo proposto dall'app (NSCA). Chi non ha esperienza può stimarlo da 3-5 ripetizioni massime
+Novità della 1.23.0
+- Su misura, obiettivo Forza o Entrambi: nuova opzione "Chiudi il picco con il test dei massimali". Le ultime 2 settimane del picco diventano uno scarico graduale come nel Pyramid (singole sempre più leggere, prova del primo tentativo, seduta di attivazione), poi c'è la giornata di test guidata

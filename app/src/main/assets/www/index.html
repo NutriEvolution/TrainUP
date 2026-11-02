@@ -948,8 +948,24 @@ function genStrength(week){ // singole, richiami e volume dei complementari dell
   const ph = genPhase(week), g = genGoal(), t = ph.n > 1 ? (ph.i - 1)/(ph.n - 1) : 1, V = genCfg().vol;
   if(ph.k === "vol") return {ph, singles: g === "forza" ? 2 : 1, rpe: Math.round(5 + 3*t), bo:0, boReps:0, boRpe:0, sec: g === "entrambi" ? Math.max(16, V) : Math.max(10, V)};
   if(ph.k === "car") return {ph, singles: g === "forza" ? 3 : 2, rpe: Math.round(6 + 3*t), bo:2, boReps: Math.round(5 - 2*t), boRpe: Math.round(5 + 3*t), sec:[10,10,9,9,8,8][ph.i-1]};
+  if(genMockOn() && ph.i >= 2) return {ph, singles:1, rpe:8, bo:0, boReps:0, boRpe:0, sec: ph.i === 2 ? 2 : 0, mock: ph.i === 2 ? 2 : 1};
   return {ph, singles: g === "forza" ? 3 : 2, rpe: Math.round(7 + 3*t), bo:[2,1,0][ph.i-1], boReps: Math.round(4 - 2*t), boRpe:6, sec:[4,3,2][ph.i-1]};
 }
+// Test dei massimali facoltativo a fine picco (Helms e colleghi, The Muscle and Strength Pyramid: Training, 3ª ed., pp. 120-122): due settimane di scarico
+// graduale e poi la giornata di test. Due settimane prima: singole a RPE 9-10 nella prima seduta, 8-9 nelle altre, nell'ultima la prova del primo tentativo
+// (~90-92% del massimale stimato, RPE ~8, senza richiami); dopo ogni singola un richiamo da 2 a RPE 5-8; ~2 serie per muscolo di complementari.
+// Settimana prima: singole a RPE 7-8 nella prima seduta, 6-7 nelle altre, nell'ultima seduta di attivazione a RPE 4-5; niente richiami né complementari.
+// Prima e ultima seduta con le tre alzate, le altre con squat (o pressa) e panca: come le sedute del libro (SBD, SB, solo panca, SBD). Adattamento ai giorni scelti: dell'app.
+function genMockOn(){ return genOn() && genGoal() !== "massa" && !!S.settings.genMock; }
+function genMockMain(st, si, n, main){ const first = si === 0, last = si === n - 1;
+  const lifts = first || last ? main : main.filter(x => x !== "stacco");
+  const rx = st.mock === 2 ? (first ? ["0-1","9-10"] : last ? ["2","~8"] : ["1-2","8-9"]) : (first ? ["2-3","7-8"] : last ? ["5-6","4-5"] : ["3-4","6-7"]);
+  const out = [];
+  lifts.forEach(ex => { out.push({ex, ty:"MAIN", m:GEN_MAIN_M[ex], p:P.range(1, 1, 1, rx[0], 180, {note: st.mock === 2 && last ? "prova del primo tentativo del test: circa il 90-92% del massimale stimato" : st.mock === 1 && last ? "seduta di attivazione a RPE 4-5, nient'altro" : `singola a RPE ${rx[1]}`})});
+    if(st.mock === 2 && !last) out.push({ex, ty:"MAIN", m:GEN_MAIN_M[ex], p:P.range(1, 2, 2, "2-5", 180, {note:"richiamo a RPE 5-8 (circa l'85% del massimale stimato se non sei sicuro)"})}); });
+  return out;
+}
+function genE1rm(ex){ let best = 0; for(const x of history(ex).slice(-8)) for(const z of x.e.sets) if(z.kg != null && z.reps > 0 && z.reps <= 6){ const r = z.reps + (z.rir != null && z.rir !== "" ? Number(z.rir) : 0); best = Math.max(best, e1rm(z.kg, Math.min(r, 10))); } return best ? roundStep(best, EX[ex].step || 2.5) : null; }
 function genSpec(){ const g = S.settings.gen || {}; return genOn() && (S.settings.level === "allenato") && g.spec && g.spec.m && g.spec.m.length ? g.spec : null; }
 function genSpecWeek(sp){ return Math.floor(daysBetween(sp.start, todayStr()) / 7) + 1; }
 function genSpecVol(m, V, sp){ const top = Math.round(V*1.5); // gambe: si sale al nuovo volume in 3 settimane (p. 132)
@@ -988,7 +1004,8 @@ function genWeek(intro, week){ // le sedute della settimana, in ordine
       seen[m] = k + parts.length;
     }
     const ord = {LF:0, PL:1, MT:2, IS:3}; items.sort((a, b) => (sp ? (sp.m.includes(b.m) ? 1 : 0) - (sp.m.includes(a.m) ? 1 : 0) : 0) || ord[a.ty] - ord[b.ty]);
-    if(st){ // alzate principali per prime (p. 179): singola a RPE e richiami, distribuite su più sedute (almeno 2 volte a settimana, p. 72)
+    if(st && st.mock){ if(!st.sec) items.length = 0; items.unshift(...genMockMain(st, si, n, genMain(s))); }
+    else if(st){ // alzate principali per prime (p. 179): singola a RPE e richiami, distribuite su più sedute (almeno 2 volte a settimana, p. 72)
       const main = genMain(s), pre = [];
       main.forEach((ex, j) => { const ses = []; for(let k = 0; k < st.singles; k++) ses.push((j + Math.floor(k*n/st.singles)) % n);
         if(!ses.includes(si)) return;
@@ -1007,6 +1024,8 @@ function genVolume(week){ // serie a settimana per muscolo con il conteggio fraz
   return vol;
 }
 function buildGenSession(pos, s){
+  if(pos.mock){ const blocks = genMain(s).map(ex => ({type:"single", items:[{ex, p:P.max(ex === "panca", genE1rm(ex), {mock:true})}]}));
+    return applyHome(applySwaps({code:"T", title:"Test dei massimali", kind:"gen", phase:{name:"Programma su misura", short:"Su misura", desc:""}, blocks}, s)); }
   const ph = genPhase(pos.week), wk = genWeek(genGoal() === "massa" ? pos.week === 1 : ph.k === "vol" && ph.i === 1, pos.week); const x = wk[pos.slot % wk.length];
   let blocks = x.items.map(it => ({type:"single", items:[{ex:it.ex, p:it.p}]}));
   { const pg = postureGymBlocks(); blocks = pg.pre.concat(blocks).concat(coreBlocks()).concat(pg.end); }
@@ -1271,7 +1290,7 @@ function ladSheet(ii){
 }
 function dn(o){ return /^Scheda/.test(o.title) ? o.title : o.code + " · " + o.title; }
 function weekInPhase(w){ const k = weekKind(w); if(k==="f1") return w; if(k==="f2") return w-5; if(k==="f3") return w-12; return null; }
-function posLabel(pos){ if(pos && pos.fs) return fsPosLabel(pos); if(pos && pos.gen){ if(genGoal() !== "massa"){ const ph = genPhase(pos.week); return (ph.c > 1 ? "Ciclo " + ph.c + " · " : "") + GEN_PH[ph.k] + " · settimana " + ph.i + (ph.k === "vol" && ph.i === 1 ? " (introduttiva)" : ""); } return pos.week === 1 ? "Su misura · settimana introduttiva" : "Su misura · settimana " + pos.week; } const k = weekKind(pos.week); const wp = weekInPhase(pos.week); if(pos.learn) return "Fase 1 · apprendimento · settimana " + pos.week; return (pos.cycle>1 ? "Ciclo " + pos.cycle + " · " : "") + PHASES[k].short + (wp ? " · settimana " + wp : "") ; }
+function posLabel(pos){ if(pos && pos.fs) return fsPosLabel(pos); if(pos && pos.gen && pos.mock){ const ph = genPhase(pos.week); return (ph.c > 1 ? "Ciclo " + ph.c + " · " : "") + "Test dei massimali"; } if(pos && pos.gen){ if(genGoal() !== "massa"){ const ph = genPhase(pos.week); return (ph.c > 1 ? "Ciclo " + ph.c + " · " : "") + GEN_PH[ph.k] + " · settimana " + ph.i + (ph.k === "vol" && ph.i === 1 ? " (introduttiva)" : "") + (ph.k === "pic" && ph.i >= 2 && genMockOn() ? " (scarico prima del test)" : ""); } return pos.week === 1 ? "Su misura · settimana introduttiva" : "Su misura · settimana " + pos.week; } const k = weekKind(pos.week); const wp = weekInPhase(pos.week); if(pos.learn) return "Fase 1 · apprendimento · settimana " + pos.week; return (pos.cycle>1 ? "Ciclo " + pos.cycle + " · " : "") + PHASES[k].short + (wp ? " · settimana " + wp : "") ; }
 
 /* ============ stato e salvataggio ============ */
 const LS = "ripresa.v1";
@@ -1309,7 +1328,7 @@ function nextPosition(onDate){
   if(genOn()){ // programma su misura: settimane in fila; dopo più di 2 settimane di stop si rifà la settimana introduttiva (Pyramid, p. 108)
     const lg = [...list].reverse().find(x => x.pos && x.pos.gen);
     if(!lg) return {pos:{gen:true, week:1, slot:0}, note:null};
-    let {week, slot} = lg.pos; slot++; if(slot >= genDays()){ slot = 0; week++; }
+    let {week, slot} = lg.pos; if(lg.pos.mock){ week++; slot = 0; } else { slot++; if(slot >= genDays()){ const ph = genPhase(week); if(genMockOn() && ph.k === "pic" && ph.i === ph.n) return {pos:{gen:true, week, slot:0, mock:true}, note:null}; slot = 0; week++; } }
     if(daysBetween(lg.date, onDate || todayStr()) > 14) return {pos:{gen:true, week:1, slot:0}, note:"Sono passate più di 2 settimane dall'ultimo allenamento: si riparte con la settimana introduttiva (meno serie, più margine)."};
     return {pos:{gen:true, week, slot}, note:null};
   }
@@ -1329,7 +1348,7 @@ function nextPosition(onDate){
   }
   return {pos:learn ? {cycle, week, slot, learn} : {cycle, week, slot}, note};
 }
-function advance(pos){ if(pos.fs) return fsAdvance(pos); if(pos.gen){ let {week, slot} = pos; slot++; if(slot >= genDays()){ slot = 0; week++; } return {gen:true, week, slot}; } let {cycle, week, slot, learn} = pos; slot++; if(slot >= slotsInWeek(week, S.settings)){ slot = 0; week++; } if(learn && week > 4){ week = 2; learn = false; } if(week > WEEKS){ week = 6; cycle++; } return learn ? {cycle, week, slot, learn} : {cycle, week, slot}; }
+function advance(pos){ if(pos.fs) return fsAdvance(pos); if(pos.gen){ let {week, slot} = pos; if(pos.mock) return {gen:true, week:week + 1, slot:0}; slot++; if(slot >= genDays()){ const ph = genPhase(week); if(genMockOn() && ph.k === "pic" && ph.i === ph.n) return {gen:true, week, slot:0, mock:true}; slot = 0; week++; } return {gen:true, week, slot}; } let {cycle, week, slot, learn} = pos; slot++; if(slot >= slotsInWeek(week, S.settings)){ slot = 0; week++; } if(learn && week > 4){ week = 2; learn = false; } if(week > WEEKS){ week = 6; cycle++; } return learn ? {cycle, week, slot, learn} : {cycle, week, slot}; }
 function forecast(){ // assegna le sedute ai giorni pianificati futuri
   const t = todayStr();
   const days = Object.keys(S.planned).filter(d => S.planned[d] && d >= t && !sessionOn(d)).sort();
@@ -2324,6 +2343,12 @@ function genSpecHtml(V){ // tabella 3.9 e pp. 129-132
     <button class="btn primary sm" data-act="genSpecStart" style="margin-top:10px" ${sel.length ? "" : "disabled"}>Inizia la specializzazione${sel.length ? ": " + esc(sel.map(m => GEN_MUS[m]).join(" e ")) : ""}</button>
     <p class="tiny muted" style="margin-top:6px">Helms e colleghi, tabella 3.9 e pp. 129-132. Che ridurre gli altri muscoli funzioni meglio è un'esperienza dei bodybuilder, non un dato di ricerca; serve a non allungare le sedute.</p></div>`;
 }
+function genMockHtml(){
+  const last = {}; for(const x of programSessions()) if(x.pos && x.pos.mock) for(const e of (x.ex || [])) if(e.kg1) last[e.key] = {kg:e.kg1, date:x.date};
+  const L = Object.entries(last);
+  return `<div class="o-list" style="margin-top:10px"><label class="switch"><input type="checkbox" data-set="genMock" ${S.settings.genMock ? "checked" : ""}><span><b>Chiudi il picco con il test dei massimali</b><br><span class="small muted">Facoltativo: il libro ricorda che non serve, perché le singole stimano già il massimale. Se lo attivi, le ultime 2 settimane del picco diventano uno scarico graduale (singole sempre più leggere, prova del primo tentativo, seduta di attivazione) e poi c'è la giornata di test guidata. Helms e colleghi, pp. 120-122.</span></span></label></div>
+    ${L.length ? `<p class="small" style="margin-top:6px">Ultimo test: ${L.map(([k, v]) => esc(EX[k].n.split(" ")[0]) + " " + fmtKg(v.kg) + " kg").join(" · ")}</p>` : ""}`;
+}
 function renderGenProgramma(){
   const s = S.settings, t = todayStr(), n = genDays(), V = genCfg().vol, {pos} = nextPosition(t);
   const cw = pos.gen ? pos.week : 2, goal = genGoal(), st = goal === "massa" ? null : genStrength(cw);
@@ -2336,6 +2361,7 @@ function renderGenProgramma(){
     <p class="small muted">${goal === "massa" ? "Sistema per la massa del libro: volume per muscolo, ripetizioni varie, doppia progressione. La prima settimana è introduttiva: circa tre quarti delle serie e una ripetizione in più di margine." : goal === "forza" ? "Sistema per la forza del libro su squat (o pressa), panca e stacco: fasi di volume, carico e picco, con una singola pesante a sforzo crescente e, dalla fase di carico, serie di richiamo. Il lavoro complementare fa crescere i muscoli che servono alla forza nel lungo periodo." : "Per chi vuole crescere e diventare più forte senza gareggiare: le regole della forza, con più lavoro complementare e meno singole pesanti (Pyramid, p. 249)."}</p>
     ${st ? `<div class="o-list" style="margin-top:6px">${[["vol","8 settimane","1-3 singole a settimana per alzata, sforzo da RPE 5 a 8; molto lavoro complementare (6-20 ripetizioni). La prima settimana è introduttiva."],["car","6 settimane","2-4 singole, da RPE 6 a 9, poi 2 serie di richiamo che scendono da 5 a 3 ripetizioni; complementari da 10 a 8 serie."],["pic","3 settimane","Singole da RPE 7 a 10, richiami e complementari che calano ogni settimana. Poi si riparte con la fase di volume."]].map(([k, d, t]) => `<div class="o-row" style="cursor:default;align-items:flex-start"><span class="dot" style="background:${st.ph.k === k ? "var(--accent)" : "var(--surface3)"};margin-top:7px"></span><span class="n">${GEN_PH[k]} · ${d}${st.ph.k === k ? ` <span class="pill acc">settimana ${st.ph.i}</span>` : ""}<small>${t}</small></span></div>`).join("")}</div>
       <p class="tiny muted" style="margin-top:6px">RPE = sforzo da 1 a 10: RPE 7 vuol dire che te ne restavano circa 3. Durate scelte dall'app dentro gli intervalli del libro (volume 6-12 settimane, carico 4-8, picco 2-4). Helms e colleghi, tabelle 7.11-7.13.</p>` : ""}
+    ${st ? genMockHtml() : ""}
     ${gd.length < 2 ? `<p class="small" style="color:var(--warn)">Il libro indica almeno 2 sedute a settimana: con meno giorni l'app usa 2 sedute a corpo intero.</p>` : ""}
     <div class="o-list">${gd.length ? planDaysRow(gd) : `<button class="o-row" data-act="goWeek"><span class="n">Nessun giorno scelto<small>Sceglili in Piano → La mia settimana</small></span><span class="p">›</span></button>`}</div></div>`;
   h += genSplitHtml(n, st ? st.sec : V) + (st ? "" : genSpecHtml(V));
