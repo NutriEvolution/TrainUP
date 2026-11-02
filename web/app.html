@@ -447,9 +447,9 @@ const EX = {
   chestPress:{n:"Chest press", step:2.5, inc:2.5, unit:"macchina", yt:"chest press macchina tecnica", src:"PE1 pp. 229-230",
     how:["Regola il sedile in modo che le maniglie siano all'altezza dei capezzoli.","Scapole strette, gomiti più bassi delle spalle, avambracci perpendicolari al petto.","Mento leggermente abbassato: Fitness posturale segnala che a chest press e pulley la testa tende ad andare in avanti."],
     err:["Sedile troppo alto o troppo basso.","Gomiti alti."]},
-  piegamenti:{n:"Piegamenti sulle braccia", step:0, inc:0, unit:"corpo libero", yt:"piegamenti braccia tecnica corretta", src:"PE1 pp. 232-234", bw:true,
-    how:["Mani a terra in modo che, in basso, gli avambracci siano verticali e le braccia a circa 60° dal busto.","Addominali contratti: bacino, busto e spalle si muovono come un blocco unico.","Se fai più di 15 ripetizioni facilmente, passa alla panca inclinata con manubri."],
-    err:["Bacino che scende prima delle spalle.","Gomiti larghi."]},
+  piegamenti:{n:"Piegamenti sulle braccia", step:0, inc:0, unit:"corpo libero", yt:"piegamenti braccia tecnica corretta", src:"PE1 pp. 232-234; Neri, Project Calisthenics, pp. 92-94; Low, Overcoming Gravity, cap. 26 (Standard Pushups, livello 1)", bw:true,
+    how:["Mani poco più larghe delle spalle, un po' ruotate in fuori; spalle sopra le mani. In basso gli avambracci sono verticali e i gomiti restano vicini al busto (non a 90°).","Addome attivo: bacino, busto e spalle si muovono come un blocco unico, bacino all'altezza delle spalle.","Parti a braccia tese e scendi finché il petto tocca terra. Fermarsi un secondo in basso e in alto rende tutte le ripetizioni uguali e i progressi confrontabili."],
+    err:["Bacino che scende prima delle spalle.","Gomiti larghi.","Rimbalzare con il petto o fermarsi prima di toccare."]},
   crociCavi:{n:"Croci ai cavi", step:2.5, inc:2.5, unit:"cavi", yt:"croci ai cavi tecnica", src:"PE1 pp. 226-227",
     how:["Fai un passo avanti rispetto ai cavi, braccia aperte a circa 60° con i gomiti leggermente piegati.","Porta le mani davanti fino a gomiti distesi, scapole sempre strette."],
     err:["Piegare molto i gomiti trasformandolo in una spinta."]},
@@ -471,9 +471,72 @@ const EX = {
   latMachine:{n:"Lat machine, presa prona", step:2.5, inc:2.5, unit:"macchina", yt:"lat machine tecnica corretta", src:"PE1 pp. 280-284",
     how:["Presa prona (palmi in avanti) o neutra; il pollice aiuta dall'esterno.","Scapole strette e abbassate; spingi i gomiti verso il basso.","Basta portare la sbarra sotto il mento, sempre davanti alla testa."],
     err:["Buttarsi indietro con il busto (diventa un pulley).","Presa supina e lat dietro la testa: sconsigliate."]},
-  trazioni:{n:"Trazioni alla sbarra", step:0, inc:0, unit:"corpo libero", yt:"trazioni sbarra tecnica", src:"PE1 pp. 280-281", bw:true,
-    how:["Presa prona o neutra; parti a braccia distese con le scapole strette.","Spingi i gomiti verso il basso finché il mento supera la sbarra.","Addominali contratti, niente oscillazioni."],
-    err:["Presa supina (sconsigliata).","Piegare le anche per aiutarsi."]},
+  trazioni:{n:"Trazioni alla sbarra", step:0, inc:0, unit:"corpo libero", yt:"trazioni sbarra tecnica", src:"PE1 pp. 280-281; Low, Overcoming Gravity, cap. 25 (Bar Pull-ups, livello 3); Neri, Project Calisthenics, pp. 121, 127", bw:true,
+    how:["Presa prona o neutra; parti a braccia distese e inizia abbassando le scapole.","Spingi i gomiti verso il basso e vicino ai fianchi finché il mento supera la sbarra, senza allungare il collo; poi scendi controllando fino a braccia tese.","Addominali contratti, niente oscillazioni."],
+    err:["Presa supina (sconsigliata).","Piegare le anche per aiutarsi.","Gomiti larghi."]},
+  // progressioni a corpo libero: Neri, Project Calisthenics (2018) e Low, Overcoming Gravity 2ª ed. (2016)
+  piegamentiFacili:{n:"Piegamenti facilitati", step:0, inc:0, unit:"corpo libero", yt:"piegamenti sulle ginocchia tecnica", src:"Neri, Project Calisthenics, pp. 94-95; Low, Overcoming Gravity, cap. 26 (Standard Pushups)", bw:true,
+    how:["Due modi: con le ginocchia a terra, oppure con le mani su un rialzo (muro, tavolo, panchina).","Stessa tecnica dei piegamenti: corpo in linea, addome attivo, petto che arriva a terra o al rialzo, braccia tese in alto.","Con le mani sul rialzo: più il corpo è vicino alla verticale, più è facile. Abbassa il rialzo man mano che diventi più forte."],
+    err:["Bacino che si inarca (\"spanciare\").","Accorciare il movimento per fare più ripetizioni."]},
+  piegamentiStretti:{n:"Piegamenti stretti", step:0, inc:0, unit:"corpo libero", yt:"piegamenti presa stretta tecnica", src:"Neri, Project Calisthenics, pp. 96-97; Low, Overcoming Gravity, cap. 26 (Diamond Pushups, livello 2)", bw:true,
+    how:["Mani a larghezza spalle invece che più larghe.","Gomiti chiusi, in linea con il corpo, per tutta la discesa: lavorano di più i tricipiti.","In basso il petto arriva più o meno all'altezza della bocca dello stomaco; tieni la linea spalle-bacino come nei piegamenti normali."],
+    err:["Gomiti che si aprono.","Perdere la linea del corpo in risalita.","Se senti male ai gomiti o alle spalle tra una seduta e l'altra, torna per qualche giorno ai piegamenti normali."]},
+  archerPushup:{n:"Archer push up", step:0, inc:0, unit:"corpo libero", side:"per braccio", yt:"archer push up tecnica", src:"Neri, Project Calisthenics, pp. 101-104 e 108", bw:true,
+    how:["Mani a larghezza spalle, poi allarga di lato il braccio di supporto fino a circa il doppio della tua larghezza normale, con la mano ruotata in fuori.","Piega solo il braccio che lavora, gomito stretto, e porta il petto verso quella mano.","Il braccio di supporto resta teso per tutta la serie: pensa di spingere con il gomito, non con la mano.","Fai tutte le serie con un braccio, poi con l'altro. All'inizio puoi tenere il braccio di supporto un po' piegato."],
+    err:["Piegare il braccio di supporto (aiuta troppo).","Bacino che cede."]},
+  pikePushup:{n:"Pike push up", step:0, inc:0, unit:"corpo libero", yt:"pike push up tecnica", src:"Low, Overcoming Gravity, cap. 24 (Pike Headstand Pushup, livello 1)", bw:true,
+    how:["Mani e piedi a terra, sedere in alto: il corpo forma una V rovesciata.","Porta sulle mani più peso che puoi senza sbilanciarti.","Piega le braccia con i gomiti stretti, in linea con il corpo, finché la testa tocca terra, poi spingi e torna su."],
+    err:["Gomiti aperti di lato: sembra più facile ma toglie stabilità.","Testa che va troppo avanti."]},
+  pikeRialzato:{n:"Pike push up con i piedi rialzati", step:0, inc:0, unit:"corpo libero", yt:"elevated pike push up tecnica", src:"Low, Overcoming Gravity, cap. 24 (Box Headstand Pushup, livello 2)", bw:true,
+    how:["Come il pike push up, ma con i piedi su una sedia, una scatola o un gradino stabile.","Più è alto il rialzo, più peso va sulle braccia.","Gomiti stretti; la testa scende in linea fino a toccare terra."],
+    err:["Testa troppo in fuori: la schiena si inarca.","Scaricare il peso sui piedi per alleggerire le braccia."]},
+  hspuNegativo:{n:"Piegamenti in verticale al muro, solo discesa", step:0, inc:0, unit:"corpo libero", yt:"wall handstand push up negative", src:"Low, Overcoming Gravity, cap. 24 (Wall Headstand Pushup Eccentric, livello 3)", bw:true,
+    ladP:p => P.range(Math.min(p.sets || 3, 3), 2, 3, "", 120, {note:"discesa lenta di 5-10 secondi"}),
+    how:["In verticale con la pancia verso il muro (o la schiena, se non sei ancora a tuo agio), corpo dritto, mani vicine al muro.","Scendi lentamente e in modo uniforme, in 5-10 secondi, finché la testa tocca terra.","Poi scendi dalla verticale e ricomincia: si lavora solo la discesa."],
+    err:["Inarcare la schiena.","Gomiti che si aprono.","Polsi doloranti: riduci e rinforzali con calma."]},
+  trazioniSaltate:{n:"Trazioni saltate", step:0, inc:0, unit:"corpo libero", yt:"jumping pull up tecnica", src:"Low, Overcoming Gravity, cap. 25 (Jumping Pull-ups, livello 1)", bw:true,
+    how:["Sbarra bassa o un rialzo sotto i piedi: parti a braccia tese e ginocchia un po' piegate.","Salta il meno possibile: devono lavorare soprattutto le braccia.","Porta le clavicole verso la sbarra senza allungare il collo, gomiti stretti davanti a te; scendi controllando."],
+    err:["Saltare forte e lasciare il lavoro alle gambe.","Allungare il collo per superare la sbarra con il mento."]},
+  trazioniNegative:{n:"Trazioni negative", step:0, inc:0, unit:"corpo libero", yt:"negative pull up tecnica", src:"Low, Overcoming Gravity, cap. 25 (Bar Pull-up Eccentrics, livello 2) e cap. 10; Neri, Project Calisthenics, p. 138", bw:true,
+    ladP:p => P.range(Math.min(p.sets || 3, 3), 2, 3, "", 120, {note:"discesa lenta di 6-8 secondi"}),
+    how:["Parti in alto, con il mento sopra la sbarra (aiutati con un salto o un rialzo).","Scendi lentamente fino a braccia tese: obiettivo 6-8 secondi, poi 7-10.","Quando fai 3 discese da 10 secondi di fila, di solito riesci a fare almeno una trazione completa."],
+    err:["Scendere veloce nell'ultima parte.","Lasciarsi cadere a braccia tese senza controllo."]},
+  trazioniLsit:{n:"Trazioni in L-sit", step:0, inc:0, unit:"corpo libero", yt:"l-sit pull up tecnica", src:"Low, Overcoming Gravity, cap. 25 (L-Sit Pull-ups, livello 4); Neri, Project Calisthenics, Trazioni in L-Sit", bw:true,
+    how:["Appeso alla sbarra, gambe tese davanti a te all'altezza del bacino.","Le mani restano un po' davanti al corpo: tira fino a portare clavicole o petto alla sbarra.","Le gambe non scendono sotto l'orizzontale per tutta la serie."],
+    err:["Lasciar cadere le gambe.","Metterle a fine seduta: con la fatica la cuffia dei rotatori lavora peggio."]},
+  rematoreAnelliFacile:{n:"Rematore agli anelli facilitato", step:0, inc:0, unit:"anelli o TRX", yt:"australian pull up principianti", src:"Neri, Project Calisthenics, pp. 122-123; Low, Overcoming Gravity, cap. 25 (Ring Row Eccentrics, livello 1)", bw:true,
+    how:["Anelli o TRX all'altezza giusta: più il corpo è vicino alla verticale, più è facile.","Puoi anche tenere le gambe piegate con i piedi a terra per alleggerire.","Tira finché le mani toccano il petto, poi torna giù a braccia tese."],
+    err:["Fermarsi a metà: conta la ripetizione con le mani al petto.","Bacino che cede."]},
+  rematoreAnelli:{n:"Rematore agli anelli", step:0, inc:0, unit:"anelli o TRX", yt:"ring row tecnica", src:"Low, Overcoming Gravity, cap. 25 (Ring Rows, livello 2); Neri, Project Calisthenics, pp. 122-124", bw:true,
+    how:["Corpo dritto, quasi parallelo al pavimento (piedi a terra o su un rialzo), glutei e addome contratti.","Stringi e abbassa le scapole, poi tira gli anelli al petto con i gomiti vicini ai fianchi.","Torna giù a braccia tese. Arrivare a 7-8 ripetizioni complete con il corpo parallelo al terreno aiuta ad arrivare alle prime trazioni."],
+    err:["Corpo che si piega a C.","Gomiti larghi."]},
+  rematoreAnelliLargo:{n:"Rematore agli anelli a gomiti larghi", step:0, inc:0, unit:"anelli o TRX", yt:"wide ring row", src:"Low, Overcoming Gravity, cap. 25 (Wide Ring Rows, livello 3)", bw:true,
+    how:["Come il rematore agli anelli, ma i gomiti si aprono a 60-90° dal busto (60° è più facile).","Le mani si allontanano dal corpo: porta i gomiti in linea con il busto.","Lavora di più la parte posteriore delle spalle."],
+    err:["Corpo che si piega a C.","Tirare con slancio."]},
+  rematoreArcher:{n:"Rematore archer agli anelli", step:0, inc:0, unit:"anelli o TRX", side:"per braccio", yt:"archer ring row", src:"Low, Overcoming Gravity, cap. 25 (Archer Ring Rows, livello 4)", bw:true,
+    how:["Corpo dritto: un braccio tira come nel rematore, l'altro resta teso e si apre di lato a 90°.","Le scapole lavorano allo stesso modo da entrambi i lati.","Scendi controllando e alterna i lati."],
+    err:["Corpo che si piega a C.","Piegare il braccio che dovrebbe restare teso."]},
+  squatLibero:{n:"Squat a corpo libero", step:0, inc:0, unit:"corpo libero", yt:"squat corpo libero tecnica", src:"Neri, Project Calisthenics, pp. 434-438; Low, Overcoming Gravity, cap. 27 (Parallel e Full Squat, livelli 1-2)", bw:true,
+    how:["Piedi alla larghezza delle spalle o poco più, punte un po' in fuori; sguardo verso il battiscopa, addome compatto.","Porta il sedere indietro e in basso; le ginocchia seguono la direzione dei piedi.","Scendi almeno finché l'anca è sotto il ginocchio, petto alto, poi risali."],
+    err:["Ginocchia verso l'interno.","Schiena che si arrotonda in basso. Se la caviglia è rigida, aiutati con un rialzo sotto il sedere come riferimento."]},
+  archerSquat:{n:"Archer squat", step:0, inc:0, unit:"corpo libero", side:"per gamba", yt:"archer squat tecnica", src:"Neri, Project Calisthenics, pp. 438-439; Low, Overcoming Gravity, cap. 27 (Side-to-Side Squat, livello 3)", bw:true,
+    how:["Gambe molto larghe: sposta il peso su un lato e scendi su quella gamba, l'altra resta tesa.","Il ginocchio che si piega segue sempre la direzione del piede.","Risali e scendi dall'altro lato. È anche un buon allungamento per le anche."],
+    err:["Ginocchio verso l'interno, soprattutto se hai avuto problemi ai menischi o ai legamenti.","Talloni che si staccano."]},
+  bulgarianCorpo:{n:"Bulgarian squat a corpo libero", step:0, inc:0, unit:"corpo libero", side:"per gamba", yt:"bulgarian split squat corpo libero", src:"Neri, Project Calisthenics, pp. 440-441", bw:true,
+    how:["Piede dietro su una sedia o una panca, l'altro avanti.","Scendi finché il ginocchio dietro sfiora terra, o almeno sotto il parallelo con la gamba avanti.","Prima diventa sicuro con affondi e squat."],
+    err:["Ginocchio avanti che cede verso l'interno.","Busto che crolla in avanti."]},
+  pistolBoxAssistito:{n:"Pistol squat assistito su un rialzo", step:0, inc:0, unit:"corpo libero", side:"per gamba", yt:"assisted box pistol squat", src:"Neri, Project Calisthenics, pp. 442-443", bw:true,
+    how:["Su una gamba sola, scendi fino a sederti su un rialzo (sedia o scatola) tenendoti con una mano a un appoggio.","La mano serve per l'equilibrio, non per tirarti su: spingi con la gamba.","Scendi sempre alla stessa altezza; quando è facile, abbassa il rialzo."],
+    err:["Ginocchio verso l'interno.","Lasciarsi cadere sul rialzo."]},
+  pistolAssistito:{n:"Pistol squat assistito", step:0, inc:0, unit:"corpo libero", side:"per gamba", yt:"assisted pistol squat", src:"Neri, Project Calisthenics, p. 443", bw:true,
+    how:["Discesa completa su una gamba, senza rialzo, con una mano su un appoggio (porta, palo).","Aumenta le ripetizioni in accosciata completa.","Quando arrivi a 10, passa al livello successivo."],
+    err:["Ginocchio verso l'interno.","Usare la mano per tirarti su."]},
+  pistolBox:{n:"Pistol squat su un rialzo", step:0, inc:0, unit:"corpo libero", side:"per gamba", yt:"box pistol squat", src:"Neri, Project Calisthenics, p. 444", bw:true,
+    how:["Senza appoggi, scendi su una gamba fino a un rialzo: ora alleni l'equilibrio.","Abbassa il rialzo man mano, fino a non usarlo più.","Aiutano anche la discesa lenta e il tenere la posizione in basso."],
+    err:["Ginocchio verso l'interno.","Sbilanciarsi all'indietro in discesa."]},
+  pistol:{n:"Pistol squat", step:0, inc:0, unit:"corpo libero", side:"per gamba", yt:"pistol squat tecnica", src:"Neri, Project Calisthenics, pp. 441-444; Low, Overcoming Gravity, cap. 27 (Pistols, livello 4)", bw:true,
+    how:["In piedi su una gamba, l'altra tesa davanti.","Scendi lentamente portando il ginocchio in avanti sopra la punta, fino a sederti sul polpaccio, muscoli tesi in basso.","Spingi con tutto il piede per risalire."],
+    err:["Ginocchio che va verso l'interno: carica i legamenti.","Andare veloci finché la tecnica non è sicura."]},
   pulley:{n:"Pulley basso (rematore al cavo)", step:2.5, inc:2.5, unit:"macchina", yt:"pulley basso tecnica", src:"PE1 pp. 285-286",
     how:["Busto perpendicolare al pavimento con la curva lombare mantenuta.","Parti a braccia distese, porta i gomiti indietro e il triangolo verso la pancia stringendo le scapole.","Se i femorali sono rigidi, piega di più le ginocchia.","Mento leggermente abbassato, la testa non va in avanti mentre tiri."],
     err:["Inclinarsi avanti e indietro a ogni ripetizione."]},
@@ -694,7 +757,7 @@ const P = {
 function prescText(p, ex){
   const side = ex && ex.side ? " " + ex.side : "";
   switch(p.t){
-    case "range": return `${p.sets} serie da ${p.rmin === p.rmax ? p.rmin : p.rmin + "-" + p.rmax} ripetizioni${side}` + (p.buf ? `. Scegli un peso con cui a fine serie te ne restano ancora circa ${p.buf}` : "") + ".";
+    case "range": return `${p.sets} serie da ${p.rmin === p.rmax ? p.rmin : p.rmin + "-" + p.rmax} ripetizioni${side}` + (p.buf ? (ex && ex.bw ? `. Fermati quando te ne restano ancora circa ${p.buf}` : `. Scegli un peso con cui a fine serie te ne restano ancora circa ${p.buf}`) : "") + ".";
     case "fixed": return `${p.sets} serie da ${p.reps} ripetizioni${side} con il peso che riusciresti a sollevare al massimo ${p.rm} volte. Stesso peso in tutte le serie.`;
     case "rpe": return `${p.sets} serie da ${p.reps} ripetizioni${side}. Regola il peso serie per serie: a fine serie te ne deve restare circa 1.`;
     case "pyr": return `Piramide: ${p.reps.length} serie da ${p.reps.join(", ")} ripetizioni. Quando le ripetizioni scendono, aumenta il peso; fermati sempre 1 ripetizione prima di non farcela più.`;
@@ -719,6 +782,7 @@ const PHASES = {
 function slotsInWeek(w, s){ return weekKind(w)==="f3" ? (s.f3freq===4 ? 4 : 3) : 3; }
 
 function buildSession(pos, s){
+  if(pos.fs) return buildFsSession(pos, s);
   if(pos.gen) return buildGenSession(pos, s);
   const w = pos.week, k = weekKind(w), slot = pos.slot;
   const legMain = s.legMain === "pressa" ? "pressa" : "squat";
@@ -778,7 +842,7 @@ function buildSession(pos, s){
   }
   { const pg = postureGymBlocks(); blocks = pg.pre.concat(blocks).concat(pg.end); }
   if(pos.learn) blocks = learnVersion(blocks);
-  return applyHome(applyVariants(applySwaps({code, title, kind:k, phase:PHASES[k], blocks}, s), pos));
+  return applyLadders(applyHome(applyVariants(applySwaps({code, title, kind:k, phase:PHASES[k], blocks}, s), pos)));
 }
 
 /* ============ programma su misura: regole di The Muscle and Strength Pyramid: Training (Helms, Morgan, Valdez, 3ª ed., 2025) ============ */
@@ -891,8 +955,86 @@ function buildGenSession(pos, s){
   const ph = genPhase(pos.week), wk = genWeek(genGoal() === "massa" ? pos.week === 1 : ph.k === "vol" && ph.i === 1, pos.week); const x = wk[pos.slot % wk.length];
   let blocks = x.items.map(it => ({type:"single", items:[{ex:it.ex, p:it.p}]}));
   { const pg = postureGymBlocks(); blocks = pg.pre.concat(blocks).concat(pg.end); }
-  return applyHome(applySwaps({code:x.code, title:x.title, kind:"gen", phase:{name:"Programma su misura", short:"Su misura", desc:""}, blocks}, s));
+  return applyLadders(applyHome(applySwaps({code:x.code, title:x.title, kind:"gen", phase:{name:"Programma su misura", short:"Su misura", desc:""}, blocks}, s)));
 }
+/* ============ Project Strength: il "Faleev 2.0" (Ferlito, Project Strength, Project Invictus 2016, cap. VI) ============ */
+// Settimana di 4 sedute (fig. 78): lun squat e panca "schema" (5×8); mar squat "tecnica", stacco "schema" (5×5 alla Tsatsouline), panca "tecnica";
+// gio come lunedì; ven squat, stacco e panca "tecnica". Tecnica = 6×4 all'80% del peso dello schema (stacco 5×4 all'80%, fig. 77); finché lo schema
+// è sotto il 75-80% del massimale la tecnica si fa con lo stesso peso. Si parte intorno al 60% del massimale; il peso sale dopo almeno 2 sedute chiuse
+// (ogni settimana per squat e panca, ogni 2 per lo stacco). Quando il 5×8 non si chiude più → 5×5 con lo stesso peso; poi 6×3 senza squat tecnico
+// (fig. 79); esaurito anche quello: settimana di scarico e test dei massimali (riscaldamento della fig. 57). Scarico ogni 4 settimane: peso del 5×8
+// ma solo 5×5, niente squat di martedì e venerdì, niente complementari. Mai a cedimento.
+// Scelte dell'app (il libro non le precisa): "non si chiude più" = 2 sedute di fila non chiuse con lo stesso peso; aumenti di 5 kg (2,5 kg in panca,
+// dentro i 2,5-5 kg indicati); stacco di partenza al 70% (carico di partenza del 5×5 nello stesso capitolo); scarico nel 5×5 e nel 6×3 = 3 serie;
+// complementari 3 serie con 2-3 ripetizioni in canna; recuperi di 3 minuti.
+function fsOn(){ return S.settings.program === "faleev"; }
+const FS_PH = {"8":[5,8], "5":[5,5], "3":[6,3]};
+const FS_NEXT = {"8":"5", "5":"3", "3":null};
+function fsLeg(s){ return (s || S.settings).legMain === "pressa" ? "pressa" : "squat"; }
+function fsInc(l){ return l === "panca" ? 2.5 : 5; }
+function fsSessions(c){ return programSessions().filter(x => x.pos && x.pos.fs && x.pos.c === c); }
+function fsEntries(c, l, role){ const out = []; for(const x of fsSessions(c)) for(const e of (x.ex || [])) if(e.key === l && e.p && e.p.fs && e.p.fs.r === role && !e.p.fs.dl) out.push(e); return out; }
+function fsRM(l, c){ // massimale di riferimento del ciclo
+  if(c > 1){ for(const x of fsSessions(c - 1).reverse()) for(const e of (x.ex || [])) if(e.key === l && e.p && e.p.fs && e.p.fs.r === "test"){ const kg = Math.max(...e.sets.filter(z => z.kg != null && z.reps >= 1).map(z => z.kg)); if(kg > 0) return {kg, why:"test di fine ciclo"}; } }
+  const u = (S.settings.fsRm || {})[l]; if(u > 0) return {kg:u, why:"massimale che hai inserito"};
+  let best = 0; for(const x of history(l).filter(x => !(x.e.p && x.e.p.fs)).slice(-6)) for(const z of x.e.sets) if(z.kg != null && z.reps > 0 && z.reps <= 12){ const r = z.reps + (z.rir != null && z.rir !== "" ? Number(z.rir) : 0); best = Math.max(best, e1rm(z.kg, Math.min(r, 15))); }
+  return best ? {kg:Math.round(best), why:"stima dalle tue ultime sedute"} : null;
+}
+function fsState(l, c){ // fase e peso dello schema, ricostruiti dalle sedute del ciclo
+  const deadl = l === "stacco", step = (EX[l] && EX[l].step) || 2.5, rm = fsRM(l, c);
+  const st = {ph: deadl ? "5" : "8", kg: rm ? roundStep(rm.kg * (deadl ? 0.70 : 0.60), step) : null, ok:0, ko:0, done:false, rm};
+  for(const e of fsEntries(c, l, "s")){
+    const sets = e.sets.filter(z => z.kg != null); if(!sets.length) continue;
+    const kg = Math.max(...sets.map(z => z.kg)), reps = e.p.rmax;
+    st.last = kg; if(kg !== st.kg){ st.kg = kg; st.ok = 0; st.ko = 0; }
+    if(e.p.fs.ph) st.ph = e.p.fs.ph;
+    const closed = sets.length >= e.p.sets && sets.every(z => (z.reps || 0) >= reps);
+    if(closed){ st.ok++; st.ko = 0; if(st.ok >= 2){ st.kg = roundStep(kg + fsInc(l), step); st.ok = 0; } }
+    else { st.ko++; st.ok = 0; if(st.ko >= 2 && !deadl){ st.ko = 0; if(FS_NEXT[st.ph]) st.ph = FS_NEXT[st.ph]; else st.done = true; } }
+  }
+  return st;
+}
+function fsTecKg(st, l){ const step = (EX[l] && EX[l].step) || 2.5, base = st.last != null ? st.last : st.kg; if(base == null) return null; if(l !== "stacco" && st.rm && base < 0.75 * st.rm.kg) return base; return roundStep(base * 0.8, step); } // tecnica sul peso dell'ultimo schema (fig. 78: "su carico lun/mar/gio")
+function fsTestDue(c){ const s = S.settings; if(s.fsTestNow === c) return true; const leg = fsLeg(s); return fsState(leg, c).done && fsState("panca", c).done; }
+function fsWeekIsDeload(w){ return w % 4 === 0; }
+function buildFsSession(pos, s){
+  const leg = fsLeg(s), c = pos.c || 1, blocks = [];
+  const single = (ex, p) => ({type:"single", items:[{ex, p}]});
+  const rx = (l, role, sets, reps, kg, note, extra) => P.range(sets, reps, reps, "", 180, {note, kg, fs:{l, r:role, ...extra}});
+  let code, title, phaseName = "Project Strength · Faleev 2.0";
+  if(pos.test){
+    code = "T" + pos.test;
+    if(pos.test < 3){ title = "Scarico prima del test"; for(const l of [leg, "panca", "stacco"]){ const rm = fsRM(l, c); blocks.push(single(l, rx(l, "scarico", 2, 5, rm ? roundStep(rm.kg * 0.6, EX[l].step || 2.5) : null, "facoltativo: un paio di serie intorno al 60%, al massimo 5 ripetizioni (oppure riposo)"))); } }
+    else { title = "Test dei massimali"; for(const l of [leg, "panca", "stacco"]) blocks.push(single(l, P.range(1, 1, 1, "0", 300, {note:"riscaldamento: 1-2×10 al 10-30%, 5 al 40%, 3 al 50%, 3 al 60%, 2×2 al 70%, 2×1 all'80%, 1 al 90%, poi il test. Recuperi ampi, almeno 5 minuti verso la fine", fs:{l, r:"test"}}))); }
+  } else {
+    const dl = fsWeekIsDeload(pos.week), sl = pos.slot % 4, acc = s.fsAcc !== false && !dl;
+    const sq = fsState(leg, c), be = fsState("panca", c), de = fsState("stacco", c);
+    const schema = (l, st) => { const [n, r] = FS_PH[st.ph], d = dl && l !== "stacco"; const sets = d ? (st.ph === "8" ? 5 : 3) : n, reps = d && st.ph === "8" ? 5 : r;
+      return single(l, rx(l, "s", sets, reps, st.kg, d ? "settimana di scarico: stesso peso, meno lavoro" : "schema: mai a cedimento" + (st.done ? " · fase finita, si aspetta l'altra alzata per il test" : ""), {ph:st.ph, dl:d})); };
+    const tec = (l, st) => single(l, rx(l, "t", l === "stacco" ? 5 : 6, 4, fsTecKg(st, l), "tecnica: peso leggero, ripetizioni pulite"));
+    if(sl === 0 || sl === 2){ code = sl === 0 ? "A" : "C"; title = "Squat e panca · schema"; blocks.push(schema(leg, sq), schema("panca", be));
+      if(acc) blocks.push(sl === 0 ? single("trazioni", P.range(3, 6, 10, "2-3", 120)) : single("rematoreManubrio", P.range(3, 8, 12, "2-3", 90)), sl === 0 ? single("curlManubri", P.range(3, 8, 12, "2-3", 60)) : single("facePull", P.range(3, 12, 15, "2-3", 60))); }
+    else { code = sl === 1 ? "B" : "D"; title = sl === 1 ? "Stacco · schema, tecnica di squat e panca" : "Tecnica di squat, stacco e panca";
+      if(!dl && sq.ph !== "3") blocks.push(tec(leg, sq));
+      blocks.push(sl === 1 ? schema("stacco", de) : tec("stacco", de), tec("panca", be));
+      if(acc) blocks.push(single("pancaInclinataManubri", P.range(3, 8, 12, "3", 90))); }
+    if(dl) title += " · scarico";
+  }
+  const pg = postureGymBlocks();
+  return applyLadders(applyHome(applySwaps({code, title, kind:"fs", phase:{name:phaseName, short:"Project Strength", desc:""}, blocks:pg.pre.concat(blocks).concat(pg.end)}, s)));
+}
+function fsNext(onDate){
+  const lg = [...programSessions()].reverse().find(x => x.pos && x.pos.fs);
+  if(!lg) return {pos:{fs:true, c:1, week:1, slot:0}, note:null};
+  return {pos:fsAdvance(lg.pos), note:null};
+}
+function fsAdvance(p){
+  const c = p.c || 1;
+  if(p.test){ if(p.test < 3) return {fs:true, c, week:p.week, slot:0, test:p.test + 1}; return {fs:true, c:c + 1, week:1, slot:0}; }
+  let slot = p.slot + 1, week = p.week; if(slot >= 4){ slot = 0; week++; if(fsTestDue(c)) return {fs:true, c, week, slot:0, test:1}; }
+  return {fs:true, c, week, slot};
+}
+function fsPosLabel(pos){ return (pos.c > 1 ? "Ciclo " + pos.c + " · " : "") + (pos.test ? (pos.test < 3 ? "Scarico prima del test" : "Test dei massimali") : "Faleev 2.0 · settimana " + pos.week + (fsWeekIsDeload(pos.week) ? " (scarico)" : "")); }
 // Fase 1 di apprendimento (principianti): macchine al posto dei pesi liberi più tecnici e una ripetizione in più di margine
 const LEARN_SWAP = {gobletSquat:"pressa", squat:"pressa", pancaManubri:"chestPress", lentoManubri:"shoulderPress", rematoreManubrio:"rowMachine"};
 function learnVersion(blocks){
@@ -991,25 +1133,26 @@ function postureGymBlocks(){
 /* ============ allenamento a casa ============ */
 // A casa ogni esercizio che richiede macchine o attrezzi che non hai viene sostituito con il primo disponibile della sua lista.
 // Elastici e allenamento a casa sono efficaci (ACSM 2026; Lopes 2019: forza simile all'allenamento con pesi). Le liste sono una scelta dell'app.
-const EQUIP = [["m","Manubri"],["pa","Panca"],["sb","Sbarra per trazioni"],["el","Elastici"],["bil","Bilanciere e rack"],["rul","Rullo (foam roller)"]];
+const EQUIP = [["m","Manubri"],["pa","Panca"],["sb","Sbarra per trazioni"],["an","Anelli o TRX"],["el","Elastici"],["bil","Bilanciere e rack"],["rul","Rullo (foam roller)"]];
 const REQ = {gobletSquat:["m"], squat:["bil"], splitSquat:["m"], affondiCamminati:["m"], splitSquatCorpo:[], affondiCorpo:[], alzateProno:["m"], diagManubrio:["m"], mobRullo:["rul"], pancaManubri:["m","pa"], panca:["bil","pa"], pancaInclinataManubri:["m","pa"], pancaStretta:["bil","pa"],
   piegamenti:[], military:["bil"], lentoManubri:["m"], alzateLaterali:["m"], trazioni:["sb"], rematoreManubrio:["m"], rematoreBil:["bil"], stacco:["bil"], rdlManubri:["m"], rdl:["bil"],
   curlEZ:["bil"], curlManubri:["m"], curlMartello:["m"], tricipitiOverheadManubrio:["m"], deadBug:[], plank:[], crunch:[], crunchInverso:[], squatCorpo:[],
+  piegamentiFacili:[], piegamentiStretti:[], archerPushup:[], pikePushup:[], pikeRialzato:[], hspuNegativo:[], trazioniSaltate:["sb"], trazioniNegative:["sb"], trazioniLsit:["sb"], rematoreAnelliFacile:["an"], rematoreAnelli:["an"], rematoreAnelliLargo:["an"], rematoreArcher:["an"], squatLibero:[], archerSquat:[], bulgarianCorpo:[], pistolBoxAssistito:[], pistolAssistito:[], pistolBox:[], pistol:[],
   rematoreElastico:["el"], latElastico:["el"], alzateLateraliElastico:["el"], curlElastico:["el"], pushdownElastico:["el"], stabElastico:["el"], pallof:["el"]};
 const HOME_ALT = {
   squat:["squat","gobletSquat","splitSquat","splitSquatCorpo"], hackSquat:["gobletSquat","splitSquat","splitSquatCorpo"], pressa:["gobletSquat","splitSquat","splitSquatCorpo"], smithSquat:["gobletSquat","splitSquat","splitSquatCorpo"], legExtension:["splitSquat","splitSquatCorpo"],
   legCurl:["rdlManubri","affondiCamminati","affondiCorpo"], legCurlSeduto:["rdlManubri","affondiCamminati","affondiCorpo"], calf:["squatCorpo"],
   panca:["panca","pancaManubri","piegamenti"], chestPress:["pancaManubri","piegamenti"], pancaInclinataManubri:["pancaInclinataManubri","piegamenti"], pancaStretta:["pancaStretta","piegamenti"], crociCavi:["pancaManubri","piegamenti"], pecDeck:["pancaManubri","piegamenti"],
-  military:["military","lentoManubri","piegamenti"], shoulderPress:["lentoManubri","military","piegamenti"],
+  military:["military","lentoManubri","pikePushup","piegamenti"], shoulderPress:["lentoManubri","military","pikePushup","piegamenti"],
   alzateLateraliCavo:["alzateLaterali","alzateLateraliElastico"], alzateLaterali:["alzateLaterali","alzateLateraliElastico"], facePull:["stabElastico","alzateProno"],
-  latMachine:["trazioni","latElastico","rematoreManubrio","rematoreElastico"], latPresaStretta:["trazioni","latElastico","rematoreManubrio","rematoreElastico"], pulldown:["latElastico","rematoreManubrio"],
-  pulley:["rematoreManubrio","rematoreElastico","rematoreBil"], rowMachine:["rematoreManubrio","rematoreElastico","rematoreBil"], rematoreBil:["rematoreBil","rematoreManubrio","rematoreElastico"],
+  latMachine:["trazioni","latElastico","rematoreAnelli","rematoreManubrio","rematoreElastico"], latPresaStretta:["trazioni","latElastico","rematoreAnelli","rematoreManubrio","rematoreElastico"], pulldown:["latElastico","rematoreManubrio"],
+  pulley:["rematoreManubrio","rematoreElastico","rematoreAnelli","rematoreBil"], rowMachine:["rematoreManubrio","rematoreElastico","rematoreAnelli","rematoreBil"], rematoreBil:["rematoreBil","rematoreManubrio","rematoreElastico","rematoreAnelli"],
   stacco:["stacco","rdlManubri","affondiCamminati","affondiCorpo"], rdl:["rdl","rdlManubri","affondiCamminati","affondiCorpo"],
   curlEZ:["curlEZ","curlManubri","curlElastico"], curlCavo:["curlManubri","curlElastico"], curlScott:["curlManubri","curlElastico"],
   frenchPress:["tricipitiOverheadManubrio","pushdownElastico","piegamenti"], pushdown:["tricipitiOverheadManubrio","pushdownElastico","piegamenti"], tricipitiOverheadCavo:["tricipitiOverheadManubrio","pushdownElastico","piegamenti"],
   pallof:["pallof","plank"], splitSquat:["splitSquat","splitSquatCorpo"], affondiCamminati:["affondiCamminati","affondiCorpo"], backExt:["deadBug","plank"],
-  gobletSquat:["gobletSquat","splitSquat","splitSquatCorpo"], pancaManubri:["pancaManubri","piegamenti"], rdlManubri:["rdlManubri","affondiCamminati","affondiCorpo"], lentoManubri:["lentoManubri","piegamenti"],
-  rematoreManubrio:["rematoreManubrio","rematoreElastico","alzateProno"], trazioni:["trazioni","latElastico","rematoreManubrio","rematoreElastico"],
+  gobletSquat:["gobletSquat","splitSquat","splitSquatCorpo"], pancaManubri:["pancaManubri","piegamenti"], rdlManubri:["rdlManubri","affondiCamminati","affondiCorpo"], lentoManubri:["lentoManubri","pikePushup","piegamenti"],
+  rematoreManubrio:["rematoreManubrio","rematoreElastico","rematoreAnelli","alzateProno"], trazioni:["trazioni","latElastico","rematoreAnelli","rematoreManubrio","rematoreElastico"],
   curlManubri:["curlManubri","curlElastico"], curlMartello:["curlMartello","curlManubri","curlElastico"], tricipitiOverheadManubrio:["tricipitiOverheadManubrio","pushdownElastico","piegamenti"]
 };
 function atHome(){ return gymOn() && S.settings.where === "casa"; }
@@ -1021,9 +1164,43 @@ function applyHome(sess){
   sess.blocks = sess.blocks.map(b => { const items = b.items.map(it => { const n = homeSub(it.ex, used); if(!n) return null; used.add(n); if(n !== it.ex){ it.homeOf = it.ex; it.ex = n; } return it; }).filter(Boolean); return items.length ? {...b, items, type: items.length > 1 ? b.type : "single"} : null; }).filter(Boolean);
   return sess;
 }
+/* ============ progressioni a corpo libero ============ */
+// Livelli in ordine di difficoltà: Low, Overcoming Gravity 2ª ed. (2016), capp. 24-27 (sistema a livelli, cap. 3); Neri, Project Calisthenics (2018), capp. V e X.
+// Si sale di livello quando si arriva in cima all'intervallo di ripetizioni in tutte le serie (Overcoming Gravity, cap. 10: progressione tra esercizi; cap. 17: da 5 a 15 ripetizioni).
+const LADDERS = {
+  spinta:{n:"Spinta orizzontale", steps:["piegamentiFacili","piegamenti","piegamentiStretti","archerPushup"]},
+  verticale:{n:"Spinta verticale", steps:["pikePushup","pikeRialzato","hspuNegativo"]},
+  trazioni:{n:"Trazioni", steps:["trazioniSaltate","trazioniNegative","trazioni","trazioniLsit"]},
+  rematore:{n:"Rematore a corpo libero", steps:["rematoreAnelliFacile","rematoreAnelli","rematoreAnelliLargo","rematoreArcher"]},
+  gambe:{n:"Gambe a corpo libero", steps:["squatLibero","archerSquat","splitSquatCorpo","bulgarianCorpo","pistolBoxAssistito","pistolAssistito","pistolBox","pistol"]}
+};
+const LAD_OF = {}; for(const [id, L] of Object.entries(LADDERS)) L.steps.forEach((k, i) => LAD_OF[k] = {id, i});
+function ladLevel(id, fallback){ const v = (S.settings.lad || {})[id]; return v != null && LADDERS[id].steps[v] ? v : fallback; }
+function ladAvail(k){ return !atHome() || !REQ[k] || REQ[k].every(e => (S.settings.equip||[]).includes(e)); }
+function applyLadders(sess){ // l'esercizio a corpo libero diventa il livello scelto dall'utente nella sua progressione
+  sess.blocks.forEach(b => b.items.forEach(it => { const lo = LAD_OF[it.ex]; if(!lo) return; const L = LADDERS[lo.id].steps; let i = ladLevel(lo.id, lo.i);
+    while(i > 0 && !ladAvail(L[i])) i--; const k = L[i]; if(k === it.ex) return;
+    it.ladOf = it.ladOf || it.ex; it.ex = k; if(!it.origP) it.origP = it.p; it.p = EX[k].ladP ? EX[k].ladP(it.origP) : it.origP; }));
+  return sess;
+}
+function bwHistory(k){ const out = []; for(const sess of doneSessions()) for(const e of (sess.ex||[])) if(e.key === k && e.sets && e.sets.some(z => z.reps != null)) out.push(e); return out; }
+function ladAdvice(k, p){ // dopo l'ultima seduta con questo livello: in cima all'intervallo in tutte le serie → livello successivo
+  const lo = LAD_OF[k]; if(!lo) return null; const L = LADDERS[lo.id].steps, next = L[lo.i + 1];
+  const h = bwHistory(k), last = h[h.length - 1]; if(!last || last.p.t !== "range") return null;
+  const sets = last.sets.filter(z => z.reps != null), top = last.p.rmax;
+  if(next && sets.length >= last.p.sets && sets.every(z => z.reps >= top)) return {up:true, next, msg:`L'ultima volta hai fatto ${top} ripetizioni in tutte le serie: puoi passare a "${EX[next].n}" (tocca Livello).`};
+  return null;
+}
+function ladSheet(ii){
+  const it = R.blocks[R.bi].items[ii], lo = LAD_OF[it.ex]; if(!lo) return; const L = LADDERS[lo.id];
+  showSheet(`<div class="grab"></div><div class="stack"><div class="row between"><h2>${esc(L.n)}</h2><button class="btn icon ghost" data-act="closeSheet" aria-label="Chiudi">${svgI.close}</button></div>
+    <p class="small muted">Livelli dal più facile al più difficile. Resta su un livello finché arrivi in cima all'intervallo di ripetizioni in tutte le serie, poi passa al successivo; se non riesci a fare il minimo delle ripetizioni, scendi di un livello.</p>
+    <div class="o-list">${L.steps.map((k, i) => { const ok = ladAvail(k); return `<button class="o-row" data-act="ladPick" data-ii="${ii}" data-v="${i}" ${ok ? "" : "disabled"}><span class="dot" style="background:${i === lo.i ? "var(--accent)" : "var(--surface3)"}"></span><span class="n">${i+1}. ${esc(EX[k].n)}<small>${ok ? esc(EX[k].how[0]) : "serve: " + esc(REQ[k].map(e => (EQUIP.find(q => q[0] === e) || [e, e])[1]).join(", "))}</small></span><span class="p">${i === lo.i ? "✓" : ""}</span></button>`; }).join("")}</div>
+    <p class="tiny muted">La scelta vale anche per le prossime sedute. Fonti: Low, <i>Overcoming Gravity</i>, 2ª ed., capp. 10 e 24-27; Neri, <i>Project Calisthenics</i>, capp. V e X.</p></div>`);
+}
 function dn(o){ return /^Scheda/.test(o.title) ? o.title : o.code + " · " + o.title; }
 function weekInPhase(w){ const k = weekKind(w); if(k==="f1") return w; if(k==="f2") return w-5; if(k==="f3") return w-12; return null; }
-function posLabel(pos){ if(pos && pos.gen){ if(genGoal() !== "massa"){ const ph = genPhase(pos.week); return (ph.c > 1 ? "Ciclo " + ph.c + " · " : "") + GEN_PH[ph.k] + " · settimana " + ph.i + (ph.k === "vol" && ph.i === 1 ? " (introduttiva)" : ""); } return pos.week === 1 ? "Su misura · settimana introduttiva" : "Su misura · settimana " + pos.week; } const k = weekKind(pos.week); const wp = weekInPhase(pos.week); if(pos.learn) return "Fase 1 · apprendimento · settimana " + pos.week; return (pos.cycle>1 ? "Ciclo " + pos.cycle + " · " : "") + PHASES[k].short + (wp ? " · settimana " + wp : "") ; }
+function posLabel(pos){ if(pos && pos.fs) return fsPosLabel(pos); if(pos && pos.gen){ if(genGoal() !== "massa"){ const ph = genPhase(pos.week); return (ph.c > 1 ? "Ciclo " + ph.c + " · " : "") + GEN_PH[ph.k] + " · settimana " + ph.i + (ph.k === "vol" && ph.i === 1 ? " (introduttiva)" : ""); } return pos.week === 1 ? "Su misura · settimana introduttiva" : "Su misura · settimana " + pos.week; } const k = weekKind(pos.week); const wp = weekInPhase(pos.week); if(pos.learn) return "Fase 1 · apprendimento · settimana " + pos.week; return (pos.cycle>1 ? "Ciclo " + pos.cycle + " · " : "") + PHASES[k].short + (wp ? " · settimana " + wp : "") ; }
 
 /* ============ stato e salvataggio ============ */
 const LS = "ripresa.v1";
@@ -1057,6 +1234,7 @@ function programSessions(){ const r = S.settings.restartAt || 0; return doneSess
 function nextPosition(onDate){
   const list = programSessions();
   const last = list[list.length-1];
+  if(fsOn()) return fsNext(onDate);
   if(genOn()){ // programma su misura: settimane in fila; dopo più di 2 settimane di stop si rifà la settimana introduttiva (Pyramid, p. 108)
     const lg = [...list].reverse().find(x => x.pos && x.pos.gen);
     if(!lg) return {pos:{gen:true, week:1, slot:0}, note:null};
@@ -1064,14 +1242,15 @@ function nextPosition(onDate){
     if(daysBetween(lg.date, onDate || todayStr()) > 14) return {pos:{gen:true, week:1, slot:0}, note:"Sono passate più di 2 settimane dall'ultimo allenamento: si riparte con la settimana introduttiva (meno serie, più margine)."};
     return {pos:{gen:true, week, slot}, note:null};
   }
-  if(!last || !last.pos) return {pos:startPos(), note:null};
-  let {cycle, week, slot, learn} = last.pos;
+  const lastL = [...list].reverse().find(x => x.pos && !x.pos.gen && !x.pos.fs);
+  if(!lastL) return {pos:startPos(), note:null};
+  let {cycle, week, slot, learn} = lastL.pos;
   slot++;
   if(slot >= slotsInWeek(week, S.settings)){ slot = 0; week++; }
   if(learn && week > 4){ week = 2; learn = false; }
   if(week > WEEKS){ week = 6; cycle++; }
   let note = null;
-  const gap = daysBetween(last.date, onDate || todayStr());
+  const gap = daysBetween(lastL.date, onDate || todayStr());
   if(gap > 35){ note = "Sono passate più di 5 settimane dall'ultimo allenamento: si riparte dalla Fase 1, settimana 3, per riabituare il corpo."; week = 3; slot = 0; }
   else if(gap > 14 && week > 1 && weekKind(week) !== "test"){
     const prev = week - 1;
@@ -1079,7 +1258,7 @@ function nextPosition(onDate){
   }
   return {pos:learn ? {cycle, week, slot, learn} : {cycle, week, slot}, note};
 }
-function advance(pos){ if(pos.gen){ let {week, slot} = pos; slot++; if(slot >= genDays()){ slot = 0; week++; } return {gen:true, week, slot}; } let {cycle, week, slot, learn} = pos; slot++; if(slot >= slotsInWeek(week, S.settings)){ slot = 0; week++; } if(learn && week > 4){ week = 2; learn = false; } if(week > WEEKS){ week = 6; cycle++; } return learn ? {cycle, week, slot, learn} : {cycle, week, slot}; }
+function advance(pos){ if(pos.fs) return fsAdvance(pos); if(pos.gen){ let {week, slot} = pos; slot++; if(slot >= genDays()){ slot = 0; week++; } return {gen:true, week, slot}; } let {cycle, week, slot, learn} = pos; slot++; if(slot >= slotsInWeek(week, S.settings)){ slot = 0; week++; } if(learn && week > 4){ week = 2; learn = false; } if(week > WEEKS){ week = 6; cycle++; } return learn ? {cycle, week, slot, learn} : {cycle, week, slot}; }
 function forecast(){ // assegna le sedute ai giorni pianificati futuri
   const t = todayStr();
   const days = Object.keys(S.planned).filter(d => S.planned[d] && d >= t && !sessionOn(d)).sort();
@@ -1120,6 +1299,7 @@ function stallInfo(h, kind){
 function suggest(exKey, p, deload){
   const ex = EX[exKey];
   if(!ex || ex.bw) return null;
+  if(p.fs){ if(p.kg == null) return null; const r = p.fs.r; return {kg:p.kg, why: r === "s" ? `peso dello schema: sale di ${fmtKg(fsInc(exKey))} kg dopo 2 sedute chiuse con lo stesso peso` : r === "t" ? "tecnica: 80% del peso dello schema (lo stesso peso finché lo schema è sotto il 75% del massimale)" : "circa il 60% del massimale"}; }
   const h = history(exKey).filter(x => !x.deload);
   const mult = deload ? 0.85 : 1;
   const done = sets => sets.filter(z => z.kg != null);
@@ -1219,9 +1399,9 @@ const GROUPS = {
   shoulders:{n:"Spalle", c:"var(--g-shoulders)"}, arms:{n:"Braccia", c:"var(--g-arms)"}, core:{n:"Core", c:"var(--g-core)"}, post:{n:"Posturale", c:"var(--g-post)"}, warm:{n:"Riscaldamento", c:"var(--muted)"}
 };
 const EXG = {
-  gobletSquat:"legs", squat:"legs", splitSquat:"legs", affondiCamminati:"legs", splitSquatCorpo:"legs", affondiCorpo:"legs", stacco:"legs", rdlManubri:"legs", rdl:"legs", pressa:"legs", hackSquat:"legs", legCurl:"legs", legCurlSeduto:"legs", smithSquat:"legs", legExtension:"legs", calf:"legs",
-  pancaManubri:"chest", panca:"chest", pancaInclinataManubri:"chest", pancaStretta:"chest", chestPress:"chest", piegamenti:"chest", crociCavi:"chest", pecDeck:"chest",
-  latMachine:"back", trazioni:"back", pulley:"back", rowMachine:"back", rematoreManubrio:"back", rematoreBil:"back", pulldown:"back", latPresaStretta:"back",
+  gobletSquat:"legs", squat:"legs", squatLibero:"legs", archerSquat:"legs", bulgarianCorpo:"legs", pistolBoxAssistito:"legs", pistolAssistito:"legs", pistolBox:"legs", pistol:"legs", splitSquat:"legs", affondiCamminati:"legs", splitSquatCorpo:"legs", affondiCorpo:"legs", stacco:"legs", rdlManubri:"legs", rdl:"legs", pressa:"legs", hackSquat:"legs", legCurl:"legs", legCurlSeduto:"legs", smithSquat:"legs", legExtension:"legs", calf:"legs",
+  pancaManubri:"chest", panca:"chest", piegamentiFacili:"chest", piegamentiStretti:"chest", archerPushup:"chest", pikePushup:"shoulders", pikeRialzato:"shoulders", hspuNegativo:"shoulders", pancaInclinataManubri:"chest", pancaStretta:"chest", chestPress:"chest", piegamenti:"chest", crociCavi:"chest", pecDeck:"chest",
+  latMachine:"back", trazioni:"back", trazioniSaltate:"back", trazioniNegative:"back", trazioniLsit:"back", rematoreAnelliFacile:"back", rematoreAnelli:"back", rematoreAnelliLargo:"back", rematoreArcher:"back", pulley:"back", rowMachine:"back", rematoreManubrio:"back", rematoreBil:"back", pulldown:"back", latPresaStretta:"back",
   military:"shoulders", lentoManubri:"shoulders", shoulderPress:"shoulders", alzateLaterali:"shoulders", facePull:"shoulders", alzateLateraliCavo:"shoulders",
   curlEZ:"arms", curlManubri:"arms", curlMartello:"arms", frenchPress:"arms", pushdown:"arms", curlCavo:"arms", curlScott:"arms", tricipitiOverheadCavo:"arms", tricipitiOverheadManubrio:"arms",
   deadBug:"core", pallof:"core", plank:"core", crunch:"core", crunchInverso:"core", backExt:"core",
@@ -2037,8 +2217,8 @@ function profileSheetHtml(){ const p = S.profile || {}; const a = ageNow();
     <div class="bf-grid"><label class="bf-in"><span>Età</span><span class="bf-f"><input type="text" inputmode="numeric" id="pfAge" value="${a ?? ""}"><em>anni</em></span></label><label class="bf-in"><span>Altezza</span><span class="bf-f"><input type="text" inputmode="decimal" id="pfH" value="${p.height ?? ""}"><em>cm</em></span></label></div>
     <button class="btn primary big" data-act="saveProfile">Salva</button></div>`; }
 function programChoiceHtml(){
-  return `<div class="o-sec first"><div class="o-label">Programma</div><div class="o-seg" style="margin-top:8px">${[["liparoti","Project Invictus"],["principi","Su misura"]].map(([k, l]) => `<button class="${(S.settings.program || "liparoti") === k ? "on" : ""}" data-act="setProgram" data-v="${k}">${l}</button>`).join("")}</div>
-    <p class="small muted">${genOn() ? "Costruito dall'app con le regole di <i>The Muscle and Strength Pyramid</i> (Helms e colleghi): serie, ripetizioni ed esercizi si adattano ai tuoi giorni e al tempo che hai." : "Il programma in tre fasi con i test, da <i>Project Bodybuilding</i> di Liparoti e dai manuali di Project Invictus."}</p></div>`;
+  return `<div class="o-sec first"><div class="o-label">Programma</div><div class="o-seg" style="margin-top:8px">${[["liparoti","Project BB"],["faleev","Project Strength"],["principi","Su misura"]].map(([k, l]) => `<button class="${(S.settings.program || "liparoti") === k ? "on" : ""}" data-act="setProgram" data-v="${k}">${l}</button>`).join("")}</div>
+    <p class="small muted">${fsOn() ? "Il \"Faleev 2.0\" di <i>Project Strength</i> (Ferlito, Project Invictus): forza su squat, panca e stacco in 4 sedute a settimana, con pesi che salgono da soli." : genOn() ? "Costruito dall'app con le regole di <i>The Muscle and Strength Pyramid</i> (Helms e colleghi): serie, ripetizioni ed esercizi si adattano ai tuoi giorni e al tempo che hai." : "Il programma in tre fasi con i test, da <i>Project Bodybuilding</i> di Liparoti e dai manuali di Project Invictus."}</p></div>`;
 }
 function deloadCheckHtml(){ // tabella 3.2 di The Muscle and Strength Pyramid: Training
   const Q = ["Hai poca voglia di andare in palestra?", "Dormi peggio del solito?", "Pesi o ripetizioni con lo stesso peso in calo rispetto al ciclo precedente?", "Stress più alto del solito?", "Dolori e acciacchi più del solito?"];
@@ -2098,7 +2278,43 @@ function renderGenProgramma(){
   h += `<div class="o-sec"><button class="btn ghost sm" data-act="clearFutureSet" style="color:var(--danger);padding-left:0">Togli i giorni di palestra da domani in poi</button></div>`;
   return h;
 }
+function renderFsProgramma(){
+  const s = S.settings, t = todayStr(), {pos} = nextPosition(t), c = pos.c || 1, gd = gymWeekDays(), leg = fsLeg(s);
+  const phN = st => st.done ? "6×3 finito" : st.ph === "8" ? "5×8" : st.ph === "5" ? "5×5" : "6×3";
+  const noBar = atHome() && !["bil","pa"].every(e => (s.equip || []).includes(e));
+  let h = programChoiceHtml();
+  h += `<div class="o-sec"><div class="o-label">Il tuo programma</div>
+    <div class="o-stats"><div><b>${c}</b><span>ciclo</span></div><div><b>${pos.test ? "test" : pos.week}</b><span>settimana</span></div><div><b>${pos.test ? pos.test + "/3" : (pos.slot + 1) + "/4"}</b><span>seduta</span></div></div>
+    <p class="small" style="margin-top:10px">Adesso: <b>${esc(posLabel(pos))}</b>. Ogni allenamento completato fa passare alla seduta successiva, qualunque sia il giorno.</p>
+    ${noBar ? `<div class="hint warn small">Servono bilanciere, rack e panca: a casa senza questi attrezzi gli esercizi verrebbero sostituiti e i pesi del programma non avrebbero senso.</div>` : ""}
+    ${gd.length !== 4 ? `<p class="small" style="color:var(--warn)">Il programma del libro è su 4 giorni (lunedì, martedì, giovedì, venerdì)${gd.length ? `; tu ne hai ${gd.length}: le 4 sedute si susseguono comunque in ordine, quindi una settimana del programma dura ${gd.length > 4 ? "meno" : "più"} di 7 giorni` : ""}.</p>` : ""}
+    <div class="o-list">${gd.length ? planDaysRow(gd) : `<button class="o-row" data-act="goWeek"><span class="n">Nessun giorno scelto<small>Sceglili in Piano → La mia settimana</small></span><span class="p">›</span></button>`}</div></div>`;
+  h += `<div class="o-sec"><div class="o-label">Alzate</div><div class="o-list">${[leg, "panca", "stacco"].map(l => { const st = fsState(l, c);
+    return `<div class="o-row" style="cursor:default"><span class="n">${esc(EX[l].n)}<small>${l === "stacco" ? "5×5" : phN(st)}${st.rm ? " · massimale " + fmtKg(st.rm.kg) + " kg (" + esc(st.rm.why) + ")" : " · massimale non noto"}</small></span><span class="p num">${st.kg != null ? fmtKg(st.kg) + " kg" : "—"}</span></div>`; }).join("")}</div>
+    <p class="tiny muted" style="margin-top:6px">A destra il peso del prossimo "schema".</p></div>`;
+  h += `<div class="o-sec"><div class="o-label">I tuoi massimali</div><p class="small muted" style="margin-top:6px">Servono per il peso di partenza (60% per squat e panca, 70% per lo stacco). Se non li conosci lascia vuoto: l'app li stima dalle tue sedute, oppure scegli tu il peso la prima volta. Dal secondo ciclo valgono quelli del test.</p>
+    <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:8px">${[leg, "panca", "stacco"].map(l => `<div class="field" style="flex:1;min-width:90px"><label for="fsrm-${l}">${esc(EX[l].n.split(" ")[0])} (kg)</label><input id="fsrm-${l}" type="number" inputmode="decimal" min="0" step="2.5" data-fsrm="${l}" value="${(s.fsRm || {})[l] || ""}"></div>`).join("")}</div></div>`;
+  const due = fsTestDue(c);
+  h += `<div class="o-sec"><div class="o-label">Test dei massimali</div><p class="small muted" style="margin-top:6px">${pos.test ? "Sei nella settimana del test." : due ? "Il test inizia alla fine di questa settimana: due sedute di scarico (anche facoltative) e poi il test di squat, panca e stacco." : "Arriva da solo quando anche il 6×3 di squat e panca non si chiude più. Puoi anticiparlo: si fa alla fine della settimana in corso."}</p>
+    ${pos.test ? "" : s.fsTestNow === c ? `<button class="btn sm" data-act="fsTest" data-v="0">Annulla il test anticipato</button>` : due ? "" : `<button class="btn sm" data-act="fsTest" data-v="1">Fai il test a fine settimana</button>`}</div>`;
+  h += `<div class="o-sec"><div class="o-label">Le 4 sedute della settimana</div>${pos.test ? "" : [0,1,2,3].map(sl => { const sess = buildFsSession({fs:true, c, week:pos.week, slot:sl}, s); return `<details class="wk" ${pos.slot === sl ? "open" : ""}><summary><span>${esc(sess.code)} · ${esc(sess.title)}${pos.slot === sl ? ' <span class="pill acc">prossima</span>' : ""}</span><span class="small muted">~${estMinutes(sess.blocks, true)}′</span></summary><div style="margin-top:8px">${exRowsHtml(sess, "fs")}</div></details>`; }).join("")}
+    <div class="o-list" style="margin-top:8px"><label class="switch"><input type="checkbox" data-set="fsAcc" ${s.fsAcc !== false ? "checked" : ""}><span><b>Complementari</b><br><span class="small muted">Trazioni, rematori, face pull e curl nei giorni di squat e panca; panca inclinata con manubri negli altri. Facoltativi per il libro.</span></span></label></div></div>`;
+  h += `<div class="o-sec"><div class="o-label">Come funziona</div><ul class="how small" style="margin-top:8px">
+    <li><b>Schema</b>: 5 serie da 8 con lo stesso peso, mai a cedimento. Si parte intorno al 60% del massimale; il peso sale dopo almeno 2 sedute chiuse (in pratica ogni settimana per squat e panca, ogni 2 per lo stacco).</li>
+    <li><b>Tecnica</b>: 6 serie da 4 all'80% del peso dello schema (stacco 5 da 4); finché lo schema è sotto il 75-80% del massimale si usa lo stesso peso.</li>
+    <li><b>Stacco</b>: 5 serie da 5 con peso fisso, +5 kg quando le chiudi (proposta di Tsatsouline, che il libro consiglia per lo stacco).</li>
+    <li>Quando il 5×8 non si chiude più si passa al 5×5 con lo stesso peso, poi al 6×3 togliendo lo squat dei giorni di tecnica. Esaurito anche il 6×3: scarico e test dei massimali, poi un nuovo ciclo.</li>
+    <li>Ogni 4 settimane una di scarico: stesso peso del 5×8 ma solo 5×5, niente squat di martedì e venerdì, niente complementari.</li></ul>
+    <p class="tiny muted" style="margin-top:6px">Il libro lo indica per principianti e intermedi e non come programma da seguire sempre. Scelte dell'app, dove il libro non dà numeri: "non si chiude più" = 2 sedute di fila non chiuse con lo stesso peso; aumenti di 5 kg (2,5 kg in panca); stacco di partenza al 70%; scarico nel 5×5 e nel 6×3 con 3 serie; serie e ripetizioni dei complementari; recuperi di 3 minuti. Fonte: Ferlito A., <i>Project Strength</i>, Project Invictus 2016, cap. VI ("Il Faleev 2.0", figg. 76-79) e appendice B (riscaldamento per il massimale, fig. 57).</p></div>`;
+  h += `<div class="o-sec"><div class="o-label">Opzioni</div>
+    <div class="field" style="margin-top:10px"><label for="setLeg">Esercizio principale per le gambe</label>
+      <select id="setLeg" data-set="legMain"><option value="squat" ${s.legMain==="squat"?"selected":""}>Squat con bilanciere</option><option value="pressa" ${s.legMain==="pressa"?"selected":""}>Pressa (scelta dell'app, il libro usa lo squat)</option></select></div></div>`;
+  h += swapsCardHtml();
+  h += `<div class="o-sec"><button class="btn ghost sm" data-act="clearFutureSet" style="color:var(--danger);padding-left:0">Togli i giorni di palestra da domani in poi</button></div>`;
+  return h;
+}
 function renderPalestraProgramma(){
+  if(fsOn()) return renderFsProgramma();
   if(genOn()) return renderGenProgramma();
   const s = S.settings, t = todayStr();
   const {pos} = nextPosition(t);
@@ -2187,6 +2403,8 @@ document.addEventListener("change", e => {
     else S.settings[k] = el.value;
     pushMeta(); render(); return;
   }
+  const fr = e.target.closest("[data-fsrm]");
+  if(fr){ const v = parseFloat(String(fr.value).replace(",", ".")); S.settings.fsRm = {...(S.settings.fsRm || {}), [fr.dataset.fsrm]: v > 0 ? v : 0}; pushMeta(); render(); return; }
   const eq = e.target.closest("[data-equip]");
   if(eq){ const k = eq.dataset.equip; let a = (S.settings.equip || []).slice(); a = eq.checked ? [...new Set(a.concat([k]))] : a.filter(x => x !== k); S.settings.equip = a; pushMeta(); render(); return; }
   const pc = e.target.closest("[data-pcond]");
@@ -2206,6 +2424,9 @@ const REFS = [
   ["Roncari A.", "Fitness posturale. Valutazione, postura e dolore.", "Project Invictus, Milano. ISBN 978-88-942054-8-0.", "Volumi, buffer, routine posturale."],
   ["Liparoti F.", "Project Bodybuilding. Il manuale della ricomposizione corporea.", "Project Invictus, Milano.", "Fase 2, Fase 3 a 4 sedute, test 8RM (cap. 13). La Fase 1, la Fase 3 a 3 sedute e le regole dell'app sono un'elaborazione a partire da questi testi."],
   ["Haff G.G., Triplett N.T. (a cura di)", "Essentials of Strength Training and Conditioning, 4ª ed.", "Human Kinetics, Champaign (IL), 2016. Cap. 17 (Sheppard J.M., Triplett N.T.), cap. 18 (Potach D.H., Chu D.A., pp. 471-520), cap. 19 (DeWeese B.H., Nimphius S., pp. 521-557), cap. 21 (Haff G.G., periodizzazione, da p. 583).", "Programmazione dei pesi, pliometria, agilità, periodizzazione."],
+  ["Ferlito A. (presentazione di Evangelista P.)", "Project Strength. Per essere padroni dell'allenamento e non schiavi dei metodi.", "Project Invictus, Milano, 2016. ISBN 978-88-942054-0-4.", "Programma Project Strength: cap. VI, \"Il Faleev 2.0\" (figg. 76-79); riscaldamento per il massimale (appendice B, fig. 57)."],
+  ["Neri E.", "Project Calisthenics. Ipertrofia e forza a corpo libero.", "Project Invictus, Milano, 2018.", "Tecnica e progressioni a corpo libero: piegamenti, trazioni e rematore agli anelli (cap. V), gambe (cap. X)."],
+  ["Low S.", "Overcoming Gravity: A Systematic Approach to Gymnastics and Bodyweight Strength, 2ª ed.", "Battle Ground Creative, Houston, 2016. ISBN 978-0-9908738-5-3.", "Livelli delle progressioni (cap. 3 e capp. 24-27), metodi di progressione tra esercizi (cap. 10), principiante a corpo libero (cap. 17)."],
   ["Daniels J.", "Daniels' Running Formula, 4ª ed.", "Human Kinetics, Champaign (IL), 2022. ISBN 978-1-7182-0366-2.", "VDOT, ritmi, limiti di volume, FC massima."],
   ["Daniels J., Gilbert J.", "Oxygen Power: Performance Tables for Distance Runners.", "Pubblicato dagli autori, 1979.", "Equazioni del VDOT (citate nel libro di Daniels)."],
   ["Allen H., Coggan A.R.", "Training and Racing with a Power Meter, 2ª ed.", "VeloPress, Boulder (CO), 2010.", "Livelli di potenza, test FTP, sedute, struttura del piano."],
@@ -2499,10 +2720,11 @@ function scrWarmup(){
 }
 function sugHtml(exKey, p){
   const ex = EX[exKey];
-  if(ex.bw) return `<div class="hint small">A corpo libero: annota solo ripetizioni o secondi.</div>`;
+  if(ex.bw){ const lo = LAD_OF[exKey], adv = ladAdvice(exKey, p); return (adv ? `<div class="hint"><b>Pronto per il livello successivo</b><br><span class="small">${esc(adv.msg)}</span></div>` : "") + `<div class="hint small">A corpo libero: annota solo ripetizioni o secondi.${lo ? ` Livello ${lo.i + 1} di ${LADDERS[lo.id].steps.length} della progressione "${esc(LADDERS[lo.id].n.toLowerCase())}".` : ""}</div>`; }
   const s = suggest(exKey, p, R.deload && R.kind !== "gen");
   if(s && s.stall) return `<div class="hint warn"><b>Peso consigliato: ${fmtKg(s.kg)} kg</b>${ex.unit.includes("manubri") ? " (un manubrio)" : ""}<br><span class="small">${esc(s.why)}. Capita a tutti: ripartire un po' più leggeri di solito sblocca la situazione in poche sedute. Se preferisci, tocca "Cambia" per passare a un esercizio simile.</span></div>`;
   if(s) return `<div class="hint"><b>Peso consigliato: ${fmtKg(s.kg)} kg</b>${ex.unit.includes("manubri") ? " (un manubrio)" : ""}<br><span class="small">${esc(s.why)}.</span></div>`;
+  if(p.fs) return p.fs.r === "test" ? "" : `<div class="hint warn small">Non conosco ancora il tuo massimale: scegli un peso con cui chiudi tutte le serie lontano dal cedimento, oppure inserisci il massimale (anche stimato) nella pagina del programma.</div>`;
   if(p.t === "fixed" || p.t === "emom") return `<div class="hint warn small">Nessun test ancora: nella prima serie cerca un peso con cui arriveresti a circa ${p.rm} ripetizioni.</div>`;
   if(p.t === "test") return "";
   if(R && R.blocks && R.blocks[R.bi] && canRamp(R.blocks[R.bi])) return "";
@@ -2522,12 +2744,12 @@ function scrIntro(){
     ${sugHtml(it.ex, it.p)}
     ${canRamp(b) ? "" : wuHtml(it, R.bi)}
     <div class="stack-sm"><span class="eyebrow">In breve</span><ul class="how small">${ex.how.slice(0,2).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>
-    <div class="row"><button class="btn sm" data-act="exInfo" data-k="${it.ex}">${svgI.info} Tecnica completa</button>${R.kind !== "post" && EXG[baseEx(it)] !== "post" && altOf(baseEx(it)).length && !R.log[R.bi][i].sets.length ? `<button class="btn sm" data-act="swapOpen" data-ii="${i}">Cambia</button>` : ""}${videoHtml(it.ex, true)}</div></div>`; }).join("")}
+    <div class="row"><button class="btn sm" data-act="exInfo" data-k="${it.ex}">${svgI.info} Tecnica completa</button>${R.kind !== "post" && EXG[baseEx(it)] !== "post" && altOf(baseEx(it)).length && !R.log[R.bi][i].sets.length ? `<button class="btn sm" data-act="swapOpen" data-ii="${i}">Cambia</button>` : ""}${LAD_OF[it.ex] && !R.log[R.bi][i].sets.length ? `<button class="btn sm" data-act="ladOpen" data-ii="${i}">Livello</button>` : ""}${videoHtml(it.ex, true)}</div></div>`; }).join("")}
   ${canRamp(b) ? `<div class="hint warn small"><b>Prima volta con questo esercizio.</b> Trova il peso con una o due serie di prova: non contano come serie e l'app ti dice da che peso partire.</div><button class="btn primary big" data-act="rampStart">Trova il peso</button><button class="btn" data-act="startEx">Conosco già il peso: inizia</button>`
     : `<button class="btn primary big" data-act="startEx">${svgI.play} Inizia esercizio</button>`}
   <button class="btn ghost" data-act="skipEx">Salta questo esercizio</button></div>`;
 }
-function canRamp(b){ if(b.type !== "single") return false; const it = b.items[0]; const ex = EX[it.ex]; return !ex.bw && ex.step > 0 && EXG[it.ex] !== "post" && ["range","rpe","pyr"].includes(it.p.t) && !suggest(it.ex, it.p, R.deload && R.kind !== "gen"); }
+function canRamp(b){ if(b.type !== "single") return false; const it = b.items[0]; if(it.p.fs) return false; const ex = EX[it.ex]; return !ex.bw && ex.step > 0 && EXG[it.ex] !== "post" && ["range","rpe","pyr"].includes(it.p.t) && !suggest(it.ex, it.p, R.deload && R.kind !== "gen"); }
 const RAMPFEEL = [[7,"6 o più","troppo leggero"],[4.5,"4-5","leggero"],[2.5,"2-3","impegnativo"],[0.5,"0-1","al limite"]];
 function scrRamp(){
   const it = R.blocks[R.bi].items[0]; const ex = EX[it.ex]; const tg = rirTarget(it.p); const reps = it.p.t === "range" ? it.p.rmax : it.p.t === "pyr" ? it.p.reps[0] : it.p.reps;
@@ -3683,6 +3905,12 @@ function act(a, d, e){
     case "mediaDel": if(confirm("Eliminare questa foto o questo video?")){ try{ Android.mediaDelete(d.k, d.n); }catch(err){} exSheet(d.k, mediaSheet && mediaSheet.slot); } break;
     case "swapSet": setSwap(d.slot, d.to); closeSheet(); render(); break;
     case "swapOpen": runSwapSheet(Number(d.ii)); break;
+    case "fsTest": { const c = (nextPosition(todayStr()).pos.c) || 1; S.settings.fsTestNow = d.v === "1" ? c : 0; pushMeta(); render(); break; }
+    case "ladOpen": ladSheet(Number(d.ii)); break;
+    case "ladPick": { const it = R.blocks[R.bi].items[Number(d.ii)], lo = LAD_OF[it.ex]; if(!lo) break; const v = Number(d.v), k = LADDERS[lo.id].steps[v];
+      S.settings.lad = {...(S.settings.lad || {}), [lo.id]:v}; pushMeta();
+      it.ladOf = it.ladOf || it.ex; if(!it.origP) it.origP = it.p; it.ex = k; it.p = EX[k].ladP ? EX[k].ladP(it.origP) : it.origP; R.ramp = null;
+      saveDraft(); closeSheet(); rRender(); break; }
     case "swapRun": { const it = R.blocks[R.bi].items[Number(d.ii)]; const orig = baseEx(it);
       if(d.mode === "always") setSwap(slotKey(R.kind, R.code, orig), d.to);
       it.ex = d.to; it.orig = d.to === orig ? undefined : orig; it.variantOf = undefined; R.ramp = null;
