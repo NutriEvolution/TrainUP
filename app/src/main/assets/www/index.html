@@ -981,6 +981,7 @@ function genStrength(week){ // singole, richiami e volume dei complementari dell
 // (~90-92% del massimale stimato, RPE ~8, senza richiami); dopo ogni singola un richiamo da 2 a RPE 5-8; ~2 serie per muscolo di complementari.
 // Settimana prima: singole a RPE 7-8 nella prima seduta, 6-7 nelle altre, nell'ultima seduta di attivazione a RPE 4-5; niente richiami né complementari.
 // Prima e ultima seduta con le tre alzate, le altre con squat (o pressa) e panca: come le sedute del libro (SBD, SB, solo panca, SBD). Adattamento ai giorni scelti: dell'app.
+const GEN_E1RM = {principiante:"il massimale stimato dovrebbe salire di settimana in settimana", ripresa:"il massimale stimato dovrebbe salire di settimana in settimana", allenato:"il massimale stimato dovrebbe salire nel corso della fase, ogni 2-3 settimane (se sei molto avanzato, anche solo mantenersi)"};
 function genMockOn(){ return genOn() && genGoal() !== "massa" && !!S.settings.genMock; }
 function genMockMain(st, si, n, main){ const first = si === 0, last = si === n - 1;
   const lifts = first || last ? main : main.filter(x => x !== "stacco");
@@ -1429,13 +1430,15 @@ function last8RM(exKey){ const h = history(exKey).filter(x => x.e.p && x.e.p.t==
 // Stallo: stesso peso per più sedute senza progressi. Regola pratica: riparti dal 10% in meno e risali.
 function stallInfo(h, kind){
   const done = sets => sets.filter(z => z.kg != null);
-  const rows = h.filter(x => kind === "fixed" ? (x.e.p.t === "fixed" || x.e.p.t === "emom") : x.e.p.t === "range").map(x => { const st = done(x.e.sets); return st.length ? {kg:Math.max(...st.map(z => z.kg)), reps:st.reduce((a,z) => a + (z.reps||0), 0), e:x.e} : null; }).filter(Boolean);
+  const rows = h.filter(x => kind === "fixed" ? (x.e.p.t === "fixed" || x.e.p.t === "emom") : x.e.p.t === "range").map(x => { const st = done(x.e.sets); return st.length ? {kg:Math.max(...st.map(z => z.kg)), reps:st.reduce((a,z) => a + (z.reps||0), 0), e:x.e, date:x.date} : null; }).filter(Boolean);
   if(!rows.length) return null;
   const last = rows[rows.length-1];
   let streak = [];
   for(let i=rows.length-1;i>=0 && rows[i].kg === last.kg;i--) streak.unshift(rows[i]);
   const need = kind === "fixed" ? 2 : 3;
   if(streak.length < need) return null;
+  // Su misura, allenato: chi non è principiante aumenta il carico nell'arco di settimane o mesi, non di seduta in seduta (Pyramid, tabella 3.1, p. 87): si parla di stallo solo dopo 4 settimane ferme
+  if(kind === "range" && genOn() && S.settings.level === "allenato" && daysBetween(streak[0].date, streak[streak.length - 1].date) < 28) return null;
   const win = streak.slice(-need);
   if(win[win.length-1].reps > win[0].reps) return null; // le ripetizioni stanno salendo: è ancora progresso
   if(kind === "range"){ // se ti restavano più ripetizioni dell'obiettivo non sei bloccato: ti sei fermato prima
@@ -2401,6 +2404,26 @@ function genSpecHtml(V){ // tabella 3.9 e pp. 129-132
     <button class="btn primary sm" data-act="genSpecStart" style="margin-top:10px" ${sel.length ? "" : "disabled"}>Inizia la specializzazione${sel.length ? ": " + esc(sel.map(m => GEN_MUS[m]).join(" e ")) : ""}</button>
     <p class="tiny muted" style="margin-top:6px">Helms e colleghi, tabella 3.9 e pp. 129-132. Che ridurre gli altri muscoli funzioni meglio è un'esperienza dei bodybuilder, non un dato di ricerca; serve a non allungare le sedute.</p></div>`;
 }
+// Livello nel programma Su misura (Helms e colleghi, The Muscle and Strength Pyramid: Training, 3ª ed.): il livello si definisce da quanto in fretta progredisci
+// (tabella 3.1, p. 87), non dagli anni di palestra. Cosa cambia: volume di partenza (tabella 7.3, p. 231: dose minima che sale con l'esperienza; volumi alti solo
+// per gli avanzati), fasi di specializzazione solo per chi è avanzato (p. 131), cosa aspettarsi dal massimale stimato nella fase di volume (pp. 117-118),
+// quando un esercizio è davvero fermo (tabella 3.1). Ripresa: si riparte con la settimana introduttiva (~75% delle serie, più lontano dal cedimento, p. 108);
+// chi riprende recupera in fretta il terreno perso (studi di Ogasawara riportati a p. 102); dopo 20 settimane di stop la forza resta in parte e il volume muscolare
+// torna ai valori iniziali (Psilander e colleghi, J Appl Physiol 2019).
+const GEN_LV = {
+  principiante:{n:"Principiante", def:"Riesci ad aumentare peso o ripetizioni quasi ogni volta che ripeti un esercizio, o di settimana in settimana.",
+    what:["Volume di partenza basso: anche poche serie fanno progredire chi comincia.","Progressione rapida: se per 3 sedute di fila non aumenti né peso né ripetizioni, l'app lo segnala.","Niente specializzazione: chi comincia deve crescere in modo uniforme."]},
+  ripresa:{n:"Ripresa dopo uno stop", def:"Ti allenavi in passato e sei rimasto fermo per un po'.",
+    what:["Si parte con la settimana introduttiva: circa tre quarti delle serie e più margine.","Il terreno perso si recupera in fretta: la forza resta in parte anche dopo mesi di stop, la massa torna più lentamente ai livelli di prima.","Volume di partenza basso, progressione e segnalazione degli stalli come per chi comincia."]},
+  allenato:{n:"Allenato", def:"I progressi sono più lenti: aggiungi ripetizioni nell'arco di settimane e peso nell'arco di mesi.",
+    what:["Volume di partenza medio.","Uno stallo si segnala solo dopo 4 settimane senza progressi sullo stesso peso, non dopo 3 sedute.","Puoi usare le fasi di specializzazione per i muscoli che restano indietro."]}
+};
+function genLevelHtml(){
+  const lv = S.settings.level || "ripresa", L = GEN_LV[lv];
+  return `<div class="o-sec"><div class="o-label">Il tuo livello</div><div class="o-seg" style="margin-top:8px">${Object.entries(GEN_LV).map(([k, x]) => `<button class="${lv === k ? "on" : ""}" data-act="genLevel" data-v="${k}">${k === "ripresa" ? "Ripresa" : x.n}</button>`).join("")}</div>
+    <p class="small" style="margin-top:8px">${esc(L.def)}</p><ul class="how small" style="margin-top:6px">${L.what.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+    <p class="tiny muted" style="margin-top:6px">Il libro distingue i livelli da quanto in fretta migliori, non dagli anni di palestra (tabella 3.1). Helms e colleghi, pp. 87, 102, 108, 117-118, 131, 231; Psilander e colleghi, 2019.</p></div>`;
+}
 function genMockHtml(){
   const last = {}; for(const x of programSessions()) if(x.pos && x.pos.mock) for(const e of (x.ex || [])) if(e.kg1) last[e.key] = {kg:e.kg1, date:x.date};
   const L = Object.entries(last);
@@ -2419,9 +2442,10 @@ function renderGenProgramma(){
     <p class="small muted">${goal === "massa" ? "Sistema per la massa del libro: volume per muscolo, ripetizioni varie, doppia progressione. La prima settimana è introduttiva: circa tre quarti delle serie e una ripetizione in più di margine." : goal === "forza" ? "Sistema per la forza del libro su squat (o pressa), panca e stacco: fasi di volume, carico e picco, con una singola pesante a sforzo crescente e, dalla fase di carico, serie di richiamo. Il lavoro complementare fa crescere i muscoli che servono alla forza nel lungo periodo." : "Per chi vuole crescere e diventare più forte senza gareggiare: le regole della forza, con più lavoro complementare e meno singole pesanti (Pyramid, p. 249)."}</p>
     ${st ? `<div class="o-list" style="margin-top:6px">${[["vol","8 settimane","1-3 singole a settimana per alzata, sforzo da RPE 5 a 8; molto lavoro complementare (6-20 ripetizioni). La prima settimana è introduttiva."],["car","6 settimane","2-4 singole, da RPE 6 a 9, poi 2 serie di richiamo che scendono da 5 a 3 ripetizioni; complementari da 10 a 8 serie."],["pic","3 settimane","Singole da RPE 7 a 10, richiami e complementari che calano ogni settimana. Poi si riparte con la fase di volume."]].map(([k, d, t]) => `<div class="o-row" style="cursor:default;align-items:flex-start"><span class="dot" style="background:${st.ph.k === k ? "var(--accent)" : "var(--surface3)"};margin-top:7px"></span><span class="n">${GEN_PH[k]} · ${d}${st.ph.k === k ? ` <span class="pill acc">settimana ${st.ph.i}</span>` : ""}<small>${t}</small></span></div>`).join("")}</div>
       <p class="tiny muted" style="margin-top:6px">RPE = sforzo da 1 a 10: RPE 7 vuol dire che te ne restavano circa 3. Durate scelte dall'app dentro gli intervalli del libro (volume 6-12 settimane, carico 4-8, picco 2-4). Helms e colleghi, tabelle 7.11-7.13.</p>` : ""}
-    ${st ? genMockHtml() : ""}
+    ${st ? `<p class="small" style="margin-top:8px">Cosa aspettarti nella fase di volume: ${GEN_E1RM[S.settings.level || "ripresa"]} (pp. 117-118).</p>` + genMockHtml() : ""}
     ${gd.length < 2 ? `<p class="small" style="color:var(--warn)">Il libro indica almeno 2 sedute a settimana: con meno giorni l'app usa 2 sedute a corpo intero.</p>` : ""}
     <div class="o-list">${gd.length ? planDaysRow(gd) : `<button class="o-row" data-act="goWeek"><span class="n">Nessun giorno scelto<small>Sceglili in Piano → La mia settimana</small></span><span class="p">›</span></button>`}</div></div>`;
+  h += genLevelHtml();
   h += genSplitHtml(n, st ? st.sec : V) + (st ? "" : genSpecHtml(V));
   h += `<div class="o-sec"><div class="o-label">Tempo e volume</div><div class="o-seg" style="margin-top:8px">${GEN_VOL.map(([v, l]) => `<button class="${V === v ? "on" : ""}" data-act="genVol" data-v="${v}" ${allowed.some(a => a[0] === v) ? "" : "disabled"}>${l}</button>`).join("")}</div>
     <p class="small muted">${esc(GEN_VOL.find(x => x[0] === V)[2])}. Più serie danno più crescita ma ogni serie in più rende meno: il libro consiglia di partire nella fascia che puoi sostenere e di aggiungere serie solo se ti fermi pur dormendo, mangiando e recuperando bene.${n < 4 ? ` Con ${n} sedute i volumi più alti renderebbero le sedute troppo lunghe.` : ""}${st ? ` Con Forza ed Entrambi vale per i complementari della fase di volume (almeno 10 serie, 16 con Entrambi); nelle fasi di carico e picco il libro li riduce.` : ""}</p>
@@ -4205,6 +4229,7 @@ function act(a, d, e){
     case "genSpecPick": { const g = {...(S.settings.gen || {})}; let a = (g.specSel || []).slice(); a = a.includes(d.v) ? a.filter(x => x !== d.v) : a.concat([d.v]).slice(-2); g.specSel = a; S.settings.gen = g; render(); break; }
     case "genSpecStart": { const g = {...(S.settings.gen || {})}; g.spec = {m:(g.specSel || []).slice(0, 2), start:mondayStr(todayStr())}; g.specSel = []; S.settings.gen = g; pushMeta(); render(); break; }
     case "genSpecStop": if(confirm("Tornare alla fase bilanciata?")){ const g = {...(S.settings.gen || {})}; g.spec = null; S.settings.gen = g; pushMeta(); render(); } break;
+    case "genLevel": S.settings.level = d.v; S.settings.levelChosen = true; pushMeta(); render(); break;
     case "genGoal": S.settings.gen = {...(S.settings.gen || {}), goal:d.v}; pushMeta(); render(); break;
     case "genVol": S.settings.gen = {...(S.settings.gen || {}), vol:Number(d.v)}; pushMeta(); render(); break;
     case "deloadCheck": showSheet(deloadCheckHtml()); break;
