@@ -85,7 +85,7 @@
   function exportBackup(){ A.saveFile(`trainup-backup-${todayStr()}.json`, JSON.stringify(backupObj())); }
 
   // --- backup automatico in una cartella del telefono: un file al giorno, gli ultimi 14 ---
-  const AUTO_LAST = "ripresa.autob.last", AUTO_DIRTY = "ripresa.autob.dirty", AUTO_KEEP = 14;
+  const AUTO_LAST = "ripresa.autob.last", AUTO_DIRTY = "ripresa.autob.dirty", AUTO_KEEP = 5;
   let autoDir = ""; try{ autoDir = A.backupDirName ? A.backupDirName() : ""; }catch(e){}
   let autoTimer = null;
   const lsGet = k => { try{ return localStorage.getItem(k); }catch(e){ return null; } }, lsSet = (k, v) => { try{ localStorage.setItem(k, v); }catch(e){} };
@@ -106,6 +106,7 @@
     let last = 0; try{ last = Number(localStorage.getItem(LASTB) || 0); }catch(e){}
     const days = last ? Math.floor((Date.now() - last) / 864e5) : null;
     const autoLast = Number(lsGet(AUTO_LAST) || 0);
+    const when = t => { const d = new Date(t), today = new Date(); const dd = Math.round((new Date(today.toDateString()) - new Date(d.toDateString())) / 864e5); const hm = d.toLocaleTimeString("it-IT", {hour:"2-digit", minute:"2-digit"}); return dd === 0 ? "oggi " + hm : dd === 1 ? "ieri " + hm : d.toLocaleDateString("it-IT", {day:"numeric", month:"short"}); };
     const sec = `<div class="o-sec" id="appDati"><div class="o-label">App e dati</div>
       <div class="o-list" style="margin-top:4px"><div class="o-row" style="cursor:default"><span class="n">Versione installata</span><span class="p"><b style="color:var(--ink)">${esc(ver)}</b></span></div>
       ${i && i.available ? `<div class="o-row" style="cursor:default"><span class="n">Disponibile</span><span class="p"><b style="color:var(--ink)">${esc(i.version)}</b></span></div>` : ""}</div>
@@ -113,17 +114,14 @@
       ${U.progress != null ? `<div class="updbar" style="margin-top:8px"><i style="width:${U.progress}%"></i></div>` : ""}
       ${U.msg ? `<p class="small muted" style="margin-top:6px">${esc(U.msg)}</p>` : ""}
       <div class="o-label" style="margin-top:18px">Backup</div>
-      <p class="small" style="margin-top:6px">${last ? `Ultimo backup: <b>${days === 0 ? "oggi" : days === 1 ? "ieri" : days + " giorni fa"}</b>.` : "Nessun backup salvato da questo telefono."}${days != null && days > 30 ? " È passato più di un mese: conviene farne uno nuovo." : ""}</p>
-      <p class="small muted" style="margin-top:6px">I dati stanno su questo telefono. Il backup è un file che salvi dove vuoi (Download, Google Drive): se disinstalli l'app o cambi telefono, lo riapri con Ripristina. Le tue foto e i tuoi video degli esercizi non sono nel file.</p>
-      <div class="row" style="margin-top:10px"><button class="btn" data-aact="export">Salva backup</button><button class="btn ghost" data-aact="import">Ripristina</button></div>
-      ${U.bmsg ? `<p class="small muted" style="margin-top:6px">${esc(U.bmsg)}</p>` : ""}
-      <div class="o-label" style="margin-top:18px">Backup automatico</div>
-      ${autoDir ? `<p class="small" style="margin-top:6px">Cartella: <b>${esc(autoDir)}</b>. ${autoLast ? `Ultimo: <b>${esc(new Date(autoLast).toLocaleString("it-IT", {day:"numeric", month:"short", hour:"2-digit", minute:"2-digit"}))}</b>.` : "Nessun backup ancora."}</p>
-        <p class="small muted" style="margin-top:6px">Dopo ogni modifica (un allenamento, una misura, un'impostazione) l'app salva il file del giorno in questa cartella e tiene gli ultimi ${AUTO_KEEP}. Per ripristinare usa Ripristina e scegli uno di quei file.</p>
-        <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:8px"><button class="btn sm" data-aact="autoNow">Fai il backup ora</button><button class="btn sm ghost" data-aact="autoDir">Cambia cartella</button><button class="btn sm ghost" data-aact="autoOff" style="color:var(--danger)">Disattiva</button></div>`
-        : `<p class="small muted" style="margin-top:6px">Scegli una cartella del telefono (per esempio una nuova cartella "TrainUP" in Documenti): l'app ci salverà da sola un backup ogni giorno in cui cambi qualcosa, tenendo gli ultimi ${AUTO_KEEP}. Il file non è cifrato e contiene anche peso e misure: scegli una cartella tua.</p>
-        <button class="btn sm" data-aact="autoDir" style="margin-top:10px">Scegli la cartella</button>`}
-      ${U.amsg ? `<p class="small" style="margin-top:6px;color:var(--warn)">${esc(U.amsg)}</p>` : ""}</div>`;
+      <div class="o-list" style="margin-top:4px">
+        <button class="o-row" data-aact="autoDir"><span class="n">Automatico<small>${autoDir ? esc(autoDir) + " · ultimi " + AUTO_KEEP : "Scegli una cartella del telefono"}</small></span><span class="p">${autoDir ? (autoLast ? esc(when(autoLast)) : "attivo") : "spento"} ›</span></button>
+        <button class="o-row" data-aact="export"><span class="n">Manuale<small>Un file dove vuoi tu (Download, Drive)</small></span><span class="p">${last ? esc(when(last)) : "mai"} ›</span></button>
+      </div>
+      <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:8px">${autoDir ? `<button class="btn sm" data-aact="autoNow">Salva ora</button>` : ""}<button class="btn sm ${autoDir ? "ghost" : ""}" data-aact="import">Ripristina</button>${autoDir ? `<button class="btn sm ghost" data-aact="autoOff" style="color:var(--danger)">Disattiva</button>` : ""}</div>
+      ${U.amsg || U.bmsg ? `<p class="small" style="margin-top:6px;color:${U.amsg ? "var(--warn)" : "var(--muted)"}">${esc(U.amsg || U.bmsg)}</p>` : ""}
+      <p class="tiny muted" style="margin-top:6px">${autoDir ? "Si salva da solo dopo ogni modifica." : "Il file contiene programma, allenamenti e misure."} Foto e video degli esercizi esclusi.</p>
+    </div>`;
     const k = h.indexOf('<div class="o-sec" id="appDati">');
     return k >= 0 ? h.slice(0, k) + sec : h + sec;
   };
