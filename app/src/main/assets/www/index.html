@@ -617,9 +617,42 @@ const EX = {
   pallof:{n:"Pallof press", step:2.5, inc:2.5, unit:"cavo o elastico", side:"per lato", yt:"pallof press", src:GEN,
     how:["Di fianco al cavo, maniglia al petto con due mani.","Distendi le braccia davanti a te senza lasciare che il busto ruoti verso il cavo, poi torna."],
     err:["Busto che ruota."]},
-  plank:{n:"Plank", step:0, inc:0, unit:"corpo libero", yt:"plank tecnica", src:"PE2 pp. 129-130", bw:true,
+  plank:{n:"Plank", step:0, inc:0, unit:"corpo libero", yt:"plank tecnica", src:"PE2 pp. 129-130; Neri, Project Calisthenics, pp. 409-410; Low, Overcoming Gravity, cap. 27 (plank: 25 s livello 2, 60 s livello 3)", bw:true, goal:60, ladP:p => coreTime(p),
     how:["Avambracci a terra sotto le spalle, corpo in linea: spalle, tronco e bacino allineati.", "Zona lombare piatta (bacino leggermente in retroversione), addominali e glutei contratti, respira normalmente."],
     err:["Schiena che si inarca e bacino che cede verso il basso.", "Bacino troppo alto."]},
+  plankAvanzato:{n:"Plank con i gomiti avanti", step:0, inc:0, unit:"corpo libero", yt:"long lever plank", src:"Neri, Project Calisthenics, pp. 409-410", bw:true, goal:60, ladP:p => coreTime(p),
+    how:["Come il plank, ma con i gomiti più avanti rispetto alle spalle: aumenta la distanza fra gli appoggi e quindi la difficoltà.","Spalle che spingono via il pavimento (protratte e abbassate), bacino in retroversione, addome contratto."],
+    err:["Lasciarsi andare sugli appoggi.","Schiena che si inarca."]},
+  supermanHold:{n:"Superman hold (long hollow)", step:0, inc:0, unit:"corpo libero", yt:"long hollow hold", src:"Neri, Project Calisthenics, p. 410", bw:true, ladP:p => coreTime(p),
+    how:["Una specie di plank con le braccia tese e distese davanti a te, mani a terra.","Più le mani sono vicine e il corpo è alto, più è facile; allontanale e avvicinati al suolo per renderlo più difficile.","Bacino in retroversione per tutta la tenuta."],
+    err:["Inarcare la zona lombare.","Spalle che crollano."]},
+  barchettaRaccolta:{n:"Barchetta raccolta", step:0, inc:0, unit:"corpo libero", yt:"tuck hollow body hold", src:"Neri, Project Calisthenics, pp. 407-408", bw:true, goal:60, ladP:p => coreTime(p),
+    how:["Supino, ginocchia raccolte verso il petto, braccia lungo i fianchi.","Contrai l'addome e solleva spalle e gambe da terra, spalle in avanti e in basso.","La zona lombare resta schiacciata a terra (bacino in retroversione), pancia in dentro."],
+    err:["Lombare che si stacca da terra.","Tirare con il collo."]},
+  barchetta:{n:"Barchetta (hollow hold)", step:0, inc:0, unit:"corpo libero", yt:"hollow body hold tecnica", src:"Neri, Project Calisthenics, pp. 407-409", bw:true, goal:60, ladP:p => coreTime(p),
+    how:["Come la barchetta raccolta, ma con le gambe tese, braccia lungo i fianchi.","Gambe il più vicino possibile al pavimento senza che la lombare si stacchi: se si stacca, alzale un po' di più.","Passaci quando tieni la versione raccolta per un minuto abbondante, fatta bene."],
+    err:["Lombare che si inarca.","Spalle appoggiate a terra."]},
+  barchettaBraccia:{n:"Barchetta con le braccia dietro la testa", step:0, inc:0, unit:"corpo libero", yt:"hollow body hold arms overhead", src:"Neri, Project Calisthenics, pp. 408-409", bw:true, ladP:p => coreTime(p),
+    how:["La barchetta completa con le braccia distese oltre la testa.","Solo se hai buona mobilità delle spalle: altrimenti la versione con le braccia lungo i fianchi allena l'addome altrettanto bene."],
+    err:["Spalle troppo alte o lombare che si stacca."]},
+  lsitRaccolta:{n:"L-sit raccolta", step:0, inc:0, unit:"corpo libero", yt:"tuck l-sit tecnica", src:"Neri, Project Calisthenics, p. 413; Low, Overcoming Gravity, cap. 25 (Tuck L-Sit, livello 1)", bw:true, goal:30, ladP:p => coreTime(p, true),
+    how:["Mani a terra accanto ai fianchi (meglio su due sedie, libri o parallette), braccia tese.","Spingi e solleva il corpo, ginocchia raccolte al petto; spalle in avanti e abbassate, lontane dalle orecchie.","Obiettivo del livello: circa 30 secondi."],
+    err:["Spalle che salgono verso le orecchie.","Braccia piegate."]},
+  lsitUnaGamba:{n:"L-sit a una gamba", step:0, inc:0, unit:"corpo libero", side:"per gamba", yt:"one leg l-sit", src:"Neri, Project Calisthenics, p. 413; Low, Overcoming Gravity, cap. 25 (One-Leg-Bent L-Sit, livello 2)", bw:true, goal:30, ladP:p => coreTime(p, true),
+    how:["Dalla L-sit raccolta distendi una gamba in avanti, parallela al pavimento.","Una serie per gamba con il recupero in mezzo, non una gamba dopo l'altra senza pausa.","Obiettivo del livello: circa 30 secondi per gamba."],
+    err:["Gamba tesa che scende.","Crampi: normali all'inizio; massaggia e riprova da fresco."]},
+  lsit:{n:"L-sit", step:0, inc:0, unit:"corpo libero", yt:"l-sit tecnica", src:"Neri, Project Calisthenics, pp. 413-414; Low, Overcoming Gravity, cap. 25 (L-Sit, livello 3)", bw:true, ladP:p => coreTime(p, true),
+    how:["In appoggio sulle mani, entrambe le gambe tese e parallele al pavimento.","Spalle protratte e abbassate, braccia tese.","Oltre i 20 secondi puoi aggiungere delle cavigliere. Servono femorali abbastanza flessibili."],
+    err:["Gambe che scendono sotto l'orizzontale.","Ginocchia piegate."]},
+  legRaiseRaccolte:{n:"Sollevamento delle gambe raccolte alla sbarra", step:0, inc:0, unit:"corpo libero", yt:"hanging knee raise", src:"Neri, Project Calisthenics, pp. 411-412", bw:true,
+    how:["Appeso alla sbarra, porta le ginocchia a formare un angolo di 90° con il busto.","Scendi controllando, senza dondolare."],
+    err:["Slanciarsi con le gambe.","Spalle completamente rilassate."]},
+  legRaiseParallelo:{n:"Sollevamento delle gambe tese al parallelo", step:0, inc:0, unit:"corpo libero", yt:"hanging leg raise to parallel", src:"Neri, Project Calisthenics, p. 412", bw:true,
+    how:["Appeso alla sbarra, porta le gambe tese parallele al pavimento (una L-sit alla sbarra), poi scendi.","Se i femorali sono rigidi faticherai a tenerle tese: allungali e intanto rinforza l'addome.","Prima del leg raise completo: circa 30 ripetizioni facili e 20 secondi di L-sit da appeso."],
+    err:["Piegare le ginocchia.","Dondolare."]},
+  legRaise:{n:"Leg raise alla sbarra", step:0, inc:0, unit:"corpo libero", yt:"hanging leg raise toes to bar", src:"Neri, Project Calisthenics, p. 412", bw:true,
+    how:["Da appeso, gambe tese, porta i piedi a toccare la sbarra in un solo movimento.","All'inizio arriva più in alto che puoi: la forza per toccare si costruisce un po' alla volta.","Niente slancio (kipping): toglie forza alla parte iniziale."],
+    err:["Usare lo slancio.","Lasciarsi cadere in discesa."]},
   crunch:{n:"Crunch", step:0, inc:0, unit:"corpo libero", yt:"crunch addominali tecnica", src:"PE2 pp. 29-31, 104-108", bw:true,
     how:["Sdraiato, ginocchia piegate, mani incrociate sul petto o alla nuca senza tirare la testa.", "Bacino in leggera retroversione (zona lombare a terra) per tutta la ripetizione.", "Solleva le spalle arrotolando il busto, poi torna giù lentamente."],
     err:["Perdere la retroversione e finire il movimento con le anche.", "Tirare il collo con le mani."]},
@@ -772,7 +805,8 @@ const P = {
   pyr:(reps,rest) => ({t:"pyr",reps,rest}),
   emom:(min,reps) => ({t:"emom",min,reps,rm:12}),
   time:(sets,sec,rest) => ({t:"time",sets,sec,rest}),
-  test:() => ({t:"test",rest:60})
+  test:() => ({t:"test",rest:60}),
+  max:(upper, exp, extra) => ({t:"max", upper, exp, rest:300, ...extra})
 };
 function prescText(p, ex){
   const side = ex && ex.side ? " " + ex.side : "";
@@ -784,6 +818,7 @@ function prescText(p, ex){
     case "emom": return `${p.min} minuti: all'inizio di ogni minuto fai ${p.reps} ripetizioni, poi riposi fino allo scoccare del minuto successivo. Peso che sollevi al massimo 12 volte.`;
     case "time": return `${p.sets} serie da ${p.sec} secondi.`;
     case "test": return "Test: cerca il peso massimo con cui fai 8 ripetizioni pulite, poi 2-5 serie da 8 con il 10% in meno.";
+    case "max": return "Test del massimale: riscaldamento progressivo, poi tentativi singoli fino al peso più alto sollevato con buona tecnica.";
   }
   return "";
 }
@@ -860,7 +895,7 @@ function buildSession(pos, s){
       title = ["Giornata pesante","Giornata media","Giornata di volume"][slot];
     }
   }
-  { const pg = postureGymBlocks(); blocks = pg.pre.concat(blocks).concat(pg.end); }
+  { const pg = postureGymBlocks(); blocks = pg.pre.concat(blocks).concat(coreBlocks()).concat(pg.end); }
   if(pos.learn) blocks = learnVersion(blocks);
   return applyLadders(applyHome(applyVariants(applySwaps({code, title, kind:k, phase:PHASES[k], blocks}, s), pos)));
 }
@@ -974,7 +1009,7 @@ function genVolume(week){ // serie a settimana per muscolo con il conteggio fraz
 function buildGenSession(pos, s){
   const ph = genPhase(pos.week), wk = genWeek(genGoal() === "massa" ? pos.week === 1 : ph.k === "vol" && ph.i === 1, pos.week); const x = wk[pos.slot % wk.length];
   let blocks = x.items.map(it => ({type:"single", items:[{ex:it.ex, p:it.p}]}));
-  { const pg = postureGymBlocks(); blocks = pg.pre.concat(blocks).concat(pg.end); }
+  { const pg = postureGymBlocks(); blocks = pg.pre.concat(blocks).concat(coreBlocks()).concat(pg.end); }
   return applyLadders(applyHome(applySwaps({code:x.code, title:x.title, kind:"gen", phase:{name:"Programma su misura", short:"Su misura", desc:""}, blocks}, s)));
 }
 /* ============ Project Strength: il "Faleev 2.0" (Ferlito, Project Strength, Project Invictus 2016, cap. VI) ============ */
@@ -995,7 +1030,7 @@ function fsInc(l){ return l === "panca" ? 2.5 : 5; }
 function fsSessions(c){ return programSessions().filter(x => x.pos && x.pos.fs && x.pos.c === c); }
 function fsEntries(c, l, role){ const out = []; for(const x of fsSessions(c)) for(const e of (x.ex || [])) if(e.key === l && e.p && e.p.fs && e.p.fs.r === role && !e.p.fs.dl) out.push(e); return out; }
 function fsRM(l, c){ // massimale di riferimento del ciclo
-  if(c > 1){ for(const x of fsSessions(c - 1).reverse()) for(const e of (x.ex || [])) if(e.key === l && e.p && e.p.fs && e.p.fs.r === "test"){ const kg = Math.max(...e.sets.filter(z => z.kg != null && z.reps >= 1).map(z => z.kg)); if(kg > 0) return {kg, why:"test di fine ciclo"}; } }
+  if(c > 1){ for(const x of fsSessions(c - 1).reverse()) for(const e of (x.ex || [])) if(e.key === l && e.p && e.p.fs && e.p.fs.r === "test"){ const kg = e.kg1 || Math.max(0, ...e.sets.filter(z => z.kg != null && z.reps === 1).map(z => z.kg)); if(kg > 0) return {kg, why:"test di fine ciclo"}; } }
   const u = (S.settings.fsRm || {})[l]; if(u > 0) return {kg:u, why:"massimale che hai inserito"};
   let best = 0; for(const x of history(l).filter(x => !(x.e.p && x.e.p.fs)).slice(-6)) for(const z of x.e.sets) if(z.kg != null && z.reps > 0 && z.reps <= 12){ const r = z.reps + (z.rir != null && z.rir !== "" ? Number(z.rir) : 0); best = Math.max(best, e1rm(z.kg, Math.min(r, 15))); }
   return best ? {kg:Math.round(best), why:"stima dalle tue ultime sedute"} : null;
@@ -1025,7 +1060,7 @@ function buildFsSession(pos, s){
   if(pos.test){
     code = "T" + pos.test;
     if(pos.test < 3){ title = "Scarico prima del test"; for(const l of [leg, "panca", "stacco"]){ const rm = fsRM(l, c); blocks.push(single(l, rx(l, "scarico", 2, 5, rm ? roundStep(rm.kg * 0.6, EX[l].step || 2.5) : null, "facoltativo: un paio di serie intorno al 60%, al massimo 5 ripetizioni (oppure riposo)"))); } }
-    else { title = "Test dei massimali"; for(const l of [leg, "panca", "stacco"]) blocks.push(single(l, P.range(1, 1, 1, "0", 300, {note:"riscaldamento: 1-2×10 al 10-30%, 5 al 40%, 3 al 50%, 3 al 60%, 2×2 al 70%, 2×1 all'80%, 1 al 90%, poi il test. Recuperi ampi, almeno 5 minuti verso la fine", fs:{l, r:"test"}}))); }
+    else { title = "Test dei massimali"; for(const l of [leg, "panca", "stacco"]){ const rm = fsRM(l, c); let ex1 = rm ? rm.kg : 0; for(const e of fsEntries(c, l, "s")) for(const z of e.sets) if(z.kg != null && z.reps > 0 && z.reps <= 10) ex1 = Math.max(ex1, e1rm(z.kg, z.reps)); blocks.push(single(l, P.max(l === "panca", ex1 ? roundStep(ex1, EX[l].step || 2.5) : null, {fs:{l, r:"test"}}))); } }
   } else {
     const dl = fsWeekIsDeload(pos.week), sl = pos.slot % 4, acc = s.fsAcc !== false && !dl;
     const sq = fsState(leg, c), be = fsState("panca", c), de = fsState("stacco", c);
@@ -1041,7 +1076,7 @@ function buildFsSession(pos, s){
     if(dl) title += " · scarico";
   }
   const pg = postureGymBlocks();
-  return applyLadders(applyHome(applySwaps({code, title, kind:"fs", phase:{name:phaseName, short:"Project Strength", desc:""}, blocks:pg.pre.concat(blocks).concat(pg.end)}, s)));
+  return applyLadders(applyHome(applySwaps({code, title, kind:"fs", phase:{name:phaseName, short:"Project Strength", desc:""}, blocks:pg.pre.concat(blocks).concat(pos.test ? [] : coreBlocks()).concat(pg.end)}, s)));
 }
 function fsNext(onDate){
   const lg = [...programSessions()].reverse().find(x => x.pos && x.pos.fs);
@@ -1156,7 +1191,7 @@ function postureGymBlocks(){
 const EQUIP = [["m","Manubri"],["pa","Panca"],["sb","Sbarra per trazioni"],["an","Anelli o TRX"],["el","Elastici"],["bil","Bilanciere e rack"],["rul","Rullo (foam roller)"]];
 const REQ = {gobletSquat:["m"], squat:["bil"], splitSquat:["m"], affondiCamminati:["m"], splitSquatCorpo:[], affondiCorpo:[], alzateProno:["m"], diagManubrio:["m"], mobRullo:["rul"], pancaManubri:["m","pa"], panca:["bil","pa"], pancaInclinataManubri:["m","pa"], pancaStretta:["bil","pa"],
   piegamenti:[], military:["bil"], lentoManubri:["m"], alzateLaterali:["m"], trazioni:["sb"], rematoreManubrio:["m"], rematoreBil:["bil"], stacco:["bil"], rdlManubri:["m"], rdl:["bil"],
-  curlEZ:["bil"], curlManubri:["m"], curlMartello:["m"], tricipitiOverheadManubrio:["m"], deadBug:[], plank:[], crunch:[], crunchInverso:[], squatCorpo:[],
+  curlEZ:["bil"], curlManubri:["m"], curlMartello:["m"], tricipitiOverheadManubrio:["m"], deadBug:[], plank:[], plankAvanzato:[], supermanHold:[], barchettaRaccolta:[], barchetta:[], barchettaBraccia:[], lsitRaccolta:[], lsitUnaGamba:[], lsit:[], legRaiseRaccolte:["sb"], legRaiseParallelo:["sb"], legRaise:["sb"], crunch:[], crunchInverso:[], squatCorpo:[],
   piegamentiFacili:[], piegamentiStretti:[], archerPushup:[], pikePushup:[], pikeRialzato:[], hspuNegativo:[], trazioniSaltate:["sb"], trazioniNegative:["sb"], trazioniLsit:["sb"], rematoreAnelliFacile:["an"], rematoreAnelli:["an"], rematoreAnelliLargo:["an"], rematoreArcher:["an"], squatLibero:[], archerSquat:[], bulgarianCorpo:[], pistolBoxAssistito:[], pistolAssistito:[], pistolBox:[], pistol:[],
   rematoreElastico:["el"], latElastico:["el"], alzateLateraliElastico:["el"], curlElastico:["el"], pushdownElastico:["el"], stabElastico:["el"], pallof:["el"]};
 const HOME_ALT = {
@@ -1192,21 +1227,37 @@ const LADDERS = {
   verticale:{n:"Spinta verticale", steps:["pikePushup","pikeRialzato","hspuNegativo"]},
   trazioni:{n:"Trazioni", steps:["trazioniSaltate","trazioniNegative","trazioni","trazioniLsit"]},
   rematore:{n:"Rematore a corpo libero", steps:["rematoreAnelliFacile","rematoreAnelli","rematoreAnelliLargo","rematoreArcher"]},
-  gambe:{n:"Gambe a corpo libero", steps:["squatLibero","archerSquat","splitSquatCorpo","bulgarianCorpo","pistolBoxAssistito","pistolAssistito","pistolBox","pistol"]}
+  gambe:{n:"Gambe a corpo libero", steps:["squatLibero","archerSquat","splitSquatCorpo","bulgarianCorpo","pistolBoxAssistito","pistolAssistito","pistolBox","pistol"]},
+  plank:{n:"Plank", steps:["plank","plankAvanzato","supermanHold"]},
+  barchetta:{n:"Barchetta", steps:["barchettaRaccolta","barchetta","barchettaBraccia"]},
+  lsit:{n:"L-sit", steps:["lsitRaccolta","lsitUnaGamba","lsit"]},
+  legraise:{n:"Leg raise alla sbarra", steps:["legRaiseRaccolte","legRaiseParallelo","legRaise"]}
 };
+// tenute a tempo: plank e barchetta 30-60 s (Overcoming Gravity, cap. 17, esercizi di posizione); L-sit 60 s in totale in quante serie servono, mai a cedimento (cap. 17).
+// Come dividere i 60 s della L-sit (3 da 20) è una scelta dell'app.
+function coreTime(p, lsit){ if(p && p.t === "time" && !!p.lsit === !!lsit) return p; return lsit ? {t:"time", sets:3, sec:20, rest:60, lsit:true, note:"60 secondi in totale, mai a cedimento"} : {t:"time", sets:2, sec:30, rest:60, lsit:false}; }
+function coreBlocks(){ // addominali a corpo libero a fine seduta (facoltativi)
+  if(!S.settings.core) return [];
+  const one = (ex, p) => ({type:"single", sec:"main", items:[{ex, p}]});
+  const b = [one("lsitRaccolta", coreTime(null, true)), one("barchettaRaccolta", coreTime(null)), one("plank", coreTime(null))];
+  if(ladAvail("legRaiseRaccolte")) b.push(one("legRaiseRaccolte", P.range(3, 8, 12, "2", 60)));
+  return b;
+}
 const LAD_OF = {}; for(const [id, L] of Object.entries(LADDERS)) L.steps.forEach((k, i) => LAD_OF[k] = {id, i});
 function ladLevel(id, fallback){ const v = (S.settings.lad || {})[id]; return v != null && LADDERS[id].steps[v] ? v : fallback; }
 function ladAvail(k){ return !atHome() || !REQ[k] || REQ[k].every(e => (S.settings.equip||[]).includes(e)); }
 function applyLadders(sess){ // l'esercizio a corpo libero diventa il livello scelto dall'utente nella sua progressione
   sess.blocks.forEach(b => b.items.forEach(it => { const lo = LAD_OF[it.ex]; if(!lo) return; const L = LADDERS[lo.id].steps; let i = ladLevel(lo.id, lo.i);
-    while(i > 0 && !ladAvail(L[i])) i--; const k = L[i]; if(k === it.ex) return;
+    while(i > 0 && !ladAvail(L[i])) i--; const k = L[i]; if(k === it.ex){ if(EX[k].ladP) it.p = EX[k].ladP(it.p); return; }
     it.ladOf = it.ladOf || it.ex; it.ex = k; if(!it.origP) it.origP = it.p; it.p = EX[k].ladP ? EX[k].ladP(it.origP) : it.origP; }));
   return sess;
 }
 function bwHistory(k){ const out = []; for(const sess of doneSessions()) for(const e of (sess.ex||[])) if(e.key === k && e.sets && e.sets.some(z => z.reps != null)) out.push(e); return out; }
 function ladAdvice(k, p){ // dopo l'ultima seduta con questo livello: in cima all'intervallo in tutte le serie → livello successivo
   const lo = LAD_OF[k]; if(!lo) return null; const L = LADDERS[lo.id].steps, next = L[lo.i + 1];
-  const h = bwHistory(k), last = h[h.length - 1]; if(!last || last.p.t !== "range") return null;
+  const h = bwHistory(k), last = h[h.length - 1]; if(!last) return null;
+  if(last.p.t === "time"){ const g = EX[k].goal, best = Math.max(...last.sets.map(z => z.reps || 0)); return next && g && best >= g ? {up:true, next, msg:`L'ultima volta hai tenuto ${best} secondi: l'obiettivo di questo livello è circa ${g}. Puoi passare a "${EX[next].n}" (tocca Livello).`} : null; }
+  if(last.p.t !== "range") return null;
   const sets = last.sets.filter(z => z.reps != null), top = last.p.rmax;
   if(next && sets.length >= last.p.sets && sets.every(z => z.reps >= top)) return {up:true, next, msg:`L'ultima volta hai fatto ${top} ripetizioni in tutte le serie: puoi passare a "${EX[next].n}" (tocca Livello).`};
   return null;
@@ -1424,7 +1475,7 @@ const EXG = {
   latMachine:"back", trazioni:"back", trazioniSaltate:"back", trazioniNegative:"back", trazioniLsit:"back", rematoreAnelliFacile:"back", rematoreAnelli:"back", rematoreAnelliLargo:"back", rematoreArcher:"back", pulley:"back", rowMachine:"back", rematoreManubrio:"back", rematoreBil:"back", pulldown:"back", latPresaStretta:"back",
   military:"shoulders", lentoManubri:"shoulders", shoulderPress:"shoulders", alzateLaterali:"shoulders", facePull:"shoulders", alzateLateraliCavo:"shoulders",
   curlEZ:"arms", curlManubri:"arms", curlMartello:"arms", frenchPress:"arms", pushdown:"arms", curlCavo:"arms", curlScott:"arms", tricipitiOverheadCavo:"arms", tricipitiOverheadManubrio:"arms",
-  deadBug:"core", pallof:"core", plank:"core", crunch:"core", crunchInverso:"core", backExt:"core",
+  deadBug:"core", pallof:"core", plank:"core", plankAvanzato:"core", supermanHold:"core", barchettaRaccolta:"core", barchetta:"core", barchettaBraccia:"core", lsitRaccolta:"core", lsitUnaGamba:"core", lsit:"core", legRaiseRaccolte:"core", legRaiseParallelo:"core", legRaise:"core", crunch:"core", crunchInverso:"core", backExt:"core",
   cardioLeggero:"warm", legSwing:"warm", worldsGreatest:"warm", squatCorpo:"warm", hingeBastone:"warm", rotBraccia:"warm", dislocazioni:"warm", pushupScapolari:"warm",
   rematoreElastico:"back", latElastico:"back", alzateLateraliElastico:"shoulders", curlElastico:"arms", pushdownElastico:"arms",
   allineamentoCerv:"post", estensoriCerv:"post", stretchCollo:"post", ritornoEstensione:"post", rotazioneCerv:"post", mobToracica:"post", stabRitmiche:"post", plankPlus:"post", propScapPalla:"post", stabElastico:"post", sleeper:"post", mobRullo:"post", diagManubrio:"post",
@@ -1444,6 +1495,7 @@ function shortP(p, ex){
     case "emom": return `EMOM ${p.min}′ · ${p.reps} rip/min`;
     case "time": return `${p.sets} × ${p.sec}″${side}`;
     case "test": return "Test 8RM + richiamo";
+    case "max": return "Test del massimale";
   }
   return "";
 }
@@ -1454,11 +1506,12 @@ function estMinutes(blocks, withWarm){
     const p = it.p;
     if(p.t === "emom") s += p.min*60 + 90;
     else if(p.t === "test") s += 11*60;
+    else if(p.t === "max") s += 20*60;
     else { const n = p.t === "pyr" ? p.reps.length : p.sets; const work = p.t === "time" ? p.sec : 40; s += n*(work + (b.type === "js" ? (b.rest||60)/2 : (p.rest||60))); }
   }
   return Math.round(s/60/5)*5;
 }
-function countSets(blocks){ return blocks.reduce((a,b) => a + b.items.reduce((c,it) => c + (it.p.t==="pyr" ? it.p.reps.length : it.p.t==="emom" || it.p.t==="test" ? 1 : it.p.sets), 0), 0); }
+function countSets(blocks){ return blocks.reduce((a,b) => a + b.items.reduce((c,it) => c + (it.p.t==="pyr" ? it.p.reps.length : it.p.t==="emom" || it.p.t==="test" || it.p.t==="max" ? 1 : it.p.sets), 0), 0); }
 const svgI = {
   logo:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 9v14M24 9v14M4 13v6M28 13v6M8 16h16"/></svg>',
   oggi:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3 9.5v5M21 9.5v5M6.5 12h11"/></svg>',
@@ -2237,8 +2290,10 @@ function profileSheetHtml(){ const p = S.profile || {}; const a = ageNow();
     <div class="bf-grid"><label class="bf-in"><span>Età</span><span class="bf-f"><input type="text" inputmode="numeric" id="pfAge" value="${a ?? ""}"><em>anni</em></span></label><label class="bf-in"><span>Altezza</span><span class="bf-f"><input type="text" inputmode="decimal" id="pfH" value="${p.height ?? ""}"><em>cm</em></span></label></div>
     <button class="btn primary big" data-act="saveProfile">Salva</button></div>`; }
 function programChoiceHtml(){
-  return `<div class="o-sec first"><div class="o-label">Programma</div><div class="o-seg" style="margin-top:8px">${[["liparoti","Project BB"],["faleev","Project Strength"],["principi","Su misura"]].map(([k, l]) => `<button class="${(S.settings.program || "liparoti") === k ? "on" : ""}" data-act="setProgram" data-v="${k}">${l}</button>`).join("")}</div>
-    <p class="small muted">${fsOn() ? "Il \"Faleev 2.0\" di <i>Project Strength</i> (Ferlito, Project Invictus): forza su squat, panca e stacco in 4 sedute a settimana, con pesi che salgono da soli." : genOn() ? "Costruito dall'app con le regole di <i>The Muscle and Strength Pyramid</i> (Helms e colleghi): serie, ripetizioni ed esercizi si adattano ai tuoi giorni e al tempo che hai." : "Il programma in tre fasi con i test, da <i>Project Bodybuilding</i> di Liparoti e dai manuali di Project Invictus."}</p></div>`;
+  const pr = S.settings.program || "liparoti", pi = pr !== "principi";
+  return `<div class="o-sec first"><div class="o-label">Programma</div><div class="o-seg" style="margin-top:8px">${[["pi","Project Invictus", pi],["principi","Su misura", !pi]].map(([k, l, on]) => `<button class="${on ? "on" : ""}" data-act="setProgram" data-v="${k}">${l}</button>`).join("")}</div>
+    ${pi ? `<div class="o-label" style="margin-top:14px">Scheda</div><div class="o-seg" style="margin-top:8px">${[["liparoti","Bodybuilding"],["faleev","Forza"]].map(([k, l]) => `<button class="${pr === k ? "on" : ""}" data-act="setProgram" data-v="${k}">${l}</button>`).join("")}</div>` : ""}
+    <p class="small muted">${fsOn() ? "Il \"Faleev 2.0\" di <i>Project Strength</i> (Ferlito): forza su squat, panca e stacco in 4 sedute a settimana, con pesi che salgono da soli." : genOn() ? "Costruito dall'app con le regole di <i>The Muscle and Strength Pyramid</i> (Helms e colleghi): serie, ripetizioni ed esercizi si adattano ai tuoi giorni e al tempo che hai." : "Il programma in tre fasi con i test, da <i>Project Bodybuilding</i> di Liparoti e dai manuali di Project Invictus."}</p></div>`;
 }
 function deloadCheckHtml(){ // tabella 3.2 di The Muscle and Strength Pyramid: Training
   const Q = ["Hai poca voglia di andare in palestra?", "Dormi peggio del solito?", "Pesi o ripetizioni con lo stesso peso in calo rispetto al ciclo precedente?", "Stress più alto del solito?", "Dolori e acciacchi più del solito?"];
@@ -2290,7 +2345,7 @@ function renderGenProgramma(){
     <p class="tiny muted" style="margin-top:6px">Serie a settimana contate come nel libro: intere per il muscolo principale, mezze per quelli secondari (per esempio i tricipiti nella panca).</p></div>`;
   h += `<div class="o-sec"><div class="o-label">Le sedute della settimana</div>${wk.map(x => { const sess = buildGenSession({gen:true, week:cw, slot:wk.indexOf(x)}, s); return `<details class="wk" ${pos.gen && pos.slot === wk.indexOf(x) ? "open" : ""}><summary><span>${esc(x.code)} · ${esc(x.title)}<span class="tiny muted"> · ripetizioni ${x.variant ? "più alte" : "più basse"}</span>${pos.gen && pos.slot === wk.indexOf(x) ? ' <span class="pill acc">prossima</span>' : ""}</span><span class="small muted">~${estMinutes(sess.blocks, true)}′</span></summary><div style="margin-top:8px">${exRowsHtml(sess, "gen")}</div></details>`; }).join("")}
     <p class="tiny muted" style="margin-top:8px">Ogni esercizio ha un intervallo di ripetizioni e di ripetizioni in canna secondo il tipo (tabella 7.7): multiarticolari delle gambe a peso libero 4-8 con 2-4 in canna, panche e pressa 6-12, macchine e trazioni 6-15, isolamento 8-20. Le sedute A e B dello stesso tipo alternano intervalli più bassi e più alti (tabella 7.8). Progressione a doppia progressione: quando arrivi in cima all'intervallo in tutte le serie, aumenti il peso.</p></div>`;
-  h += `<div class="o-sec"><div class="o-label">Opzioni</div>
+  h += `<div class="o-sec"><div class="o-label">Opzioni</div>${coreSwitchHtml()}
     <div class="field" style="margin-top:10px"><label for="setLeg">Esercizio principale per le gambe</label>
       <select id="setLeg" data-set="legMain"><option value="squat" ${s.legMain==="squat"?"selected":""}>Squat con bilanciere</option><option value="pressa" ${s.legMain==="pressa"?"selected":""}>Pressa</option></select></div>
     <p class="tiny muted">Dove ti alleni e la postura si scelgono nelle Impostazioni${s.where === "casa" ? "; ora: a casa" : ""}. Gli esercizi si possono cambiare toccandoli.</p></div>`;
@@ -2298,6 +2353,7 @@ function renderGenProgramma(){
   h += `<div class="o-sec"><button class="btn ghost sm" data-act="clearFutureSet" style="color:var(--danger);padding-left:0">Togli i giorni di palestra da domani in poi</button></div>`;
   return h;
 }
+function coreSwitchHtml(){ return `<div class="o-list" style="margin-top:8px"><label class="switch"><input type="checkbox" data-set="core" ${S.settings.core ? "checked" : ""}><span><b>Addominali a corpo libero</b><br><span class="small muted">A fine seduta: L-sit (60 secondi in totale), barchetta e plank${ladAvail("legRaiseRaccolte") ? ", leg raise alla sbarra" : ""}, ognuno al tuo livello.</span></span></label></div>`; }
 function renderFsProgramma(){
   const s = S.settings, t = todayStr(), {pos} = nextPosition(t), c = pos.c || 1, gd = gymWeekDays(), leg = fsLeg(s);
   const phN = st => st.done ? "6×3 finito" : st.ph === "8" ? "5×8" : st.ph === "5" ? "5×5" : "6×3";
@@ -2326,7 +2382,7 @@ function renderFsProgramma(){
     <li>Quando il 5×8 non si chiude più si passa al 5×5 con lo stesso peso, poi al 6×3 togliendo lo squat dei giorni di tecnica. Esaurito anche il 6×3: scarico e test dei massimali, poi un nuovo ciclo.</li>
     <li>Ogni 4 settimane una di scarico: stesso peso del 5×8 ma solo 5×5, niente squat di martedì e venerdì, niente complementari.</li></ul>
     <p class="tiny muted" style="margin-top:6px">Il libro lo indica per principianti e intermedi e non come programma da seguire sempre. Scelte dell'app, dove il libro non dà numeri: "non si chiude più" = 2 sedute di fila non chiuse con lo stesso peso; aumenti di 5 kg (2,5 kg in panca); stacco di partenza al 70%; scarico nel 5×5 e nel 6×3 con 3 serie; serie e ripetizioni dei complementari; recuperi di 3 minuti. Fonte: Ferlito A., <i>Project Strength</i>, Project Invictus 2016, cap. VI ("Il Faleev 2.0", figg. 76-79) e appendice B (riscaldamento per il massimale, fig. 57).</p></div>`;
-  h += `<div class="o-sec"><div class="o-label">Opzioni</div>
+  h += `<div class="o-sec"><div class="o-label">Opzioni</div>${coreSwitchHtml()}
     <div class="field" style="margin-top:10px"><label for="setLeg">Esercizio principale per le gambe</label>
       <select id="setLeg" data-set="legMain"><option value="squat" ${s.legMain==="squat"?"selected":""}>Squat con bilanciere</option><option value="pressa" ${s.legMain==="pressa"?"selected":""}>Pressa (scelta dell'app, il libro usa lo squat)</option></select></div></div>`;
   h += swapsCardHtml();
@@ -2345,7 +2401,7 @@ function renderPalestraProgramma(){
     <p class="small" style="margin-top:10px">Adesso: <b>${esc(posLabel(pos))}</b>. Ogni allenamento completato fa passare alla seduta successiva, qualunque sia il giorno: se salti un giorno non perdi niente.</p>
     <p class="tiny muted">Più di 2 settimane di stop: ripeti la settimana precedente. Più di 5 settimane: si riparte dalla Fase 1, settimana 3. Dopo la settimana 19 riparte la Fase 2 con un nuovo ciclo.</p>
     <div class="o-list">${gd.length ? planDaysRow(gd) : `<button class="o-row" data-act="goWeek"><span class="n">Nessun giorno scelto<small>Sceglili in Piano → La mia settimana</small></span><span class="p">›</span></button>`}</div></div>`;
-  h += `<div class="o-sec"><div class="o-label">Opzioni</div>
+  h += `<div class="o-sec"><div class="o-label">Opzioni</div>${coreSwitchHtml()}
     <div class="o-list"><button class="o-row" data-act="openLevel"><span class="n">Livello<small>${esc(LEVELS[s.level || "ripresa"].n) + (s.level === "allenato" ? (s.startFrom === "f3" ? " · parti dalla Fase 3" : " · parti dalla Fase 2") : "")}</small></span><span class="p">›</span></button></div>
     <div class="field" style="margin-top:10px"><label for="setLeg">Esercizio principale per le gambe</label>
       <select id="setLeg" data-set="legMain"><option value="squat" ${s.legMain==="squat"?"selected":""}>Squat con bilanciere (per la forza)</option><option value="pressa" ${s.legMain==="pressa"?"selected":""}>Pressa (come Liparoti)</option></select></div>
@@ -2447,6 +2503,7 @@ const REFS = [
   ["Ferlito A. (presentazione di Evangelista P.)", "Project Strength. Per essere padroni dell'allenamento e non schiavi dei metodi.", "Project Invictus, Milano, 2016. ISBN 978-88-942054-0-4.", "Programma Project Strength: cap. VI, \"Il Faleev 2.0\" (figg. 76-79); riscaldamento per il massimale (appendice B, fig. 57)."],
   ["Neri E.", "Project Calisthenics. Ipertrofia e forza a corpo libero.", "Project Invictus, Milano, 2018.", "Tecnica e progressioni a corpo libero: piegamenti, trazioni e rematore agli anelli (cap. V), gambe (cap. X)."],
   ["Low S.", "Overcoming Gravity: A Systematic Approach to Gymnastics and Bodyweight Strength, 2ª ed.", "Battle Ground Creative, Houston, 2016. ISBN 978-0-9908738-5-3.", "Livelli delle progressioni (cap. 3 e capp. 24-27), metodi di progressione tra esercizi (cap. 10), principiante a corpo libero (cap. 17)."],
+  ["Haff G.G. (a cura di), NSCA", "Essentials of Strength Training and Conditioning, 5ª ed.", "Human Kinetics, Champaign (IL), 2026. ISBN 978-1-7182-1627-3. Cap. 18, fig. 18.8 e tabella 18.9.", "Test del massimale (tentativi) e stima da 3-5 ripetizioni massime."],
   ["Daniels J.", "Daniels' Running Formula, 4ª ed.", "Human Kinetics, Champaign (IL), 2022. ISBN 978-1-7182-0366-2.", "VDOT, ritmi, limiti di volume, FC massima."],
   ["Daniels J., Gilbert J.", "Oxygen Power: Performance Tables for Distance Runners.", "Pubblicato dagli autori, 1979.", "Equazioni del VDOT (citate nel libro di Daniels)."],
   ["Allen H., Coggan A.R.", "Training and Racing with a Power Meter, 2ª ed.", "VeloPress, Boulder (CO), 2010.", "Livelli di potenza, test FTP, sedute, struttura del piano."],
@@ -2699,6 +2756,7 @@ function expandBlock(b){
     else if(p.t === "time") for(let i=0;i<p.sets;i++) out.push({ii, target:p.sec+"″", def:p.sec, rest:p.rest, time:true});
     else if(p.t === "emom") out.push({ii, emom:true, min:p.min, reps:p.reps, rest:90});
     else if(p.t === "test") out.push({ii, test:true});
+    else if(p.t === "max") out.push({ii, max:true});
     out.forEach((x, k) => { x.n = k+1; x.of = out.length; });
     return out;
   });
@@ -2719,7 +2777,7 @@ function rRender(){
   const tot = totalSteps(), dn0 = stepsDone();
   const pct = R.screen === "end" ? 100 : Math.round(100 * dn0 / Math.max(1, tot));
   const head = `<div class="rtop"><button class="btn icon ghost" data-act="exitRunner" aria-label="Esci e salva la bozza">${svgI.close}</button><span class="small muted" style="text-align:center;flex:1">${esc(dn(R))}${R.deload ? " · scarico" : ""}</span><span class="tiny muted num">${R.screen === "end" ? tot : dn0}/${tot}</span></div><div class="prog" style="margin-bottom:16px"><i style="width:${pct}%"></i></div>`;
-  const body = {warmup:scrWarmup, intro:scrIntro, ramp:scrRamp, set:scrSet, rest:scrRest, emom:scrEmom, test:scrTest, end:scrEnd}[R.screen]();
+  const body = {warmup:scrWarmup, intro:scrIntro, ramp:scrRamp, set:scrSet, rest:scrRest, emom:scrEmom, test:scrTest, max:scrMax, end:scrEnd}[R.screen]();
   el.innerHTML = `<div class="wrap">${head}${body}</div>`;
   if(R.screen === "rest" || (R.screen === "emom" && R.emom && R.emom.start) || (R.screen === "set" && R.holdEnd)) tick = setInterval(onTick, 100);
   if(ringRaf){ cancelAnimationFrame(ringRaf); ringRaf = null; }
@@ -2744,6 +2802,7 @@ function sugHtml(exKey, p){
   const s = suggest(exKey, p, R.deload && R.kind !== "gen");
   if(s && s.stall) return `<div class="hint warn"><b>Peso consigliato: ${fmtKg(s.kg)} kg</b>${ex.unit.includes("manubri") ? " (un manubrio)" : ""}<br><span class="small">${esc(s.why)}. Capita a tutti: ripartire un po' più leggeri di solito sblocca la situazione in poche sedute. Se preferisci, tocca "Cambia" per passare a un esercizio simile.</span></div>`;
   if(s) return `<div class="hint"><b>Peso consigliato: ${fmtKg(s.kg)} kg</b>${ex.unit.includes("manubri") ? " (un manubrio)" : ""}<br><span class="small">${esc(s.why)}.</span></div>`;
+  if(p.t === "max") return "";
   if(p.fs) return p.fs.r === "test" ? "" : `<div class="hint warn small">Non conosco ancora il tuo massimale: scegli un peso con cui chiudi tutte le serie lontano dal cedimento, oppure inserisci il massimale (anche stimato) nella pagina del programma.</div>`;
   if(p.t === "fixed" || p.t === "emom") return `<div class="hint warn small">Nessun test ancora: nella prima serie cerca un peso con cui arriveresti a circa ${p.rm} ripetizioni.</div>`;
   if(p.t === "test") return "";
@@ -2855,6 +2914,7 @@ function scrSet(){
 }
 function nextInfo(){
   if(R.afterRest === "test") return {name:"Test 8RM", sub:"Torna alla schermata del test"};
+  if(R.afterRest === "max") return {name:"Test del massimale", sub:"Prossimo tentativo"};
   if(R.si+1 < R.seq.length){ const st = R.seq[R.si+1]; const it = R.blocks[R.bi].items[st.ii]; return {name:EX[it.ex].n, sub:`Serie ${st.n} di ${st.of} · ${st.target}${st.time ? "" : " rip"}`}; }
   if(R.bi+1 < R.blocks.length){ const b = R.blocks[R.bi+1]; return {name:b.items.map(it => EX[it.ex].n).join(" + "), sub:"Prossimo esercizio · " + shortP(b.items[0].p, EX[b.items[0].ex])}; }
   return {name:"Fine allenamento", sub:""};
@@ -2906,6 +2966,40 @@ function scrTest(){
     <button class="btn primary big" data-act="testBack">Serie completata</button>
     <button class="btn ghost" data-act="testEnd">Finisci qui il test</button></div>`;
 }
+// Test del massimale guidato. Riscaldamento: Ferlito, Project Strength, appendice B (fig. 57), in % del massimale previsto.
+// Tentativi: NSCA, Essentials of Strength Training and Conditioning, 5ª ed. (2026), fig. 18.8: dopo un tentativo riuscito +5-10% (parte alta) o +10-20% (gambe),
+// dopo uno fallito -2,5-5% o -5-10%; il massimale si trova idealmente in 3-5 tentativi. L'app propone l'estremo più prudente di ogni intervallo.
+// Chi non ha esperienza di massimali: test di 3-5 ripetizioni massime e stima con la tabella 18.9 (stessa sezione). Recuperi: almeno 5 minuti verso la fine (Project Strength, app. B).
+const MAX_WU = [["1-2 × 10", 0.1, 0.3], ["5", 0.4], ["3", 0.5], ["3", 0.6], ["2 × 2", 0.7], ["2 × 1", 0.8], ["1", 0.9]];
+function maxNext(T, p, step){
+  const up = p.upper, tr = T.tries; if(!tr.length) return p.exp ? roundStep(p.exp, step) : null;
+  const ok = tr.filter(z => z.ok), ko = tr.filter(z => !z.ok), last = tr[tr.length - 1];
+  let kg = last.ok ? last.kg * (1 + (up ? 0.05 : 0.10)) : last.kg * (1 - (up ? 0.025 : 0.05));
+  const best = ok.length ? Math.max(...ok.map(z => z.kg)) : 0, minKo = ko.length ? Math.min(...ko.map(z => z.kg)) : Infinity;
+  kg = roundStep(kg, step); if(kg <= best) kg = best + step; if(kg >= minKo) kg = minKo - step; if(kg <= best) return null; // nessun carico utile fra il riuscito e il fallito
+  return kg;
+}
+function scrMax(){
+  const st = curStep(); const it = R.blocks[R.bi].items[st.ii]; const ex = EX[it.ex]; const p = it.p, step = ex.step || 2.5;
+  const T = R.mx || (R.mx = {mode:"1rm", tries:[]});
+  const ok = T.tries.filter(z => z.ok), best = ok.length ? Math.max(...ok.map(z => z.kg)) : null;
+  const est = T.mode === "rm" && T.tries.length ? Math.round(Math.max(...T.tries.filter(z => z.reps >= 1 && z.reps <= 5).map(z => e1rm(z.kg, z.reps)), 0)) : null;
+  const nk = T.mode === "1rm" ? maxNext(T, p, step) : null;
+  const wu = p.exp ? `<div class="stack-sm"><span class="eyebrow">Riscaldamento (massimale previsto ${fmtKg(p.exp)} kg)</span><div class="done-sets">${MAX_WU.map(([r, a, b]) => `<span>${r} con ${b ? fmtKg(roundStep(p.exp*a, step)) + "-" + fmtKg(roundStep(p.exp*b, step)) : fmtKg(roundStep(p.exp*a, step))} kg</span>`).join("")}</div><p class="tiny muted">Prima qualche serie a corpo libero ad alte ripetizioni. Dal 70% in su spingi ogni ripetizione come se fosse un massimale. Project Strength, appendice B.</p></div>` : `<p class="small muted">Riscaldati salendo a piccoli salti con poche ripetizioni (5, poi 3, poi 2, poi 1), fino a circa il 90% di quello che pensi di sollevare.</p>`;
+  return `<div class="stack"><span class="eyebrow">Test · ${esc(ex.n)}</span><h1>${T.mode === "1rm" ? "Il tuo massimale" : "Stima del massimale"}</h1>
+    <div class="o-seg">${[["1rm","Massimale"],["rm","3-5 ripetizioni"]].map(([k, l]) => `<button class="${T.mode === k ? "on" : ""}" data-act="mxMode" data-v="${k}" ${T.tries.length ? "disabled" : ""}>${l}</button>`).join("")}</div>
+    <p class="small muted">${T.mode === "1rm" ? "Per chi ha già esperienza con l'esercizio. Dopo il riscaldamento: tentativi singoli; l'app propone il peso del tentativo successivo. Di solito bastano 3-5 tentativi." : "Più adatto se non hai mai fatto un massimale: cerca il peso con cui fai al massimo 3-5 ripetizioni pulite; il massimale si stima con la tabella NSCA."} Sempre con le sicure del rack o qualcuno che ti assiste.</p>
+    ${wu}
+    ${T.tries.length ? `<div class="done-sets">${T.tries.map((z, i) => `<span>${i+1}: ${fmtKg(z.kg)} kg ${T.mode === "1rm" ? (z.ok ? "✓" : "✗") : "× " + z.reps}</span>`).join("")}</div>` : ""}
+    ${T.mode === "1rm" && T.tries.length && nk == null ? `<div class="hint">Non c'è un carico utile tra il tentativo riuscito e quello fallito: il tuo massimale è <b>${fmtKg(best)} kg</b>.</div>` : ""}
+    ${T.tries.length >= 5 ? `<div class="hint warn small">Hai fatto 5 tentativi: oltre, la fatica falsa il risultato.</div>` : ""}
+    <div class="row"><div class="field"><label for="inKg">Peso (kg)</label><div class="stepper"><button data-act="kgStep" data-v="-1">−</button><input id="inKg" inputmode="decimal" value="${esc(R.inKg != null ? fmtKg(R.inKg) : nk != null ? fmtKg(nk) : "")}"><button data-act="kgStep" data-v="1">+</button></div></div>
+    ${T.mode === "rm" ? `<div class="field"><label for="inReps">Ripetizioni fatte</label><div class="stepper"><button data-act="repStep" data-v="-1">−</button><input id="inReps" inputmode="numeric" value="${esc(R.inReps ?? 3)}"><button data-act="repStep" data-v="1">+</button></div></div>` : ""}</div>
+    ${T.mode === "1rm" ? `<div class="row" style="gap:8px"><button class="btn primary big" style="flex:1" data-act="mxTry" data-v="1">Riuscito</button><button class="btn big" style="flex:1" data-act="mxTry" data-v="0">Non riuscito</button></div>` : `<button class="btn primary big" data-act="mxTry" data-v="1">Registra la serie</button>`}
+    ${(T.mode === "1rm" ? best : est) ? `<button class="btn big" data-act="mxEnd">Fine: massimale ${fmtKg(T.mode === "1rm" ? best : est)} kg${T.mode === "rm" ? " (stimato)" : ""}</button>` : ""}
+    <button class="btn ghost" data-act="mxSkip">Salta il test di questo esercizio</button>
+    <p class="tiny muted">Tentativi: NSCA, <i>Essentials of Strength Training and Conditioning</i>, 5ª ed., fig. 18.8 (dopo un tentativo riuscito ${p.upper ? "+5-10%" : "+10-20%"}, dopo uno fallito ${p.upper ? "-2,5-5%" : "-5-10%"}: l'app propone il salto più piccolo); stima: tabella 18.9.</p></div>`;
+}
 function scrEnd(){
   const sets = R.log.flat().reduce((a,x) => a + x.sets.length, 0);
   const min = Math.round((Date.now() - R.startedAt)/60000);
@@ -2942,10 +3036,11 @@ function onTick(){
 function readNum(id){ const el = $("#" + id); if(!el) return null; const v = parseFloat(String(el.value).replace(",", ".")); return isNaN(v) ? null : v; }
 function enterBlock(){
   R.seq = expandBlock(R.blocks[R.bi]); R.si = 0; R.nextKg = {}; R.advice = null; R.ramp = null; R.inKg = null; R.inReps = null; R.inRir = null; R.emom = null; R.test = null; R.holdEnd = null;
-  const st = curStep(); R.screen = st.emom ? "emom" : st.test ? "test" : "set";
+  const st = curStep(); R.mx = null; R.screen = st.emom ? "emom" : st.test ? "test" : st.max ? "max" : "set";
 }
 function goNextStep(){
   if(R && R.afterRest === "test" && R.screen === "rest"){ R.screen = "test"; R.inReps = null; rRender(); return; }
+  if(R && R.afterRest === "max" && R.screen === "rest"){ R.screen = "max"; R.inReps = null; R.inKg = null; rRender(); return; }
   if(R) R.afterRest = null;
   R.inKg = null; R.inReps = null; R.inRir = null; R.holdEnd = null;
   if(R.si + 1 < R.seq.length){ R.si++; R.screen = "set"; rRender(); return; }
@@ -2957,7 +3052,7 @@ function endTestEx(){ R.afterRest = null; if(R.bi + 1 >= R.blocks.length){ R.scr
 function finishSession(){
   const notes = $("#inNotes") ? $("#inNotes").value : R.notes;
   const ex = [];
-  R.blocks.forEach((b, bi) => b.items.forEach((it, ii) => { const l = R.log[bi][ii]; ex.push({key:it.ex, p:it.p, sets:l.sets, ...(l.kg8 ? {kg8:l.kg8} : {})}); }));
+  R.blocks.forEach((b, bi) => b.items.forEach((it, ii) => { const l = R.log[bi][ii]; ex.push({key:it.ex, p:it.p, sets:l.sets, ...(l.kg8 ? {kg8:l.kg8} : {}), ...(l.kg1 ? {kg1:l.kg1} : {})}); }));
   const sess = {id:R.id, date:R.date, pos:R.pos, code:R.code, title:R.title, kind:R.kind, deload:R.deload, ex, notes, finishedAt:Date.now(), updatedAt:Date.now()};
   S.sessions[sess.id] = sess;
   if(R.kind !== "post" && !S.planned[R.date]){ S.planned[R.date] = true; pushMeta(); }
@@ -4011,12 +4106,17 @@ function act(a, d, e){
     case "testFound": { const ok = R.test.tries.filter(z => z.reps >= 8); R.test.kg8 = Math.max(...ok.map(z => z.kg)); R.log[R.bi][curStep().ii].kg8 = R.test.kg8; R.test.phase = "back"; R.inReps = null; R.afterRest = "test"; startRest(120); break; }
     case "testBack": { const st = curStep(); const ex = EX[R.blocks[R.bi].items[st.ii].ex]; const reps = readNum("inReps") ?? 0; const kg = roundStep(R.test.kg8*0.9, ex.step); R.log[R.bi][st.ii].sets.push({kg, reps, label:"richiamo"}); R.test.back++; R.inReps = null; if(reps < 8 || R.test.back >= 5) endTestEx(); else { R.afterRest = "test"; startRest(60); } break; }
     case "testEnd": endTestEx(); break;
+    case "mxMode": R.mx.mode = d.v; rRender(); break;
+    case "mxTry": { const st = curStep(); const kg = readNum("inKg"); if(kg == null || kg <= 0) break; const T = R.mx; const reps = T.mode === "rm" ? (readNum("inReps") ?? 0) : (d.v === "1" ? 1 : 0);
+      T.tries.push({kg, ok:d.v === "1" && reps >= 1, reps}); R.log[R.bi][st.ii].sets.push({kg, reps, label:T.mode === "rm" ? "serie" : "tentativo"}); R.inKg = null; R.afterRest = "max"; startRest(300); break; }
+    case "mxEnd": { const st = curStep(); const T = R.mx; const v = T.mode === "1rm" ? Math.max(...T.tries.filter(z => z.ok).map(z => z.kg)) : Math.round(Math.max(...T.tries.filter(z => z.reps >= 1 && z.reps <= 5).map(z => e1rm(z.kg, z.reps)))); R.log[R.bi][st.ii].kg1 = v; endTestEx(); break; }
+    case "mxSkip": endTestEx(); break;
     case "finish": finishSession(); break;
     case "setWhere": S.settings.where = d.v; pushMeta(); render(); break;
     case "clearFutureSet": if(confirm("Togliere i giorni di palestra segnati da domani in poi?")){ const t = todayStr(); for(const k of Object.keys(S.planned)) if(k > t) delete S.planned[k]; pushMeta(); render(); } break;
     case "openSettings": if(view !== "impostazioni"){ setPrev = view; view = "impostazioni"; render(); window.scrollTo(0,0); } break;
     case "closeSettings": view = setPrev || "oggi"; render(); window.scrollTo(0,0); break;
-    case "setProgram": if((S.settings.program || "liparoti") !== d.v){ S.settings.program = d.v; pushMeta(); render(); } break;
+    case "setProgram": { const v = d.v === "pi" ? (S.settings.piSub === "faleev" ? "faleev" : "liparoti") : d.v; if(v !== "principi") S.settings.piSub = v; if((S.settings.program || "liparoti") !== v){ S.settings.program = v; } pushMeta(); render(); break; }
     case "genSplit": { const g = {...(S.settings.gen || {})}; g.split = {...(g.split || {}), [d.n]:Number(d.v)}; S.settings.gen = g; pushMeta(); render(); break; }
     case "genSpecPick": { const g = {...(S.settings.gen || {})}; let a = (g.specSel || []).slice(); a = a.includes(d.v) ? a.filter(x => x !== d.v) : a.concat([d.v]).slice(-2); g.specSel = a; S.settings.gen = g; render(); break; }
     case "genSpecStart": { const g = {...(S.settings.gen || {})}; g.spec = {m:(g.specSel || []).slice(0, 2), start:mondayStr(todayStr())}; g.specSel = []; S.settings.gen = g; pushMeta(); render(); break; }
