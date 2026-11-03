@@ -1,3 +1,3 @@
-Novità della 1.28.0
-- Figure dei manuali: importi una volta il pacchetto (Impostazioni → Figure dei manuali) e le figure dei tuoi libri compaiono nelle schede degli esercizi, anche senza internet
-- Con il backup automatico attivo, foto, video e figure vengono copiati nella cartella «TrainUP media» e tornano nell'app dopo una reinstallazione
+Novità della 1.29.0
+- Mal di schiena: valutazione guidata (Impostazioni → Postura) con domande e test di McGill; ne esce una routine giornaliera con Big 3, camminata e igiene della colonna
+- Il giorno dopo la routine l'app chiede com'è la schiena e adatta tenute, livelli e camminata

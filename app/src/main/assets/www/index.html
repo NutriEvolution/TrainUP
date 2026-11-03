@@ -192,6 +192,7 @@ p{margin:0}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .chip{border:0;background:var(--surface2);border-radius:99px;padding:8px 14px;font-weight:600;cursor:pointer;min-width:46px}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+details.bcat{border-bottom:1px solid var(--line);padding:10px 0}details.bcat summary{cursor:pointer;list-style:none}details.bcat summary::-webkit-details-marker{display:none}
 .feelgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .feelgrid.four{grid-template-columns:repeat(2,minmax(0,1fr))}
 .feel{border:0;background:var(--surface);box-shadow:var(--shadow);border-radius:18px;padding:12px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:72px;justify-content:center;transition:transform .12s}
@@ -822,7 +823,74 @@ const EX = {
     err:["Piegare i gomiti.","Bacino che crolla."]},
   crunchInverso:{n:"Crunch inverso", step:0, inc:0, unit:"corpo libero", yt:"crunch inverso tecnica", src:"PE2 pp. 99-100, 125", bw:true,
     how:["Sdraiato su panca o a terra, gambe piegate sollevate, mani ai lati o alla panca.", "Fletti solo la zona lombare: stacca l'osso sacro e spingi le gambe verso l'alto, poi torna lentamente."],
-    err:["Muovere solo le anche portando le gambe avanti e indietro.", "Slanciare le gambe."]}
+    err:["Muovere solo le anche portando le gambe avanti e indietro.", "Slanciare le gambe."]},
+  // ---- schiena: Stuart McGill, Back Mechanic (2015, 2ª stampa 2017) ----
+  mgCurlUp:{n:"Curl-up di McGill", step:0, inc:0, unit:"corpo libero", yt:"mcgill curl up", src:"McGill, Back Mechanic, cap. 9, pp. 103-105", bw:true,
+    how:["Supino, mani a palmi in giù sotto la zona lombare per non schiacciarla a terra; una gamba tesa, l'altra piegata con il piede accanto al ginocchio della gamba tesa.","Irrigidisci appena l'addome, stacca i gomiti da terra.","Solleva di poco testa e spalle, collo e zona lombare fermi, come per azzerare il peso su una bilancia. Tieni 10 secondi respirando.","A ogni serie cambia la gamba piegata; con dolore a gluteo o gamba piega quella del lato che fa male."],
+    err:["Piegare il collo portando il mento al petto.","Mani dietro la testa.","Fare un crunch o un sit-up: il movimento è minimo."]},
+  sideBridgeWall:{n:"Plank laterale al muro", step:0, inc:0, unit:"muro", side:"per lato", yt:"mcgill side plank wall", src:"McGill, Back Mechanic, cap. 9, p. 107", bw:true,
+    how:["Appoggiati di lato al muro sull'avambraccio, piede esterno davanti.","Muovi un po' schiena e anche finché trovi la posizione senza dolore e tienila 10 secondi."],
+    err:["Bacino che cede o ruota."]},
+  sideBridgeKnees:{n:"Plank laterale sulle ginocchia", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"mcgill side bridge knees", src:"McGill, Back Mechanic, cap. 9, p. 105", bw:true,
+    how:["Su un fianco, appoggiato su gomito e ginocchia, ginocchia piegate a circa 90°.","Invece di alzare il bacino di lato, spingi le anche in avanti come nell'hip hinge: corpo allineato dalle ginocchia in su. Tieni 10 secondi.","Se la spalla dà fastidio: mano libera sulla spalla opposta e gomito tirato verso il basso sul petto."],
+    err:["Riposarsi con la schiena piegata tra una tenuta e l'altra."]},
+  sideBridge:{n:"Plank laterale", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"mcgill side bridge", src:"McGill, Back Mechanic, cap. 9, pp. 105-106", bw:true,
+    how:["Appoggio su gomito e piedi, il piede di sopra davanti a quello di sotto.","Mano libera sulla spalla opposta, gomito tirato in basso sul petto. Corpo dritto, tieni 10 secondi."],
+    err:["Bacino che cede.","Torsione della schiena."]},
+  sideBridgeHip:{n:"Plank laterale con la mano sul fianco", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"mcgill side bridge", src:"McGill, Back Mechanic, cap. 9, p. 106", bw:true,
+    how:["Come il plank laterale, ma con la mano libera sul fianco: più peso da sostenere.","Corpo dritto, tieni 10 secondi."],
+    err:["Bacino che cede.","Torsione della schiena."]},
+  sideBridgeRoll:{n:"Plank laterale con rotolamento", step:0, inc:0, unit:"corpo libero", yt:"mcgill rolling side plank", src:"McGill, Back Mechanic, cap. 9, pp. 105-106", bw:true,
+    how:["10 secondi su un fianco, rotola nel plank sui gomiti e tieni 3 secondi, poi rotola sull'altro fianco per 10 secondi: è una ripetizione.","Busto e bacino girano insieme come un blocco, il movimento è solo di spalle e anche."],
+    err:["Far partire il giro dal bacino: la schiena si torce."]},
+  birdDogArm:{n:"Bird dog: solo le braccia", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"bird dog progression arm", src:"McGill, Back Mechanic, cap. 9, p. 108", bw:true,
+    how:["A quattro zampe: mani sotto le spalle, ginocchia sotto le anche, schiena nella posizione senza dolore.","Irrigidisci appena l'addome e solleva una mano piegando il gomito; quando va bene, stendi il braccio in avanti. Tieni 10 secondi."],
+    err:["Schiena che si muove o si torce."]},
+  birdDogLeg:{n:"Bird dog: solo le gambe", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"bird dog progression leg", src:"McGill, Back Mechanic, cap. 9, pp. 107-108", bw:true,
+    how:["A quattro zampe, schiena nella posizione senza dolore, addome appena contratto.","Stendi una gamba indietro spingendo via il tallone, non più in alto dell'anca. Tieni 10 secondi."],
+    err:["Alzare troppo la gamba: il bacino ruota e la schiena si torce."]},
+  birdDog:{n:"Bird dog", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"mcgill bird dog sweep the floor", src:"McGill, Back Mechanic, cap. 9, pp. 107-109", bw:true,
+    how:["A quattro zampe, schiena nella posizione senza dolore, addome appena contratto.","Stendi il braccio e la gamba opposti fino a parallelo al pavimento: braccio non sopra la spalla, gamba non sopra l'anca. Pugno chiuso, tallone spinto via. Tieni 10 secondi.","Tra una tenuta e l'altra \"spazza il pavimento\": porta mano e ginocchio a sfiorare terra senza appoggiarli, poi torna su."],
+    err:["Schiena o collo che si muovono.","Gamba troppo alta: il bacino ruota."]},
+  birdDogSquares:{n:"Bird dog con i quadrati", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"bird dog drawing squares mcgill", src:"McGill, Back Mechanic, cap. 9, pp. 108-109", bw:true,
+    how:["Come il bird dog: durante la tenuta disegna con la mano e il piede un quadrato di al massimo 30 cm (fuori, giù, verso il centro, su).","Pugno chiuso; muovi solo spalle e anche."],
+    err:["Schiena che si torce."]},
+  birdDogStanding:{n:"Bird dog in piedi", step:0, inc:0, unit:"tavolo o piano di lavoro", side:"per lato", yt:"standing bird dog", src:"McGill, Back Mechanic, cap. 9, p. 109; cap. 14, p. 138", bw:true,
+    how:["In piedi con una mano appoggiata a un tavolo: la versione per chi ha ginocchia doloranti o fatica a scendere a terra.","Prima solleva un braccio, poi una gamba indietro, poi braccio e gamba opposti. Tieni 10 secondi, muovi solo spalle e anche."],
+    err:["Schiena che si inarca o si torce."]},
+  catCamel:{n:"Gatto-cammello", step:0, inc:0, unit:"corpo libero", yt:"mcgill cat camel", src:"McGill, Back Mechanic, cap. 9, p. 110; cap. 11, p. 118", bw:true,
+    how:["A quattro zampe, alterna lentamente schiena incurvata verso il basso con lo sguardo in alto e schiena arrotondata con lo sguardo in basso.","Ogni ciclo 3-4 secondi, restando dentro il movimento senza dolore. Bastano 7-8 cicli."],
+    err:["Spingere fino alla fine del movimento: non è un allungamento.","Fare molti cicli in più."]},
+  proneRelax:{n:"Sdraiato a pancia in giù", step:0, inc:0, unit:"pavimento", yt:"mckenzie prone lying", src:"McGill, Back Mechanic, cap. 6, pp. 63-64; cap. 7, p. 77", bw:true,
+    how:["Pancia in giù, mani sotto il mento. Rilassati e a ogni espirazione lascia scendere la zona lombare verso il pavimento.","Se va bene, un pugno sotto il mento; se va ancora bene, due pugni uno sopra l'altro. Resta fino a 3 minuti.","Rialzati senza piegare la schiena: a quattro zampe, poi in affondo spingendo con le anche."],
+    err:["Restare se il dolore aumenta: dopo 30 secondi senza miglioramento, smetti.","Rialzarsi arrotondando la schiena."]},
+  mcgillStretch:{n:"Allungamento in piedi dopo essere stato seduto", step:0, inc:0, unit:"corpo libero", yt:"mcgill standing stretch", src:"McGill, Back Mechanic, cap. 8, pp. 92-93", bw:true,
+    how:["Alzati dalla sedia e porta le braccia in alto: conta fino a 10.","Allunga ancora più in alto e un po' indietro per altri 10, con un'inspirazione profonda, poi abbassa le braccia e rilassati.","Ogni 20 minuti di seduta, poi regola l'intervallo su quello che va meglio per te."],
+    err:["Inarcare con forza la zona lombare."]},
+  shortstopSquat:{n:"Squat dello shortstop", step:0, inc:0, unit:"corpo libero", yt:"mcgill shortstop squat hip hinge", src:"McGill, Back Mechanic, cap. 7, pp. 81-84", bw:true,
+    how:["In piedi, mani sulle cosce. Schiena dritta, porta il bacino indietro piegando le anche e fai scendere le mani fino alle ginocchia, come lo shortstop del baseball. Ginocchia a metà tra talloni e punte.","Addome appena contratto, spalle spinte in basso lontano dalle orecchie: il peso del busto scende lungo le braccia.","Torna su tirando le anche in avanti, senza sollevare con la schiena. È lo schema da usare per raccogliere oggetti e alzarsi dalla sedia."],
+    err:["Ginocchia che vanno avanti oltre le punte.","Schiena che si arrotonda."]},
+  parkBench:{n:"Scarico della schiena su una panchina", step:0, inc:0, unit:"panchina o ringhiera", yt:"mcgill park bench decompression", src:"McGill, Back Mechanic, cap. 14, p. 133", bw:true,
+    how:["Durante la camminata, appena compare il fastidio: mani sullo schienale di una panchina o su una ringhiera, braccia strette al busto.","Spingi con il palmo e porta il peso sulle braccia, poi avvicina le anche alla panchina per estendere la schiena.","Resta finché è comodo, al massimo un minuto, poi riprendi a camminare."],
+    err:["Restare se il dolore aumenta."]},
+  wallWalk:{n:"Camminata delle mani sul muro", step:0, inc:0, unit:"muro", yt:"wall walking hands mcgill", src:"McGill, Back Mechanic, cap. 14, p. 133", bw:true,
+    how:["Di fronte al muro, fai salire le mani una sopra l'altra come se camminassero.","Porta le anche verso il muro per raddrizzarti."],
+    err:["Inarcare con forza la zona lombare."]},
+  nerveFloss:{n:"Scorrimento del nervo sciatico", step:0, inc:0, unit:"tavolo o mobile alto", side:"per gamba", yt:"mcgill nerve flossing sciatica", src:"McGill, Back Mechanic, cap. 14, pp. 133-135", bw:true,
+    how:["Seduto su un tavolo con le gambe libere, schiena neutra.","Insieme: guarda in alto, stendi il ginocchio e porta la punta del piede verso di te. Poi insieme: abbassa il mento, piega il ginocchio e punta il piede. Ogni ciclo 3-4 secondi.","10 per gamba. Se il giorno dopo il dolore che scende nella gamba è peggiorato, smetti e riprova dopo una settimana; se peggiora di nuovo, non fa per te."],
+    err:["Muovere solo la testa invece di flettere ed estendere il collo.","Tirare come in un allungamento."]},
+  lewit:{n:"Respirazione di Lewit", step:0, inc:0, unit:"pavimento", yt:"mcgill lewit breathing", src:"McGill, Back Mechanic, cap. 14, pp. 136-137", bw:true,
+    how:["Supino con anche e ginocchia piegate a 90° e piedi sollevati; dondola appena il bacino per trovare la posizione lombare senza dolore.","Alla fine di un'espirazione normale, soffia attraverso le labbra strette come in una cannuccia fino a svuotare del tutto i polmoni: l'addome lavora e il torace scende.","3-4 cicli."],
+    err:["Gonfiare il torace in avanti tra un ciclo e l'altro."]},
+  clamshell:{n:"Conchiglia", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"mcgill clamshell glute", src:"McGill, Back Mechanic, cap. 12, p. 121", bw:true,
+    how:["Su un fianco con le ginocchia piegate. Pollice sulla sporgenza ossea davanti al bacino, dita sul gluteo laterale.","Apri il ginocchio di sopra come una conchiglia, piedi uniti: senti il gluteo che si contrae sotto le dita."],
+    err:["Ruotare il bacino o torcere la schiena."]},
+  gluteBridge:{n:"Ponte per i glutei", step:0, inc:0, unit:"corpo libero", yt:"mcgill glute bridge", src:"McGill, Back Mechanic, cap. 12, p. 122", bw:true,
+    how:["Supino con le ginocchia piegate. Prima stringi soltanto i glutei, senza alcun movimento.","Poi aumenta la contrazione dei glutei finché il bacino si solleva, senza usare i muscoli dietro la coscia."],
+    err:["Inarcare la schiena per salire.","Spingere con i femorali (crampo dietro la coscia)."]},
+  lungeHip:{n:"Affondo camminato con il braccio in alto", step:0, inc:0, unit:"corpo libero", yt:"walking lunge psoas stretch overhead", src:"McGill, Back Mechanic, cap. 12, p. 121", bw:true,
+    how:["Affondo: mentre scendi spingi verso l'alto la mano del lato della gamba dietro.","Inclina un poco il busto dalla parte opposta e porta la spalla indietro: senti allungare la parte davanti dell'anca.","Fai un passo e cambia gamba e braccio: 6 passi in tutto."],
+    err:["Inarcare la zona lombare."]},
 };
 
 /* ============ prescrizioni ============ */
@@ -834,6 +902,8 @@ const P = {
   pyr:(reps,rest) => ({t:"pyr",reps,rest}),
   emom:(min,reps) => ({t:"emom",min,reps,rm:12}),
   time:(sets,sec,rest) => ({t:"time",sets,sec,rest}),
+  // piramide discendente di tenute (McGill, Back Mechanic, cap. 9, p. 103): serie da top, top-2, top-4 tenute di 8-10 s, pochi secondi tra le tenute
+  hold:(top,sec,rest) => ({t:"hold",reps:[top, top-2, top-4].filter(x => x > 0),sec,rest}),
   test:() => ({t:"test",rest:60}),
   max:(upper, exp, extra) => ({t:"max", upper, exp, rest:300, ...extra})
 };
@@ -846,6 +916,7 @@ function prescText(p, ex){
     case "pyr": return `Piramide: ${p.reps.length} serie da ${p.reps.join(", ")} ripetizioni. Quando le ripetizioni scendono, aumenta il peso; fermati sempre 1 ripetizione prima di non farcela più.`;
     case "emom": return `${p.min} minuti: all'inizio di ogni minuto fai ${p.reps} ripetizioni, poi riposi fino allo scoccare del minuto successivo. Peso che sollevi al massimo 12 volte.`;
     case "time": return `${p.sets} serie da ${p.sec} secondi.`;
+    case "hold": return `Piramide discendente: ${p.reps.length} serie da ${p.reps.join(", ")} tenute di ${p.sec} secondi${side}. Pochi secondi tra una tenuta e l'altra, ${p.rest} secondi tra le serie.`;
     case "test": return "Test: cerca il peso massimo con cui fai 8 ripetizioni pulite, poi 2-5 serie da 8 con il 10% in meno.";
     case "max": return "Test del massimale: riscaldamento progressivo, poi tentativi singoli fino al peso più alto sollevato con buona tecnica.";
   }
@@ -1351,7 +1422,7 @@ function ladSheet(ii){
     <div class="o-list">${L.steps.map((k, i) => { const ok = ladAvail(k); return `<button class="o-row" data-act="ladPick" data-ii="${ii}" data-v="${i}" ${ok ? "" : "disabled"}><span class="dot" style="background:${i === lo.i ? "var(--accent)" : "var(--surface3)"}"></span><span class="n">${i+1}. ${esc(EX[k].n)}<small>${ok ? esc(EX[k].how[0]) : "serve: " + esc(REQ[k].map(e => (EQUIP.find(q => q[0] === e) || [e, e])[1]).join(", "))}</small></span><span class="p">${i === lo.i ? "✓" : ""}</span></button>`; }).join("")}</div>
     <p class="tiny muted">La scelta vale anche per le prossime sedute. Fonti: Low, <i>Overcoming Gravity</i>, 2ª ed., capp. 10 e 24-27; Neri, <i>Project Calisthenics</i>, capp. V e X.</p></div>`);
 }
-function dn(o){ return /^Scheda/.test(o.title) ? o.title : o.code + " · " + o.title; }
+function dn(o){ return /^Scheda/.test(o.title) || o.kind === "post" ? o.title : o.code + " · " + o.title; }
 function weekInPhase(w){ const k = weekKind(w); if(k==="f1") return w; if(k==="f2") return w-5; if(k==="f3") return w-12; return null; }
 function posLabel(pos){ if(pos && pos.fs) return fsPosLabel(pos); if(pos && pos.gen && pos.mock){ const ph = genPhase(pos.week); return (ph.c > 1 ? "Ciclo " + ph.c + " · " : "") + "Test dei massimali"; } if(pos && pos.gen){ if(genGoal() !== "massa"){ const ph = genPhase(pos.week); return (ph.c > 1 ? "Ciclo " + ph.c + " · " : "") + GEN_PH[ph.k] + " · settimana " + ph.i + (ph.k === "vol" && ph.i === 1 ? " (introduttiva)" : "") + (ph.k === "pic" && ph.i >= 2 && genMockOn() ? " (scarico prima del test)" : ""); } return pos.week === 1 ? "Su misura · settimana introduttiva" : "Su misura · settimana " + pos.week; } const k = weekKind(pos.week); const wp = weekInPhase(pos.week); if(pos.learn) return "Fase 1 · apprendimento · settimana " + pos.week; return (pos.cycle>1 ? "Ciclo " + pos.cycle + " · " : "") + PHASES[k].short + (wp ? " · settimana " + wp : "") ; }
 
@@ -1367,7 +1438,7 @@ function load(){
   return JSON.parse(JSON.stringify(DEFAULT));
 }
 function saveLocal(){ try{ localStorage.setItem(LS, JSON.stringify(S)); }catch(e){} }
-function postureOn(d){ return Object.values(S.sessions).find(x => x && !x.deleted && x.kind === "post" && x.date === d); }
+function postureOn(d){ return Object.values(S.sessions).find(x => x && !x.deleted && x.kind === "post" && x.code !== "Back" && x.date === d); }
 function doneSessions(){ return Object.values(S.sessions).filter(x => x && !x.deleted && x.kind !== "post" && x.kind !== "run" && x.kind !== "volley" && x.kind !== "bike").sort((a,b) => a.date === b.date ? a.finishedAt - b.finishedAt : (a.date < b.date ? -1 : 1)); }
 
 /* ============ motore: prossima seduta ============ */
@@ -1563,7 +1634,8 @@ const EXG = {
   cardioLeggero:"warm", legSwing:"warm", worldsGreatest:"warm", squatCorpo:"warm", hingeBastone:"warm", rotBraccia:"warm", dislocazioni:"warm", pushupScapolari:"warm",
   rematoreElastico:"back", latElastico:"back", alzateLateraliElastico:"shoulders", curlElastico:"arms", pushdownElastico:"arms",
   allineamentoCerv:"post", estensoriCerv:"post", stretchCollo:"post", ritornoEstensione:"post", rotazioneCerv:"post", mobToracica:"post", stabRitmiche:"post", plankPlus:"post", propScapPalla:"post", stabElastico:"post", sleeper:"post", mobRullo:"post", diagManubrio:"post",
-  mobQuad:"post", mobProno:"post", neckFlex:"post", alzateProno:"post", alzateY:"post", wallSlide:"post", stretchPetto:"post", stretchCross:"post", stretchNuca:"post"
+  mobQuad:"post", mobProno:"post", neckFlex:"post", alzateProno:"post", alzateY:"post", wallSlide:"post", stretchPetto:"post", stretchCross:"post", stretchNuca:"post",
+  mgCurlUp:"post", sideBridgeWall:"post", sideBridgeKnees:"post", sideBridge:"post", sideBridgeHip:"post", sideBridgeRoll:"post", birdDogArm:"post", birdDogLeg:"post", birdDog:"post", birdDogSquares:"post", birdDogStanding:"post", catCamel:"post", proneRelax:"post", mcgillStretch:"post", shortstopSquat:"post", parkBench:"post", wallWalk:"post", nerveFloss:"post", lewit:"post", clamshell:"post", gluteBridge:"post", lungeHip:"post"
 };
 const PRE = ["mobQuad","mobProno","neckFlex"], POSTEND = ["alzateProno","alzateY","wallSlide"];
 const SECT = {pre:{n:"Prima dei pesi · posturale", cls:"post"}, main:{n:"Allenamento", cls:""}, end:{n:"Fine seduta · posturale", cls:"post"}, stretch:{n:"Fine seduta · allungamento", cls:"post"}, home:{n:"Routine a casa", cls:"post"}};
@@ -1578,6 +1650,7 @@ function shortP(p, ex){
     case "pyr": return `Piramide ${p.reps.join("-")}`;
     case "emom": return `EMOM ${p.min}′ · ${p.reps} rip/min`;
     case "time": return `${p.sets} × ${p.sec}″${side}`;
+    case "hold": return `${p.reps.join("-")} tenute da ${p.sec}″${side}`;
     case "test": return "Test 8RM + richiamo";
     case "max": return "Test del massimale";
   }
@@ -1591,6 +1664,7 @@ function estMinutes(blocks, withWarm){
     if(p.t === "emom") s += p.min*60 + 90;
     else if(p.t === "test") s += 11*60;
     else if(p.t === "max") s += 20*60;
+    else if(p.t === "hold"){ const sides = EX[b.items[0].ex] && EX[b.items[0].ex].side ? 2 : 1; s += p.reps.reduce((a, n) => a + n*sides*(p.sec + 4), 0) + p.reps.length*(p.rest||30); }
     else { const n = p.t === "pyr" ? p.reps.length : p.sets; const work = p.t === "time" ? p.sec : 40; s += n*(work + (b.type === "js" ? (b.rest||60)/2 : (p.rest||60))); }
   }
   return Math.round(s/60/5)*5;
@@ -1619,12 +1693,12 @@ const PLAN_N = {palestra:"Palestra", corsa:"Corsa", pallavolo:"Salto e rapidità
 function render(){
   if(view === "calendario" || view === "programma") view = "piano";
   extendGym();
-  const body = {oggi:renderOggi, piano:renderPiano, progressi:renderProgressi, guida:renderGuida, impostazioni:renderImpostazioni}[view]();
-  const title = view === "oggi" ? "" : view === "impostazioni" ? "Impostazioni" : view === "piano" && planOpen ? PLAN_N[planOpen] : TABS.find(t => t[0] === view)[1];
+  const body = {oggi:renderOggi, piano:renderPiano, progressi:renderProgressi, guida:renderGuida, impostazioni:renderImpostazioni, schiena:renderSchiena}[view]();
+  const title = view === "oggi" ? "" : view === "impostazioni" ? "Impostazioni" : view === "schiena" ? "Schiena" : view === "piano" && planOpen ? PLAN_N[planOpen] : TABS.find(t => t[0] === view)[1];
   $("#app").innerHTML = `<div class="wrap"><header class="top"><div class="brand">${svgI.logo}<span>TrainUP</span></div><div class="row" style="gap:6px"><div class="sync"><span id="syncDot" class="dot"></span><span id="syncTxt"></span></div><button class="btn icon ghost topgear" data-act="openSettings" aria-label="Impostazioni" ${view === "impostazioni" ? 'aria-current="page"' : ""}>${svgI.gear}</button></div></header>${title ? `<h1 class="ltitle">${title}</h1>` : ""}${body}</div>
   <nav class="nav" aria-label="Sezioni">${TABS.map(([v,l]) => `<button data-nav="${v}" ${view===v ? 'aria-current="page"' : ""}>${svgI[v]}<span>${l}</span></button>`).join("")}</nav>`;
   setSync(sync.state);
-  if(view === "piano" || view === "impostazioni") addHelp($("#app"));
+  if(view === "piano" || view === "impostazioni" || view === "schiena") addHelp($("#app"));
 }
 // Spiegazioni a comparsa: i testi descrittivi delle sezioni (paragrafi attenuati) restano nascosti finché non si tocca "?" accanto al titolo della sezione
 const helpOpen = new Set();
@@ -1763,13 +1837,15 @@ function renderOggi(){
       ${gymOn() ? `<button class="btn ghost sm" data-act="trainToday" style="display:block;margin-top:${next.length ? 6 : 10}px;padding-left:0">Allenati in palestra oggi lo stesso</button>` : ""}</div>`;
   }
   h += runToday;
+  h += backCheckHtml();
   h += vbTodayHtml(t);
   h += bkTodayHtml(t);
   if(next.length) h += `<div class="o-sec"><div class="o-label">Prossimi giorni</div><div class="o-list">${next.map(x => `<button class="o-row" data-act="openDay" data-d="${x.ds}"><span class="dot" style="background:${x.c}"></span><span class="n">${esc(x.n)}<small>${esc(whenLbl(t, x.ds))} · ${esc(x.sub)}</small></span><span class="p">›</span></button>`).join("")}</div></div>`;
   // posturale + guida al peso
   h += `<div class="o-sec"><div class="o-list" style="margin-top:0">
     <button class="o-row" data-act="bodyAdd"><span class="dot" style="background:var(--c4)"></span><span class="n">Registra peso o misure<small>${(() => { const w = latestWeight(); return w ? "ultimo peso " + fmtKg(w) + " kg" : "peso, circonferenze, composizione"; })()}</small></span><span class="p">›</span></button>
-    ${postureHomeOn() || postDraft ? `<button class="o-row" data-act="startPost"><span class="dot" style="background:var(--post)"></span><span class="n">Routine posturale a casa<small>${postDraft ? "interrotta: tocca per riprendere" : postDone ? "fatta oggi ✓" : esc(postureConds().filter(k => POSTURE[k].home.length).map(k => POSTURE[k].n.toLowerCase()).join(", "))}</small></span><span class="p">›</span></button>` : ""}
+    ${backTodayRow(t, postDraft)}
+    ${postureHomeOn() || (postDraft && postDraft.code !== "Back") ? `<button class="o-row" data-act="startPost"><span class="dot" style="background:var(--post)"></span><span class="n">Routine posturale a casa<small>${postDraft && postDraft.code !== "Back" ? "interrotta: tocca per riprendere" : postDone ? "fatta oggi ✓" : esc(postureConds().filter(k => POSTURE[k].home.length).map(k => POSTURE[k].n.toLowerCase()).join(", "))}</small></span><span class="p">›</span></button>` : ""}
     ${gymOn() && st.total < 4 ? `<button class="o-row" data-act="rirHelp"><span class="dot" style="background:var(--accent-mint)"></span><span class="n">Come scegliere il peso<small>Le prime sedute: "Trova il peso" e le ripetizioni in canna</small></span><span class="p">›</span></button>` : ""}
   </div></div>`;
   return h;
@@ -1930,7 +2006,7 @@ function openDay(ds){
   else if(runHere && !done && !pl){ h += `<div class="o-sec" style="padding-bottom:0"><div class="o-label">Palestra</div><p class="small muted" style="margin-top:6px">Nessuna seduta.</p><button class="btn sm" data-act="togglePlan" data-d="${ds}" style="margin-top:8px">Aggiungi un allenamento in palestra</button></div>`; }
   else if(done){
     h += `<div class="row"><span class="pill acc">${esc(posLabel(done.pos))}</span><b>${esc(dn(done))}</b>${done.deload ? ' <span class="pill post">scarico</span>' : ""}</div>`;
-    h += `<div style="overflow-x:auto"><table class="set-table"><thead><tr><th>Esercizio</th><th>Serie fatte</th></tr></thead><tbody>${(done.ex||[]).filter(e => e.sets.length).map(e => `<tr><td><span class="gdot" style="background:${grp(e.key).c}"></span> ${esc(EX[e.key]?.n || e.key)}${e.kg8 ? `<br><span class="tiny muted">8RM: ${fmtKg(e.kg8)} kg</span>` : ""}</td><td>${e.sets.map(z => z.emom ? `${z.rounds}/${z.min} min × ${z.reps} · ${fmtKg(z.kg)} kg` : `${z.kg != null ? fmtKg(z.kg) + " kg × " : ""}${z.reps ?? "—"}${z.time ? " s" : ""}`).join("<br>")}</td></tr>`).join("")}</tbody></table></div>`;
+    h += `<div style="overflow-x:auto"><table class="set-table"><thead><tr><th>Esercizio</th><th>Serie fatte</th></tr></thead><tbody>${(done.ex||[]).filter(e => e.sets.length).map(e => `<tr><td><span class="gdot" style="background:${grp(e.key).c}"></span> ${esc(EX[e.key]?.n || e.key)}${e.kg8 ? `<br><span class="tiny muted">8RM: ${fmtKg(e.kg8)} kg</span>` : ""}</td><td>${e.sets.map(z => z.emom ? `${z.rounds}/${z.min} min × ${z.reps} · ${fmtKg(z.kg)} kg` : `${z.kg != null ? fmtKg(z.kg) + " kg × " : ""}${z.reps ?? "—"}${z.time ? " s" : ""}${z.hold ? " tenute da " + z.hold + "″" : ""}`).join("<br>")}</td></tr>`).join("")}</tbody></table></div>`;
     if(done.notes) h += `<div class="hint"><b>Note</b><br>${esc(done.notes)}</div>`;
     h += `<div id="delZone"><button class="btn danger sm" data-act="askDelete" data-id="${done.id}">Elimina questo allenamento</button></div>`;
   } else {
@@ -2648,6 +2724,7 @@ const REFS = [
   ["Helms E., Morgan A., Valdez A.", "The Muscle and Strength Pyramid: Training, 3ª ed.", "Pubblicato dagli autori, 2025.", "Regole del programma su misura: tabelle 2.2, 2.5, 3.2, 7.2, 7.4, 7.7, 7.8, 7.16, 7.17."],
   ["Zatsiorsky V.M., Kraemer W.J., Fry A.C.", "Science and Practice of Strength Training, 3ª ed.", "Human Kinetics, Champaign (IL), 2021. ISBN 978-1-4925-9200-6.", "Metodi di allenamento della forza (cap. 4), esercizi per chi comincia (cap. 6)."],
   ["Friel J.", "Joe Friel's Quick Guide to Setting Zones.", "TrainingPeaks, 4 maggio 2012. trainingpeaks.com/learn/articles/joe-friel-s-quick-guide-to-setting-zones", "Test della FC di soglia in bici."]]],
+  ["McGill S.", "Back Mechanic: The Secrets to a Healthy Spine Your Doctor Isn't Telling You.", "Backfitpro, Gravenhurst (ON), 2015 (2ª stampa 2017).", "Valutazione del mal di schiena e routine: autovalutazione e test (capp. 5-6), strumenti di movimento e igiene della colonna (capp. 7-8), Big 3 (cap. 9), camminata (cap. 10), anche (cap. 12), condizioni particolari (cap. 14)."],
  ["Palestra: ricerca", [
   ["Pelland J., Remmert J., Robinson Z., Hinson S., Zourdos M.", "The resistance training dose response: meta-regressions exploring the effects of weekly volume and frequency on muscle hypertrophy and strength gains.", "Sports Medicine 2026;56(2):481-505.", "Volume e frequenza."],
   ["Phillips S.M. (presidente), Currier B.S., D'Souza A.C. et al.", "American College of Sports Medicine position stand. Resistance training prescription for muscle function, hypertrophy, and physical performance in healthy adults: an overview of reviews.", "Medicine & Science in Sports & Exercise, aprile 2026.", "Raccomandazioni ACSM."],
@@ -2676,6 +2753,8 @@ const REFS = [
   ["Lopes J.S.S., Machado A.F., Micheletti J.K., de Almeida A.C., Cavina A.P., Pastre C.M.", "Effects of training with elastic resistance versus conventional resistance on muscular strength: a systematic review and meta-analysis.", "SAGE Open Medicine 2019;7.", "doi:10.1177/2050312119831116"],
   ["Morton R.W., Murphy K.T., McKellar S.R. et al.", "A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains in muscle mass and strength in healthy adults.", "British Journal of Sports Medicine 2018;52(6):376-384.", "doi:10.1136/bjsports-2017-097608"],
   ["Swain C.T.V., Pan F., Owen P.J., Schmidt H., Belavy D.L.", "No consensus on causality of spine postures or physical exposure and low back pain: a systematic review of systematic reviews.", "Journal of Biomechanics 2020;102:109312.", "doi:10.1016/j.jbiomech.2019.08.006"],
+  ["George S.Z., Fritz J.M., Silfies S.P. et al.", "Interventions for the management of acute and chronic low back pain: revision 2021. Clinical practice guidelines.", "Journal of Orthopaedic & Sports Physical Therapy 2021;51(11):CPG1-CPG60.", "doi:10.2519/jospt.2021.0304"],
+  ["Hartvigsen J., Hancock M.J., Kongsted A. et al.", "What low back pain is and why we need to pay attention.", "The Lancet 2018;391(10137):2356-2367.", "doi:10.1016/S0140-6736(18)30480-X"],
   ["Sheikhhoseini R., Shahrbanian S., Sayyadi P., O'Sullivan K.", "Effectiveness of therapeutic exercise on forward head posture: a systematic review and meta-analysis.", "Journal of Manipulative and Physiological Therapeutics 2018;41(6):530-539.", "doi:10.1016/j.jmpt.2018.02.002"],
   ["Negrini S., Donzelli S., Aulisa A.G. et al.", "2016 SOSORT guidelines: orthopaedic and rehabilitation treatment of idiopathic scoliosis during growth.", "Scoliosis and Spinal Disorders 2018;13:3.", "doi:10.1186/s13013-017-0145-8"]]],
  ["Corsa, bici e allenamento combinato", [
@@ -2731,12 +2810,261 @@ function renderImpostazioni(){
 
 function postureSettingsHtml(){
   const s = S.settings, sel = s.postureConds || [];
-  return `<div class="o-sec" id="posturaSet"><div class="o-label">Postura</div>
+  const bk = backState();
+  const backRow = `<div class="o-list" style="margin-top:4px"><button class="o-row" data-act="${bk && bk.at ? "backOpen" : "backStart"}"><span class="n">Mal di schiena<small>${bk && bk.at ? (bk.stop ? "prima dal medico" : backOn() ? "routine attiva · valutazione del " + esc(fmtDate(bk.at)) : "routine tolta") : "valutazione guidata e routine (McGill)"}</small></span><span class="p">›</span></button></div>`;
+  return `<div class="o-sec" id="posturaSet"><div class="o-label">Postura</div>${backRow}
     <p class="small muted" style="margin-top:6px">Scegli le condizioni che ti riguardano: riceverai gli esercizi dei protocolli di Roncari (<i>Fitness posturale</i>) e di <i>Project Exercise 2</i>. Se non ne scegli nessuna, niente esercizi posturali. Meglio farle valutare da un professionista.</p>
     <div class="o-list">${Object.entries(POSTURE).map(([k, c]) => `<label class="switch"><input type="checkbox" data-pcond="${k}" ${sel.includes(k) ? "checked" : ""}><span><b>${esc(c.n)}</b><br><span class="small muted">${c.home.length ? c.home.length + " esercizi" : "solo indicazioni"}</span></span></label>`).join("")}</div>
     ${sel.length ? `<label class="switch"><input type="checkbox" data-set="postureGym" ${s.postureGym !== false ? "checked" : ""}><span><b>Anche nelle sedute di palestra</b><br><span class="small muted">Fino a 3 esercizi prima dei pesi e 3 alla fine; la routine completa resta nella home come routine a casa</span></span></label>` : ""}
   </div>`;
 }
+/* ============ schiena: valutazione e routine ============ */
+// Fonte principale: S. McGill, Back Mechanic (2015, 2ª stampa 2017), cap. 5-6 (autovalutazione: domande, test di provocazione, categorie
+// di dolore, pp. 53-72), cap. 7-12 (strumenti di movimento, igiene della colonna, Big 3, camminata, anche, pp. 75-123), cap. 14-15.
+// Segnali d'allarme: elenco di McGill (p. 58); quasi tutti sono poco specifici (Hartvigsen 2018, Lancet: l'80% di chi ha mal di schiena acuto
+// ne ha almeno uno, meno dell'1% ha una malattia seria), quindi portano a un controllo dal medico, non a un allarme.
+// Linea guida JOSPT 2021 (George et al.): esercizio (attivazione e resistenza dei muscoli del tronco, aerobico, generale) raccomandato nel mal di schiena cronico.
+// Scelte dell'app (dette anche nella pagina): livello di partenza di plank laterale e bird dog, tappe della camminata, quando si passa
+// alla forma successiva, dosi di conchiglia e ponte (il libro non le indica).
+const BACK_RED = [
+  ["peso", "Hai perso peso senza volerlo di recente?"],
+  ["trauma", "Il dolore è iniziato con un trauma (caduta, incidente)?"],
+  ["sella", "Perdi il controllo di urina o feci, o senti intorpidita la zona tra le cosce?", true],
+  ["tumore", "Hai o hai avuto un tumore?"],
+  ["droghe", "Usi o hai usato droghe per via endovenosa?"],
+  ["sistemica", "Hai una malattia generale in corso (per esempio infiammatoria)?"],
+  ["febbre", "Hai febbre insieme al mal di schiena?"],
+  ["notte", "Hai dolore di notte costante e in peggioramento?"],
+  ["pancia", "Hai dolore alla pancia, tra ombelico e pube?"],
+  ["fisso", "Il dolore resta uguale qualunque posizione o movimento fai?"]
+];
+const BACK_WORSE = [["seduto","Stare seduto a lungo"],["auto","Guidare"],["piegarsi","Piegarsi, allacciare le scarpe"],["sollevare","Sollevare o tenere pesi davanti"],["inpiedi","Stare in piedi fermo"],["lento","Camminare piano"],["lungo","Camminare a lungo (dopo un po')"],["inarcare","Inarcarsi, braccia sopra la testa"],["torcere","Girarsi, torcersi"],["scale","Scale, terreno irregolare"],["corsa","Correre o saltare"],["starnuto","Tossire, starnutire"],["esercizi","Solo alcuni esercizi in palestra"]];
+const BACK_BETTER = [["veloce","Camminare a passo svelto"],["sdraiato","Stare sdraiato"],["prono","Sdraiato a pancia in giù"],["sedersi","Sedersi dopo aver camminato"],["muoversi","Cambiare spesso posizione"]];
+const BACK_Q = [
+  ["catch", "Girandoti nel letto senti \"fitte\" improvvise? (o fitte quando starnutisci, ti allunghi)"],
+  ["mattina", "Il dolore è peggiore appena alzato?"],
+  ["sera", "Il dolore aumenta con il passare della giornata?"],
+  ["gamba", "Il dolore scende nel gluteo, nella gamba o nel piede?"],
+  ["dorso", "Il dolore è soprattutto a metà schiena (zona dorsale)?"],
+  ["osteo", "Hai l'osteoporosi?"],
+  ["terra", "Riesci a scendere a terra e rialzarti senza grosse difficoltà?"]
+];
+const BACK_WALK = [2, 5, 10, 15, 20, 30]; // minuti a passo svelto (tappe dell'app; obiettivo del libro: 30′ tre volte al giorno, cap. 10, p. 115)
+const BACK_SIDE = ["sideBridgeWall", "sideBridgeKnees", "sideBridge", "sideBridgeHip", "sideBridgeRoll"];
+const BACK_BIRD = ["birdDogArm", "birdDog", "birdDogSquares"];
+// test di provocazione (cap. 6, pp. 61-67): ogni domanda con le sue risposte
+const BACK_TESTS = [
+  {k:"t1", n:"Seduto, tirando il sedile", src:"Test 1, p. 61", how:"Siediti su uno sgabello e afferra il sedile ai lati. Tira verso l'alto per comprimere la schiena, con la stessa forza nelle tre posizioni.",
+    qs:[["alto","Seduto dritto (schiena neutra): fa male?"],["curvo","Seduto curvo: fa male?"],["arco","Seduto inarcato: fa male?"],["collo","Nella posizione peggiore, con il mento al petto fa più male che guardando in alto?"]]},
+  {k:"t2", n:"Caduta sui talloni", src:"Test 2, pp. 62-63", how:"In piedi, sali sulle punte e lasciati ricadere sui talloni, prima piano.",
+    qs:[["drop","Fa male?"],["collo","Con il mento al petto fa più male che guardando in alto?"],["addome","Rifallo con l'addome appena irrigidito: va meglio?"],["spalle","Rifallo con l'addome rilassato e le spalle spinte in basso: va meglio?"]]},
+  {k:"t3", n:"Sdraiato a pancia in giù", src:"Test 3, pp. 63-64", how:"Quando hai un po' di dolore: pancia in giù per 3 minuti (smetti dopo 30 secondi se peggiora). Poi rialzati senza piegare la schiena: a quattro zampe e in affondo.",
+    qs:[["meglio","In piedi, il dolore è diminuito?"],["peggio","Stando giù il dolore è aumentato?"]]},
+  {k:"t4", n:"Estensione in piedi", src:"Test 4, p. 64", how:"In piedi, inarca la zona lombare; poi inarca ruotando verso un lato e verso l'altro.",
+    qs:[["ext","Inarcarsi (anche con la rotazione) fa male?"],["unagamba","Ripetuto in piedi su una gamba sola (quella del lato che fa male), fa meno male?"]]},
+  {k:"t6", n:"Un peso in mano", src:"Test 6, p. 65", how:"In piedi, schiena nella posizione senza dolore. Tieni un peso di circa 2 kg davanti alla cintura, poi a braccia tese.",
+    qs:[["vicino","Vicino al corpo fa male?"],["lontano","A braccia tese fa male?"]]},
+  {k:"t7", n:"Bacino avanti e indietro", src:"Test 7, p. 66", how:"Con un bastone o un bilanciere scarico sulle spalle, ruota il bacino in avanti e indietro: la zona lombare si piega e si inarca. Saltalo se il test del peso ha fatto male.",
+    qs:[["mov","Il movimento fa male?"]]},
+  {k:"t8", n:"Siediti dritto", src:"Cap. 6, p. 60; cap. 14, p. 136", how:"Davanti a uno specchio, siediti curvo e poi raddrizzati come ti viene naturale.", only:"dorso",
+    qs:[["torace","Ti raddrizzi quasi solo alzando il petto (senza ruotare il bacino)?"]]}
+];
+function backState(){ return S.settings.back || null; }
+function backOn(){ const b = backState(); return !!(b && b.at && !b.stop && b.top); }
+function backTags(b){
+  const w = new Set(b.worse || []), be = new Set(b.better || []), q = b.q || {}, t = b.t || {}, tg = new Set();
+  const yes = (k, s) => t[k] && t[k][s] === "s";
+  if(w.has("seduto") || w.has("auto") || w.has("piegarsi") || yes("t1","curvo") || yes("t3","meglio")) tg.add("flex");
+  if(w.has("inarcare") || w.has("torcere") || yes("t1","arco") || yes("t4","ext") || yes("t3","peggio")) tg.add("ext");
+  if(yes("t1","alto") || yes("t2","drop")) tg.add("compr");
+  if(yes("t1","collo") || yes("t2","collo")) tg.add("neural");
+  if(yes("t6","vicino") || yes("t6","lontano") || w.has("sollevare")) tg.add("load");
+  if(yes("t7","mov")) tg.add("motion");
+  if(w.has("lungo") || (be.has("sedersi") && !be.has("veloce"))) tg.add("walkDist");
+  if(w.has("scale") || w.has("corsa")) tg.add("dyn");
+  if(w.has("esercizi")) tg.add("specific");
+  if(q.catch === "s" || w.has("starnuto")) tg.add("instab");
+  if(q.mattina === "s") tg.add("morning");
+  if(q.sera === "s") tg.add("dayLong");
+  if(q.gamba === "s") tg.add("radic");
+  if(q.dorso === "s" && yes("t8","torace")) tg.add("chest");
+  if(q.osteo === "s") tg.add("osteo");
+  if(yes("t3","meglio")) tg.add("prone");
+  if(yes("t4","unagamba")) tg.add("stiff");
+  if(yes("t2","addome")) tg.add("braceAbd"); else if(yes("t2","spalle")) tg.add("braceLat");
+  return tg;
+}
+// testi delle categorie: McGill, Back Mechanic, cap. 6, pp. 59-70 (sintesi)
+const BACK_CAT = {
+  flex:{n:"Flessione", d:"Fa male stare curvo, piegarsi, allacciare le scarpe.", fai:["Piegati con le anche (squat dello shortstop), non con la schiena","Seduto con la curva lombare sostenuta; alzati ogni 20′ circa","Pancia in giù se ti dà sollievo"], evita:["Ginocchia al petto e sit-up, soprattutto appena alzato","Stare a lungo nella stessa posizione"], p:"pp. 59, 68"},
+  ext:{n:"Estensione e torsione", d:"Fa male inarcarsi o girarsi.", fai:["Muoviti con le anche","Resta vicino alla posizione neutra"], evita:["Inarcarsi e torcersi, soprattutto insieme"], p:"pp. 64, 69"},
+  compr:{n:"Compressione", d:"Fa male anche con la schiena dritta, sotto carico.", fai:["Oggetti vicino al corpo, metà del peso per volta"], evita:["Allungarti in avanti con le braccia","Carichi inutili"], p:"pp. 62, 69"},
+  neural:{n:"Tensione del nervo", d:"Il dolore cambia con la posizione del collo.", fai:["Tieni il collo nella posizione che non aumenta il dolore (schermo e piano di lavoro più alti)","Più avanti: scorrimento del nervo"], evita:["Allungamenti, anche dei femorali","Movimenti a fine corsa"], p:"pp. 62, 68"},
+  load:{n:"Carichi", d:"Tenere un peso fa male.", fai:["Fatti aiutare con i pesi durante il recupero"], evita:["Sollevare o portare carichi non necessari"], p:"p. 65"},
+  motion:{n:"Movimento della schiena", d:"Piegare e inarcare la zona lombare sotto carico fa male.", fai:["Schiena ferma, movimento da anche e spalle"], evita:["Muovere la zona lombare con un peso addosso"], p:"p. 66"},
+  walkDist:{n:"Camminare a lungo", d:"Camminare va bene all'inizio, poi fa male; sedersi aiuta.", fai:["Cammina a pezzi che finiscono prima del dolore","Nelle pause: scarico su una panchina o mani al muro"], evita:["Camminare finché arriva il dolore"], p:"pp. 69, 133"},
+  dyn:{n:"Carichi improvvisi", d:"Scale, terreno irregolare, corsa fanno male.", fai:["Addome o spalle appena irrigiditi, quanto basta a togliere il dolore"], evita:["Corsa e salti per ora","Vibrazioni (macchinari, mezzi pesanti)"], p:"p. 68"},
+  specific:{n:"Solo alcuni esercizi", d:"Fa male solo in palestra con certi esercizi.", fai:["Individua l'esercizio, correggi la tecnica, riduci peso e volume"], evita:["L'esercizio che scatena il dolore"], p:"p. 70"},
+  instab:{n:"Fitte improvvise", d:"Fitte girandoti nel letto, starnutendo, allungandoti.", fai:["Big 3: irrigidiscono la schiena e tolgono i piccoli movimenti che fanno male"], evita:["Manipolazioni, allungamenti della schiena","Ginocchia a destra e sinistra da supino"], p:"pp. 59-60"},
+  morning:{n:"Peggio al mattino", d:"", fai:["Esercizi a metà mattina, non appena alzato","Un materasso che sostiene la curva lombare"], evita:["Piegarti e sollevare pesi appena alzato"], p:"pp. 60, 97, 142"},
+  dayLong:{n:"Peggio verso sera", d:"Il carico della giornata si accumula.", fai:["Cambia posizione prima che arrivi il dolore","Pause di segno opposto al lavoro: se stai seduto, cammina"], evita:["Tirare avanti fino al dolore"], p:"pp. 60, 96-98"},
+  radic:{n:"Dolore nella gamba", d:"Quasi sempre una radice nervosa irritata nella zona lombare.", fai:["Camminate a intervalli","Pancia in giù prima di camminare, se aiuta"], evita:["Stare seduto a lungo","Allungare il nervo (femorali)"], p:"pp. 60, 132-135, 145"},
+  chest:{n:"Metà schiena", d:"Ti raddrizzi spingendo il petto: il movimento si concentra a metà schiena.", fai:["Respirazione di Lewit"], evita:["Raddrizzarti solo alzando il petto"], p:"pp. 60, 136"},
+  osteo:{n:"Osteoporosi", d:"", fai:["Cammina eretto; il nuoto va bene"], evita:["Compressione e schiena piegata; golf"], p:"p. 60"}
+};
+function backBraceTxt(tg){ return tg.has("braceAbd") ? "Addome appena irrigidito, «regolato» quanto basta a togliere il dolore." : tg.has("braceLat") ? "Spalle spinte in basso lontano dalle orecchie (pettorali e dorsali), addome rilassato." : ""; }
+function backLevels(b, tg){ // livello di partenza: scelta dell'app
+  const tender = tg.has("load") || tg.has("compr");
+  return {side: b.q && b.q.terra === "n" ? 0 : tender ? 0 : 1, bird: tender ? 0 : 1};
+}
+function backTop(b){ return Math.max(3, Math.min(6, b.top || 5)); }
+function backPhase2(b){ return !!b.phase2; }
+function buildBackSession(){
+  const b = backState(), tg = backTags(b), standing = b.q && b.q.terra === "n", top = backTop(b);
+  const one = (ex, p) => ({type:"single", items:[{ex, p}]});
+  const blocks = [];
+  if(tg.has("prone") && !standing) blocks.push(one("proneRelax", P.time(1, 180, 0)));
+  if(!standing) blocks.push(one("catCamel", P.range(2, 8, 8, "", 20)));
+  blocks.push(one(standing ? "birdDogStanding" : BACK_BIRD[b.lv.bird], P.hold(top, 10, 30)));
+  if(!standing) blocks.push(one("mgCurlUp", P.hold(top, 10, 30)));
+  blocks.push(one(standing ? "sideBridgeWall" : BACK_SIDE[b.lv.side], P.hold(top, 10, 30)));
+  if(tg.has("chest") && !standing) blocks.push(one("lewit", P.range(1, 4, 4, "", 0)));
+  if(backPhase2(b)){
+    if(!standing){ blocks.push(one("clamshell", P.range(2, 10, 10, "", 30))); blocks.push(one("gluteBridge", P.range(2, 8, 8, "", 30))); }
+    blocks.push(one("lungeHip", P.range(1, 6, 6, "", 0)));
+    if(tg.has("radic") || tg.has("neural")) blocks.push(one("nerveFloss", P.range(1, 10, 10, "", 0)));
+  }
+  return {code:"Back", title:"Routine per la schiena", kind:"post", blocks};
+}
+function backWalkTxt(b){ const m = BACK_WALK[b.walk || 0]; return m >= 30 ? "30′ a passo svelto, 3 volte al giorno" : m <= 5 ? `${m}′ a passo svelto, più volte al giorno` : `${m}′ a passo svelto, 3 volte al giorno`; }
+function backDoneOn(d){ return Object.values(S.sessions).find(x => x && !x.deleted && x.kind === "post" && x.code === "Back" && x.date === d); }
+function backLastDone(){ return Object.values(S.sessions).filter(x => x && !x.deleted && x.kind === "post" && x.code === "Back").map(x => x.date).sort().pop() || null; }
+function backNeedsCheck(){ // il giorno dopo una routine: com'è la schiena rispetto a ieri?
+  const b = backState(); if(!backOn()) return null; const last = backLastDone(), t = todayStr();
+  if(!last || last >= t) return null; const log = b.log || {};
+  if(Object.keys(log).some(d => d > last)) return null;
+  return last;
+}
+// progressione (cap. 9, p. 103; cap. 15, p. 142): se il giorno dopo va bene, una tenuta in più per serie; se va peggio, si torna indietro di un passo.
+// Arrivati a 6-4-2 con due giorni buoni di fila, si passa alla forma successiva di plank laterale e bird dog ripartendo da 5 (scelta dell'app).
+function backCheck(v){
+  const b = backState(); if(!b) return; const t = todayStr(); b.log = b.log || {}; b.log[t] = v;
+  if(v === "w"){ b.top = Math.max(3, backTop(b) - 1); b.walk = Math.max(0, (b.walk || 0) - 1); b.ok = 0; }
+  else {
+    if(backTop(b) < 6){ b.top = backTop(b) + 1; b.ok = 0; }
+    else if((b.ok = (b.ok || 0) + 1) >= 2){ const sideMax = BACK_SIDE.length - 1, birdMax = BACK_BIRD.length - 1; if(b.lv.side < sideMax || b.lv.bird < birdMax){ b.lv.side = Math.min(sideMax, b.lv.side + 1); b.lv.bird = Math.min(birdMax, b.lv.bird + 1); b.top = 5; b.ok = 0; } }
+    if(backTop(b) >= 6) b.phase2 = true; // dopo circa 4-6 settimane si arriva a 6-4-2 (cap. 11, p. 118); con il dolore calmato si lavora sulle anche (cap. 12, p. 120)
+    b.walk = Math.min(BACK_WALK.length - 1, (b.walk || 0) + 1);
+  }
+  pushMeta(); render();
+}
+function backCheckHtml(){
+  const last = backNeedsCheck(); if(!last) return "";
+  return `<div class="o-sec"><div class="o-label">Schiena</div><p class="small" style="margin:6px 0 8px">Rispetto a ${last === ymd(new Date(Date.now() - 864e5)) ? "ieri" : esc(fmtDate(last))}, com'è la schiena?</p>
+    <div class="seg" style="width:100%"><button data-act="backCheck" data-v="b" style="flex:1">Meglio</button><button data-act="backCheck" data-v="s" style="flex:1">Uguale</button><button data-act="backCheck" data-v="w" style="flex:1">Peggio</button></div></div>`;
+}
+function backTodayRow(t, postDraft){
+  if(!backOn() && !(postDraft && postDraft.code === "Back")) return "";
+  const b = backState(), done = backDoneOn(t), dr = postDraft && postDraft.code === "Back";
+  return `<button class="o-row" data-act="startBack"><span class="dot" style="background:var(--post)"></span><span class="n">Routine per la schiena<small>${dr ? "interrotta: tocca per riprendere" : done ? "fatta oggi ✓ · camminata " + BACK_WALK[b.walk || 0] + "′" : esc(`Big 3 ${P.hold(backTop(b), 10, 30).reps.join("-")} · camminata ${BACK_WALK[b.walk || 0]}′`)}</small></span><span class="p">›</span></button>`;
+}
+function startBack(){
+  const sess = buildBackSession(); const blocks = cloneBlocks(sess.blocks, false);
+  R = {id:uid(), date:todayStr(), pos:null, code:sess.code, title:sess.title, kind:"post", deload:false, blocks, bi:0, screen:"intro", seq:[], si:0, log:blocks.map(b => b.items.map(() => ({sets:[]}))), restEnd:null, startedAt:Date.now(), notes:"", warm:{}};
+  initAudio(); saveDraft(); openRunner();
+}
+// ---- pagina della valutazione ----
+let BA = null; // bozza della valutazione in corso
+function backStart(){ const old = backState(); BA = {step:0, red:[], worse:[], better:[], q:{}, t:{}, walk:null}; if(old && old.at){ BA.worse = (old.worse||[]).slice(); BA.better = (old.better||[]).slice(); BA.q = {...(old.q||{})}; } view = "schiena"; render(); window.scrollTo(0,0); }
+function backSteps(){ const st = ["intro","red","q","liste"]; BACK_TESTS.forEach(x => { if(!x.only || (BA.q[x.only] === "s")) st.push(x.k); }); st.push("walk", "fine"); return st; }
+function yn(name, cur, labels){ const L = labels || [["s","Sì"],["n","No"]]; return `<div class="seg">${L.map(([v, l]) => `<button data-act="baSet" data-k="${name}" data-v="${v}" aria-pressed="${cur === v}">${l}</button>`).join("")}</div>`; }
+function renderSchiena(){
+  const b = backState();
+  if(!BA){ // riepilogo
+    if(!b || !b.at) { BA = null; return `<button class="btn ghost sm" data-act="backClose" style="padding-left:0">‹ Indietro</button><div class="o-sec first"><p>Nessuna valutazione.</p><button class="btn primary" data-act="backStart">Inizia</button></div>`; }
+    return backResultHtml(b, false);
+  }
+  const steps = backSteps(), k = steps[Math.min(BA.step, steps.length - 1)], n = steps.length;
+  let h = `<button class="btn ghost sm" data-act="${BA.step ? "baPrev" : "backClose"}" style="padding-left:0">‹ ${BA.step ? "Indietro" : "Esci"}</button><div class="tiny muted" style="margin:4px 0 2px">Passo ${BA.step + 1} di ${n}</div>`;
+  if(k === "intro") h += `<div class="o-sec first"><div class="o-label">Valutazione del mal di schiena</div>
+      <p style="margin-top:8px">Domande e alcuni test per capire quali posizioni, carichi e movimenti scatenano il dolore e quali lo alleviano. Ne esce una routine giornaliera.</p>
+      <p class="small muted keep">Metodo di Stuart McGill (<i>Back Mechanic</i>, cap. 5-6). Nei test si cerca di proposito di provocare il dolore, senza forzare: se un test fa molto male, fermati e saltalo. Non sostituisce la visita di un professionista.</p></div>`;
+  else if(k === "red") h += `<div class="o-sec first"><div class="o-label">Prima di tutto</div><p class="small" style="margin-top:6px">Segna quello che ti riguarda.</p>
+      <div class="o-list">${BACK_RED.map(([id, l]) => `<label class="switch"><input type="checkbox" data-bared="${id}" ${BA.red.includes(id) ? "checked" : ""}><span>${esc(l)}</span></label>`).join("")}</div>
+      <p class="small muted">Elenco da McGill, <i>Back Mechanic</i>, p. 58. Sono segnali poco specifici: quasi sempre dietro non c'è nulla di grave (Hartvigsen 2018, <i>Lancet</i>), ma vanno valutati da un medico prima di iniziare.</p></div>`;
+  else if(k === "q") h += `<div class="o-sec first"><div class="o-label">Domande</div><div class="stack" style="margin-top:10px">${BACK_Q.map(([id, l]) => `<div class="stack-sm"><span class="small">${esc(l)}</span>${yn("q." + id, BA.q[id])}</div>`).join("")}</div>
+      <p class="small muted">McGill, <i>Back Mechanic</i>, cap. 6, «Le domande essenziali», pp. 59-61.</p></div>`;
+  else if(k === "liste") h += `<div class="o-sec first"><div class="o-label">Cosa lo peggiora</div><div class="chips" style="margin-top:8px">${BACK_WORSE.map(([id, l]) => `<button class="chip" aria-pressed="${BA.worse.includes(id)}" data-act="baChip" data-l="worse" data-v="${id}">${esc(l)}</button>`).join("")}</div>
+      <div class="o-label" style="margin-top:16px">Cosa lo allevia</div><div class="chips" style="margin-top:8px">${BACK_BETTER.map(([id, l]) => `<button class="chip" aria-pressed="${BA.better.includes(id)}" data-act="baChip" data-l="better" data-v="${id}">${esc(l)}</button>`).join("")}</div>
+      <p class="small muted">Le due liste del cap. 6 (p. 59): cerca cosa hanno in comune le attività che fanno male.</p></div>`;
+  else if(k === "walk") h += `<div class="o-sec first"><div class="o-label">Camminata</div><p class="small" style="margin-top:6px">Quanto riesci a camminare a passo svelto, braccia che oscillano, prima che il dolore aumenti?</p>
+      <div class="o-list">${BACK_WALK.map((m, i) => `<label class="switch"><input type="radio" name="bawalk" data-bawalk="${i}" ${BA.walk === i ? "checked" : ""}><span>${i === 0 ? "Meno di 5 minuti" : i === BACK_WALK.length - 1 ? "30 minuti o più" : "Circa " + m + " minuti"}</span></label>`).join("")}</div>
+      <p class="small muted">Si parte da pezzi più corti del punto in cui arriva il dolore, più volte al giorno; l'obiettivo è 30 minuti tre volte al giorno (McGill, cap. 10, pp. 114-116). Le tappe intermedie sono una scelta dell'app.</p></div>`;
+  else if(k === "fine"){ const tmp = backFromDraft(); h += backResultHtml(tmp, true); return h; }
+  else { const T = BACK_TESTS.find(x => x.k === k); const cur = BA.t[k] || {};
+    h += `<div class="o-sec first"><div class="o-label">Test · ${esc(T.n)}</div><p style="margin-top:8px">${esc(T.how)}</p>
+      <div class="stack" style="margin-top:10px">${T.qs.map(([id, l]) => `<div class="stack-sm"><span class="small">${esc(l)}</span>${yn("t." + k + "." + id, cur[id])}</div>`).join("")}</div>
+      <p class="small muted">McGill, <i>Back Mechanic</i>, cap. 6, ${esc(T.src)}. Se non puoi farlo, vai avanti.</p></div>`; }
+  const redStop = k === "red" && BA.red.length;
+  h += `<div class="row" style="margin-top:14px;gap:8px">${redStop ? `<button class="btn primary big" data-act="baStop">Avanti</button>` : `<button class="btn primary big" data-act="baNext">${k === "intro" ? "Inizia" : "Avanti"}</button>`}</div>`;
+  return h;
+}
+function backFromDraft(){
+  const old = backState() || {};
+  const b = {at:todayStr(), red:BA.red.slice(), worse:BA.worse.slice(), better:BA.better.slice(), q:{...BA.q}, t:JSON.parse(JSON.stringify(BA.t)), stop:false};
+  const tg = backTags(b);
+  b.lv = old.lv && old.at ? old.lv : backLevels(b, tg);
+  b.top = old.top || 5; b.walk = BA.walk != null ? BA.walk : (old.walk || 0); b.phase2 = !!old.phase2; b.log = old.log || {}; b.ok = 0;
+  return b;
+}
+function backResultHtml(b, draft){
+  if(b.stop) return `<div class="o-sec first"><div class="o-label">Prima dal medico</div>
+    <p style="margin-top:8px">${b.red.includes("sella") ? "Perdita di controllo di urina o feci o intorpidimento tra le cosce: rivolgiti subito a un medico." : "Hai segnato uno o più segnali da far valutare a un medico prima di iniziare."} Quando il medico ti dà il via libera, rifai la valutazione.</p>
+    <div class="row" style="margin-top:12px;gap:8px"><button class="btn" data-act="backStart">Rifai la valutazione</button><button class="btn ghost" data-act="backClose">Chiudi</button></div></div>`;
+  const tg = backTags(b), cats = Object.keys(BACK_CAT).filter(c => tg.has(c)), brace = backBraceTxt(tg);
+  const sess = (() => { const keep = S.settings.back; S.settings.back = b; const s2 = buildBackSession(); S.settings.back = keep; return s2; })();
+  let h = draft ? "" : `<button class="btn ghost sm" data-act="backClose" style="padding-left:0">‹ Indietro</button>`;
+  h += `<div class="o-sec first"><div class="o-label">I tuoi fattori scatenanti</div>
+    ${cats.length ? `<div class="o-list" style="margin-top:4px">${cats.map(c => { const C = BACK_CAT[c]; return `<details class="bcat"><summary><b>${esc(C.n)}</b>${C.d ? `<span class="small muted"> · ${esc(C.d)}</span>` : ""}</summary>
+      <div class="small" style="margin:6px 0 4px"><b>Fai:</b> ${C.fai.map(esc).join(" · ")}</div><div class="small"><b>Evita:</b> ${C.evita.map(esc).join(" · ")}</div><div class="tiny muted" style="margin-top:4px">Back Mechanic, ${esc(C.p)}</div></details>`; }).join("")}</div>`
+      : `<p class="small" style="margin-top:6px">Nessun fattore chiaro. McGill consiglia un diario: ogni giorno come va la schiena e cosa hai fatto; dopo 4-5 giornate peggiori cerca cosa le accomuna, guardando soprattutto il giorno prima. Se non emerge nulla, serve un professionista (p. 70).</p>`}
+    ${brace ? `<p class="small" style="margin-top:8px"><b>Per i carichi:</b> ${esc(brace)}</p>` : ""}
+    <p class="small muted">Categorie di McGill, <i>Back Mechanic</i>, cap. 6, pp. 68-70. Indicano cosa evitare durante il recupero, non una diagnosi.</p></div>`;
+  h += `<div class="o-sec"><div class="o-label">Routine di ogni giorno</div><ul class="exlist">${sess.blocks.map(x => { const it = x.items[0], ex = EX[it.ex]; return `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}"><span class="gdot" style="background:var(--post)"></span><span class="t"><span class="n">${esc(ex.n)}</span><span class="p">${esc(shortP(it.p, ex))}</span></span><span class="chev">›</span></button></li>`; }).join("")}</ul>
+    <p class="small" style="margin-top:8px"><b>Camminate:</b> ${esc(backWalkTxt(b))}, braccia che oscillano dalle spalle.</p>
+    <p class="small muted">Big 3 (curl-up, plank laterale, bird dog) con tenute di 10 secondi a piramide discendente, ogni giorno, ma non appena alzato dal letto (McGill, cap. 9, pp. 102-110). Il giorno dopo l'app chiede com'è la schiena: se va bene aggiunge una tenuta per serie, se va peggio torna indietro di un passo (cap. 9, p. 103; cap. 15, p. 142). Arrivato a 6-4-2 si aggiungono gli esercizi per le anche (cap. 12)${tg.has("radic") || tg.has("neural") ? " e lo scorrimento del nervo (cap. 14)" : ""}. Livello di partenza e passaggio alle forme più difficili sono scelte dell'app. La linea guida JOSPT 2021 raccomanda l'esercizio per il mal di schiena cronico, compresi quelli di attivazione e resistenza del tronco.</p></div>`;
+  h += `<div class="o-sec"><div class="o-label">Igiene della colonna</div><ul class="small" style="margin:6px 0 0;padding-left:18px">
+    <li>Per piegarti usa le anche: squat dello shortstop, e per oggetti leggeri il «golfer lift».</li>
+    <li>Non piegarti né sollevare pesi appena alzato dal letto o dopo essere stato a lungo seduto: prima cammina qualche minuto.</li>
+    <li>Cambia posizione prima che arrivi il dolore; dopo 20′ seduto, alzati e fai l'allungamento in piedi.</li>
+    <li>Carichi vicini al corpo; spingi e tira con la forza diretta verso l'ombelico.</li></ul>
+    <p class="small muted">McGill, <i>Back Mechanic</i>, cap. 8, pp. 92-99.</p></div>`;
+  if(draft) h += `<div class="row" style="margin-top:14px;gap:8px"><button class="btn primary big" data-act="baSave">Salva e usa questa routine</button></div>`;
+  else h += `<div class="row" style="margin-top:14px;gap:8px;flex-wrap:wrap"><button class="btn" data-act="backStart">Rifai la valutazione</button><button class="btn ghost" data-act="backOff" style="color:var(--danger)">Togli la routine</button></div>`;
+  return h;
+}
+function backAct(a, d, e){
+  switch(a){
+    case "backOpen": BA = null; view = "schiena"; render(); window.scrollTo(0,0); return true;
+    case "backStart": backStart(); return true;
+    case "backClose": BA = null; view = "impostazioni"; render(); window.scrollTo(0,0); return true;
+    case "baNext": BA.step++; render(); window.scrollTo(0,0); return true;
+    case "baPrev": BA.step = Math.max(0, BA.step - 1); render(); window.scrollTo(0,0); return true;
+    case "baStop": { const old = backState() || {}; S.settings.back = {...old, at:todayStr(), red:BA.red.slice(), stop:true}; BA = null; pushMeta(); render(); window.scrollTo(0,0); return true; }
+    case "baSet": { const parts = d.k.split("."); if(parts[0] === "q") BA.q[parts[1]] = BA.q[parts[1]] === d.v ? undefined : d.v; else { const t = BA.t[parts[1]] = BA.t[parts[1]] || {}; t[parts[2]] = t[parts[2]] === d.v ? undefined : d.v; } render(); return true; }
+    case "baChip": { const L = BA[d.l]; const i = L.indexOf(d.v); if(i >= 0) L.splice(i, 1); else L.push(d.v); render(); return true; }
+    case "baSave": S.settings.back = backFromDraft(); BA = null; pushMeta(); view = "oggi"; render(); window.scrollTo(0,0); return true;
+    case "backOff": if(confirm("Togliere la routine per la schiena? La valutazione resta salvata.")){ const b = backState(); if(b) b.top = 0; pushMeta(); render(); } return true;
+    case "backCheck": backCheck(d.v); return true;
+    case "startBack": { const dr = loadDraft(); if(dr && dr.kind === "post" && dr.code === "Back") resumeSession(); else if(dr) alert("C'è un'altra seduta interrotta: finiscila o eliminala prima."); else startBack(); return true; }
+  }
+  return false;
+}
+document.addEventListener("change", e => {
+  const r = e.target.closest("[data-bared]"); if(r && BA){ const id = r.dataset.bared; BA.red = r.checked ? [...new Set(BA.red.concat([id]))] : BA.red.filter(x => x !== id); render(); return; }
+  const w = e.target.closest("[data-bawalk]"); if(w && BA){ BA.walk = Number(w.dataset.bawalk); render(); }
+});
+
 /* ============ Guida ============ */
 const GLOSS = [
   ["Ripetizione e serie", "Una ripetizione è un movimento completo. Una serie è un gruppo di ripetizioni di fila: \"3 serie da 10\" vuol dire 10 ripetizioni, pausa, altre 10, pausa, altre 10."],
@@ -2892,6 +3220,7 @@ function expandBlock(b){
     else if(p.t === "fixed" || p.t === "rpe") for(let i=0;i<p.sets;i++) out.push({ii, target:String(p.reps), def:p.reps, rest:p.rest});
     else if(p.t === "pyr") p.reps.forEach(r => out.push({ii, target:String(r), def:r, rest:p.rest}));
     else if(p.t === "time") for(let i=0;i<p.sets;i++) out.push({ii, target:p.sec+"″", def:p.sec, rest:p.rest, time:true});
+    else if(p.t === "hold") p.reps.forEach(n => out.push({ii, target:String(n), def:n, rest:p.rest, hp:{n, sec:p.sec, gap:4}}));
     else if(p.t === "emom") out.push({ii, emom:true, min:p.min, reps:p.reps, rest:90});
     else if(p.t === "test") out.push({ii, test:true});
     else if(p.t === "max") out.push({ii, max:true});
@@ -2917,7 +3246,7 @@ function rRender(){
   const head = `<div class="rtop"><button class="btn icon ghost" data-act="exitRunner" aria-label="Esci e salva la bozza">${svgI.close}</button><span class="small muted" style="text-align:center;flex:1">${esc(dn(R))}${R.deload ? " · scarico" : ""}</span><span class="tiny muted num">${R.screen === "end" ? tot : dn0}/${tot}</span></div><div class="prog" style="margin-bottom:16px"><i style="width:${pct}%"></i></div>`;
   const body = {warmup:scrWarmup, intro:scrIntro, ramp:scrRamp, set:scrSet, rest:scrRest, emom:scrEmom, test:scrTest, max:scrMax, end:scrEnd}[R.screen]();
   el.innerHTML = `<div class="wrap">${head}${body}</div>`;
-  if(R.screen === "rest" || (R.screen === "emom" && R.emom && R.emom.start) || (R.screen === "set" && R.holdEnd)) tick = setInterval(onTick, 100);
+  if(R.screen === "rest" || (R.screen === "emom" && R.emom && R.emom.start) || (R.screen === "set" && (R.holdEnd || R.hpRun))) tick = setInterval(onTick, 100);
   if(ringRaf){ cancelAnimationFrame(ringRaf); ringRaf = null; }
   if(R.screen === "rest"){ R.lastPip = null; ringRaf = requestAnimationFrame(ringFrame); }
   saveDraft();
@@ -3031,6 +3360,7 @@ function scrSet(){
   const tg = EXG[it.ex] === "post" ? null : rirTarget(it.p);
   const adv = R.advice && R.advice.ii === st.ii ? R.advice : null;
   const holdLeft = R.holdEnd ? Math.max(0, (R.holdEnd - Date.now())/1000) : null;
+  if(st.hp) return scrHoldSet(st, it, ex, done);
   const cue = tg ? `Obiettivo: finire la serie potendone fare ancora <b>${tg.txt}</b>.` : it.p.t==="fixed" ? `Peso da ${it.p.rm} ripetizioni massime, uguale in tutte le serie: all'inizio sembra leggero, la fatica arriva nelle ultime serie.` : "";
   return `<div class="stack">
     <div class="row between">${secPill(R.bi)}<button class="btn sm ghost" data-act="exInfo" data-k="${it.ex}">${svgI.info} Tecnica</button></div>
@@ -3048,6 +3378,30 @@ function scrSet(){
     ${done.length ? `<div class="done-sets">${done.map((z,i) => `<span>S${i+1}: ${z.kg!=null ? fmtKg(z.kg)+" kg × " : ""}${z.reps}${z.rir != null ? " · " + (z.rir >= 6 ? "5+" : z.rir) + " in canna" : ""}</span>`).join("")}</div>` : ""}
     ${tg ? `<div class="stack-sm"><span class="eyebrow">Serie finita? Quante ne avresti fatte ancora?</span><div class="feelgrid">${FEEL.map(([v,l,sub]) => `<button class="feel${v >= tg.lo && v <= tg.hi ? " ok" : ""}" data-act="setFeel" data-v="${v}"><b>${l}</b><span>${sub}</span></button>`).join("")}</div><span class="tiny muted">Il riquadro evidenziato è l'obiettivo. Un tocco registra la serie e fa partire il recupero.</span></div>`
          : `<button class="btn primary big" data-act="setDone">Serie completata</button>`}
+  </div>`;
+}
+// serie di tenute guidata: il cronometro fa tenuta, pausa breve, tenuta... (per gli esercizi "per lato" prima un lato, poi l'altro)
+function holdPlan(st, ex){ const per = ex.side ? 2 : 1; return {tot:st.hp.n*per, per}; }
+function holdLabel(st, ex){
+  const h = R.hpRun; if(!h) return "";
+  const {tot} = holdPlan(st, ex); if(h.k >= tot) return "Fatto";
+  const lato = ex.side ? (h.k < st.hp.n ? "primo lato · " : "secondo lato · ") : "";
+  const left = Math.max(0, Math.ceil((h.end - Date.now())/1000));
+  return h.phase === "hold" ? `${lato}tenuta ${(h.k % st.hp.n) + 1} di ${st.hp.n} · ${left}″` : `${lato}pausa · ${left}″`;
+}
+function scrHoldSet(st, it, ex, done){
+  const {tot} = holdPlan(st, ex), h = R.hpRun, reps = R.inReps ?? st.def;
+  return `<div class="stack">
+    <div class="row between">${secPill(R.bi)}<button class="btn sm ghost" data-act="exInfo" data-k="${it.ex}">${svgI.info} Tecnica</button></div>
+    <div class="stack-sm"><h2>${esc(ex.n)}</h2><div class="row between"><span class="small muted">Serie ${st.n} di ${st.of}</span>${setDots(st, st.ii)}</div></div>
+    <div class="card stack">
+      <div class="target"><span class="bignum">${st.hp.n}</span><span class="muted">tenute da ${st.hp.sec}″${ex.side ? " " + ex.side : ""}</span></div>
+      ${h ? `<div class="hint small" style="text-align:center"><b id="hpT" class="num">${esc(holdLabel(st, ex))}</b></div>` : ""}
+      ${h && h.k < tot ? `<button class="btn" data-act="holdStop">Ferma il cronometro</button>` : !h ? `<button class="btn" data-act="holdGo">${svgI.play} Avvia: ${tot} × ${st.hp.sec}″</button>` : ""}
+    </div>
+    <div class="field"><label for="inReps">Tenute fatte${ex.side ? " per lato" : ""}</label><div class="stepper"><button data-act="repStep" data-v="-1" aria-label="Meno">−</button><input id="inReps" inputmode="numeric" value="${esc(reps)}"><button data-act="repStep" data-v="1" aria-label="Più">+</button></div></div>
+    ${done.length ? `<div class="done-sets">${done.map((z,i) => `<span>S${i+1}: ${z.reps} tenute</span>`).join("")}</div>` : ""}
+    <button class="btn primary big" data-act="setDone">Serie completata</button>
   </div>`;
 }
 function nextInfo(){
@@ -3165,6 +3519,15 @@ function onTick(){
     if(round !== R.emom.lastRound){ if(R.emom.lastRound) beep("double"); R.emom.lastRound = round; }
     const r = $("#emomR"); if(r) r.textContent = `Minuto ${round} di ${st.min}`;
     const t = $("#emomT"); if(t) t.textContent = fmtSec(60 - (el % 60));
+  } else if(R.screen === "set" && R.hpRun){
+    const h = R.hpRun, st = curStep(), ex = EX[R.blocks[R.bi].items[st.ii].ex];
+    if(!st.hp) { R.hpRun = null; return; }
+    const {tot} = holdPlan(st, ex);
+    if(h.k < tot && Date.now() >= h.end){
+      if(h.phase === "hold"){ h.k++; if(h.k >= tot){ beep("alarm"); rRender(); return; } beep("double"); h.phase = "gap"; h.end = Date.now() + (ex.side && h.k === st.hp.n ? 10 : st.hp.gap)*1000; }
+      else { beep("pip"); h.phase = "hold"; h.end = Date.now() + st.hp.sec*1000; }
+    }
+    const t = $("#hpT"); if(t) t.textContent = holdLabel(st, ex);
   } else if(R.screen === "set" && R.holdEnd){
     const left = (R.holdEnd - Date.now())/1000;
     if(left <= 0){ beep("alarm"); R.holdEnd = null; rRender(); return; }
@@ -3173,14 +3536,14 @@ function onTick(){
 }
 function readNum(id){ const el = $("#" + id); if(!el) return null; const v = parseFloat(String(el.value).replace(",", ".")); return isNaN(v) ? null : v; }
 function enterBlock(){
-  R.seq = expandBlock(R.blocks[R.bi]); R.si = 0; R.nextKg = {}; R.advice = null; R.ramp = null; R.inKg = null; R.inReps = null; R.inRir = null; R.emom = null; R.test = null; R.holdEnd = null;
+  R.seq = expandBlock(R.blocks[R.bi]); R.si = 0; R.nextKg = {}; R.advice = null; R.ramp = null; R.inKg = null; R.inReps = null; R.inRir = null; R.emom = null; R.test = null; R.holdEnd = null; R.hpRun = null;
   const st = curStep(); R.mx = null; R.screen = st.emom ? "emom" : st.test ? "test" : st.max ? "max" : "set";
 }
 function goNextStep(){
   if(R && R.afterRest === "test" && R.screen === "rest"){ R.screen = "test"; R.inReps = null; rRender(); return; }
   if(R && R.afterRest === "max" && R.screen === "rest"){ R.screen = "max"; R.inReps = null; R.inKg = null; rRender(); return; }
   if(R) R.afterRest = null;
-  R.inKg = null; R.inReps = null; R.inRir = null; R.holdEnd = null;
+  R.inKg = null; R.inReps = null; R.inRir = null; R.holdEnd = null; R.hpRun = null;
   if(R.si + 1 < R.seq.length){ R.si++; R.screen = "set"; rRender(); return; }
   nextBlock();
 }
@@ -4144,9 +4507,10 @@ function runDayHtml(ds){
 }
 /* ============ azioni ============ */
 function act(a, d, e){
+  if(backAct(a, d, e)) return;
   switch(a){
     case "start": { closeSheet(); const dr = loadDraft(); if(dr && dr.kind !== "post") resumeSession(); else if(!dr || confirm("C'è una routine posturale interrotta: se inizi la palestra viene eliminata. Continuare?")) startSession(); break; }
-    case "startPost": { const dr = loadDraft(); if(dr && dr.kind === "post") resumeSession(); else if(dr) alert("C'è un allenamento di palestra in corso: finiscilo o eliminalo prima di iniziare la routine posturale."); else startPosture(); break; }
+    case "startPost": { const dr = loadDraft(); if(dr && dr.kind === "post" && dr.code === "Back") alert("C'è la routine per la schiena interrotta: finiscila o eliminala prima."); else if(dr && dr.kind === "post") resumeSession(); else if(dr) alert("C'è un allenamento di palestra in corso: finiscilo o eliminalo prima di iniziare la routine posturale."); else startPosture(); break; }
     case "resume": resumeSession(); break;
     case "askDiscard": showSheet(`<div class="grab"></div><div class="stack"><h2>Eliminare l'allenamento in corso?</h2><p class="small muted">Le serie registrate finora vanno perse e la seduta non viene salvata. Il programma resta alla stessa seduta.</p><div class="row" style="gap:10px"><button class="btn" data-act="closeSheet" style="flex:1">Annulla</button><button class="btn" data-act="discardDraft" style="flex:1;background:var(--danger);color:#fff">Elimina</button></div></div>`); break;
     case "discardDraft": clearDraft(); R = null; try{ window.Android && Android.cancelAlarm(); }catch(err){} closeSheet(); render(); break;
@@ -4205,6 +4569,8 @@ function act(a, d, e){
     case "kgStep": { const st = R.screen === "ramp" ? {ii:0} : curStep(); const it = R.blocks[R.bi].items[st.ii]; const step = EX[it.ex].step || 1; const v = readNum("inKg") ?? 0; R.inKg = Math.max(0, roundStep(v + step*Number(d.v), step)); if(R.screen === "ramp") R.ramp.kg = R.inKg; R.inReps = readNum("inReps") ?? R.inReps; rRender(); break; }
     case "repStep": { const v = readNum("inReps") ?? 0; R.inReps = Math.max(0, v + Number(d.v)); const k = readNum("inKg"); if(k != null) R.inKg = k; rRender(); break; }
     case "rir": { R.inRir = R.inRir === d.v ? null : d.v; const k = readNum("inKg"); if(k != null) R.inKg = k; const r = readNum("inReps"); if(r != null) R.inReps = r; rRender(); break; }
+    case "holdGo": { const st = curStep(); R.hpRun = {k:0, phase:"hold", end:Date.now() + st.hp.sec*1000}; beep("pip"); rRender(); break; }
+    case "holdStop": { R.hpRun = null; rRender(); break; }
     case "hold": { if(!R.holdEnd){ const st = curStep(); R.holdEnd = Date.now() + st.def*1000; rRender(); } break; }
     case "rirHelp": showSheet(rirHelpHtml()); break;
     case "rampStart": { const it = R.blocks[R.bi].items[0]; R.ramp = {kg:null, tries:[], res:null}; R.inKg = null; R.screen = "ramp"; rRender(); break; }
@@ -4224,7 +4590,7 @@ function act(a, d, e){
       const st = curStep(); const it = R.blocks[R.bi].items[st.ii]; const ex = EX[it.ex];
       const kg = ex.bw ? null : readNum("inKg"); const reps = readNum("inReps");
       const rirV = a === "setFeel" ? Number(d.v) : null;
-      R.log[R.bi][st.ii].sets.push({kg, reps, rir:rirV, target:st.target, time:!!st.time});
+      R.log[R.bi][st.ii].sets.push({kg, reps, rir:rirV, target:st.target, time:!!st.time, ...(st.hp ? {hold:st.hp.sec} : {})}); R.hpRun = null;
       const adv = rirV != null ? adviseNext(kg, rirV, reps, it.p, ex) : null;
       R.advice = adv ? {...adv, ii:st.ii} : null;
       if(adv){ R.nextKg = R.nextKg || {}; R.nextKg[st.ii] = adv.kg; } else if(kg != null){ R.nextKg = R.nextKg || {}; R.nextKg[st.ii] = kg; }
