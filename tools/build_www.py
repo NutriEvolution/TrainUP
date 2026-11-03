@@ -23,9 +23,9 @@ head, body = src[:i], src[i:]
 j = body.rindex("</script>") + len("</script>")
 body = body[:j] + "\n<script>\n" + android + "\n</script>\n" + body[j:]
 splash = """<style>
-#splash{position:fixed;inset:0;z-index:9999;background:var(--navy,#1C2230);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .3s ease}
-#splash svg{width:84px;height:95px;color:var(--accent,#D93A3F);animation:splashRun .6s ease both}
-#splash b{font-family:var(--font);font-weight:800;font-size:30px;letter-spacing:-.02em;color:#fff;animation:splashIn .5s ease .15s both}
+#splash{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .3s ease}
+#splash svg{width:76px;height:86px;color:var(--accent);animation:splashRun .6s ease both}
+#splash b{font-family:var(--serif);font-weight:600;font-size:30px;letter-spacing:-.02em;color:var(--ink);animation:splashIn .5s ease .15s both}
 #splash.out{opacity:0;pointer-events:none}
 @keyframes splashIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @keyframes splashRun{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
