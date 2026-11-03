@@ -1126,11 +1126,11 @@ function genVolume(week){ // serie a settimana per muscolo con il conteggio fraz
 }
 function buildGenSession(pos, s){
   if(pos.mock){ const blocks = genMain(s).map(ex => ({type:"single", items:[{ex, p:P.max(ex === "panca", genE1rm(ex), {mock:true})}]}));
-    return applyHome(applySwaps({code:"T", title:"Test dei massimali", kind:"gen", phase:{name:"Programma su misura", short:"Su misura", desc:""}, blocks}, s)); }
+    return applyHome(applySwaps({code:"T", title:"Test dei massimali", kind:"gen", phase:{name:"Programma personalizzato", short:"Personalizzato", desc:""}, blocks}, s)); }
   const ph = genPhase(pos.week), wk = genWeek(genGoal() === "massa" ? pos.week === 1 : ph.k === "vol" && ph.i === 1, pos.week); const x = wk[pos.slot % wk.length];
   let blocks = x.items.map(it => ({type:"single", items:[{ex:it.ex, p:it.p}]}));
   { const pg = postureGymBlocks(); const cb = coreBlocks(); blocks = pg.pre.concat(blocks).concat(cb).concat(pg.end).concat(stretchBlocks(blocks.concat(cb))); }
-  return applyLadders(applyHome(applySwaps({code:x.code, title:x.title, kind:"gen", phase:{name:"Programma su misura", short:"Su misura", desc:""}, blocks}, s)));
+  return applyLadders(applyHome(applySwaps({code:x.code, title:x.title, kind:"gen", phase:{name:"Programma personalizzato", short:"Personalizzato", desc:""}, blocks}, s)));
 }
 /* ============ Project Strength: il "Faleev 2.0" (Ferlito, Project Strength, Project Invictus 2016, cap. VI) ============ */
 // Settimana di 4 sedute (fig. 78): lun squat e panca "schema" (5×8); mar squat "tecnica", stacco "schema" (5×5 alla Tsatsouline), panca "tecnica";
@@ -1424,7 +1424,7 @@ function ladSheet(ii){
 }
 function dn(o){ return /^Scheda/.test(o.title) || o.kind === "post" ? o.title : o.code + " · " + o.title; }
 function weekInPhase(w){ const k = weekKind(w); if(k==="f1") return w; if(k==="f2") return w-5; if(k==="f3") return w-12; return null; }
-function posLabel(pos){ if(pos && pos.fs) return fsPosLabel(pos); if(pos && pos.gen && pos.mock){ const ph = genPhase(pos.week); return (ph.c > 1 ? "Ciclo " + ph.c + " · " : "") + "Test dei massimali"; } if(pos && pos.gen){ if(genGoal() !== "massa"){ const ph = genPhase(pos.week); return (ph.c > 1 ? "Ciclo " + ph.c + " · " : "") + GEN_PH[ph.k] + " · settimana " + ph.i + (ph.k === "vol" && ph.i === 1 ? " (introduttiva)" : "") + (ph.k === "pic" && ph.i >= 2 && genMockOn() ? " (scarico prima del test)" : ""); } return pos.week === 1 ? "Su misura · settimana introduttiva" : "Su misura · settimana " + pos.week; } const k = weekKind(pos.week); const wp = weekInPhase(pos.week); if(pos.learn) return "Fase 1 · apprendimento · settimana " + pos.week; return (pos.cycle>1 ? "Ciclo " + pos.cycle + " · " : "") + PHASES[k].short + (wp ? " · settimana " + wp : "") ; }
+function posLabel(pos){ if(pos && pos.fs) return fsPosLabel(pos); if(pos && pos.gen && pos.mock){ const ph = genPhase(pos.week); return (ph.c > 1 ? "Ciclo " + ph.c + " · " : "") + "Test dei massimali"; } if(pos && pos.gen){ if(genGoal() !== "massa"){ const ph = genPhase(pos.week); return (ph.c > 1 ? "Ciclo " + ph.c + " · " : "") + GEN_PH[ph.k] + " · settimana " + ph.i + (ph.k === "vol" && ph.i === 1 ? " (introduttiva)" : "") + (ph.k === "pic" && ph.i >= 2 && genMockOn() ? " (scarico prima del test)" : ""); } return pos.week === 1 ? "Personalizzato · settimana introduttiva" : "Personalizzato · settimana " + pos.week; } const k = weekKind(pos.week); const wp = weekInPhase(pos.week); if(pos.learn) return "Fase 1 · apprendimento · settimana " + pos.week; return (pos.cycle>1 ? "Ciclo " + pos.cycle + " · " : "") + PHASES[k].short + (wp ? " · settimana " + wp : "") ; }
 
 /* ============ stato e salvataggio ============ */
 const LS = "ripresa.v1";
@@ -2477,7 +2477,7 @@ function profileSheetHtml(){ const p = S.profile || {}; const a = ageNow();
     <button class="btn primary big" data-act="saveProfile">Salva</button></div>`; }
 function programChoiceHtml(){
   const pr = S.settings.program || "liparoti", pi = pr !== "principi";
-  return `<div class="o-sec first"><div class="o-label">Programma</div><div class="o-seg" style="margin-top:8px">${[["pi","Project Invictus", pi],["principi","Su misura", !pi]].map(([k, l, on]) => `<button class="${on ? "on" : ""}" data-act="setProgram" data-v="${k}">${l}</button>`).join("")}</div>
+  return `<div class="o-sec first"><div class="o-label">Programma</div><div class="o-seg" style="margin-top:8px">${[["pi","Project Invictus", pi],["principi","Personalizzato", !pi]].map(([k, l, on]) => `<button class="${on ? "on" : ""}" data-act="setProgram" data-v="${k}">${l}</button>`).join("")}</div>
     ${pi ? `<div class="o-label" style="margin-top:14px">Scheda</div><div class="o-seg" style="margin-top:8px">${[["liparoti","Bodybuilding"],["faleev","Forza"]].map(([k, l]) => `<button class="${pr === k ? "on" : ""}" data-act="setProgram" data-v="${k}">${l}</button>`).join("")}</div>` : ""}
     <p class="small muted">${fsOn() ? "Il \"Faleev 2.0\" di <i>Project Strength</i> (Ferlito): forza su squat, panca e stacco in 4 sedute a settimana, con pesi che salgono da soli." : genOn() ? "Costruito dall'app con le regole di <i>The Muscle and Strength Pyramid</i> (Helms e colleghi): serie, ripetizioni ed esercizi si adattano ai tuoi giorni e al tempo che hai." : "Il programma in tre fasi con i test, da <i>Project Bodybuilding</i> di Liparoti e dai manuali di Project Invictus."}</p></div>`;
 }
@@ -2645,7 +2645,7 @@ function renderPalestraProgramma(){
 }
 function whyGenHtml(){
   const R = (c, n, t, src) => `<div class="o-row" style="cursor:default;align-items:flex-start"><span class="dot" style="background:${c};margin-top:7px"></span><span class="n">${n}<small>${t} <span class="cite">${src}</span></small></span></div>`;
-  return `<div class="o-sec"><div class="o-label">Programma su misura: le regole</div><p class="small muted" style="margin-top:6px">Il programma "Su misura" applica le regole del libro di Helms, Morgan e Valdez; dove una scelta è dell'app è scritto.</p>
+  return `<div class="o-sec"><div class="o-label">Programma personalizzato: le regole</div><p class="small muted" style="margin-top:6px">Il programma "Personalizzato" applica le regole del libro di Helms, Morgan e Valdez; dove una scelta è dell'app è scritto.</p>
     <div class="o-list">
       ${R("var(--accent)", "Giorni e schema", "Per ogni numero di giorni il libro elenca più schemi (da 3 opzioni con 2 giorni a 8 con 6 giorni), che si possono scegliere in Piano → Palestra. Per la massa conta il totale delle serie più di come le dividi: si sceglie in base a quante serie fai (più serie, più conviene allenare ogni muscolo spesso), alla durata delle sedute e ai giorni in cui ti alleni.", "Pyramid tab. 7.2 e 7.6, pp. 226-233")}
       ${R("var(--accent)", "Fase di specializzazione", "Per chi è avanzato: 8-12 settimane con circa il 50% di serie in più su 1 o 2 muscoli, allenati all'inizio di ogni seduta, e 1/3-1/2 in meno sugli altri (l'app usa il 40%), alternate a fasi bilanciate. Per quadricipiti e femorali si sale al nuovo volume in 2-4 settimane (l'app usa 3).", "Pyramid tab. 3.9, pp. 129-132")}
@@ -2721,7 +2721,7 @@ const REFS = [
   ["Daniels J.", "Daniels' Running Formula, 4ª ed.", "Human Kinetics, Champaign (IL), 2022. ISBN 978-1-7182-0366-2.", "VDOT, ritmi, limiti di volume, FC massima."],
   ["Daniels J., Gilbert J.", "Oxygen Power: Performance Tables for Distance Runners.", "Pubblicato dagli autori, 1979.", "Equazioni del VDOT (citate nel libro di Daniels)."],
   ["Allen H., Coggan A.R.", "Training and Racing with a Power Meter, 2ª ed.", "VeloPress, Boulder (CO), 2010.", "Livelli di potenza, test FTP, sedute, struttura del piano."],
-  ["Helms E., Morgan A., Valdez A.", "The Muscle and Strength Pyramid: Training, 3ª ed.", "Pubblicato dagli autori, 2025.", "Regole del programma su misura: tabelle 2.2, 2.5, 3.2, 7.2, 7.4, 7.7, 7.8, 7.16, 7.17."],
+  ["Helms E., Morgan A., Valdez A.", "The Muscle and Strength Pyramid: Training, 3ª ed.", "Pubblicato dagli autori, 2025.", "Regole del programma personalizzato: tabelle 2.2, 2.5, 3.2, 7.2, 7.4, 7.7, 7.8, 7.16, 7.17."],
   ["Zatsiorsky V.M., Kraemer W.J., Fry A.C.", "Science and Practice of Strength Training, 3ª ed.", "Human Kinetics, Champaign (IL), 2021. ISBN 978-1-4925-9200-6.", "Metodi di allenamento della forza (cap. 4), esercizi per chi comincia (cap. 6)."],
   ["Friel J.", "Joe Friel's Quick Guide to Setting Zones.", "TrainingPeaks, 4 maggio 2012. trainingpeaks.com/learn/articles/joe-friel-s-quick-guide-to-setting-zones", "Test della FC di soglia in bici."]]],
   ["McGill S.", "Back Mechanic: The Secrets to a Healthy Spine Your Doctor Isn't Telling You.", "Backfitpro, Gravenhurst (ON), 2015 (2ª stampa 2017).", "Valutazione del mal di schiena e routine: autovalutazione e test (capp. 5-6), strumenti di movimento e igiene della colonna (capp. 7-8), Big 3 (cap. 9), camminata (cap. 10), anche (cap. 12), condizioni particolari (cap. 14)."],
