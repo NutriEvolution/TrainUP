@@ -24,7 +24,7 @@
   const _open = openRunner, _close = closeRunner;
   openRunner = function(){ try{ A.keepScreenOn(true); }catch(e){} return _open.apply(this, arguments); };
   closeRunner = function(){ try{ A.keepScreenOn(false); A.cancelAlarm(); }catch(e){} lastAlarm = 0; return _close.apply(this, arguments); };
-  window.onAndroidResume = function(){ try{ if(R && !$("#runner").hidden) rRender(); }catch(e){} };
+  window.onAndroidResume = function(){ try{ if(R && !$("#runner").hidden) rRender(); }catch(e){} try{ if(view === "timer"){ tmLoop(); render(); } }catch(e){} };
 
   // --- tasto Indietro ---
   window.androidBack = function(){
@@ -35,7 +35,8 @@
     const rn = $("#runner");
     if(rn && !rn.hidden){ act("exitRunner", {}, null); return true; }
     if(view === "impostazioni"){ view = setPrev || "oggi"; render(); window.scrollTo(0,0); return true; }
-    if(view === "guida"){ view = "altro"; render(); window.scrollTo(0,0); return true; }
+    if(view === "guida" || view === "timer"){ view = "altro"; render(); window.scrollTo(0,0); return true; }
+    if(["regione","piede","testa"].includes(view)){ view = "postura"; render(); window.scrollTo(0,0); return true; }
     if(view === "schiena"){ if(BA && BA.step > 0){ BA.step--; render(); } else { BA = null; view = "postura"; render(); } window.scrollTo(0,0); return true; }
     if(view === "piano" && planOpen){ planOpen = null; render(); window.scrollTo(0,0); return true; }
     if(view !== "oggi"){ view = "oggi"; planOpen = null; weekDraft = null; render(); window.scrollTo(0,0); return true; }

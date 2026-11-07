@@ -297,6 +297,35 @@ details.wk[open] summary::after{transform:rotate(-135deg)}
 .cal .day .rnd{position:absolute;right:5px;top:5px;width:7px;height:7px;border-radius:50%;border:1.6px solid var(--c2)}
 .cal .day.rundone .rnd{background:var(--c2)}
 .topgear{width:36px;height:36px;color:var(--ink2)}.topgear svg{width:21px;height:21px}.topgear[aria-current]{color:var(--accent)}
+.ft-wrap{position:relative;border-radius:14px;overflow:hidden;background:var(--surface2);touch-action:manipulation;cursor:crosshair}
+.ft-wrap img{display:block;width:100%;height:auto}
+.ft-wrap svg{position:absolute;left:0;top:0;pointer-events:none}
+.ft-p{fill:var(--accent);stroke:#fff;stroke-width:2}
+.ft-l{stroke:var(--accent);stroke-width:3}
+.ft-h{stroke:#fff;stroke-width:2;stroke-dasharray:6 5;opacity:.9}
+.ft-t{fill:#fff;font-size:14px;font-weight:700;paint-order:stroke;stroke:rgba(0,0,0,.6);stroke-width:3px}
+.ft-res{display:flex;align-items:baseline;gap:10px;margin:12px 0}
+.ft-res b{font-size:40px;letter-spacing:-.03em}
+.tm-face{text-align:center;padding:26px 0 18px}
+.tm-lab{min-height:22px;font-weight:600;color:var(--muted)}
+.tm-face[data-ph="work"] .tm-lab{color:var(--accent)}
+.tm-face[data-ph="rest"] .tm-lab,.tm-face[data-ph="prep"] .tm-lab{color:var(--warn,#b7791f)}
+.tm-disp{font-size:clamp(64px,22vw,96px);font-weight:700;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1.05;margin:6px 0}
+.tm-disp small{font-size:.45em;color:var(--muted)}
+.tm-bar{height:6px;border-radius:3px;background:var(--surface2);margin:14px auto 0;max-width:320px;overflow:hidden}
+.tm-bar i{display:block;height:100%;width:calc(var(--tmp,0)*100%);background:var(--accent);transition:width .1s linear}
+.tm-face[data-ph="rest"] .tm-bar i,.tm-face[data-ph="prep"] .tm-bar i{background:var(--warn,#b7791f)}
+.tm-face:not([data-ph]) .tm-bar,.tm-face[data-ph=""] .tm-bar{visibility:hidden}
+.tm-ctl{display:grid;grid-template-columns:1fr 2fr;gap:10px;align-items:stretch}
+.tm-ctl .btn{min-height:56px}
+.tm-setup{display:flex;flex-direction:column;gap:10px}
+.tm-adj{display:flex;align-items:center;justify-content:space-between}
+.tm-adj .row{gap:6px;align-items:center}
+.tm-adj b{min-width:64px;text-align:center;font-variant-numeric:tabular-nums;font-size:18px}
+.tm-laps{list-style:none;padding:0;margin:14px 0 0}
+.tm-laps li{display:grid;grid-template-columns:1fr 1fr 1fr;padding:9px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.tm-laps li span:nth-child(n+2){text-align:right}
+.myex summary{cursor:pointer;color:var(--accent);font-weight:600}
 .o-sec{padding:18px 0;border-top:1px solid var(--line)}
 .o-sec.first{border-top:0;padding-top:6px}
 .o-label{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
@@ -532,9 +561,9 @@ const EX = {
   rematoreArcher:{n:"Rematore archer agli anelli", step:0, inc:0, unit:"anelli o TRX", side:"per braccio", yt:"archer ring row", src:"Low, Overcoming Gravity, cap. 25 (Archer Ring Rows, livello 4)", bw:true,
     how:["Corpo dritto: un braccio tira come nel rematore, l'altro resta teso e si apre di lato a 90°.","Le scapole lavorano allo stesso modo da entrambi i lati.","Scendi controllando e alterna i lati."],
     err:["Corpo che si piega a C.","Piegare il braccio che dovrebbe restare teso."]},
-  squatLibero:{n:"Squat a corpo libero", step:0, inc:0, unit:"corpo libero", yt:"squat corpo libero tecnica", src:"Neri, Project Calisthenics, pp. 434-438; Low, Overcoming Gravity, cap. 27 (Parallel e Full Squat, livelli 1-2)", bw:true,
-    how:["Piedi alla larghezza delle spalle o poco più, punte un po' in fuori; sguardo verso il battiscopa, addome compatto.","Porta il sedere indietro e in basso; le ginocchia seguono la direzione dei piedi.","Scendi almeno finché l'anca è sotto il ginocchio, petto alto, poi risali."],
-    err:["Ginocchia verso l'interno.","Schiena che si arrotonda in basso. Se la caviglia è rigida, aiutati con un rialzo sotto il sedere come riferimento."]},
+  squatLibero:{n:"Squat a corpo libero", step:0, inc:0, unit:"corpo libero", yt:"squat corpo libero tecnica", src:"Neri, Project Calisthenics, pp. 434-438; Low, Overcoming Gravity, cap. 27 (Parallel e Full Squat, livelli 1-2; goblet squat)", bw:true,
+    how:["Piedi alla larghezza delle spalle o poco più, punte un po' in fuori; sguardo verso il battiscopa, addome compatto.","Porta il sedere indietro e in basso; le ginocchia seguono la direzione dei piedi.","Scendi almeno finché l'anca è sotto il ginocchio, petto alto, poi risali.","Se la caviglia è rigida e ti sbilanci indietro, tieni un peso abbracciato al petto (goblet squat): il baricentro va in avanti e la discesa è più stabile. Una sedia o una scatola dietro di te aiuta a imparare la profondità."],
+    err:["Ginocchia verso l'interno.","Schiena che si arrotonda in basso.","Talloni che si staccano: busto troppo dritto e ginocchia troppo avanti."]},
   archerSquat:{n:"Archer squat", step:0, inc:0, unit:"corpo libero", side:"per gamba", yt:"archer squat tecnica", src:"Neri, Project Calisthenics, pp. 438-439; Low, Overcoming Gravity, cap. 27 (Side-to-Side Squat, livello 3)", bw:true,
     how:["Gambe molto larghe: sposta il peso su un lato e scendi su quella gamba, l'altra resta tesa.","Il ginocchio che si piega segue sempre la direzione del piede.","Risali e scendi dall'altro lato. È anche un buon allungamento per le anche."],
     err:["Ginocchio verso l'interno, soprattutto se hai avuto problemi ai menischi o ai legamenti.","Talloni che si staccano."]},
@@ -592,6 +621,21 @@ const EX = {
   calf:{n:"Calf in piedi", step:2.5, inc:2.5, unit:"macchina o manubrio", yt:"calf raise in piedi tecnica", src:"PE2 pp. 305-307",
     how:["Ginocchia quasi tese, avampiedi sul rialzo.","Sali sulle punte e scendi lentamente, senza oscillare con il busto."],
     err:["Piedi \"in dentro\" o \"in fuori\": secondo PE2 non servono."]},
+  calfSeduto:{n:"Calf da seduto (ginocchia flesse)", step:2.5, inc:2.5, unit:"macchina", yt:"seated calf raise tecnica", src:"PE2 pp. 274-277, 305-306",
+    how:["Ginocchia piegate a 90° subito sotto le imbottiture, avampiedi sui supporti.","Parti con i talloni più bassi delle punte e sollevali, lentamente e senza slanci.","A ginocchio piegato lavora soprattutto il soleo; il calf in piedi o alla pressa lavora di più il gastrocnemio."],
+    err:["Oscillare con il busto per dare lo slancio.","Punte in dentro o in fuori: secondo PE2 non cambiano niente."]},
+  calfPressa:{n:"Calf alla pressa", step:5, inc:5, unit:"macchina", yt:"calf alla pressa tecnica", src:"PE2 pp. 276, 305-306",
+    how:["Seduto alla pressa, avampiedi sul bordo basso della pedana, ginocchia distese ma mai bloccate (circa 5° di piegamento).","Spingi sulle punte e torna lentamente con i talloni più bassi delle punte.","PE2 la preferisce al calf in piedi se vuoi caricare molto o hai problemi ai dischi."],
+    err:["Ginocchia bloccate in iperestensione.","Movimenti veloci a rimbalzo."]},
+  pancaLeve:{n:"Panca piana a leve (macchina a dischi)", step:2.5, inc:5, unit:"dischi aggiunti", yt:"plate loaded chest press tecnica", src:"PE1 pp. 229-230 (la stessa regolazione della chest press); descrivere la macchina è una scelta dell'app",
+    how:["Panca con due leve caricate a dischi: la spinta è guidata, come una chest press da sdraiato.","Regola la panca in modo che le maniglie siano all'altezza dei capezzoli.","Scapole strette, gomiti più bassi delle spalle, avambracci in linea con le maniglie.","Annota solo il peso dei dischi: le leve delle diverse macchine pesano in modo diverso."],
+    err:["Seduta troppo alta o troppo bassa: le maniglie arrivano al collo o alla pancia.","Gomiti alti all'altezza delle spalle."]},
+  pancaMultipower:{n:"Panca piana al multipower (Smith)", step:2.5, inc:5, unit:"bilanciere guidato (escluso il bilanciere)", yt:"smith machine bench press tecnica", src:"PE1 pp. 214-217 (la sconsiglia come sostituto della panca)",
+    how:["PE1 la sconsiglia come sostituto della panca: con il bilanciere libero la barra scende obliqua dal collo alla linea dei capezzoli, nella guida invece fa una linea dritta.","Se la usi, metti la panca in modo che la barra scenda sulla parte bassa del petto, scapole strette e abbassate, gomiti più bassi delle spalle (posizione scelta dall'app).","Sblocca e riaggancia ruotando i polsi."],
+    err:["Barra sul collo: i gomiti salgono e le scapole perdono l'assetto.","Caricare di più solo perché la guida dà sicurezza."]},
+  lentoMultipower:{n:"Lento avanti al multipower (Smith), seduto", step:2.5, inc:2.5, unit:"bilanciere guidato (escluso il bilanciere)", yt:"smith machine shoulder press tecnica", src:"PE1 pp. 138-140 (lo sconsiglia)",
+    how:["PE1 lo sconsiglia: la guida non lascia arrivare il bilanciere sopra la testa e riduce lo spazio sotto l'acromion. Meglio manubri, bilanciere libero o shoulder press.","Se lo usi: panca un po' indietro rispetto alla barra, parti dal petto e spingi fino a braccia quasi tese, senza bloccare.","Sblocca e riaggancia ruotando i polsi."],
+    err:["Scendere dietro la nuca.","Inarcare la schiena per spingere di più."]},
   curlEZ:{n:"Curl con bilanciere sagomato (EZ)", step:2.5, inc:2.5, unit:"bilanciere", yt:"curl bilanciere ez tecnica", src:"PE1 pp. 323-324",
     how:["Usa il bilanciere sagomato, più rispettoso di polsi e gomiti.","Dal gomito disteso (non iperesteso) alla massima flessione.","Se oscilli con la schiena, appoggiati con la schiena a un muro."],
     err:["Slanci con la schiena."]},
@@ -607,15 +651,15 @@ const EX = {
   pushdown:{n:"Pushdown ai cavi con corda", step:2.5, inc:2.5, unit:"cavi", yt:"pushdown corda tricipiti tecnica", src:"PE1 pp. 350-353",
     how:["In piedi, braccia ferme lungo i fianchi.","Parti con il gomito piegato oltre i 90° e arriva a gomiti distesi, ruotando le mani verso l'esterno in fondo."],
     err:["Gomiti che si allargano.","Ginocchia piegate."]},
-  deadBug:{n:"Dead bug", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"dead bug esercizio", src:GEN, bw:true,
+  deadBug:{n:"Dead bug", step:0, inc:0, dynReps:8, unit:"corpo libero", side:"per lato", yt:"dead bug esercizio", src:GEN, bw:true,
     how:["Sdraiato a pancia in su, braccia verso il soffitto, anche e ginocchia a 90°.","Distendi lentamente un braccio e la gamba opposta tenendo la zona lombare a contatto con il pavimento.","Torna e alterna."],
     err:["Schiena che si stacca da terra."]},
-  pallof:{n:"Pallof press", step:2.5, inc:2.5, unit:"cavo o elastico", side:"per lato", yt:"pallof press", src:GEN,
+  pallof:{n:"Pallof press", step:2.5, inc:2.5, dynReps:10, unit:"cavo o elastico", side:"per lato", yt:"pallof press", src:GEN,
     how:["Di fianco al cavo, maniglia al petto con due mani.","Distendi le braccia davanti a te senza lasciare che il busto ruoti verso il cavo, poi torna."],
     err:["Busto che ruota."]},
-  plank:{n:"Plank", step:0, inc:0, unit:"corpo libero", yt:"plank tecnica", src:"PE2 pp. 129-130; Neri, Project Calisthenics, pp. 409-410; Low, Overcoming Gravity, cap. 27 (plank: 25 s livello 2, 60 s livello 3)", bw:true, goal:60, ladP:p => coreTime(p),
-    how:["Avambracci a terra sotto le spalle, corpo in linea: spalle, tronco e bacino allineati.", "Zona lombare piatta (bacino leggermente in retroversione), addominali e glutei contratti, respira normalmente."],
-    err:["Schiena che si inarca e bacino che cede verso il basso.", "Bacino troppo alto."]},
+  plank:{n:"Plank", step:0, inc:0, iso:true, unit:"corpo libero", yt:"plank tecnica", src:"PE2 pp. 129-130; Neri, Project Calisthenics, pp. 409-410 e Tab. 7.15 (3-4×20″, +10″ a seduta fino a 60-80″) e 11.5 (3×30″); Low, Overcoming Gravity, cap. 27 (plank: 25 s livello 2, 60 s livello 3)", bw:true, goal:60, ladP:p => coreTime(p),
+    how:["È un esercizio di tenuta: si misura in secondi, non in ripetizioni.","Avambracci a terra sotto le spalle, corpo in linea: spalle, tronco e bacino allineati.", "Spingi via il pavimento con le spalle (in avanti e in basso), senza appoggiarti su di esse.", "Zona lombare piatta (bacino leggermente in retroversione), addominali e glutei contratti, respira normalmente.", "Ogni volta che tieni tutte le serie, la volta dopo l'app aggiunge 10 secondi, fino a 60."],
+    err:["Schiena che si inarca e bacino che cede verso il basso: carica la zona lombare.", "Bacino troppo alto.", "Ginocchia a terra: Neri la sconsiglia perché si perde la retroversione; se è troppo difficile, prima la barchetta raccolta."]},
   // stretching statico a fine seduta: NSCA, Essentials of Strength Training and Conditioning, 5ª ed. (2026), cap. 15, pp. 383-394 (tecniche) e "Programming Considerations for Stretching"
   strQuad:{n:"Allungamento dei quadricipiti sul fianco", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"side lying quad stretch", src:"NSCA, Essentials 5ª ed., cap. 15, p. 391 (Side Quadriceps Stretch)", bw:true,
     how:["Sdraiato su un fianco con le gambe tese, appoggiato sull'avambraccio.","Piega la gamba che sta sopra e prendi la caviglia con la mano dello stesso lato.","Porta piano il tallone verso il gluteo: senti allungare la parte davanti della coscia e dell'anca."],
@@ -641,28 +685,28 @@ const EX = {
   strTricipiti:{n:"Allungamento dei tricipiti dietro la testa", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"overhead triceps stretch", src:"NSCA, Essentials 5ª ed., cap. 15, p. 385 (Behind-Neck Stretch)", bw:true,
     how:["Alza un braccio, piega il gomito e porta la mano verso la scapola opposta.","Con l'altra mano prendi il gomito.","Tiralo piano dietro la testa: l'allungamento è nel tricipite e lungo il fianco."],
     err:["Spingere la testa in avanti.","Inarcare la schiena."]},
-  plankAvanzato:{n:"Plank con i gomiti avanti", step:0, inc:0, unit:"corpo libero", yt:"long lever plank", src:"Neri, Project Calisthenics, pp. 409-410", bw:true, goal:60, ladP:p => coreTime(p),
+  plankAvanzato:{n:"Plank con i gomiti avanti", step:0, inc:0, iso:true, unit:"corpo libero", yt:"long lever plank", src:"Neri, Project Calisthenics, pp. 409-410", bw:true, goal:60, ladP:p => coreTime(p),
     how:["Come il plank, ma con i gomiti più avanti rispetto alle spalle: aumenta la distanza fra gli appoggi e quindi la difficoltà.","Spalle che spingono via il pavimento (protratte e abbassate), bacino in retroversione, addome contratto."],
     err:["Lasciarsi andare sugli appoggi.","Schiena che si inarca."]},
-  supermanHold:{n:"Superman hold (long hollow)", step:0, inc:0, unit:"corpo libero", yt:"long hollow hold", src:"Neri, Project Calisthenics, p. 410", bw:true, ladP:p => coreTime(p),
+  supermanHold:{n:"Superman hold (long hollow)", step:0, inc:0, iso:true, unit:"corpo libero", yt:"long hollow hold", src:"Neri, Project Calisthenics, p. 410", bw:true, ladP:p => coreTime(p),
     how:["Una specie di plank con le braccia tese e distese davanti a te, mani a terra.","Più le mani sono vicine e il corpo è alto, più è facile; allontanale e avvicinati al suolo per renderlo più difficile.","Bacino in retroversione per tutta la tenuta."],
     err:["Inarcare la zona lombare.","Spalle che crollano."]},
-  barchettaRaccolta:{n:"Barchetta raccolta", step:0, inc:0, unit:"corpo libero", yt:"tuck hollow body hold", src:"Neri, Project Calisthenics, pp. 407-408", bw:true, goal:60, ladP:p => coreTime(p),
+  barchettaRaccolta:{n:"Barchetta raccolta", step:0, inc:0, iso:true, unit:"corpo libero", yt:"tuck hollow body hold", src:"Neri, Project Calisthenics, pp. 407-408", bw:true, goal:60, ladP:p => coreTime(p),
     how:["Supino, ginocchia raccolte verso il petto, braccia lungo i fianchi.","Contrai l'addome e solleva spalle e gambe da terra, spalle in avanti e in basso.","La zona lombare resta schiacciata a terra (bacino in retroversione), pancia in dentro."],
     err:["Lombare che si stacca da terra.","Tirare con il collo."]},
-  barchetta:{n:"Barchetta (hollow hold)", step:0, inc:0, unit:"corpo libero", yt:"hollow body hold tecnica", src:"Neri, Project Calisthenics, pp. 407-409", bw:true, goal:60, ladP:p => coreTime(p),
+  barchetta:{n:"Barchetta (hollow hold)", step:0, inc:0, iso:true, unit:"corpo libero", yt:"hollow body hold tecnica", src:"Neri, Project Calisthenics, pp. 407-409", bw:true, goal:60, ladP:p => coreTime(p),
     how:["Come la barchetta raccolta, ma con le gambe tese, braccia lungo i fianchi.","Gambe il più vicino possibile al pavimento senza che la lombare si stacchi: se si stacca, alzale un po' di più.","Passaci quando tieni la versione raccolta per un minuto abbondante, fatta bene."],
     err:["Lombare che si inarca.","Spalle appoggiate a terra."]},
-  barchettaBraccia:{n:"Barchetta con le braccia dietro la testa", step:0, inc:0, unit:"corpo libero", yt:"hollow body hold arms overhead", src:"Neri, Project Calisthenics, pp. 408-409", bw:true, ladP:p => coreTime(p),
+  barchettaBraccia:{n:"Barchetta con le braccia dietro la testa", step:0, inc:0, iso:true, unit:"corpo libero", yt:"hollow body hold arms overhead", src:"Neri, Project Calisthenics, pp. 408-409", bw:true, ladP:p => coreTime(p),
     how:["La barchetta completa con le braccia distese oltre la testa.","Solo se hai buona mobilità delle spalle: altrimenti la versione con le braccia lungo i fianchi allena l'addome altrettanto bene."],
     err:["Spalle troppo alte o lombare che si stacca."]},
-  lsitRaccolta:{n:"L-sit raccolta", step:0, inc:0, unit:"corpo libero", yt:"tuck l-sit tecnica", src:"Neri, Project Calisthenics, p. 413; Low, Overcoming Gravity, cap. 25 (Tuck L-Sit, livello 1)", bw:true, goal:30, ladP:p => coreTime(p, true),
+  lsitRaccolta:{n:"L-sit raccolta", step:0, inc:0, iso:true, unit:"corpo libero", yt:"tuck l-sit tecnica", src:"Neri, Project Calisthenics, p. 413; Low, Overcoming Gravity, cap. 25 (Tuck L-Sit, livello 1)", bw:true, goal:30, ladP:p => coreTime(p, true),
     how:["Mani a terra accanto ai fianchi (meglio su due sedie, libri o parallette), braccia tese.","Spingi e solleva il corpo, ginocchia raccolte al petto; spalle in avanti e abbassate, lontane dalle orecchie.","Obiettivo del livello: circa 30 secondi."],
     err:["Spalle che salgono verso le orecchie.","Braccia piegate."]},
-  lsitUnaGamba:{n:"L-sit a una gamba", step:0, inc:0, unit:"corpo libero", side:"per gamba", yt:"one leg l-sit", src:"Neri, Project Calisthenics, p. 413; Low, Overcoming Gravity, cap. 25 (One-Leg-Bent L-Sit, livello 2)", bw:true, goal:30, ladP:p => coreTime(p, true),
+  lsitUnaGamba:{n:"L-sit a una gamba", step:0, inc:0, iso:true, unit:"corpo libero", side:"per gamba", yt:"one leg l-sit", src:"Neri, Project Calisthenics, p. 413; Low, Overcoming Gravity, cap. 25 (One-Leg-Bent L-Sit, livello 2)", bw:true, goal:30, ladP:p => coreTime(p, true),
     how:["Dalla L-sit raccolta distendi una gamba in avanti, parallela al pavimento.","Una serie per gamba con il recupero in mezzo, non una gamba dopo l'altra senza pausa.","Obiettivo del livello: circa 30 secondi per gamba."],
     err:["Gamba tesa che scende.","Crampi: normali all'inizio; massaggia e riprova da fresco."]},
-  lsit:{n:"L-sit", step:0, inc:0, unit:"corpo libero", yt:"l-sit tecnica", src:"Neri, Project Calisthenics, pp. 413-414; Low, Overcoming Gravity, cap. 25 (L-Sit, livello 3)", bw:true, ladP:p => coreTime(p, true),
+  lsit:{n:"L-sit", step:0, inc:0, iso:true, unit:"corpo libero", yt:"l-sit tecnica", src:"Neri, Project Calisthenics, pp. 413-414; Low, Overcoming Gravity, cap. 25 (L-Sit, livello 3)", bw:true, ladP:p => coreTime(p, true),
     how:["In appoggio sulle mani, entrambe le gambe tese e parallele al pavimento.","Spalle protratte e abbassate, braccia tese.","Oltre i 20 secondi puoi aggiungere delle cavigliere. Servono femorali abbastanza flessibili."],
     err:["Gambe che scendono sotto l'orizzontale.","Ginocchia piegate."]},
   legRaiseRaccolte:{n:"Sollevamento delle gambe raccolte alla sbarra", step:0, inc:0, unit:"corpo libero", yt:"hanging knee raise", src:"Neri, Project Calisthenics, pp. 411-412", bw:true,
@@ -728,8 +772,8 @@ const EX = {
   stabRitmiche:{n:"Stabilizzazione del collo in isometria", step:0, inc:0, unit:"corpo libero", yt:"cervical isometric towel exercise", src:"Fitness posturale, atlante cap. 4, A.4", bw:true,
     how:["Seduto in buon allineamento, un asciugamano dietro la testa tenuto per i due capi.","Tira l'asciugamano in avanti e resisti con il collo senza muoverlo; tieni 5 secondi.","In alternativa spingi con il palmo sulla fronte o sulle tempie. La spinta deve essere moderata e crescere piano."],
     err:["Muovere la testa: lo scopo è non farla muovere."]},
-  plankPlus:{n:"Plank plus", step:0, inc:0, unit:"corpo libero", yt:"plank plus serratus", src:"Fitness posturale, atlante cap. 5, D.1", bw:true,
-    how:["Prono sui gomiti (o in plank).","Allontana il torace dal pavimento spingendo con le scapole, che si aprono restando attaccate al torace; tieni 3 secondi.","Collo allineato, scapole che non salgono verso le orecchie."],
+  plankPlus:{n:"Plank plus (spinta delle scapole)", step:0, inc:0, unit:"corpo libero", yt:"plank plus serratus", src:"Fitness posturale, atlante cap. 5, D.1", bw:true,
+    how:["Non è il plank: si conta in ripetizioni, ognuna con 3 secondi di tenuta.","Prono sui gomiti (o in plank).","Allontana il torace dal pavimento spingendo con le scapole, che si aprono restando attaccate al torace; tieni 3 secondi.","Collo allineato, scapole che non salgono verso le orecchie."],
     err:["Scapole che si sollevano dal torace o salgono."]},
   propScapPalla:{n:"Movimento delle scapole con la palla", step:0, inc:0, unit:"palla o muro", side:"per lato", yt:"scapular retraction ball wall", src:"Fitness posturale, atlante cap. 5, L.2", bw:true,
     how:["In piedi, avambraccio appoggiato a una palla contro il muro, busto e spalla piegati in avanti.","Raddrizza busto e spalla facendo rotolare la palla verso di te: la scapola va indietro.","Variante del protocollo per le scapole alate: mano sulla palla a lato e solo la scapola che va indietro, gomito teso."],
@@ -919,6 +963,24 @@ const EX = {
   stepDown:{n:"Discesa dal gradino su una gamba", step:0, inc:0, unit:"gradino", side:"per gamba", yt:"lateral step down exercise", src:"Grieve's, cap. 48.2", bw:true,
     how:["In piedi su un gradino su una gamba, l'altra fuori dal bordo.","Piega lentamente il ginocchio d'appoggio finché il tallone dell'altra gamba sfiora il pavimento, poi risali.","Tieniti al corrimano all'inizio."],
     err:["Bacino che si inclina.","Ginocchio che cade verso l'interno."]},
+  ankFlex:{n:"Piegamento su una gamba", step:0, inc:0, unit:"corpo libero", side:"per gamba", yt:"single leg squat balance ankle", src:"Hupperets 2009 (BMJ); scheda RACGP HANDI 2014 (programma di E. Verhagen)", bw:true,
+    how:["In piedi su una gamba, l'altra piegata con il piede sollevato e le cosce parallele.","Piega il ginocchio d'appoggio come in un piccolo squat su una gamba, alzando il braccio opposto, poi torna su.","Ginocchio d'appoggio sopra l'avampiede.","Livelli: terreno piano, poi a occhi chiusi, poi sulla tavoletta propriocettiva."],
+    err:["Ginocchio che cade verso l'interno."]},
+  toeRaise:{n:"Sollevamento sulle punte dal gradino", step:0, inc:0, unit:"gradino", yt:"calf raise step", src:"Hupperets 2009 (BMJ); scheda RACGP HANDI 2014 (programma di E. Verhagen)", bw:true,
+    how:["Avampiedi su un gradino, talloni fuori dal bordo, ginocchia tese ma non bloccate, busto dritto.","Scendi con i talloni più in basso che puoi, poi sali sulle punte muovendo solo le caviglie e torna giù lentamente.","Livelli: tenendoti a un appoggio, poi senza."],
+    err:["Piegare le ginocchia o muovere il busto."]},
+  ankStance:{n:"Equilibrio su una gamba", step:0, inc:0, unit:"corpo libero", side:"per gamba", yt:"single leg stance ankle sprain", src:"Hupperets 2009 (BMJ); scheda RACGP HANDI 2014 (programma di E. Verhagen)", bw:true, iso:true,
+    how:["In piedi su una gamba, ginocchio d'appoggio leggermente piegato e sopra l'avampiede, l'altro piede sollevato.","Resta in equilibrio per il tempo indicato, poi cambia gamba.","Livelli: terreno piano, poi a occhi chiusi, poi sulla tavoletta propriocettiva."],
+    err:["Ginocchio d'appoggio bloccato in estensione."]},
+  runnerPose:{n:"Posizione del corridore", step:0, inc:0, unit:"corpo libero", side:"per gamba", yt:"runner pose balance exercise", src:"Hupperets 2009 (BMJ); scheda RACGP HANDI 2014 (programma di E. Verhagen)", bw:true,
+    how:["In piedi, piedi a circa 5 cm, braccia lungo i fianchi.","Porta il peso su una gamba e alza l'altro ginocchio finché la coscia è parallela al pavimento, portando avanti il braccio opposto come nella corsa.","Tieni 8 secondi, poi torna giù: è una ripetizione.","Livelli: terreno piano, poi a occhi chiusi, poi sulla tavoletta propriocettiva."],
+    err:["Busto che si inclina di lato."]},
+  crossSway:{n:"Oscillazione della gamba incrociata", step:0, inc:0, unit:"corpo libero", side:"per gamba", yt:"leg swing balance ankle", src:"Hupperets 2009 (BMJ); scheda RACGP HANDI 2014 (programma di E. Verhagen)", bw:true,
+    how:["Peso su una gamba, busto un po' in avanti, punta dell'altro piede sollevata.","Porta la gamba libera davanti a quella d'appoggio, incrociandola quanto ti è comodo, poi verso l'esterno quanto ti è comodo: andata e ritorno sono una ripetizione.","Livelli: tenendoti a un appoggio, poi senza, poi a occhi chiusi; la scheda prevede anche la tavoletta."],
+    err:["Ruotare il busto invece di muovere la gamba."]},
+  toeWalk:{n:"Camminata sulle punte", step:0, inc:0, unit:"4 metri liberi", yt:"toe walk exercise", src:"Hupperets 2009 (BMJ); scheda RACGP HANDI 2014 (programma di E. Verhagen)", bw:true,
+    how:["Sulle punte, talloni ben alti per tutto l'esercizio.","Cammina 4 metri con le punte in avanti, 4 con le punte in fuori e 4 con le punte in dentro (ruotando dall'anca): è un giro.","All'ultimo livello si fa saltellando invece che camminando."],
+    err:["Talloni che si abbassano."]},
 };
 
 /* ============ prescrizioni ============ */
@@ -935,7 +997,8 @@ const P = {
   test:() => ({t:"test",rest:60}),
   max:(upper, exp, extra) => ({t:"max", upper, exp, rest:300, ...extra})
 };
-function prescText(p, ex){
+function prescText(p, ex){ const t = prescText0(p, ex); return p.note ? `${t} ${p.note.charAt(0).toUpperCase() + p.note.slice(1)}.` : t; }
+function prescText0(p, ex){
   const side = ex && ex.side ? " " + ex.side : "";
   switch(p.t){
     case "range": return `${p.sets} serie da ${p.rmin === p.rmax ? p.rmin : p.rmin + "-" + p.rmax} ripetizioni${side}` + (p.buf ? (ex && ex.bw ? `. Fermati quando te ne restano ancora circa ${p.buf}` : `. Scegli un peso con cui a fine serie te ne restano ancora circa ${p.buf}`) : "") + ".";
@@ -943,7 +1006,7 @@ function prescText(p, ex){
     case "rpe": return `${p.sets} serie da ${p.reps} ripetizioni${side}. Regola il peso serie per serie: a fine serie te ne deve restare circa 1.`;
     case "pyr": return `Piramide: ${p.reps.length} serie da ${p.reps.join(", ")} ripetizioni. Quando le ripetizioni scendono, aumenta il peso; fermati sempre 1 ripetizione prima di non farcela più.`;
     case "emom": return `${p.min} minuti: all'inizio di ogni minuto fai ${p.reps} ripetizioni, poi riposi fino allo scoccare del minuto successivo. Peso che sollevi al massimo 12 volte.`;
-    case "time": return `${p.sets} serie da ${p.sec} secondi.`;
+    case "time": return `${p.sets} serie da ${p.sec} secondi${side}.`;
     case "hold": return `Piramide discendente: ${p.reps.length} serie da ${p.reps.join(", ")} tenute di ${p.sec} secondi${side}. Pochi secondi tra una tenuta e l'altra, ${p.rest} secondi tra le serie.`;
     case "test": return "Test: cerca il peso massimo con cui fai 8 ripetizioni pulite, poi 2-5 serie da 8 con il 10% in meno.";
     case "max": return "Test del massimale: riscaldamento progressivo, poi tentativi singoli fino al peso più alto sollevato con buona tecnica.";
@@ -1252,11 +1315,11 @@ const PAT = [
   ["splitSquat","affondiCamminati","splitSquatCorpo","affondiCorpo"],
   ["rdl","rdlManubri","stacco"],
   ["legCurlSeduto","legCurl"],
-  ["panca","pancaManubri","chestPress","piegamenti"],
-  ["pancaInclinataManubri","chestPress","pancaManubri"],
+  ["panca","pancaManubri","chestPress","pancaLeve","pancaMultipower","piegamenti"],
+  ["pancaInclinataManubri","chestPress","pancaManubri","pancaLeve"],
   ["pancaStretta","chestPress"],
   ["crociCavi","pecDeck"],
-  ["military","lentoManubri","shoulderPress"],
+  ["military","lentoManubri","shoulderPress","lentoMultipower"],
   ["alzateLaterali","alzateLateraliCavo"],
   ["latMachine","latPresaStretta","trazioni"],
   ["rematoreBil","rematoreManubrio","rowMachine","pulley"],
@@ -1264,12 +1327,14 @@ const PAT = [
   ["frenchPress","tricipitiOverheadCavo","tricipitiOverheadManubrio","pushdown"],
   ["pushdown","tricipitiOverheadCavo","tricipitiOverheadManubrio","frenchPress"],
   ["crunch","crunchInverso"],
+  ["calf","calfPressa","calfSeduto"],
   ["plank","deadBug","pallof"]
 ];
 const ALT_NOTE = {
   tricipitiOverheadCavo:"consigliato: tricipite in allungamento", tricipitiOverheadManubrio:"consigliato: tricipite in allungamento",
   legCurlSeduto:"consigliato: femorali in allungamento", hackSquat:"macchina, simile allo squat", pressa:"meno tecnica e più rapida da impostare",
-  rowMachine:"con appoggio al petto", gobletSquat:"più leggero, per imparare"
+  rowMachine:"con appoggio al petto", gobletSquat:"più leggero, per imparare",
+  pancaMultipower:"guidata, sconsigliata da PE1", lentoMultipower:"guidato, sconsigliato da PE1", pancaLeve:"guidata, a dischi", calfSeduto:"soleo", calfPressa:"anche con problemi ai dischi"
 };
 function altOf(k){
   const out = [];
@@ -1383,7 +1448,17 @@ const LADDERS = {
 };
 // tenute a tempo: plank e barchetta 30-60 s (Overcoming Gravity, cap. 17, esercizi di posizione); L-sit 60 s in totale in quante serie servono, mai a cedimento (cap. 17).
 // Come dividere i 60 s della L-sit (3 da 20) è una scelta dell'app.
-function coreTime(p, lsit){ if(p && p.t === "time" && !!p.lsit === !!lsit) return p; return lsit ? {t:"time", sets:3, sec:20, rest:60, lsit:true, note:"60″ in totale"} : {t:"time", sets:2, sec:30, rest:60, lsit:false}; }
+// Tenute: plank e barchetta 3 serie partendo da 20″ con 30″ di pausa, +10″ quando le tieni tutte, fino all'obiettivo del livello (Neri, Project Calisthenics, Tab. 7.15 e 11.5);
+// L-sit 60″ in totale in più serie, non a cedimento (Low, Overcoming Gravity, cap. 17). Il passo di 10″ è del libro; partire da 20″ e fermarsi a 60″ è una scelta dell'app.
+function coreTime(p, lsit){ if(p && p.t === "time" && !!p.lsit === !!lsit) return p; return lsit ? {t:"time", sets:3, sec:20, rest:60, lsit:true, note:"60″ in totale"} : {t:"time", sets:3, sec:20, rest:30, lsit:false}; }
+function isoProg(k, p){ if(!p || p.t !== "time" || p.lsit || p.fixed) return p; const last = bwHistory(k).filter(e => e.p && e.p.t === "time").pop(); if(!last) return p;
+  const sets = last.sets.filter(z => z.reps != null), held = sets.length >= last.p.sets && sets.every(z => z.reps >= last.p.sec), cap = EX[k].goal || 60;
+  const sec = held ? Math.min(cap, last.p.sec + 10) : last.p.sec; return sec === p.sec ? p : {...p, sec, note:sec > last.p.sec ? "+10″ rispetto all'ultima volta" : p.note}; }
+// Prescrizione adatta all'esercizio dopo uno scambio: le tenute vanno in secondi, gli esercizi dinamici in ripetizioni.
+function fitP(k, p){ const e = EX[k]; if(!e || !p) return p;
+  if(e.iso){ if(p.t !== "time") p = e.ladP ? e.ladP(null) : coreTime(null); return isoProg(k, p); }
+  if(p.t === "time" && e.dynReps) return P.range(p.sets || 2, e.dynReps, e.dynReps, "", 60);
+  return p; }
 // Allungamento a fine seduta (NSCA, Essentials 5ª ed., cap. 15): statico, 15-30 s per posizione (le prove sostengono 30 s, oltre il beneficio cala),
 // fino a un leggero fastidio e mai dolore, entro 5-10 minuti dalla fine; conta più la frequenza settimanale della durata della singola seduta.
 // Scelte dell'app: una tenuta da 30 s per lato, solo per i gruppi allenati nella seduta, al massimo 6 posizioni.
@@ -1410,6 +1485,7 @@ function applyLadders(sess){ // l'esercizio a corpo libero diventa il livello sc
   sess.blocks.forEach(b => b.items.forEach(it => { const lo = LAD_OF[it.ex]; if(!lo) return; const L = LADDERS[lo.id].steps; let i = ladLevel(lo.id, lo.i);
     while(i > 0 && !ladAvail(L[i])) i--; const k = L[i]; if(k === it.ex){ if(EX[k].ladP) it.p = EX[k].ladP(it.p); return; }
     it.ladOf = it.ladOf || it.ex; it.ex = k; if(!it.origP) it.origP = it.p; it.p = EX[k].ladP ? EX[k].ladP(it.origP) : it.origP; }));
+  sess.blocks.forEach(b => b.items.forEach(it => { it.p = fitP(it.ex, it.p); }));
   return applyTut(sess);
 }
 // Tempo sotto tensione (Low, Overcoming Gravity 2ª ed., cap. 10: "Tempo Change", "Additional Set", "Density"): per gli esercizi a corpo libero senza un
@@ -1666,6 +1742,35 @@ const EXG = {
   mgCurlUp:"post", sideBridgeWall:"post", sideBridgeKnees:"post", sideBridge:"post", sideBridgeHip:"post", sideBridgeRoll:"post", birdDogArm:"post", birdDogLeg:"post", birdDog:"post", birdDogSquares:"post", birdDogStanding:"post", catCamel:"post", proneRelax:"post", mcgillStretch:"post", shortstopSquat:"post", parkBench:"post", wallWalk:"post", nerveFloss:"post", lewit:"post", clamshell:"post", gluteBridge:"post", lungeHip:"post",
   romCollo:"post", neckFlexLift:"post", scapRetr:"post", extraRotFianco:"post", isoRotSpalla:"post", elevScap:"post", extraRotElastico:"post", intraRotElastico:"post", abdFianco:"post", squatParziale:"post", stepUp:"post", stepDown:"post"
 };
+Object.assign(EXG, {ankFlex:"post", toeRaise:"post", ankStance:"post", runnerPose:"post", crossSway:"post", toeWalk:"post", calfSeduto:"legs", calfPressa:"legs", pancaLeve:"chest", pancaMultipower:"chest", lentoMultipower:"shoulders"});
+// Macchine aggiunte dall'utente come alternative a un esercizio: hanno il loro storico dei pesi, ma nessuna descrizione verificata.
+function registerMyEx(){
+  for(const m of (S.settings.myEx || [])){
+    if(!EX[m.of]) continue;
+    EX[m.id] = {n:m.n, step:m.step || 2.5, inc:m.step || 2.5, unit:"macchina aggiunta da te", yt:m.n + " tecnica", src:"Aggiunto da te (nessuna fonte)", mine:true,
+      how:["Aggiunto da te come alternativa a " + EX[m.of].n + ".", "Regola la macchina come indicato sulla macchina stessa; per la tecnica valgono gli stessi punti di " + EX[m.of].n + "."], err:[]};
+    EXG[m.id] = EXG[m.of];
+    for(const g of PAT){ const i = g.indexOf(m.id); if(i >= 0) g.splice(i, 1); }
+    if(m.hidden) continue;
+    let found = false; for(const g of PAT) if(g.includes(m.of)){ g.push(m.id); found = true; }
+    if(!found) PAT.push([m.of, m.id]);
+  }
+}
+registerMyEx();
+function myExFormHtml(orig, ctx){
+  if(!EX[orig] || EX[orig].bw || ["post","warm","stretch"].includes(EXG[orig])) return "";
+  const st = EX[orig].step || 2.5;
+  return `<details class="myex"><summary class="small">Nella tua palestra c'è un'altra macchina? Aggiungila</summary>
+    <div class="stack-sm" style="margin-top:8px"><input id="myExName" type="text" maxlength="50" placeholder="Nome, es. panca piana guidata" autocomplete="off">
+    <label class="small muted">Aumento minimo di peso</label>
+    <div class="seg" id="myExStep">${[1,2.5,5].map(v => `<button type="button" data-act="myExStep" data-v="${v}" aria-pressed="${v === st}">${String(v).replace(".", ",")} kg</button>`).join("")}</div>
+    <button class="btn sm primary" data-act="myExAdd" data-of="${orig}" ${ctx}>Aggiungi alle alternative</button></div></details>`;
+}
+function myExListHtml(){
+  const l = (S.settings.myEx || []).filter(m => !m.hidden && EX[m.of]);
+  if(!l.length) return "";
+  return `<div class="o-label" style="margin:12px 0 6px">Macchine aggiunte da te</div><ul class="exlist">${l.map(m => `<li><div class="exrow" style="cursor:default"><span class="gdot" style="background:${grp(m.id).c}"></span><span class="t"><span class="n">${esc(m.n)}</span><span class="p">alternativa a ${esc(EX[m.of].n)}</span></span><button class="btn sm ghost" data-act="myExDel" data-k="${m.id}">Togli</button></div></li>`).join("")}</ul>`;
+}
 const PRE = ["mobQuad","mobProno","neckFlex"], POSTEND = ["alzateProno","alzateY","wallSlide"];
 const SECT = {pre:{n:"Prima dei pesi · posturale", cls:"post"}, main:{n:"Allenamento", cls:""}, end:{n:"Fine seduta · posturale", cls:"post"}, stretch:{n:"Fine seduta · allungamento", cls:"post"}, home:{n:"Routine a casa", cls:"post"}};
 const grp = k => GROUPS[EXG[k] || "core"];
@@ -1709,6 +1814,7 @@ const svgI = {
   calendario:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
   progressi:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M6 15l4-4 3 3 5-6"/><path d="M15 8h3v3"/></svg>',
   programma:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4h14v16H5zM8.5 8.5h7M8.5 12h7M8.5 15.5h4"/></svg>',
+  timer:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13.5" r="8"/><path d="M12 9.5v4l2.5 2M9.5 2.5h5M19 6l1.5-1.5"/></svg>',
   guida:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5zM4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg>',
   chev:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg>',
   gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
@@ -1722,20 +1828,22 @@ const svgI = {
 let view = "oggi", guideTab = "esercizi", guideQ = "", planOpen = null;
 let calMonth = (() => { const d = new Date(); return {y:d.getFullYear(), m:d.getMonth()}; })();
 const TABS = [["oggi","Oggi"],["piano","Piano"],["progressi","Progressi"],["postura","Postura"],["altro","Altro"]];
-const TAB_OF = {impostazioni:"altro", guida:"altro", schiena:"postura", regione:"postura", piede:"postura"};
+const TAB_OF = {impostazioni:"altro", guida:"altro", timer:"altro", testa:"postura", schiena:"postura", regione:"postura", piede:"postura"};
 const PLAN_N = {palestra:"Palestra", corsa:"Corsa", pallavolo:"Salto e rapidità", ciclismo:"Bici"};
 function render(){
+  if((S.settings.myEx || []).some(m => !EX[m.id])) registerMyEx();
   if(view === "calendario" || view === "programma") view = "piano";
   extendGym();
-  const body = {oggi:renderOggi, piano:renderPiano, progressi:renderProgressi, guida:renderGuida, impostazioni:renderImpostazioni, schiena:renderSchiena, regione:renderRegione, piede:renderPiede, postura:renderPostura, altro:renderAltro}[view]();
-  const title = {impostazioni:"Impostazioni", schiena:"Schiena", regione:REG[RK].r[0].toUpperCase() + REG[RK].r.slice(1), piede:"Piede", guida:"Guida"}[view] || (view === "piano" && planOpen ? PLAN_N[planOpen] : (TABS.find(t => t[0] === view) || [0, ""])[1]);
+  const body = {oggi:renderOggi, piano:renderPiano, progressi:renderProgressi, guida:renderGuida, impostazioni:renderImpostazioni, schiena:renderSchiena, regione:renderRegione, piede:renderPiede, postura:renderPostura, altro:renderAltro, timer:renderTimer, testa:renderTesta}[view]();
+  const title = {impostazioni:"Impostazioni", schiena:"Schiena", regione:REG[RK].r[0].toUpperCase() + REG[RK].r.slice(1), piede:"Piede", guida:"Guida", timer:"Timer", testa:"Testa di profilo"}[view] || (view === "piano" && planOpen ? PLAN_N[planOpen] : (TABS.find(t => t[0] === view) || [0, ""])[1]);
   const backAct = {impostazioni:"closeSettings", schiena:"backClose", regione:"regClose", piede:"fpClose", guida:"goAltro"}[view] || (view === "piano" && planOpen ? "closePlan" : "");
   const navOn = TAB_OF[view] || view;
   const back = backAct ? `<button class="btn ghost sm" data-act="${backAct}" style="padding-left:0;margin-bottom:-6px">‹ ${backAct === "closePlan" ? "Piano" : backAct === "goAltro" ? "Altro" : ["backClose","regClose","fpClose"].includes(backAct) ? "Postura" : "Indietro"}</button>` : "";
   $("#app").innerHTML = `<div class="wrap"><header class="top"><div class="brand">${svgI.omino.replace("<svg ", '<svg class="om" ')}<span>TrainUP</span></div><div class="sync"><span id="syncDot" class="dot"></span><span id="syncTxt"></span></div></header>${view === "oggi" ? "" : back + `<h1 class="ltitle">${esc(title)}</h1>`}${body}</div>
   <nav class="nav" aria-label="Sezioni">${TABS.map(([v,l]) => `<button data-nav="${v}" ${navOn===v ? 'aria-current="page"' : ""}>${svgI[v]}<span>${l}</span></button>`).join("")}</nav>`;
   setSync(sync.state);
-  if(["piano","impostazioni","schiena","regione","piede","postura"].includes(view)) addHelp($("#app"));
+  if(["piano","impostazioni","schiena","regione","piede","postura","timer","testa"].includes(view)) addHelp($("#app"));
+  if(view === "testa" && FT) requestAnimationFrame(ftDraw);
 }
 // Spiegazioni a comparsa: i testi descrittivi delle sezioni (paragrafi attenuati) restano nascosti finché non si tocca "?" accanto al titolo della sezione
 const helpOpen = new Set();
@@ -2137,11 +2245,12 @@ function swapSectionHtml(k, slot){
   const orig = slot.split("|")[2];
   if(EXG[orig] === "post") return "";
   const swapped = orig !== k;
-  if(!altOf(orig).length) return "";
+  if(!altOf(orig).length && !myExFormHtml(orig, "")) return "";
   return `<div class="stack-sm"><span class="eyebrow">Cambia esercizio in questa scheda</span>
     ${swapped ? `<div class="hint small">Al posto di <b>${esc(EX[orig].n)}</b>. <button class="btn sm ghost" data-act="swapSet" data-slot="${esc(slot)}" data-to="${orig}">Torna all'originale</button></div>` : ""}
     ${swapWarnHtml(orig)}
     ${altListHtml(orig, a => a === k ? `<span class="pill acc">in uso</span>` : `<button class="btn sm primary" data-act="swapSet" data-slot="${esc(slot)}" data-to="${a}">Usa questo da ora</button>`)}
+    ${myExFormHtml(orig, `data-slot="${esc(slot)}" data-k="${k}"`)}
     <p class="tiny muted">Vale per tutte le prossime sedute di questa scheda. Ogni esercizio ha il suo storico dei pesi: la prima volta l'app ti aiuta a trovare il peso.</p></div>`;
 }
 function setSwap(slot, to){
@@ -2155,10 +2264,11 @@ function runSwapSheet(ii){
   const orig = baseEx(it);
   showSheet(`<div class="grab"></div><div class="stack">
     <div class="row between"><h2>Cambia esercizio</h2><button class="btn icon ghost" data-act="closeSheet" aria-label="Chiudi">${svgI.close}</button></div>
-    <p class="small muted">Adesso: <b>${esc(EX[it.ex].n)}</b>${it.orig ? ` (al posto di ${esc(EX[orig].n)})` : it.variantOf ? ` (variante del ciclo al posto di ${esc(EX[orig].n)})` : ""}. Serie, ripetizioni e recupero restano gli stessi.</p>
+    <p class="small muted">Adesso: <b>${esc(EX[it.ex].n)}</b>${it.orig ? ` (al posto di ${esc(EX[orig].n)})` : it.variantOf ? ` (variante del ciclo al posto di ${esc(EX[orig].n)})` : ""}. Serie e recupero restano gli stessi; le tenute (plank, barchetta, L-sit) passano in secondi.</p>
     ${swapWarnHtml(orig)}
     ${it.orig ? `<button class="btn sm ghost" data-act="swapRun" data-ii="${ii}" data-to="${orig}" data-mode="always" style="align-self:flex-start">Torna a ${esc(EX[orig].n)}</button>` : ""}
     ${altListHtml(orig, a => a === it.ex ? `<span class="pill acc">in uso</span>` : `<button class="btn sm" data-act="swapRun" data-ii="${ii}" data-to="${a}" data-mode="today">Solo oggi</button><button class="btn sm primary" data-act="swapRun" data-ii="${ii}" data-to="${a}" data-mode="always">Da ora in poi</button>`)}
+    ${myExFormHtml(orig, `data-ii="${ii}"`)}
   </div>`);
 }
 
@@ -2502,6 +2612,7 @@ function swapsCardHtml(){
   return `<div class="o-sec" id="cambiati"><div class="o-label" style="margin-bottom:6px">Esercizi cambiati</div>
     ${sw.length ? `<ul class="exlist">${sw.map(([slot, to]) => { const [kind, code, orig] = slot.split("|"); return `<li><div class="exrow" style="cursor:default"><span class="gdot" style="background:${grp(to).c}"></span><span class="t"><span class="n">${esc(EX[to]?.n || to)}</span><span class="p">al posto di ${esc(EX[orig]?.n || orig)} · ${esc((PHASES[kind]?.short || "Test") + ", " + codeName(code))}</span></span><button class="btn sm ghost" data-act="swapSet" data-slot="${esc(slot)}" data-to="${orig}">Ripristina</button></div></li>`; }).join("")}</ul>`
       : `<p class="small muted">Nessuno. Per cambiare un esercizio toccalo nella seduta (in Oggi o in Piano) oppure usa "Cambia" durante l'allenamento.</p>`}
+    ${myExListHtml()}
   </div>`;
 }
 function profileSheetHtml(){ const p = S.profile || {}; const a = ageNow();
@@ -2759,7 +2870,7 @@ const REFS = [
   ["Zatsiorsky V.M., Kraemer W.J., Fry A.C.", "Science and Practice of Strength Training, 3ª ed.", "Human Kinetics, Champaign (IL), 2021. ISBN 978-1-4925-9200-6.", "Metodi di allenamento della forza (cap. 4), esercizi per chi comincia (cap. 6)."],
   ["Friel J.", "Joe Friel's Quick Guide to Setting Zones.", "TrainingPeaks, 4 maggio 2012. trainingpeaks.com/learn/articles/joe-friel-s-quick-guide-to-setting-zones", "Test della FC di soglia in bici."],
   ["McGill S.", "Low Back Disorders: Evidence-Based Prevention and Rehabilitation, 3ª ed.", "Human Kinetics, Champaign (IL), 2016.", "Tenute brevi, camminata a intervalli sotto la soglia del dolore (cap. 10)."],
-  ["Jull G., Moore A., Falla D., Lewis J., McCarthy C., Sterling M. (a cura di)", "Grieve's Modern Musculoskeletal Physiotherapy, 4ª ed.", "Elsevier, Edimburgo, 2015.", "Collo (cap. 41), spalla (cap. 50), ginocchio (cap. 48.2), segnali d'allarme (cap. 35.1), metodo McKenzie e approccio multidimensionale (cap. 45), controllo posturale (cap. 4)."],
+  ["Jull G., Moore A., Falla D., Lewis J., McCarthy C., Sterling M. (a cura di)", "Grieve's Modern Musculoskeletal Physiotherapy, 4ª ed.", "Elsevier, Edimburgo, 2015.", "Collo (cap. 41), spalla (cap. 50), ginocchio (cap. 48.2), caviglia (cap. 49, Hiller e Refshauge), segnali d'allarme (cap. 35.1), metodo McKenzie e approccio multidimensionale (cap. 45), controllo posturale (cap. 4)."],
   ["Conroy V.M., Murray B.N., Alexopulos Q.T., McCreary J.", "Kendall's Muscles: Testing and Function with Posture and Pain, 6ª ed.", "Wolters Kluwer, Filadelfia, 2024.", "Postura (cap. 2): conta più riuscire a cambiare posizione che l'aspetto."],
   ["McGill S.", "Back Mechanic: The Secrets to a Healthy Spine Your Doctor Isn't Telling You.", "Backfitpro, Gravenhurst (ON), 2015 (2ª stampa 2017).", "Valutazione del mal di schiena e routine: autovalutazione e test (capp. 5-6), strumenti di movimento e igiene della colonna (capp. 7-8), Big 3 (cap. 9), camminata (cap. 10), anche (cap. 12), condizioni particolari (cap. 14)."]]],
  ["Palestra: ricerca", [
@@ -2790,6 +2901,13 @@ const REFS = [
   ["Lopes J.S.S., Machado A.F., Micheletti J.K., de Almeida A.C., Cavina A.P., Pastre C.M.", "Effects of training with elastic resistance versus conventional resistance on muscular strength: a systematic review and meta-analysis.", "SAGE Open Medicine 2019;7.", "doi:10.1177/2050312119831116"],
   ["Morton R.W., Murphy K.T., McKellar S.R. et al.", "A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains in muscle mass and strength in healthy adults.", "British Journal of Sports Medicine 2018;52(6):376-384.", "doi:10.1136/bjsports-2017-097608"]]],
  ["Postura e dolore", [
+    ["Hupperets M.D.W., Verhagen E.A.L.M., van Mechelen W.", "Effect of unsupervised home based proprioceptive training on recurrences of ankle sprain: randomised controlled trial.", "BMJ 2009;339:b2684.", "doi:10.1136/bmj.b2684"],
+    ["Royal Australian College of General Practitioners", "8-week training program for preventing recurrent ankle sprain (scheda per i pazienti, programma di E. Verhagen).", "HANDI, Handbook of Non-Drug Interventions, 2014.", "racgp.org.au"],
+    ["Martin R.L., Davenport T.E., Fraser J.J. et al.", "Ankle stability and movement coordination impairments: lateral ankle ligament sprains revision 2021.", "Journal of Orthopaedic & Sports Physical Therapy 2021;51(4):CPG1-CPG80.", "doi:10.2519/jospt.2021.0302"],
+    ["Cote R., Vietas C., Kolakowski M., Lombardo K., Prete J., Dashottar A.", "Inter and intra-rater reliability of measuring photometric craniovertebral angle using a cloud-based video communication platform.", "International Journal of Telerehabilitation 2021;13(1).", "doi:10.5195/ijt.2021.6346"],
+    ["Maddaluno M.L.M., Ferreira A.P.A., Tavares A.C.L.C., Meziat-Filho N., Ferreira A.S.", "Craniocervical posture assessed with photogrammetry and the accuracy of palpation methods for locating the seventh cervical spinous process: a cross-sectional study.", "Journal of Manipulative and Physiological Therapeutics 2021;44(3):196-204.", "doi:10.1016/j.jmpt.2020.07.012"],
+    ["Yang S., Boudier-Revéret M., Yi Y.G., Hong K.Y., Chang M.C.", "Treatment of chronic neck pain in patients with forward head posture: a systematic narrative review.", "Healthcare 2023;11(19):2604.", "doi:10.3390/healthcare11192604"],
+    ["Seyedahmadi M. et al.", "The effect of corrective exercises on forward head posture: a systematic review and meta-analysis (studi piccoli e molto diversi fra loro).", "Journal of Paramedical Sciences and Rehabilitation 2025;14(1):89-106.", "doi:10.22038/JPSR.2025.87805.2700"],
     ["Swain C.T.V., Pan F., Owen P.J., Schmidt H., Belavy D.L.", "No consensus on causality of spine postures or physical exposure and low back pain: a systematic review of systematic reviews.", "Journal of Biomechanics 2020;102:109312.", "doi:10.1016/j.jbiomech.2019.08.006"],
     ["George S.Z., Fritz J.M., Silfies S.P. et al.", "Interventions for the management of acute and chronic low back pain: revision 2021. Clinical practice guidelines.", "Journal of Orthopaedic & Sports Physical Therapy 2021;51(11):CPG1-CPG60.", "doi:10.2519/jospt.2021.0304"],
     ["Hartvigsen J., Hancock M.J., Kongsted A. et al.", "What low back pain is and why we need to pay attention.", "The Lancet 2018;391(10137):2356-2367.", "doi:10.1016/S0140-6736(18)30480-X"],
@@ -3191,25 +3309,45 @@ const REG = {
         [["abdFianco",3,12],["clamshell",3,12],["gluteBridge",3,12],["squatParziale",3,10],["stepUp",3,8]],
         [["abdFianco",3,15],["gluteBridge",3,12],["stepUp",3,10],["stepDown",3,8],["splitSquatCorpo",3,8]]],
     lvSrc:"Esercizi per l'anca (abduttori, glutei) e per il ginocchio (squat, gradino), da carico parziale a completo (Crossley 2016; Grieve's, cap. 48.2).",
-    pain:"Durante gli esercizi va bene un dolore fino a 2 su 10; fino a 5 per poco, purché il mattino dopo non sia peggiorato.", worse:"Peggio stamattina"}
+    pain:"Durante gli esercizi va bene un dolore fino a 2 su 10; fino a 5 per poco, purché il mattino dopo non sia peggiorato.", worse:"Peggio stamattina"},
+  caviglia:{n:"Distorsione della caviglia", r:"caviglia", art:"la caviglia", fixed:true, freq:"3 volte a settimana, per 8 settimane",
+    intro:"Dopo una distorsione: domande per escludere fratture e lesioni da far vedere. Ne esce il programma di 8 settimane per l'equilibrio che riduce le nuove distorsioni.",
+    red:[["ottawa","Dopo la distorsione non riuscivi a fare 4 passi, o non ci riesci adesso, o fa male premere l'osso sulla punta di un malleolo o lungo i suoi ultimi 6 cm sul retro?",1],
+      ["sindesmosi","Nella distorsione il piede è ruotato verso l'esterno, e il dolore o il gonfiore sono sopra la caviglia, fra tibia e perone, o non riesci a saltellare su quel piede?"]],
+    redSrc:"Grieve's, cap. 49: regole di Ottawa per decidere la radiografia (dolore all'osso alla punta o negli ultimi 6 cm del bordo posteriore di tibia o perone, oppure non riuscire a fare 4 passi subito dopo e alla visita); sospetto di lesione della sindesmosi (rotazione esterna del piede, dolore sopra la caviglia, non riuscire a saltellare), che guarisce più lentamente e richiede cautele diverse.",
+    q:[["cammina","Cammini normalmente e hai ripreso le tue attività (o lo sport)?"],["recente","La distorsione è di meno di 2 settimane fa?"],["ricadute","Hai già avuto altre distorsioni alla stessa caviglia, o a volte la senti cedere?"]],
+    qSrc:"Grieve's, cap. 49 (decorso e instabilità cronica); Hupperets 2009 (il programma parte dopo le cure abituali e la ripresa dello sport).",
+    stop:q => q.cammina === "n" ? "Il programma parte quando cammini normalmente e hai ripreso le attività. Prima servono carico progressivo, un supporto (un tutore semirigido funziona meglio di una fascia elastica) ed esercizi impostati con un fisioterapista." : "",
+    notes:q => [
+      q.recente === "s" && ["Distorsione recente","Di solito dolore e gonfiore calano molto entro 2 settimane. Se il gonfiore dura più di un mese, fallo vedere.","Grieve's, cap. 49"],
+      q.ricadute === "s" && ["Distorsioni ripetute","È l'instabilità cronica della caviglia: la cura principale è l'esercizio per equilibrio e forza. Durante lo sport un tutore o il taping riducono le ricadute, anche dopo la fine del programma.","Grieve's, cap. 49; Martin 2021 (JOSPT)"],
+      ["Per tutti","In 522 sportivi questo programma ha ridotto le nuove distorsioni in un anno dal 33% al 22%. Un tutore portato a lungo nella vita di tutti i giorni non è raccomandato; nello sport invece protegge.","Hupperets 2009 (BMJ); Grieve's, cap. 49"]].filter(Boolean),
+    start:q => 0,
+    lv:[[["ankFlex",2,15,"terreno piano"],["toeRaise",2,15,"tenendoti a un appoggio"],["ankStance","t",60,3,"terreno piano"],["runnerPose",1,15,"tieni 8″, terreno piano"],["crossSway",1,15,"tenendoti a un appoggio"],["toeWalk",3,1,"giri camminando"]],
+        [["ankFlex",2,15,"occhi chiusi"],["toeRaise",2,15,"senza appoggio"],["ankStance","t",60,3,"occhi chiusi"],["runnerPose",1,15,"tieni 8″, occhi chiusi"],["crossSway",1,15,"senza appoggio"],["toeWalk",3,1,"giri camminando"]],
+        [["ankFlex",2,15,"sulla tavoletta"],["toeRaise",2,15,"senza appoggio"],["ankStance","t",60,3,"sulla tavoletta"],["runnerPose",1,15,"tieni 8″, sulla tavoletta"],["crossSway",1,15,"occhi chiusi, senza appoggio"],["toeWalk",3,1,"giri saltellando"]]],
+    lvSrc:"Programma di Hupperets 2009 (BMJ) come nella scheda per i pazienti dell'RACGP (HANDI, 2014): 6 esercizi, 3 volte a settimana per 8 settimane (24 sedute), circa 30 minuti; dal terreno piano agli occhi chiusi alla tavoletta. La scheda fa partire il livello 2 dalla seduta 9 per il primo esercizio: cambiare livello ogni 8 sedute per tutti gli esercizi è una scelta dell'app. Senza tavoletta propriocettiva resta al livello 2.",
+    pain:"Le fonti del programma non danno indicazioni sul dolore. Scelta dell'app: fermati se un esercizio ti fa male alla caviglia o ti fa sentire instabile.", worse:"Peggio oggi"}
 };
 const REG_KEYS = Object.keys(REG);
 function regState(k){ return (S.settings.reg || {})[k] || null; }
 function regOn(k){ const r = regState(k); return !!(r && r.at && !r.stop && r.on); }
 function regItems(k, r){ const R0 = REG[k], lv = Math.min(2, r.lv || 0), st = r.st || 0;
+  if(R0.fixed) return R0.lv[lv].map(([ex, a, b, c, d]) => a === "t" ? {ex, p:{...P.time(c, b, 15), note:d}} : {ex, p:{...P.range(a, b, b, "", 30), note:c}});
   return R0.lv[lv].concat(R0.extra ? R0.extra(r.q || {}) : []).map(([ex, a, b]) => ({ex, p:a === "t" ? P.time(2, b, 15) : P.range(a, b + 2*st, b + 2*st, "", 30)})); }
-function buildRegSession(k){ const r = regState(k); return {code:"Reg:" + k, title:"Routine per " + (k === "ginocchio" ? "il ginocchio" : k === "spalla" ? "la spalla" : "il collo"), kind:"post", blocks:regItems(k, r).map(it => ({type:"single", items:[it]}))}; }
+function buildRegSession(k){ const r = regState(k); return {code:"Reg:" + k, title:"Routine per " + (REG[k].art || (k === "ginocchio" ? "il ginocchio" : k === "spalla" ? "la spalla" : "il collo")), kind:"post", blocks:regItems(k, r).map(it => ({type:"single", items:[it]}))}; }
 function regDoneOn(k, d){ return Object.values(S.sessions).find(x => x && !x.deleted && x.kind === "post" && x.code === "Reg:" + k && x.date === d); }
 function regLastDone(k){ return Object.values(S.sessions).filter(x => x && !x.deleted && x.kind === "post" && x.code === "Reg:" + k).map(x => x.date).sort().pop() || null; }
 function regNeedsCheck(k){ if(!regOn(k)) return null; const r = regState(k), last = regLastDone(k), t = todayStr(); if(!last || last >= t) return null; if(Object.keys(r.log || {}).some(d => d > last)) return null; return last; }
 // progressione (scelta dell'app): giorno dopo uguale o meglio → +2 ripetizioni (fino a +4); poi due giorni buoni di fila → livello successivo.
-// Peggio → si torna indietro di un passo.
+// Peggio → si torna indietro di un passo. Caviglia (programma a dosi fisse): livello successivo ogni 8 sedute; se va peggio la seduta non conta.
 function regCheck(k, v){ const r = regState(k); if(!r) return; r.log = r.log || {}; r.log[todayStr()] = v;
+  if(REG[k].fixed){ if(v !== "w" && (r.n = (r.n || 0) + 1) >= 8 && (r.lv || 0) < 2){ r.lv = (r.lv || 0) + 1; r.n = 0; } pushMeta(); render(); return; }
   if(v === "w"){ if(r.st > 0) r.st--; else if(r.lv > 0){ r.lv--; r.st = 1; } r.ok = 0; }
   else if(r.st < 2){ r.st++; r.ok = 0; } else if((r.ok = (r.ok || 0) + 1) >= 2 && r.lv < 2){ r.lv++; r.st = 0; r.ok = 0; }
   pushMeta(); render(); }
 function regCheckHtml(){ return REG_KEYS.map(k => { const last = regNeedsCheck(k); if(!last) return ""; const R0 = REG[k];
-  return `<div class="o-sec"><div class="o-label">${esc(R0.r[0].toUpperCase() + R0.r.slice(1))}</div><p class="small" style="margin:6px 0 8px">Rispetto a ${last === ymd(new Date(Date.now() - 864e5)) ? "ieri" : esc(fmtDate(last))}, com'è ${k === "collo" ? "il collo" : k === "spalla" ? "la spalla" : "il ginocchio"}?</p>
+  return `<div class="o-sec"><div class="o-label">${esc(R0.r[0].toUpperCase() + R0.r.slice(1))}</div><p class="small" style="margin:6px 0 8px">Rispetto a ${last === ymd(new Date(Date.now() - 864e5)) ? "ieri" : esc(fmtDate(last))}, com'è ${R0.art || (k === "collo" ? "il collo" : k === "spalla" ? "la spalla" : "il ginocchio")}?</p>
     <div class="seg" style="width:100%"><button data-act="regCheck" data-k="${k}" data-v="b" style="flex:1">Meglio</button><button data-act="regCheck" data-k="${k}" data-v="s" style="flex:1">Uguale</button><button data-act="regCheck" data-k="${k}" data-v="w" style="flex:1">${esc(R0.worse)}</button></div></div>`; }).join(""); }
 function regTodayRow(k, t, postDraft){ const code = "Reg:" + k, dr = postDraft && postDraft.code === code; if(!regOn(k) && !dr) return "";
   const r = regState(k), done = regDoneOn(k, t);
@@ -3243,9 +3381,9 @@ function regResultHtml(b, draft){ const R0 = REG[RK];
   let h = "";
   if(b.out) h += `<div class="o-sec first"><div class="o-label">Da un professionista</div><p style="margin-top:8px">${esc(b.out)}</p></div>`;
   else { { const N = R0.notes(b.q || {}); h += `<div class="o-sec first"><div class="o-label">Cosa sapere</div>${N.map(([t, x]) => `<p class="small" style="margin-top:8px"><b>${esc(t)}.</b> ${esc(x)}</p>`).join("")}<p class="small muted">${esc([...new Set(N.map(n => n[2]))].join("; "))}.</p></div>`; }
-    h += `<div class="o-sec"><div class="o-label">Routine</div><p class="small" style="margin-top:6px">Livello ${(b.lv || 0) + 1} di 3, 3-5 volte a settimana.</p><ul class="exlist">${regItems(RK, b).map(it => { const ex = EX[it.ex]; return `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}"><span class="gdot" style="background:var(--post)"></span><span class="t"><span class="n">${esc(ex.n)}</span><span class="p">${esc(shortP(it.p, ex))}</span></span><span class="chev">›</span></button></li>`; }).join("")}</ul>
+    h += `<div class="o-sec"><div class="o-label">Routine</div><p class="small" style="margin-top:6px">Livello ${(b.lv || 0) + 1} di 3, ${esc(R0.freq || "3-5 volte a settimana")}${R0.fixed && b.at ? ` · sedute a questo livello: ${b.n || 0} di 8` : ""}.</p><ul class="exlist">${regItems(RK, b).map(it => { const ex = EX[it.ex]; return `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}"><span class="gdot" style="background:var(--post)"></span><span class="t"><span class="n">${esc(ex.n)}</span><span class="p">${esc(shortP(it.p, ex))}${it.p.note ? " · " + esc(it.p.note) : ""}</span></span><span class="chev">›</span></button></li>`; }).join("")}</ul>
       <p class="small" style="margin-top:8px"><b>Dolore:</b> ${esc(R0.pain)}</p>
-      <p class="small muted">${esc(R0.lvSrc)} Esercizi di ogni livello, dosi, frequenza e progressione sono scelte dell'app: le fonti non indicano una dose ottimale. Il giorno dopo la routine l'app chiede come va: se va uguale o meglio aggiunge 2 ripetizioni (fino a +4), poi passa al livello successivo; se va peggio torna indietro di un passo.</p></div>`; }
+      <p class="small muted">${esc(R0.lvSrc)} ${R0.fixed ? "Il giorno dopo ogni seduta l'app chiede come va: se va uguale o meglio la seduta conta per il cambio di livello; se va peggio no." : "Esercizi di ogni livello, dosi, frequenza e progressione sono scelte dell'app: le fonti non indicano una dose ottimale. Il giorno dopo la routine l'app chiede come va: se va uguale o meglio aggiunge 2 ripetizioni (fino a +4), poi passa al livello successivo; se va peggio torna indietro di un passo."}</p></div>`; }
   if(draft) h += `<div class="row" style="margin-top:14px;gap:8px"><button class="btn primary big" data-act="raSave">${b.out ? "Salva" : "Salva e usa questa routine"}</button></div>`;
   else h += `<div class="row" style="margin-top:14px;gap:8px;flex-wrap:wrap"><button class="btn" data-act="regStart" data-k="${RK}">Rifai la valutazione</button>${b.on ? `<button class="btn ghost" data-act="regOff" style="color:var(--danger)">Togli la routine</button>` : !b.out ? `<button class="btn ghost" data-act="regOnAgain">Riattiva la routine</button>` : ""}</div>`;
   return h; }
@@ -3322,7 +3460,7 @@ function renderPostura(){
     ${backTodayRow(t, postDraft)}${REG_KEYS.map(regRow).join("")}</div>
     <p class="small muted">Valutazioni con domande sui segnali d'allarme e routine progressive. Non sono diagnosi.</p></div>`;
   const fp = (S.settings.fpi || []).slice(-1)[0], fd = fp && fpiTot(fp.dx), fs = fp && fpiTot(fp.sx), sg = x => (x.t > 0 ? "+" : "") + x.t;
-  h += `<div class="o-sec"><div class="o-label">Piede</div><div class="o-list"><button class="o-row" data-act="fpOpen"><span class="dot" style="background:var(--post)"></span><span class="n">Postura del piede (FPI-6)<small>${fp ? esc(fmtDate(fp.d)) + " · " + [fd ? "dx " + sg(fd) : "", fs ? "sx " + sg(fs) : ""].filter(Boolean).join(", ") : "valutazione con l'aiuto di un'altra persona"}</small></span><span class="p">›</span></button></div></div>`;
+  h += `<div class="o-sec"><div class="o-label">Misure</div><div class="o-list">${ftRow()}<button class="o-row" data-act="fpOpen"><span class="dot" style="background:var(--post)"></span><span class="n">Postura del piede (FPI-6)<small>${fp ? esc(fmtDate(fp.d)) + " · " + [fd ? "dx " + sg(fd) : "", fs ? "sx " + sg(fs) : ""].filter(Boolean).join(", ") : "valutazione con l'aiuto di un'altra persona"}</small></span><span class="p">›</span></button></div></div>`;
   if(postureHomeOn() || (postDraft && postDraft.code === "Post")) h += `<div class="o-sec"><div class="o-label">Routine posturale</div><div class="o-list"><button class="o-row" data-act="startPost"><span class="dot" style="background:var(--post)"></span><span class="n">Routine posturale a casa<small>${postDraft && postDraft.code === "Post" ? "interrotta: tocca per riprendere" : postureOn(t) ? "fatta oggi ✓" : esc(postureConds().filter(k => POSTURE[k].home.length).map(k => POSTURE[k].n.toLowerCase()).join(", "))}</small></span><span class="p">›</span></button></div></div>`;
   h += postureSettingsHtml();
   h += `<div class="o-sec"><div class="o-label">Da sapere sulla postura</div><ul class="small" style="margin:6px 0 0;padding-left:18px">
@@ -3332,12 +3470,181 @@ function renderPostura(){
     <p class="small muted">Slater 2019 (JOSPT); Swain 2020 (revisione di 41 revisioni: nessun consenso sul fatto che posture o carichi causino il mal di schiena); Christensen 2008 (nessuna prova forte di legame fra curve della colonna e dolore); <i>Grieve's</i>, cap. 4. Anche Kendall osserva che molte posture «scorrette» non danno dolore e che conta di più riuscire a cambiare posizione.</p></div>`;
   return h;
 }
+/* ============ Testa di profilo: angolo cranio-vertebrale (CVA) da una foto ============ */
+// Metodo di Cote 2021 (Int J Telerehabil 13(1)): foto di profilo davanti a un muro liscio, C7 segnata con nastro colorato, trago scoperto,
+// qualche passo sul posto, un respiro profondo, poi postura rilassata. CVA = angolo fra la linea trago-C7 e l'orizzontale per C7.
+// Errore standard della misura 1,9° (Cote 2021); 5° come differenza minima: 1,96 × √2 × 1,9 ≈ 5,2°, calcolo dell'app (formula del cambiamento minimo rilevabile).
+let FT = null; // {src, name, tr:{x,y}, c7:{x,y}, sel}
+const FT_KEY = "fotoTesta";
+function ftRow(){ const l = (S.settings.cva || []).slice(-1)[0];
+  return `<button class="o-row" data-act="ftOpen"><span class="dot" style="background:var(--post)"></span><span class="n">Testa di profilo (angolo da una foto)<small>${l ? esc(fmtDate(l.d)) + " · " + l.v.toFixed(1).replace(".", ",") + "°" : "misura l'angolo fra testa e collo"}</small></span><span class="p">›</span></button>`; }
+const ftAngle = (tr, c7) => Math.atan2(c7.y - tr.y, Math.abs(tr.x - c7.x)) * 180 / Math.PI;
+function ftPhotos(){ if(!(window.Android && Android.mediaList)) return []; try{ return (JSON.parse(Android.mediaList(FT_KEY)) || []).filter(m => !m.video); }catch(e){ return []; } }
+function renderTesta(){
+  const and = !!(window.Android && Android.mediaAdd), ph = ftPhotos(), hist = S.settings.cva || [];
+  let h = `<div class="o-sec first"><div class="o-label">Come fare la foto</div>
+    <ol class="small" style="margin:6px 0 0;padding-left:18px">
+      <li>In piedi di fianco, vicino a un muro liscio, orecchio scoperto (capelli dietro).</li>
+      <li>Fatti segnare con un pezzetto di nastro colorato C7, l'ultima vertebra del collo, alla base della nuca.</li>
+      <li>Telefono all'altezza della spalla, dritto, a un paio di metri: nella foto devono vedersi testa, collo e spalla. Fattela scattare o usa l'autoscatto.</li>
+      <li>Fai qualche passo sul posto, un respiro profondo dentro e fuori, poi resta nella tua postura normale e rilassata.</li></ol>
+    <div class="row" style="flex-wrap:wrap;gap:8px;margin-top:12px">${and ? `<button class="btn sm" data-act="ftAdd" data-m="photo">Scatta foto</button><button class="btn sm ghost" data-act="ftAdd" data-m="pick">Dalla galleria</button>` : `<label class="btn sm">Scegli una foto<input type="file" accept="image/*" id="ftFile" hidden></label>`}</div>
+    <p class="small muted">Metodo di Cote e colleghi (2021), con un errore tipico della misura di circa 2°. Il nastro su C7 serve perché la vertebra non si vede sotto la pelle. Trovarla con le dita non è facile nemmeno per i fisioterapisti (corretta in 4-7 casi su 10 secondo i raggi X), ma sbagliare di una vertebra cambia l'angolo di circa 1° (Maddaluno 2021): conta usare sempre lo stesso punto.</p></div>`;
+  if(ph.length && !FT) h += `<div class="o-sec"><div class="o-label">Le tue foto</div><div class="media-grid">${ph.slice(-6).reverse().map(m => `<div class="mitem"><img src="${esc(m.url)}" alt="" data-act="ftPick" data-u="${esc(m.url)}" data-n="${esc(m.name)}"><button class="mdel" data-act="ftDelPhoto" data-n="${esc(m.name)}" aria-label="Elimina">${svgI.close}</button></div>`).join("")}</div><p class="small muted">Tocca una foto per misurarla. Le foto restano solo su questo telefono.</p></div>`;
+  if(FT){ const done = FT.tr && FT.c7, v = done ? ftAngle(FT.tr, FT.c7) : null;
+    h += `<div class="o-sec"><div class="o-label">Misura</div>
+      <div class="seg" style="margin-bottom:10px"><button data-act="ftSel" data-v="tr" aria-pressed="${FT.sel === "tr"}">1 · Trago</button><button data-act="ftSel" data-v="c7" aria-pressed="${FT.sel === "c7"}">2 · C7 (nastro)</button></div>
+      <p class="small" style="margin:0 0 8px">${FT.sel === "tr" ? "Tocca il trago: la piccola sporgenza davanti al buco dell'orecchio." : "Tocca il centro del nastro su C7."}</p>
+      <div class="ft-wrap" id="ftWrap"><img id="ftImg" src="${esc(FT.src)}" alt="Foto di profilo"><svg id="ftSvg"></svg></div>
+      ${done ? `<div class="ft-res"><b>${v.toFixed(1).replace(".", ",")}°</b><span class="small muted">angolo cranio-vertebrale</span></div>
+        <div class="row" style="gap:8px"><button class="btn primary" data-act="ftSave">Salva la misura</button><button class="btn ghost" data-act="ftClose">Annulla</button></div>`
+        : `<button class="btn sm ghost" data-act="ftClose">Annulla</button>`}
+      <p class="small muted">Più l'angolo è piccolo, più la testa è in avanti rispetto al collo. Nello studio di Cote, in 66 fisioterapisti e studenti, la media in postura rilassata era circa 51°, con differenze di diversi gradi fra le persone, ed era uguale in chi aveva dolore al collo e in chi no: per questo l'app non indica una soglia «giusta».</p></div>`; }
+  if(hist.length){ const f = hist[0];
+    h += `<div class="o-sec"><div class="o-label">Le tue misure</div><ul class="exlist">${hist.slice().reverse().map((m, i) => { const idx = hist.length - 1 - i, dv = idx > 0 ? m.v - f.v : null;
+      return `<li><div class="exrow" style="cursor:default"><span class="t"><span class="n">${m.v.toFixed(1).replace(".", ",")}°</span><span class="p">${esc(fmtDate(m.d))}${dv != null ? ` · ${dv >= 0 ? "+" : "−"}${Math.abs(dv).toFixed(1).replace(".", ",")}° dalla prima${Math.abs(dv) < 5 ? " (entro l'errore di misura)" : ""}` : ""}</span></span><button class="btn sm ghost" data-act="ftDel" data-i="${idx}">Togli</button></div></li>`; }).join("")}</ul>
+      <p class="small muted">Differenze sotto i 5° possono dipendere solo da come è fatta la foto o da dove tocchi i punti (soglia calcolata dall'app dall'errore di misura di Cote 2021): per confrontare, rifai la foto sempre allo stesso modo. Gli esercizi possono cambiare l'angolo, ma non è dimostrato che cambiarlo tolga il dolore (Seyedahmadi 2025; Yang 2023).</p></div>`; }
+  return h;
+}
+function ftDraw(){
+  const svg = $("#ftSvg"), img = $("#ftImg"); if(!svg || !img || !FT) return;
+  const w = img.clientWidth, hh = img.clientHeight; svg.setAttribute("viewBox", `0 0 ${w} ${hh}`); svg.setAttribute("width", w); svg.setAttribute("height", hh);
+  const k = w / (img.naturalWidth || w), P = p => p && {x:p.x * k, y:p.y * k}, a = P(FT.tr), c = P(FT.c7);
+  let g = "";
+  if(c) g += `<line x1="${c.x}" y1="${c.y}" x2="${a && a.x < c.x ? 0 : w}" y2="${c.y}" class="ft-h"/>`;
+  if(a && c) g += `<line x1="${c.x}" y1="${c.y}" x2="${a.x}" y2="${a.y}" class="ft-l"/>`;
+  if(a) g += `<circle cx="${a.x}" cy="${a.y}" r="7" class="ft-p"/><text x="${a.x + 10}" y="${a.y - 10}" class="ft-t">trago</text>`;
+  if(c) g += `<circle cx="${c.x}" cy="${c.y}" r="7" class="ft-p"/><text x="${c.x + 10}" y="${c.y - 10}" class="ft-t">C7</text>`;
+  svg.innerHTML = g;
+}
+function ftOpenSrc(src, name){ FT = {src, name:name || null, tr:null, c7:null, sel:"tr"}; render(); setTimeout(() => { const w = $("#ftWrap"); if(w) w.scrollIntoView({block:"start", behavior:"smooth"}); }, 60); }
+document.addEventListener("click", e => {
+  const img = e.target.closest && e.target.closest("#ftWrap"); if(!img || !FT) return;
+  const im = $("#ftImg"), r = im.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+  if(fx < 0 || fx > 1 || fy < 0 || fy > 1) return;
+  const p = {x:fx * (im.naturalWidth || r.width), y:fy * (im.naturalHeight || r.height)}; // pixel della foto: l'angolo non dipende da come è rimpicciolita
+  FT[FT.sel] = p; if(FT.sel === "tr" && !FT.c7) FT.sel = "c7"; render();
+});
+document.addEventListener("change", e => { if(e.target.id !== "ftFile") return; const f = e.target.files && e.target.files[0]; if(!f) return;
+  const rd = new FileReader(); rd.onload = () => ftOpenSrc(rd.result, null); rd.readAsDataURL(f); });
+document.addEventListener("load", e => { if(e.target && e.target.id === "ftImg") ftDraw(); }, true);
+window.addEventListener("resize", () => { if(view === "testa") ftDraw(); });
+(function(){ const prev = window.onMediaChanged; window.onMediaChanged = function(k){ if(k === FT_KEY && view === "testa"){ const l = ftPhotos().slice(-1)[0]; if(l) ftOpenSrc(l.url, l.name); else render(); return; } if(prev) prev.apply(this, arguments); }; })();
+function ftAct(a, d){
+  if(!a.startsWith("ft")) return false;
+  if(a === "ftOpen"){ FT = null; view = "testa"; render(); window.scrollTo(0, 0); return true; }
+  if(a === "ftAdd"){ try{ Android.mediaAdd(FT_KEY, d.m); }catch(e){} return true; }
+  if(a === "ftPick"){ ftOpenSrc(d.u, d.n); return true; }
+  if(a === "ftDelPhoto"){ if(confirm("Eliminare questa foto dal telefono?")){ try{ Android.mediaDelete(FT_KEY, d.n); }catch(e){} render(); } return true; }
+  if(a === "ftSel"){ FT.sel = d.v; render(); return true; }
+  if(a === "ftClose"){ FT = null; render(); return true; }
+  if(a === "ftSave"){ if(!FT || !FT.tr || !FT.c7) return true; const v = Math.round(ftAngle(FT.tr, FT.c7) * 10) / 10;
+    S.settings.cva = (S.settings.cva || []).concat([{d:todayStr(), v, foto:FT.name || undefined}]); FT = null; pushMeta(); render(); window.scrollTo(0, document.body.scrollHeight); return true; }
+  if(a === "ftDel"){ const l = (S.settings.cva || []).slice(); l.splice(Number(d.i), 1); S.settings.cva = l; pushMeta(); render(); return true; }
+  return false;
+}
 function renderAltro(){
   const row = (act, n, sub, ic) => `<button class="o-row" data-act="${act}"><span class="ico">${ic}</span><span class="n">${n}<small>${sub}</small></span><span class="p">›</span></button>`;
   return `<div class="o-sec first"><div class="o-list">
     ${row("openSettings", "Impostazioni", "Profilo, programma, attrezzi, backup", svgI.gear)}
+    ${row("goTimer", "Timer e cronometro", "Cronometro con giri, timer, intervalli, EMOM", svgI.timer)}
     ${row("goGuida", "Guida", "Esercizi, glossario, fonti", svgI.guida)}
   </div></div>`;
+}
+/* ============ Timer e cronometro ============ */
+// Il tempo si calcola dagli orari (Date.now), non contando gli scatti: resta giusto anche se il telefono rallenta l'app in background.
+const TM_KEY = "trainup.timer";
+let TM = (() => { const d = {mode:"sw", run:false, t0:0, acc:0, laps:[], passed:0, done:false, cd:{sec:90}, int:{work:30, rest:30, rounds:8, prep:10}, emom:{every:60, mins:10}};
+  try{ const x = JSON.parse(localStorage.getItem(TM_KEY) || "null"); if(x) return {...d, ...x, cd:{...d.cd, ...x.cd}, int:{...d.int, ...x.int}, emom:{...d.emom, ...x.emom}}; }catch(e){} return d; })();
+let tmTick = null, tmAlarm = 0;
+function tmSave(){ try{ localStorage.setItem(TM_KEY, JSON.stringify(TM)); }catch(e){} }
+const tmEl = () => TM.run ? Date.now() - TM.t0 : TM.acc;
+// Istanti (ms dall'avvio) in cui suona: fine del timer, cambi di fase degli intervalli, inizio di ogni minuto dell'EMOM.
+function tmEvents(){
+  if(TM.mode === "cd") return [TM.cd.sec * 1000];
+  if(TM.mode === "emom"){ const e = TM.emom.every * 1000; return Array.from({length:TM.emom.mins}, (_, i) => (i + 1) * e); }
+  if(TM.mode === "int"){ const {work, rest, rounds, prep} = TM.int, ev = []; let t = prep * 1000; if(prep) ev.push(t);
+    for(let r = 1; r <= rounds; r++){ t += work * 1000; ev.push(t); if(r < rounds && rest){ t += rest * 1000; ev.push(t); } } return ev; }
+  return [];
+}
+function tmPhase(el){
+  if(TM.mode === "cd"){ const left = TM.cd.sec * 1000 - el; return {left, label: left <= 0 ? "Tempo scaduto" : "", total:TM.cd.sec * 1000}; }
+  if(TM.mode === "emom"){ const e = TM.emom.every * 1000, tot = e * TM.emom.mins; if(el >= tot) return {left:0, label:"Finito", done:true};
+    const k = Math.floor(el / e); return {left:e - (el - k * e), label:`Giro ${k + 1} di ${TM.emom.mins}`, total:e, cls:"work"}; }
+  if(TM.mode === "int"){ const {work, rest, rounds, prep} = TM.int; let t = 0;
+    if(el < prep * 1000) return {left:prep * 1000 - el, label:"Preparati", total:prep * 1000, cls:"prep"}; t = prep * 1000;
+    for(let r = 1; r <= rounds; r++){ if(el < t + work * 1000) return {left:t + work * 1000 - el, label:`Lavoro · ${r} di ${rounds}`, total:work * 1000, cls:"work"}; t += work * 1000;
+      if(r < rounds && rest){ if(el < t + rest * 1000) return {left:t + rest * 1000 - el, label:`Recupero · poi ${r + 1} di ${rounds}`, total:rest * 1000, cls:"rest"}; t += rest * 1000; } }
+    return {left:0, label:"Finito", done:true}; }
+  return {left:el, label:""};
+}
+function tmFmt(ms, tenths){ ms = Math.max(0, ms); const s = tenths ? Math.floor(ms / 1000) : Math.ceil(ms / 1000), m = Math.floor(s / 60), h = Math.floor(m / 60);
+  const mm = h ? `${h}:${String(m % 60).padStart(2, "0")}` : String(m).padStart(2, "0");
+  return `${mm}:${String(s % 60).padStart(2, "0")}` + (tenths ? `<small>,${Math.floor(ms % 1000 / 100)}</small>` : ""); }
+function tmBuzz(last){ try{ navigator.vibrate && navigator.vibrate(last ? [300,120,300,120,300] : 250); }catch(e){} if(S.settings.sound !== false && audioCtx){ try{ if(audioCtx.state === "suspended") audioCtx.resume(); ding(); if(last) setTimeout(() => { try{ ding(); }catch(e){} }, 450); }catch(e){} } }
+function tmSchedule(){ // notifica del prossimo segnale se l'app va in background (solo nell'app per Android)
+  const A = window.Android; if(!A || !A.scheduleAlarm) return;
+  let want = 0; if(TM.run && TM.mode !== "sw"){ const ev = tmEvents(), el = tmEl(), nx = ev.find(t => t > el); if(nx != null) want = TM.t0 + nx; }
+  if(want === tmAlarm) return; tmAlarm = want;
+  try{ if(want){ const last = want === TM.t0 + tmEvents().slice(-1)[0]; A.scheduleAlarm(String(want), last ? "Timer finito" : "Timer", last ? "Tempo scaduto" : "Cambio di fase"); } else A.cancelAlarm(); }catch(e){}
+}
+function tmLoop(){
+  if(TM.run && TM.mode !== "sw"){ const el = tmEl(), ev = tmEvents(), n = ev.filter(t => t <= el).length;
+    if(n > TM.passed){ TM.passed = n; const fin = n >= ev.length; tmBuzz(fin); if(fin){ TM.run = false; TM.acc = ev[ev.length - 1]; TM.done = true; } tmSave(); tmSchedule(); if(view === "timer") return render(); } }
+  if(view === "timer") tmPaint();
+  if(!TM.run){ clearInterval(tmTick); tmTick = null; }
+}
+function tmPaint(){
+  const d = $("#tmDisp"); if(!d) return; const el = tmEl();
+  if(TM.mode === "sw"){ d.innerHTML = tmFmt(el, true); return; }
+  const ph = tmPhase(el); d.innerHTML = tmFmt(ph.left); const l = $("#tmLab"); if(l) l.textContent = ph.label;
+  const f = $("#tmFace"); if(f){ f.dataset.ph = ph.cls || ""; f.style.setProperty("--tmp", ph.total ? Math.max(0, Math.min(1, 1 - ph.left / ph.total)).toFixed(3) : 0); }
+}
+function tmStartLoop(){ if(!tmTick) tmTick = setInterval(tmLoop, 100); }
+function renderTimer(){
+  const modes = [["sw","Cronometro"],["cd","Timer"],["int","Intervalli"],["emom","EMOM"]];
+  const el = tmEl(), started = TM.run || el > 0;
+  const adj = (k, v, lab, fmt) => `<div class="tm-adj"><span class="small muted">${lab}</span><div class="row"><button class="btn icon ghost" data-act="tmAdj" data-k="${k}" data-v="-${v}" aria-label="Meno">−</button><b>${fmt}</b><button class="btn icon ghost" data-act="tmAdj" data-k="${k}" data-v="${v}" aria-label="Più">+</button></div></div>`;
+  const sec = n => n >= 60 ? `${Math.floor(n / 60)}′${n % 60 ? String(n % 60).padStart(2, "0") + "″" : ""}` : `${n}″`;
+  let setup = "";
+  if(!started){
+    if(TM.mode === "cd") setup = `<div class="chips">${[30,60,90,120,180,300].map(v => `<button class="chip" aria-pressed="${TM.cd.sec === v}" data-act="tmSet" data-k="cd.sec" data-v="${v}">${sec(v)}</button>`).join("")}</div>${adj("cd.sec", 15, "Durata", sec(TM.cd.sec))}`;
+    if(TM.mode === "int") setup = adj("int.work", 5, "Lavoro", sec(TM.int.work)) + adj("int.rest", 5, "Recupero", sec(TM.int.rest)) + adj("int.rounds", 1, "Giri", TM.int.rounds) + adj("int.prep", 5, "Preparazione", sec(TM.int.prep));
+    if(TM.mode === "emom") setup = adj("emom.every", 15, "Ogni", sec(TM.emom.every)) + adj("emom.mins", 1, "Giri", TM.emom.mins);
+  }
+  const tot = TM.mode === "int" ? tmEvents().slice(-1)[0] : TM.mode === "emom" ? TM.emom.every * TM.emom.mins * 1000 : 0;
+  const ph = TM.mode === "sw" ? null : tmPhase(el);
+  const laps = TM.mode === "sw" && TM.laps.length ? `<ul class="tm-laps">${TM.laps.map((t, i) => `<li><span>Giro ${i + 1}</span><span>${tmFmt(t - (TM.laps[i - 1] || 0), true)}</span><span class="muted">${tmFmt(t, true)}</span></li>`).reverse().join("")}</ul>` : "";
+  return `<div class="o-sec first"><div class="seg seg4">${modes.map(([k, n]) => `<button data-act="tmMode" data-v="${k}" aria-pressed="${TM.mode === k}">${n}</button>`).join("")}</div></div>
+  <div class="tm-face" id="tmFace" data-ph="${ph && ph.cls || ""}" style="--tmp:${ph && ph.total ? Math.max(0, Math.min(1, 1 - ph.left / ph.total)).toFixed(3) : 0}">
+    <div class="tm-lab" id="tmLab">${ph ? esc(ph.label) : ""}</div>
+    <div class="tm-disp" id="tmDisp">${TM.mode === "sw" ? tmFmt(el, true) : tmFmt(ph.left)}</div>
+    ${tot && !started ? `<div class="small muted">Durata totale ${tmFmt(tot)}</div>` : ""}
+    <div class="tm-bar"><i></i></div>
+  </div>
+  <div class="tm-ctl">
+    ${TM.mode === "sw" ? `<button class="btn" data-act="${TM.run ? "tmLap" : "tmReset"}" ${!started ? "disabled" : ""}>${TM.run ? "Giro" : "Azzera"}</button>` : `<button class="btn" data-act="tmReset" ${!started ? "disabled" : ""}>Azzera</button>`}
+    <button class="btn primary big" data-act="tmGo">${TM.run ? "Pausa" : TM.done ? "Ricomincia" : started ? "Riprendi" : "Avvia"}</button>
+  </div>
+  ${setup ? `<div class="o-sec tm-setup">${setup}</div>` : ""}
+  ${laps}
+  <div class="o-sec"><div class="o-label">Come funziona</div>
+    <p class="small muted">Timer: conto alla rovescia, suona alla fine. Intervalli: lavoro e recupero alternati per i giri scelti, con qualche secondo per prepararti. EMOM ("every minute on the minute"): all'inizio di ogni giro fai le ripetizioni previste e riposi per il resto del tempo; Neri, Project Calisthenics, cap. XI, lo propone per 10 minuti con esercizi di base, non con le tenute.</p>
+    <p class="small muted">Con l'app chiusa il telefono avvisa solo del prossimo segnale. Suono come nelle impostazioni dell'allenamento; la vibrazione c'è sempre.</p></div>`;
+}
+function tmAct(a, d){
+  if(!a.startsWith("tm") && a !== "goTimer") return false;
+  if(a === "goTimer"){ view = "timer"; render(); window.scrollTo(0, 0); if(TM.run) tmStartLoop(); return true; }
+  if(a === "tmMode"){ if(TM.run || tmEl() > 0) if(!confirm("Il tempo in corso si azzera. Cambiare?")) return true; TM = {...TM, mode:d.v, run:false, acc:0, t0:0, laps:[], passed:0, done:false}; tmSchedule(); }
+  else if(a === "tmGo"){ initAudio();
+    if(TM.run){ TM.acc = Date.now() - TM.t0; TM.run = false; }
+    else { if(TM.done){ TM.acc = 0; TM.passed = 0; TM.laps = []; TM.done = false; } TM.t0 = Date.now() - TM.acc; TM.run = true; keepAwake(); try{ window.Android && Android.keepScreenOn(true); }catch(e){} tmStartLoop(); }
+    tmSchedule(); }
+  else if(a === "tmLap"){ TM.laps.push(tmEl()); }
+  else if(a === "tmReset"){ TM = {...TM, run:false, acc:0, t0:0, laps:[], passed:0, done:false}; tmSchedule(); try{ window.Android && Android.keepScreenOn(false); }catch(e){} }
+  else if(a === "tmSet" || a === "tmAdj"){ const [g, k] = d.k.split("."), lim = {"cd.sec":[5, 5940], "int.work":[5, 600], "int.rest":[0, 600], "int.rounds":[1, 50], "int.prep":[0, 60], "emom.every":[15, 300], "emom.mins":[1, 60]}[d.k];
+    const v = a === "tmSet" ? Number(d.v) : TM[g][k] + Number(d.v); TM[g] = {...TM[g], [k]:Math.max(lim[0], Math.min(lim[1], v))}; }
+  tmSave(); render(); return true;
 }
 /* ============ Guida ============ */
 const GLOSS = [
@@ -4781,7 +5088,7 @@ function runDayHtml(ds){
 }
 /* ============ azioni ============ */
 function act(a, d, e){
-  if(regAct(a, d) || fpAct(a, d) || backAct(a, d, e)) return;
+  if(regAct(a, d) || fpAct(a, d) || backAct(a, d, e) || tmAct(a, d) || ftAct(a, d)) return;
   switch(a){
     case "start": { closeSheet(); const dr = loadDraft(); if(dr && dr.kind !== "post") resumeSession(); else if(!dr || confirm("C'è una routine posturale interrotta: se inizi la palestra viene eliminata. Continuare?")) startSession(); break; }
     case "startPost": { const dr = loadDraft(); if(dr && dr.kind === "post" && dr.code !== "Post") alert("C'è un'altra routine interrotta: finiscila o eliminala prima."); else if(dr && dr.kind === "post") resumeSession(); else if(dr) alert("C'è un allenamento di palestra in corso: finiscilo o eliminalo prima di iniziare la routine posturale."); else startPosture(); break; }
@@ -4795,16 +5102,26 @@ function act(a, d, e){
     case "mediaAdd": try{ Android.mediaAdd(d.k, d.m); }catch(err){} break;
     case "mediaDel": if(confirm("Eliminare questa foto o questo video?")){ try{ Android.mediaDelete(d.k, d.n); }catch(err){} exSheet(d.k, mediaSheet && mediaSheet.slot); } break;
     case "swapSet": setSwap(d.slot, d.to); closeSheet(); render(); break;
+    case "myExStep": { const g = $("#myExStep"); if(g) g.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b === e.target.closest("button"))); break; }
+    case "myExAdd": { const inp = $("#myExName"), n = (inp && inp.value || "").trim().replace(/\s+/g, " ");
+      if(n.length < 3){ if(inp) inp.focus(); break; }
+      const on = $('#myExStep button[aria-pressed="true"]'), step = on ? Number(on.dataset.v) : (EX[d.of].step || 2.5);
+      const l = S.settings.myEx = S.settings.myEx || []; const id = "my" + Date.now().toString(36);
+      l.push({id, n:n.charAt(0).toUpperCase() + n.slice(1), of:d.of, step}); registerMyEx(); pushMeta();
+      if(d.ii != null) runSwapSheet(Number(d.ii)); else exSheet(d.k, d.slot); break; }
+    case "myExDel": { const m = (S.settings.myEx || []).find(x => x.id === d.k); if(!m) break; m.hidden = true;
+      const sw = {...(S.settings.swaps || {})}; for(const [sl, to] of Object.entries(sw)) if(to === m.id) delete sw[sl]; S.settings.swaps = sw;
+      registerMyEx(); pushMeta(); render(); break; }
     case "swapOpen": runSwapSheet(Number(d.ii)); break;
     case "fsTest": { const c = (nextPosition(todayStr()).pos.c) || 1; S.settings.fsTestNow = d.v === "1" ? c : 0; pushMeta(); render(); break; }
     case "ladOpen": ladSheet(Number(d.ii)); break;
     case "ladPick": { const it = R.blocks[R.bi].items[Number(d.ii)], lo = LAD_OF[it.ex]; if(!lo) break; const v = Number(d.v), k = LADDERS[lo.id].steps[v];
       S.settings.lad = {...(S.settings.lad || {}), [lo.id]:v}; pushMeta();
-      it.ladOf = it.ladOf || it.ex; if(!it.origP) it.origP = it.p; it.ex = k; it.p = EX[k].ladP ? EX[k].ladP(it.origP) : it.origP; R.ramp = null;
+      it.ladOf = it.ladOf || it.ex; if(!it.origP) it.origP = it.p; it.ex = k; it.p = fitP(k, EX[k].ladP ? EX[k].ladP(it.origP) : it.origP); R.ramp = null;
       saveDraft(); closeSheet(); rRender(); break; }
     case "swapRun": { const it = R.blocks[R.bi].items[Number(d.ii)]; const orig = baseEx(it);
       if(d.mode === "always") setSwap(slotKey(R.kind, R.code, orig), d.to);
-      it.ex = d.to; it.orig = d.to === orig ? undefined : orig; it.variantOf = undefined; R.ramp = null;
+      if(!it.p0) it.p0 = it.p; it.ex = d.to; it.orig = d.to === orig ? undefined : orig; it.variantOf = undefined; it.p = fitP(d.to, it.p0); R.ramp = null;
       saveDraft(); closeSheet(); rRender(); break; }
     case "homeExpand": homeExpand = !homeExpand; render(); break;
     case "progPeriod": progPeriod = d.v; render(); break;

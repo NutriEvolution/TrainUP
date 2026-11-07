@@ -1,6 +1,8 @@
-Novità della 2.1.0
-- Postura: nuove valutazioni con routine progressive per collo, spalla e dolore davanti al ginocchio, con le domande sui segnali d'allarme
-- Postura del piede (FPI-6): sei osservazioni, punteggio per piede e confronto nel tempo
-- Mal di schiena: più segnali d'allarme, altre scelte di esercizio oltre al Big 3, cosa sapere sul dolore e ripresa graduale dei movimenti evitati
-- Esercizi per l'aspetto della postura separati da quelli per il dolore, con ciò che dicono le prove
-- Fonti aggiornate (nuovo gruppo Postura e dolore)
+Novità della 2.2.0
+- Correzione: plank, barchetta e L-sit si fanno sempre in secondi, anche quando sostituiscono un esercizio a ripetizioni; plank e barchetta partono da 3×20″ e salgono di 10″ quando tieni tutte le serie (Project Calisthenics)
+- Nuove alternative: panca a leve con dischi, panca e lento al multipower (con l'avviso di PE1), calf da seduto e alla pressa
+- Puoi aggiungere le macchine della tua palestra come alternativa a un esercizio
+- Timer e cronometro (in Altro): cronometro con giri, timer, intervalli, EMOM
+- Testa di profilo: misura dell'angolo fra testa e collo da una foto, con lo storico
+- Caviglia: valutazione dopo una distorsione e programma di 8 settimane per l'equilibrio
+- Testi rivisti dopo la rilettura di Project Calisthenics e Overcoming Gravity
