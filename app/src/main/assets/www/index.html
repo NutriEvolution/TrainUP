@@ -903,6 +903,43 @@ const EX = {
   lungeHip:{n:"Affondo camminato con il braccio in alto", step:0, inc:0, unit:"corpo libero", yt:"walking lunge psoas stretch overhead", src:"McGill, Back Mechanic, cap. 12, p. 121", bw:true,
     how:["Affondo: mentre scendi spingi verso l'alto la mano del lato della gamba dietro.","Inclina un poco il busto dalla parte opposta e porta la spalla indietro: senti allungare la parte davanti dell'anca.","Fai un passo e cambia gamba e braccio: 6 passi in tutto."],
     err:["Inarcare la zona lombare."]},
+  // ---- collo, spalla, ginocchio (routine per il dolore) ----
+  romCollo:{n:"Movimenti del collo senza dolore", step:0, inc:0, unit:"corpo libero", yt:"neck range of motion exercises", src:"Blanpied 2017 (JOSPT), esercizi di mobilità del collo", bw:true,
+    how:["Seduto, lentamente: gira la testa a destra e a sinistra, inclinala verso una spalla e verso l'altra, abbassa e alza il mento.","Fermati prima del punto in cui il dolore aumenta. Le ripetizioni indicate valgono per ogni direzione."],
+    err:["Forzare a fine movimento.","Muovere di scatto."]},
+  neckFlexLift:{n:"Flessori del collo a testa sollevata", step:0, inc:0, unit:"corpo libero", yt:"deep neck flexor endurance head lift", src:"Grieve's, cap. 41; Blanpied 2017 (resistenza dei flessori)", bw:true,
+    how:["Supino con le ginocchia piegate. Fai il cenno del «sì» come nell'esercizio dei flessori profondi.","Tenendo il mento abbassato, solleva la testa di un paio di centimetri e tieni 5 secondi; poi appoggia e rilassa.","Quando è facile, tieni 10 secondi."],
+    err:["Il mento si alza e la testa va avanti.","Trattenere il respiro."]},
+  scapRetr:{n:"Scapole indietro e in basso", step:0, inc:0, unit:"corpo libero", yt:"scapular retraction exercise seated", src:"Blanpied 2017 (rinforzo scapolotoracico); Kibler 2013", bw:true,
+    how:["Seduto o in piedi, braccia lungo i fianchi.","Porta le scapole indietro e un po' in basso, come per metterle nelle tasche dietro; tieni 5 secondi e rilascia.","Il collo resta rilassato."],
+    err:["Alzare le spalle verso le orecchie.","Inarcare la schiena."]},
+  extraRotFianco:{n:"Rotazione esterna su un fianco", step:0, inc:0, unit:"manubrio leggero o niente", side:"per lato", yt:"side lying external rotation", src:"Kibler 2013; Grieve's, cap. 50.2", bw:true,
+    how:["Su un fianco, gomito del braccio di sopra piegato a 90° e appoggiato al fianco (un asciugamano arrotolato tra gomito e busto aiuta).","Ruota l'avambraccio verso l'alto senza staccare il gomito, poi torna giù lentamente.","Inizia senza peso; poi un manubrio da 0,5-2 kg."],
+    err:["Staccare il gomito dal fianco.","Ruotare il busto all'indietro."]},
+  isoRotSpalla:{n:"Rotazioni della spalla contro il muro (isometria)", step:0, inc:0, unit:"muro o stipite", side:"per lato", yt:"isometric shoulder external rotation wall", src:"Grieve's, cap. 50.2 (esercizi graduati, all'inizio senza dolore)", bw:true,
+    how:["In piedi accanto a uno stipite, gomito piegato a 90° e vicino al fianco, un asciugamano piegato tra polso e stipite.","Rotazione esterna: spingi il dorso del polso contro lo stipite senza muovere il braccio. Rotazione interna: girati e spingi con il palmo.","Spinta leggera che non provoca dolore; tieni 5-10 secondi. Le ripetizioni valgono per ogni direzione."],
+    err:["Spingere fino a sentire dolore.","Alzare la spalla."]},
+  elevScap:{n:"Elevazione del braccio nel piano scapolare", step:0, inc:0, unit:"manubrio leggero o niente", side:"per lato", yt:"scaption exercise", src:"Grieve's, cap. 50.2", bw:true,
+    how:["In piedi, pollice in alto, braccio un po' in avanti rispetto al fianco (circa 30°).","Alza il braccio teso fino a dove non fa male, al massimo all'altezza della spalla; scendi lentamente.","Prima senza peso, poi con un manubrio leggero; alza più in alto quando non fa male."],
+    err:["Alzare la spalla verso l'orecchio.","Andare oltre il punto in cui il dolore aumenta."]},
+  extraRotElastico:{n:"Rotazione esterna con elastico", step:0, inc:0, unit:"elastico", side:"per lato", yt:"band external rotation shoulder", src:"Grieve's, cap. 50.2", bw:true,
+    how:["Elastico fissato all'altezza del gomito, dal lato opposto al braccio che lavora. Gomito a 90° vicino al fianco (asciugamano arrotolato).","Ruota l'avambraccio verso l'esterno senza staccare il gomito; torna lentamente.","Elastico con cui arrivi alle ripetizioni con un paio di margine."],
+    err:["Staccare il gomito dal fianco.","Ruotare il busto."]},
+  intraRotElastico:{n:"Rotazione interna con elastico", step:0, inc:0, unit:"elastico", side:"per lato", yt:"band internal rotation shoulder", src:"Grieve's, cap. 50.2", bw:true,
+    how:["Elastico fissato all'altezza del gomito dallo stesso lato del braccio che lavora. Gomito a 90° vicino al fianco.","Porta l'avambraccio verso la pancia senza staccare il gomito; torna lentamente."],
+    err:["Staccare il gomito dal fianco."]},
+  abdFianco:{n:"Abduzione dell'anca su un fianco", step:0, inc:0, unit:"corpo libero", side:"per lato", yt:"side lying hip abduction", src:"Crossley 2016 (esercizi per l'anca); Grieve's, cap. 48.2", bw:true,
+    how:["Su un fianco, gamba di sotto piegata, gamba di sopra tesa in linea con il busto.","Alza la gamba di sopra con il tallone che guida e la punta in avanti, poi scendi lentamente.","Il bacino resta fermo, non ruota all'indietro."],
+    err:["Portare la gamba in avanti mentre sale.","Ruotare il bacino."]},
+  squatParziale:{n:"Squat parziale verso la sedia", step:0, inc:0, unit:"sedia", yt:"partial squat to chair knee pain", src:"Crossley 2016; Grieve's, cap. 48.2", bw:true,
+    how:["In piedi davanti a una sedia, piedi alla larghezza delle anche; se serve tieniti a un appoggio.","Scendi portando il bacino indietro fino a sfiorare la sedia (o meno, se fa male), poi risali.","Ginocchio sopra il centro del piede, bacino orizzontale."],
+    err:["Ginocchia che cadono verso l'interno.","Scendere oltre il punto in cui il dolore supera il limite."]},
+  stepUp:{n:"Salita sul gradino", step:0, inc:0, unit:"gradino", side:"per gamba", yt:"step up exercise knee", src:"Crossley 2016; Grieve's, cap. 48.2", bw:true,
+    how:["Un piede su un gradino basso, tieniti al corrimano se serve.","Sali spingendo con la gamba sul gradino, poi scendi lentamente con l'altra.","Bacino orizzontale, ginocchio sopra il centro del piede. Quando è facile, gradino più alto."],
+    err:["Spingere con la gamba a terra.","Ginocchio che cade verso l'interno."]},
+  stepDown:{n:"Discesa dal gradino su una gamba", step:0, inc:0, unit:"gradino", side:"per gamba", yt:"lateral step down exercise", src:"Grieve's, cap. 48.2", bw:true,
+    how:["In piedi su un gradino su una gamba, l'altra fuori dal bordo.","Piega lentamente il ginocchio d'appoggio finché il tallone dell'altra gamba sfiora il pavimento, poi risali.","Tieniti al corrimano all'inizio."],
+    err:["Bacino che si inclina.","Ginocchio che cade verso l'interno."]},
 };
 
 /* ============ prescrizioni ============ */
@@ -1297,10 +1334,10 @@ const POSTURE = {
     pre:["ritornoEstensione","stabRitmiche"], end:["alzateProno","plankPlus"], edu:"Per la salute del collo contano stabilità e forza; massaggi e terapie passive da soli non danno effetti a lungo termine (Roncari)."},
   spalle:{n:"Spalle in avanti", src:"Fitness posturale, cap. 5, protocollo I, livello 1 (pp. 261-263)",
     home:[["propScapPalla",P.range(2,12,12,"",30)], ["alzateProno",P.range(4,12,12,"",60)], ["stabElastico",P.range(3,12,12,"",60)], ["stretchPetto",P.time(2,60,15)], ["sleeper",P.time(2,60,15)], ["mobRullo",P.time(2,60,15)]],
-    pre:["propScapPalla","mobRullo"], end:["alzateProno","stabElastico"], edu:"Le posizioni con le spalle in avanti tenute a lungo durante il giorno remano contro gli esercizi: alzati e muoviti spesso."},
+    pre:["propScapPalla","mobRullo"], end:["alzateProno","stabElastico"], edu:"Durante il giorno alzati e cambia posizione spesso."},
   scapole:{n:"Scapole alate", src:"Fitness posturale, cap. 5, protocollo II, livello 1 (pp. 266-267)",
     home:[["propScapPalla",P.range(2,15,15,"",60)], ["plankPlus",P.range(2,10,10,"",60)], ["diagManubrio",P.range(3,10,10,"",60)], ["alzateProno",P.range(3,12,12,"",60)], ["stretchCross",P.time(3,60,15)]],
-    pre:["propScapPalla"], end:["plankPlus","diagManubrio"], edu:"Se la causa è nella forma della schiena (per esempio cifosi piatta o lieve scoliosi) gli esercizi cambiano poco: conta un allenamento regolare ed equilibrato (Roncari)."},
+    pre:["propScapPalla"], end:["plankPlus","diagManubrio"], edu:"Senza dolore le scapole «alate» non sono un problema: sono comuni anche in chi sta bene (Kibler 2013). Se la causa è nella forma della schiena (per esempio cifosi piatta o lieve scoliosi) gli esercizi cambiano poco: conta un allenamento regolare ed equilibrato (Roncari)."},
   lombare:{n:"Lordosi lombare ridotta", src:"Project Exercise 2, Mobilizzare la lordosi lombare; pp. 300-302 e cap. 2",
     home:[["mobQuad",P.range(2,10,10,"",30)], ["mobProno",P.time(1,120,30)]],
     pre:["mobQuad","mobProno"], end:[], edu:"Squat e stacco solo con la zona lombare in posizione neutra; al posto dei crunch le iperestensioni (PE2)."},
@@ -1450,7 +1487,7 @@ function load(){
   return JSON.parse(JSON.stringify(DEFAULT));
 }
 function saveLocal(){ try{ localStorage.setItem(LS, JSON.stringify(S)); }catch(e){} }
-function postureOn(d){ return Object.values(S.sessions).find(x => x && !x.deleted && x.kind === "post" && x.code !== "Back" && x.date === d); }
+function postureOn(d){ return Object.values(S.sessions).find(x => x && !x.deleted && x.kind === "post" && x.code === "Post" && x.date === d); }
 function doneSessions(){ return Object.values(S.sessions).filter(x => x && !x.deleted && x.kind !== "post" && x.kind !== "run" && x.kind !== "volley" && x.kind !== "bike").sort((a,b) => a.date === b.date ? a.finishedAt - b.finishedAt : (a.date < b.date ? -1 : 1)); }
 
 /* ============ motore: prossima seduta ============ */
@@ -1647,7 +1684,8 @@ const EXG = {
   rematoreElastico:"back", latElastico:"back", alzateLateraliElastico:"shoulders", curlElastico:"arms", pushdownElastico:"arms",
   allineamentoCerv:"post", estensoriCerv:"post", stretchCollo:"post", ritornoEstensione:"post", rotazioneCerv:"post", mobToracica:"post", stabRitmiche:"post", plankPlus:"post", propScapPalla:"post", stabElastico:"post", sleeper:"post", mobRullo:"post", diagManubrio:"post",
   mobQuad:"post", mobProno:"post", neckFlex:"post", alzateProno:"post", alzateY:"post", wallSlide:"post", stretchPetto:"post", stretchCross:"post", stretchNuca:"post",
-  mgCurlUp:"post", sideBridgeWall:"post", sideBridgeKnees:"post", sideBridge:"post", sideBridgeHip:"post", sideBridgeRoll:"post", birdDogArm:"post", birdDogLeg:"post", birdDog:"post", birdDogSquares:"post", birdDogStanding:"post", catCamel:"post", proneRelax:"post", mcgillStretch:"post", shortstopSquat:"post", parkBench:"post", wallWalk:"post", nerveFloss:"post", lewit:"post", clamshell:"post", gluteBridge:"post", lungeHip:"post"
+  mgCurlUp:"post", sideBridgeWall:"post", sideBridgeKnees:"post", sideBridge:"post", sideBridgeHip:"post", sideBridgeRoll:"post", birdDogArm:"post", birdDogLeg:"post", birdDog:"post", birdDogSquares:"post", birdDogStanding:"post", catCamel:"post", proneRelax:"post", mcgillStretch:"post", shortstopSquat:"post", parkBench:"post", wallWalk:"post", nerveFloss:"post", lewit:"post", clamshell:"post", gluteBridge:"post", lungeHip:"post",
+  romCollo:"post", neckFlexLift:"post", scapRetr:"post", extraRotFianco:"post", isoRotSpalla:"post", elevScap:"post", extraRotElastico:"post", intraRotElastico:"post", abdFianco:"post", squatParziale:"post", stepUp:"post", stepDown:"post"
 };
 const PRE = ["mobQuad","mobProno","neckFlex"], POSTEND = ["alzateProno","alzateY","wallSlide"];
 const SECT = {pre:{n:"Prima dei pesi · posturale", cls:"post"}, main:{n:"Allenamento", cls:""}, end:{n:"Fine seduta · posturale", cls:"post"}, stretch:{n:"Fine seduta · allungamento", cls:"post"}, home:{n:"Routine a casa", cls:"post"}};
@@ -1705,20 +1743,20 @@ const svgI = {
 let view = "oggi", guideTab = "esercizi", guideQ = "", planOpen = null;
 let calMonth = (() => { const d = new Date(); return {y:d.getFullYear(), m:d.getMonth()}; })();
 const TABS = [["oggi","Oggi"],["piano","Piano"],["progressi","Progressi"],["postura","Postura"],["altro","Altro"]];
-const TAB_OF = {impostazioni:"altro", guida:"altro", schiena:"postura"};
+const TAB_OF = {impostazioni:"altro", guida:"altro", schiena:"postura", regione:"postura", piede:"postura"};
 const PLAN_N = {palestra:"Palestra", corsa:"Corsa", pallavolo:"Salto e rapidità", ciclismo:"Bici"};
 function render(){
   if(view === "calendario" || view === "programma") view = "piano";
   extendGym();
-  const body = {oggi:renderOggi, piano:renderPiano, progressi:renderProgressi, guida:renderGuida, impostazioni:renderImpostazioni, schiena:renderSchiena, postura:renderPostura, altro:renderAltro}[view]();
-  const title = {impostazioni:"Impostazioni", schiena:"Schiena", guida:"Guida"}[view] || (view === "piano" && planOpen ? PLAN_N[planOpen] : (TABS.find(t => t[0] === view) || [0, ""])[1]);
-  const backAct = {impostazioni:"closeSettings", schiena:"backClose", guida:"goAltro"}[view] || (view === "piano" && planOpen ? "closePlan" : "");
+  const body = {oggi:renderOggi, piano:renderPiano, progressi:renderProgressi, guida:renderGuida, impostazioni:renderImpostazioni, schiena:renderSchiena, regione:renderRegione, piede:renderPiede, postura:renderPostura, altro:renderAltro}[view]();
+  const title = {impostazioni:"Impostazioni", schiena:"Schiena", regione:REG[RK].r[0].toUpperCase() + REG[RK].r.slice(1), piede:"Piede", guida:"Guida"}[view] || (view === "piano" && planOpen ? PLAN_N[planOpen] : (TABS.find(t => t[0] === view) || [0, ""])[1]);
+  const backAct = {impostazioni:"closeSettings", schiena:"backClose", regione:"regClose", piede:"fpClose", guida:"goAltro"}[view] || (view === "piano" && planOpen ? "closePlan" : "");
   const navOn = TAB_OF[view] || view;
-  const back = backAct ? `<button class="btn ghost sm" data-act="${backAct}" style="padding-left:0;margin-bottom:-6px">‹ ${backAct === "closePlan" ? "Piano" : backAct === "goAltro" ? "Altro" : backAct === "backClose" ? "Postura" : "Indietro"}</button>` : "";
+  const back = backAct ? `<button class="btn ghost sm" data-act="${backAct}" style="padding-left:0;margin-bottom:-6px">‹ ${backAct === "closePlan" ? "Piano" : backAct === "goAltro" ? "Altro" : ["backClose","regClose","fpClose"].includes(backAct) ? "Postura" : "Indietro"}</button>` : "";
   $("#app").innerHTML = `<div class="wrap"><header class="top"><div class="brand">${svgI.omino.replace("<svg ", '<svg class="om" ')}<span>TrainUP</span></div><div class="sync"><span id="syncDot" class="dot"></span><span id="syncTxt"></span></div></header>${view === "oggi" ? "" : back + `<h1 class="ltitle">${esc(title)}</h1>`}${body}</div>
   <nav class="nav" aria-label="Sezioni">${TABS.map(([v,l]) => `<button data-nav="${v}" ${navOn===v ? 'aria-current="page"' : ""}>${svgI[v]}<span>${l}</span></button>`).join("")}</nav>`;
   setSync(sync.state);
-  if(["piano","impostazioni","schiena","postura"].includes(view)) addHelp($("#app"));
+  if(["piano","impostazioni","schiena","regione","piede","postura"].includes(view)) addHelp($("#app"));
 }
 // Spiegazioni a comparsa: i testi descrittivi delle sezioni (paragrafi attenuati) restano nascosti finché non si tocca "?" accanto al titolo della sezione
 const helpOpen = new Set();
@@ -1859,6 +1897,7 @@ function renderOggi(){
   }
   h += runToday;
   h += backCheckHtml();
+  h += regCheckHtml();
   h += vbTodayHtml(t);
   h += bkTodayHtml(t);
   if(next.length) h += `<div class="o-sec"><div class="o-label">Prossimi giorni</div><div class="o-list">${next.map(x => `<button class="o-row" data-act="openDay" data-d="${x.ds}"><span class="dot" style="background:${x.c}"></span><span class="n">${esc(x.n)}<small>${esc(whenLbl(t, x.ds))} · ${esc(x.sub)}</small></span><span class="p">›</span></button>`).join("")}</div></div>`;
@@ -2740,6 +2779,9 @@ const REFS = [
   ["Helms E., Morgan A., Valdez A.", "The Muscle and Strength Pyramid: Training, 3ª ed.", "Pubblicato dagli autori, 2025.", "Regole del programma personalizzato: tabelle 2.2, 2.5, 3.2, 7.2, 7.4, 7.7, 7.8, 7.16, 7.17."],
   ["Zatsiorsky V.M., Kraemer W.J., Fry A.C.", "Science and Practice of Strength Training, 3ª ed.", "Human Kinetics, Champaign (IL), 2021. ISBN 978-1-4925-9200-6.", "Metodi di allenamento della forza (cap. 4), esercizi per chi comincia (cap. 6)."],
   ["Friel J.", "Joe Friel's Quick Guide to Setting Zones.", "TrainingPeaks, 4 maggio 2012. trainingpeaks.com/learn/articles/joe-friel-s-quick-guide-to-setting-zones", "Test della FC di soglia in bici."],
+  ["McGill S.", "Low Back Disorders: Evidence-Based Prevention and Rehabilitation, 3ª ed.", "Human Kinetics, Champaign (IL), 2016.", "Tenute brevi, camminata a intervalli sotto la soglia del dolore (cap. 10)."],
+  ["Jull G., Moore A., Falla D., Lewis J., McCarthy C., Sterling M. (a cura di)", "Grieve's Modern Musculoskeletal Physiotherapy, 4ª ed.", "Elsevier, Edimburgo, 2015.", "Collo (cap. 41), spalla (cap. 50), ginocchio (cap. 48.2), segnali d'allarme (cap. 35.1), metodo McKenzie e approccio multidimensionale (cap. 45), controllo posturale (cap. 4)."],
+  ["Conroy V.M., Murray B.N., Alexopulos Q.T., McCreary J.", "Kendall's Muscles: Testing and Function with Posture and Pain, 6ª ed.", "Wolters Kluwer, Filadelfia, 2024.", "Postura (cap. 2): conta più riuscire a cambiare posizione che l'aspetto."],
   ["McGill S.", "Back Mechanic: The Secrets to a Healthy Spine Your Doctor Isn't Telling You.", "Backfitpro, Gravenhurst (ON), 2015 (2ª stampa 2017).", "Valutazione del mal di schiena e routine: autovalutazione e test (capp. 5-6), strumenti di movimento e igiene della colonna (capp. 7-8), Big 3 (cap. 9), camminata (cap. 10), anche (cap. 12), condizioni particolari (cap. 14)."]]],
  ["Palestra: ricerca", [
   ["Pelland J., Remmert J., Robinson Z., Hinson S., Zourdos M.", "The resistance training dose response: meta-regressions exploring the effects of weekly volume and frequency on muscle hypertrophy and strength gains.", "Sports Medicine 2026;56(2):481-505.", "Volume e frequenza."],
@@ -2767,12 +2809,24 @@ const REFS = [
   ["Bell L., Strafford B.W., Coleman M., Androulakis Korakakis P., Nolan D.", "Integrating deloading into strength and physique sports training programmes: an international Delphi consensus approach.", "Sports Medicine - Open 2023;9.", "doi:10.1186/s40798-023-00633-0"],
   ["Coleman M., Burke R., Augustin F., Piñero A., Maldonado J., Fisher J.P., Israetel M., Androulakis-Korakakis P., Swinton P., Oberlin D.J., Schoenfeld B.J.", "Gaining more from doing less? The effects of a one-week deload period during supervised resistance training on muscular adaptations.", "PeerJ 2024;12:e16777.", "doi:10.7717/peerj.16777"],
   ["Lopes J.S.S., Machado A.F., Micheletti J.K., de Almeida A.C., Cavina A.P., Pastre C.M.", "Effects of training with elastic resistance versus conventional resistance on muscular strength: a systematic review and meta-analysis.", "SAGE Open Medicine 2019;7.", "doi:10.1177/2050312119831116"],
-  ["Morton R.W., Murphy K.T., McKellar S.R. et al.", "A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains in muscle mass and strength in healthy adults.", "British Journal of Sports Medicine 2018;52(6):376-384.", "doi:10.1136/bjsports-2017-097608"],
-  ["Swain C.T.V., Pan F., Owen P.J., Schmidt H., Belavy D.L.", "No consensus on causality of spine postures or physical exposure and low back pain: a systematic review of systematic reviews.", "Journal of Biomechanics 2020;102:109312.", "doi:10.1016/j.jbiomech.2019.08.006"],
-  ["George S.Z., Fritz J.M., Silfies S.P. et al.", "Interventions for the management of acute and chronic low back pain: revision 2021. Clinical practice guidelines.", "Journal of Orthopaedic & Sports Physical Therapy 2021;51(11):CPG1-CPG60.", "doi:10.2519/jospt.2021.0304"],
-  ["Hartvigsen J., Hancock M.J., Kongsted A. et al.", "What low back pain is and why we need to pay attention.", "The Lancet 2018;391(10137):2356-2367.", "doi:10.1016/S0140-6736(18)30480-X"],
-  ["Sheikhhoseini R., Shahrbanian S., Sayyadi P., O'Sullivan K.", "Effectiveness of therapeutic exercise on forward head posture: a systematic review and meta-analysis.", "Journal of Manipulative and Physiological Therapeutics 2018;41(6):530-539.", "doi:10.1016/j.jmpt.2018.02.002"],
-  ["Negrini S., Donzelli S., Aulisa A.G. et al.", "2016 SOSORT guidelines: orthopaedic and rehabilitation treatment of idiopathic scoliosis during growth.", "Scoliosis and Spinal Disorders 2018;13:3.", "doi:10.1186/s13013-017-0145-8"]]],
+  ["Morton R.W., Murphy K.T., McKellar S.R. et al.", "A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains in muscle mass and strength in healthy adults.", "British Journal of Sports Medicine 2018;52(6):376-384.", "doi:10.1136/bjsports-2017-097608"]]],
+ ["Postura e dolore", [
+    ["Swain C.T.V., Pan F., Owen P.J., Schmidt H., Belavy D.L.", "No consensus on causality of spine postures or physical exposure and low back pain: a systematic review of systematic reviews.", "Journal of Biomechanics 2020;102:109312.", "doi:10.1016/j.jbiomech.2019.08.006"],
+    ["George S.Z., Fritz J.M., Silfies S.P. et al.", "Interventions for the management of acute and chronic low back pain: revision 2021. Clinical practice guidelines.", "Journal of Orthopaedic & Sports Physical Therapy 2021;51(11):CPG1-CPG60.", "doi:10.2519/jospt.2021.0304"],
+    ["Hartvigsen J., Hancock M.J., Kongsted A. et al.", "What low back pain is and why we need to pay attention.", "The Lancet 2018;391(10137):2356-2367.", "doi:10.1016/S0140-6736(18)30480-X"],
+    ["Sheikhhoseini R., Shahrbanian S., Sayyadi P., O'Sullivan K.", "Effectiveness of therapeutic exercise on forward head posture: a systematic review and meta-analysis.", "Journal of Manipulative and Physiological Therapeutics 2018;41(6):530-539.", "doi:10.1016/j.jmpt.2018.02.002"],
+    ["Negrini S., Donzelli S., Aulisa A.G. et al.", "2016 SOSORT guidelines: orthopaedic and rehabilitation treatment of idiopathic scoliosis during growth.", "Scoliosis and Spinal Disorders 2018;13:3.", "doi:10.1186/s13013-017-0145-8"],
+  ["NICE", "Low back pain and sciatica in over 16s: assessment and management (NG59).", "National Institute for Health and Care Excellence, 2016, aggiornata il 29 luglio 2026.", "Segnali d'allarme, restare attivi, nessun tipo di esercizio preferito, niente busti e plantari per il mal di schiena."],
+  ["Foster N.E., Anema J.R., Cherkin D. et al.", "Prevention and treatment of low back pain: evidence, challenges, and promising directions.", "The Lancet 2018;391(10137):2368-2383.", "doi:10.1016/S0140-6736(18)30489-6"],
+  ["Kent P., Haines T., O'Sullivan P. et al.", "Cognitive functional therapy with or without movement sensor biofeedback versus usual care for chronic, disabling low back pain (RESTORE): a randomised, controlled, three-arm, parallel group, phase 3, clinical trial.", "The Lancet 2023;401(10391):1866-1877.", "doi:10.1016/S0140-6736(23)00441-5"],
+  ["Slater D., Korakakis V., O'Sullivan P., Nolan D., O'Sullivan K.", "\"Sit up straight\": time to re-evaluate.", "Journal of Orthopaedic & Sports Physical Therapy 2019;49(8):562-564.", "doi:10.2519/jospt.2019.0610"],
+  ["Christensen S.T., Hartvigsen J.", "Spinal curves and health: a systematic critical review of the epidemiological literature dealing with associations between sagittal spinal curves and health.", "Journal of Manipulative and Physiological Therapeutics 2008;31(9):690-714.", "doi:10.1016/j.jmpt.2008.10.004"],
+  ["Blanpied P.R., Gross A.R., Elliott J.M. et al.", "Neck pain: revision 2017. Clinical practice guidelines.", "Journal of Orthopaedic & Sports Physical Therapy 2017;47(7):A1-A83.", "doi:10.2519/jospt.2017.0302"],
+  ["Kibler W.B., Ludewig P.M., McClure P.W. et al.", "Clinical implications of scapular dyskinesis in shoulder injury: the 2013 consensus statement from the 'scapular summit'.", "British Journal of Sports Medicine 2013;47(14):877-885.", "doi:10.1136/bjsports-2013-092425"],
+  ["Crossley K.M., Stefanik J.J., Selfe J. et al.", "2016 Patellofemoral pain consensus statement from the 4th International Patellofemoral Pain Research Retreat, Manchester. Part 1: terminology, definitions, clinical examination, natural history, patellofemoral osteoarthritis and patient-reported outcome measures.", "British Journal of Sports Medicine 2016;50(14):839-843.", "doi:10.1136/bjsports-2016-096384"],
+  ["Crossley K.M., van Middelkoop M., Callaghan M.J. et al.", "2016 Patellofemoral pain consensus statement from the 4th International Patellofemoral Pain Research Retreat, Manchester. Part 2: recommended physical interventions (exercise, taping, bracing, foot orthoses and combined interventions).", "British Journal of Sports Medicine 2016;50(14):844-852.", "doi:10.1136/bjsports-2016-096268"],
+  ["Redmond A.C., Crane Y.Z., Menz H.B.", "Normative values for the Foot Posture Index.", "Journal of Foot and Ankle Research 2008;1:6.", "doi:10.1186/1757-1146-1-6"],
+  ["Loreti S., Berardi A., Galeoto G.", "Translation, cross-cultural adaptation and validation of the Foot Posture Index (FPI-6), Italian version.", "Healthcare 2023;11(9):1325.", "doi:10.3390/healthcare11091325"]]],
  ["Corsa, bici e allenamento combinato", [
   ["Helgerud J., Høydal K., Wang E. et al.", "Aerobic high-intensity intervals improve VO2max more than moderate training.", "Medicine & Science in Sports & Exercise 2007;39(4):665-671.", "Intervalli 4 × 4 (uomini mediamente allenati)."],
   ["Tanaka H., Monahan K.D., Seals D.R.", "Age-predicted maximal heart rate revisited.", "Journal of the American College of Cardiology 2001;37(1):153-156.", "FC massima stimata."],
@@ -2825,10 +2879,9 @@ function renderImpostazioni(){
 
 function postureSettingsHtml(){
   const s = S.settings, sel = s.postureConds || [];
-  const bk = backState();
-  const backRow = `<div class="o-list" style="margin-top:4px"><button class="o-row" data-act="${bk && bk.at ? "backOpen" : "backStart"}"><span class="n">Mal di schiena<small>${bk && bk.at ? (bk.stop ? "prima dal medico" : backOn() ? "routine attiva · valutazione del " + esc(fmtDate(bk.at)) : "routine tolta") : "valutazione guidata e routine (McGill)"}</small></span><span class="p">›</span></button></div>`;
-  return `<div class="o-sec" id="posturaSet"><div class="o-label">Condizioni posturali</div>
-    <p class="small muted" style="margin-top:6px">Scegli le condizioni che ti riguardano: riceverai gli esercizi dei protocolli di Roncari (<i>Fitness posturale</i>) e di <i>Project Exercise 2</i>. Se non ne scegli nessuna, niente esercizi posturali. Meglio farle valutare da un professionista.</p>
+  return `<div class="o-sec" id="posturaSet"><div class="o-label">Esercizi per l'aspetto della postura</div>
+    <p class="small" style="margin-top:6px">Se vuoi lavorare su come appare la postura, scegli cosa ti riguarda.</p>
+    <p class="small muted">Protocolli di Roncari (<i>Fitness posturale</i>) e di <i>Project Exercise 2</i>. Gli esercizi possono cambiare un po' l'angolo della testa in avanti (Sheikhhoseini 2018), ma non è dimostrato che servano a prevenire o togliere il dolore: per il dolore usa le valutazioni qui sopra. Se non scegli nulla, niente esercizi.</p>
     <div class="o-list">${Object.entries(POSTURE).map(([k, c]) => `<label class="switch"><input type="checkbox" data-pcond="${k}" ${sel.includes(k) ? "checked" : ""}><span><b>${esc(c.n)}</b><br><span class="small muted">${c.home.length ? c.home.length + " esercizi" : "solo indicazioni"}</span></span></label>`).join("")}</div>
     ${sel.length ? `<label class="switch"><input type="checkbox" data-set="postureGym" ${s.postureGym !== false ? "checked" : ""}><span><b>Anche nelle sedute di palestra</b><br><span class="small muted">Fino a 3 esercizi prima dei pesi e 3 alla fine; la routine completa resta nella home come routine a casa</span></span></label>` : ""}
   </div>`;
@@ -2838,18 +2891,23 @@ function postureSettingsHtml(){
 // di dolore, pp. 53-72), cap. 7-12 (strumenti di movimento, igiene della colonna, Big 3, camminata, anche, pp. 75-123), cap. 14-15.
 // Segnali d'allarme: elenco di McGill (p. 58); quasi tutti sono poco specifici (Hartvigsen 2018, Lancet: l'80% di chi ha mal di schiena acuto
 // ne ha almeno uno, meno dell'1% ha una malattia seria), quindi portano a un controllo dal medico, non a un allarme.
+// Aggiunti: segni della cauda equina e debolezza che peggiora (urgenti: NICE NG59 1.1.1; Grieve's cap. 35.1), segni della compressione
+// midollare da metastasi (dolore da sdraiati/notturno, a fascia, gambe pesanti o instabili: Grieve's cap. 35.1), spondiloartrite (Hartvigsen 2018).
 // Linea guida JOSPT 2021 (George et al.): esercizio (attivazione e resistenza dei muscoli del tronco, aerobico, generale) raccomandato nel mal di schiena cronico.
 // Scelte dell'app (dette anche nella pagina): livello di partenza di plank laterale e bird dog, tappe della camminata, quando si passa
 // alla forma successiva, dosi di conchiglia e ponte (il libro non le indica).
 const BACK_RED = [
   ["peso", "Hai perso peso senza volerlo di recente?"],
   ["trauma", "Il dolore è iniziato con un trauma (caduta, incidente)?"],
-  ["sella", "Perdi il controllo di urina o feci, o senti intorpidita la zona tra le cosce?", true],
+  ["sella", "Fai fatica a urinare (stimolo assente, getto debole), perdi il controllo di urina o feci, senti intorpidita la zona tra le cosce o i glutei, o hai disturbi sessuali comparsi da poco?", true],
+  ["forza", "Una gamba sta diventando più debole (piede che si trascina, inciampi) o ti senti instabile camminando?", true],
   ["tumore", "Hai o hai avuto un tumore?"],
   ["droghe", "Usi o hai usato droghe per via endovenosa?"],
   ["sistemica", "Hai una malattia generale in corso (per esempio infiammatoria)?"],
   ["febbre", "Hai febbre insieme al mal di schiena?"],
-  ["notte", "Hai dolore di notte costante e in peggioramento?"],
+  ["notte", "Il dolore peggiora da sdraiato o di notte, tanto da disturbare molto il sonno?"],
+  ["fascia", "Il dolore gira a fascia intorno al torace o alla pancia?"],
+  ["rigido", "Il dolore è iniziato piano piano tra i 20 e i 40 anni e al mattino sei rigido a lungo, meglio muovendoti che a riposo?"],
   ["pancia", "Hai dolore alla pancia, tra ombelico e pube?"],
   ["fisso", "Il dolore resta uguale qualunque posizione o movimento fai?"]
 ];
@@ -2911,8 +2969,8 @@ function backTags(b){
 }
 // testi delle categorie: McGill, Back Mechanic, cap. 6, pp. 59-70 (sintesi)
 const BACK_CAT = {
-  flex:{n:"Flessione", d:"Fa male stare curvo, piegarsi, allacciare le scarpe.", fai:["Piegati con le anche (squat dello shortstop), non con la schiena","Seduto con la curva lombare sostenuta; alzati ogni 20′ circa","Pancia in giù se ti dà sollievo"], evita:["Ginocchia al petto e sit-up, soprattutto appena alzato","Stare a lungo nella stessa posizione"], p:"pp. 59, 68"},
-  ext:{n:"Estensione e torsione", d:"Fa male inarcarsi o girarsi.", fai:["Muoviti con le anche","Resta vicino alla posizione neutra"], evita:["Inarcarsi e torcersi, soprattutto insieme"], p:"pp. 64, 69"},
+  flex:{n:"Flessione", d:"Fa male stare curvo, piegarsi, allacciare le scarpe.", fai:["Piegati con le anche (squat dello shortstop), non con la schiena","Seduto con la curva lombare sostenuta; alzati ogni 20′ circa","Pancia in giù se ti dà sollievo"], evita:["Per ora: ginocchia al petto e sit-up, soprattutto appena alzato","Stare a lungo nella stessa posizione"], p:"pp. 59, 68"},
+  ext:{n:"Estensione e torsione", d:"Fa male inarcarsi o girarsi.", fai:["Muoviti con le anche","Resta vicino alla posizione neutra"], evita:["Per ora: inarcarsi e torcersi, soprattutto insieme"], p:"pp. 64, 69"},
   compr:{n:"Compressione", d:"Fa male anche con la schiena dritta, sotto carico.", fai:["Oggetti vicino al corpo, metà del peso per volta"], evita:["Allungarti in avanti con le braccia","Carichi inutili"], p:"pp. 62, 69"},
   neural:{n:"Tensione del nervo", d:"Il dolore cambia con la posizione del collo.", fai:["Tieni il collo nella posizione che non aumenta il dolore (schermo e piano di lavoro più alti)","Più avanti: scorrimento del nervo"], evita:["Allungamenti, anche dei femorali","Movimenti a fine corsa"], p:"pp. 62, 68"},
   load:{n:"Carichi", d:"Tenere un peso fa male.", fai:["Fatti aiutare con i pesi durante il recupero"], evita:["Sollevare o portare carichi non necessari"], p:"p. 65"},
@@ -2923,7 +2981,7 @@ const BACK_CAT = {
   instab:{n:"Fitte improvvise", d:"Fitte girandoti nel letto, starnutendo, allungandoti.", fai:["Big 3: irrigidiscono la schiena e tolgono i piccoli movimenti che fanno male"], evita:["Manipolazioni, allungamenti della schiena","Ginocchia a destra e sinistra da supino"], p:"pp. 59-60"},
   morning:{n:"Peggio al mattino", d:"", fai:["Esercizi a metà mattina, non appena alzato","Un materasso che sostiene la curva lombare"], evita:["Piegarti e sollevare pesi appena alzato"], p:"pp. 60, 97, 142"},
   dayLong:{n:"Peggio verso sera", d:"Il carico della giornata si accumula.", fai:["Cambia posizione prima che arrivi il dolore","Pause di segno opposto al lavoro: se stai seduto, cammina"], evita:["Tirare avanti fino al dolore"], p:"pp. 60, 96-98"},
-  radic:{n:"Dolore nella gamba", d:"Quasi sempre una radice nervosa irritata nella zona lombare.", fai:["Camminate a intervalli","Pancia in giù prima di camminare, se aiuta"], evita:["Stare seduto a lungo","Allungare il nervo (femorali)"], p:"pp. 60, 132-135, 145"},
+  radic:{n:"Dolore nella gamba", d:"Spesso un nervo irritato nella zona lombare; di solito migliora in settimane o mesi.", fai:["Camminate a intervalli","Pancia in giù prima di camminare, se aiuta","Un movimento ripetuto che riduce il dolore alla gamba o lo riporta verso la schiena va bene; se lo spinge verso il piede, fermati"], evita:["Stare seduto a lungo","Allungare il nervo (femorali)"], p:"pp. 60, 132-135, 145"},
   chest:{n:"Metà schiena", d:"Ti raddrizzi spingendo il petto: il movimento si concentra a metà schiena.", fai:["Respirazione di Lewit"], evita:["Raddrizzarti solo alzando il petto"], p:"pp. 60, 136"},
   osteo:{n:"Osteoporosi", d:"", fai:["Cammina eretto; il nuoto va bene"], evita:["Compressione e schiena piegata; golf"], p:"p. 60"}
 };
@@ -3002,11 +3060,11 @@ function renderSchiena(){
   const steps = backSteps(), k = steps[Math.min(BA.step, steps.length - 1)], n = steps.length;
   let h = `<div class="row between" style="margin-top:10px">${BA.step ? `<button class="btn ghost sm" data-act="baPrev" style="padding-left:0">‹ Passo precedente</button>` : "<span></span>"}<span class="tiny muted">Passo ${BA.step + 1} di ${n}</span></div>`;
   if(k === "intro") h += `<div class="o-sec first"><div class="o-label">Valutazione del mal di schiena</div>
-      <p style="margin-top:8px">Domande e alcuni test per capire quali posizioni, carichi e movimenti scatenano il dolore e quali lo alleviano. Ne esce una routine giornaliera.</p>
-      <p class="small muted keep">Metodo di Stuart McGill (<i>Back Mechanic</i>, cap. 5-6). Nei test si cerca di proposito di provocare il dolore, senza forzare: se un test fa molto male, fermati e saltalo. Non sostituisce la visita di un professionista.</p></div>`;
+      <p style="margin-top:8px">Domande e alcuni test per capire quali posizioni, carichi e movimenti scatenano il dolore adesso e quali lo alleviano. Ne escono una routine giornaliera e le camminate.</p>
+      <p class="small muted keep">Metodo di Stuart McGill (<i>Back Mechanic</i>, cap. 5-6). Nei test si cerca di proposito di provocare il dolore, senza forzare: se un test fa molto male, fermati e saltalo. Non trova la causa del dolore e non sostituisce la visita di un professionista.</p></div>`;
   else if(k === "red") h += `<div class="o-sec first"><div class="o-label">Prima di tutto</div><p class="small" style="margin-top:6px">Segna quello che ti riguarda.</p>
       <div class="o-list">${BACK_RED.map(([id, l]) => `<label class="switch"><input type="checkbox" data-bared="${id}" ${BA.red.includes(id) ? "checked" : ""}><span>${esc(l)}</span></label>`).join("")}</div>
-      <p class="small muted">Elenco da McGill, <i>Back Mechanic</i>, p. 58. Sono segnali poco specifici: quasi sempre dietro non c'è nulla di grave (Hartvigsen 2018, <i>Lancet</i>), ma vanno valutati da un medico prima di iniziare.</p></div>`;
+      <p class="small muted">Elenco di McGill (<i>Back Mechanic</i>, p. 58) completato con NICE NG59, Hartvigsen 2018 (<i>Lancet</i>) e <i>Grieve's</i>, cap. 35.1. Quasi sempre dietro questi segnali non c'è nulla di grave, ma vanno valutati da un medico prima di iniziare. I primi due sono urgenti.</p></div>`;
   else if(k === "q") h += `<div class="o-sec first"><div class="o-label">Domande</div><div class="stack" style="margin-top:10px">${BACK_Q.map(([id, l]) => `<div class="stack-sm"><span class="small">${esc(l)}</span>${yn("q." + id, BA.q[id])}</div>`).join("")}</div>
       <p class="small muted">McGill, <i>Back Mechanic</i>, cap. 6, «Le domande essenziali», pp. 59-61.</p></div>`;
   else if(k === "liste") h += `<div class="o-sec first"><div class="o-label">Cosa lo peggiora</div><div class="chips" style="margin-top:8px">${BACK_WORSE.map(([id, l]) => `<button class="chip" aria-pressed="${BA.worse.includes(id)}" data-act="baChip" data-l="worse" data-v="${id}">${esc(l)}</button>`).join("")}</div>
@@ -3034,7 +3092,7 @@ function backFromDraft(){
 }
 function backResultHtml(b, draft){
   if(b.stop) return `<div class="o-sec first"><div class="o-label">Prima dal medico</div>
-    <p style="margin-top:8px">${b.red.includes("sella") ? "Perdita di controllo di urina o feci o intorpidimento tra le cosce: rivolgiti subito a un medico." : "Hai segnato uno o più segnali da far valutare a un medico prima di iniziare."} Quando il medico ti dà il via libera, rifai la valutazione.</p>
+    <p style="margin-top:8px">${b.red.includes("sella") || b.red.includes("forza") ? "Disturbi di vescica, intestino o sensibilità tra le cosce, o una gamba che si indebolisce: vai subito al pronto soccorso o chiama un medico." : "Hai segnato uno o più segnali da far valutare a un medico prima di iniziare."} Quando il medico ti dà il via libera, rifai la valutazione.</p>
     <div class="row" style="margin-top:12px;gap:8px"><button class="btn" data-act="backStart">Rifai la valutazione</button><button class="btn ghost" data-act="backClose">Chiudi</button></div></div>`;
   const tg = backTags(b), cats = Object.keys(BACK_CAT).filter(c => tg.has(c)), brace = backBraceTxt(tg);
   const sess = (() => { const keep = S.settings.back; S.settings.back = b; const s2 = buildBackSession(); S.settings.back = keep; return s2; })();
@@ -3042,18 +3100,26 @@ function backResultHtml(b, draft){
   h += `<div class="o-sec first"><div class="o-label">I tuoi fattori scatenanti</div>
     ${cats.length ? `<div class="o-list" style="margin-top:4px">${cats.map(c => { const C = BACK_CAT[c]; return `<details class="bcat"><summary><b>${esc(C.n)}</b>${C.d ? `<span class="small muted"> · ${esc(C.d)}</span>` : ""}</summary>
       <div class="small" style="margin:6px 0 4px"><b>Fai:</b> ${C.fai.map(esc).join(" · ")}</div><div class="small"><b>Evita:</b> ${C.evita.map(esc).join(" · ")}</div><div class="tiny muted" style="margin-top:4px">Back Mechanic, ${esc(C.p)}</div></details>`; }).join("")}</div>`
-      : `<p class="small" style="margin-top:6px">Nessun fattore chiaro. McGill consiglia un diario: ogni giorno come va la schiena e cosa hai fatto; dopo 4-5 giornate peggiori cerca cosa le accomuna, guardando soprattutto il giorno prima. Se non emerge nulla, serve un professionista (p. 70).</p>`}
+      : `<p class="small" style="margin-top:6px">Nessun fattore chiaro. Se vuoi, tieni un diario come consiglia McGill: ogni giorno come va la schiena e cosa hai fatto; dopo 4-5 giornate peggiori cerca cosa le accomuna, guardando soprattutto il giorno prima. Se non emerge nulla, serve un professionista (p. 70).</p>`}
     ${brace ? `<p class="small" style="margin-top:8px"><b>Per i carichi:</b> ${esc(brace)}</p>` : ""}
-    <p class="small muted">Categorie di McGill, <i>Back Mechanic</i>, cap. 6, pp. 68-70. Indicano cosa evitare durante il recupero, non una diagnosi.</p></div>`;
+    <p class="small muted">Categorie di McGill, <i>Back Mechanic</i>, cap. 6, pp. 68-70: cosa evitare finché il dolore è alto, non una diagnosi. Quando il dolore cala, riprendi a poco a poco anche i movimenti che evitavi: tornare gradualmente ai movimenti temuti fa parte della cura (Kent 2023, <i>Lancet</i>). Il «brace» (addome o spalle irrigiditi) serve nei carichi finché la schiena è sensibile, non come abitudine per sempre (<i>Grieve's</i>, cap. 32.2 e 45.2). Il principio del movimento che riduce o riporta il dolore verso la schiena è del metodo McKenzie (<i>Grieve's</i>, cap. 45.1).</p></div>`;
   h += `<div class="o-sec"><div class="o-label">Routine di ogni giorno</div><ul class="exlist">${sess.blocks.map(x => { const it = x.items[0], ex = EX[it.ex]; return `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}"><span class="gdot" style="background:var(--post)"></span><span class="t"><span class="n">${esc(ex.n)}</span><span class="p">${esc(shortP(it.p, ex))}</span></span><span class="chev">›</span></button></li>`; }).join("")}</ul>
     <p class="small" style="margin-top:8px"><b>Camminate:</b> ${esc(backWalkTxt(b))}, braccia che oscillano dalle spalle.</p>
-    <p class="small muted">Big 3 (curl-up, plank laterale, bird dog) con tenute di 10 secondi a piramide discendente, ogni giorno, ma non appena alzato dal letto (McGill, cap. 9, pp. 102-110). Il giorno dopo l'app chiede com'è la schiena: se va bene aggiunge una tenuta per serie, se va peggio torna indietro di un passo (cap. 9, p. 103; cap. 15, p. 142). Arrivato a 6-4-2 si aggiungono gli esercizi per le anche (cap. 12)${tg.has("radic") || tg.has("neural") ? " e lo scorrimento del nervo (cap. 14)" : ""}. Livello di partenza e passaggio alle forme più difficili sono scelte dell'app. La linea guida JOSPT 2021 raccomanda l'esercizio per il mal di schiena cronico, compresi quelli di attivazione e resistenza del tronco.</p></div>`;
-  h += `<div class="o-sec"><div class="o-label">Igiene della colonna</div><ul class="small" style="margin:6px 0 0;padding-left:18px">
+    <p class="small muted">Big 3 (curl-up, plank laterale, bird dog) con tenute di 10 secondi a piramide discendente, ogni giorno, ma non appena alzato dal letto (McGill, cap. 9, pp. 102-110). Il giorno dopo l'app chiede com'è la schiena: se va bene aggiunge una tenuta per serie, se va peggio torna indietro di un passo (cap. 9, p. 103; cap. 15, p. 142). Arrivato a 6-4-2 si aggiungono gli esercizi per le anche (cap. 12)${tg.has("radic") || tg.has("neural") ? " e lo scorrimento del nervo (cap. 14)" : ""}. Livello di partenza e passaggio alle forme più difficili sono scelte dell'app. Nelle camminate fermati prima del punto in cui il dolore arriva: se arriva dopo 10 minuti, camminane circa 7 (McGill, <i>Low Back Disorders</i>, cap. 10).</p></div>`;
+  h += `<div class="o-sec"><div class="o-label">Altre scelte</div><p class="small" style="margin-top:6px">Il Big 3 è una delle strade possibili. Funzionano anche camminare, nuotare, la palestra, lo yoga, il pilates: scegli quello che ti piace e riesci a fare con regolarità. Nelle prime settimane conta soprattutto restare attivo.</p>
+    <p class="small" style="margin-top:6px">Se il dolore dura da più di 3 mesi e limita molto la tua vita, cerca un fisioterapista che segue la terapia cognitivo-funzionale.</p>
+    <p class="small muted">Per il mal di schiena nessun tipo di esercizio è risultato migliore degli altri (JOSPT 2021; NICE NG59; Foster 2018, <i>Lancet</i>). Terapia cognitivo-funzionale: Kent 2023, <i>Lancet</i> (dolore cronico invalidante; a un anno molto meglio delle cure abituali).</p></div>`;
+  h += `<div class="o-sec"><div class="o-label">Da sapere</div><ul class="small" style="margin:6px 0 0;padding-left:18px">
+    <li>Il mal di schiena è molto comune e quasi sempre non dipende da un danno grave. Di solito migliora molto in qualche settimana; può ripresentarsi, ed è normale.</li>
+    <li>La schiena è robusta. Muoversi e continuare le attività di sempre, anche con un po' di dolore, aiuta più del riposo.</li>
+    <li>Anche sonno, stress e umore influiscono sul dolore.</li></ul>
+    <p class="small muted">Hartvigsen 2018 e Foster 2018 (<i>Lancet</i>); NICE NG59; JOSPT 2021 (educazione: niente spiegazioni che spaventano, sì a prognosi favorevole e ripresa delle attività).</p></div>`;
+  h += `<div class="o-sec"><div class="o-label">Accorgimenti, finché fa male</div><ul class="small" style="margin:6px 0 0;padding-left:18px">
     <li>Per piegarti usa le anche: squat dello shortstop, e per oggetti leggeri il «golfer lift».</li>
     <li>Non piegarti né sollevare pesi appena alzato dal letto o dopo essere stato a lungo seduto: prima cammina qualche minuto.</li>
     <li>Cambia posizione prima che arrivi il dolore; dopo 20′ seduto, alzati e fai l'allungamento in piedi.</li>
     <li>Carichi vicini al corpo; spingi e tira con la forza diretta verso l'ombelico.</li></ul>
-    <p class="small muted">McGill, <i>Back Mechanic</i>, cap. 8, pp. 92-99.</p></div>`;
+    <p class="small muted">McGill, <i>Back Mechanic</i>, cap. 8, pp. 92-99. Servono a gestire il dolore durante il recupero, non sono regole per sempre: non esiste una postura giusta e stare seduti non è pericoloso (Slater 2019, JOSPT; Swain 2020).</p></div>`;
   if(draft) h += `<div class="row" style="margin-top:14px;gap:8px"><button class="btn primary big" data-act="baSave">Salva e usa questa routine</button></div>`;
   else h += `<div class="row" style="margin-top:14px;gap:8px;flex-wrap:wrap"><button class="btn" data-act="backStart">Rifai la valutazione</button><button class="btn ghost" data-act="backOff" style="color:var(--danger)">Togli la routine</button></div>`;
   return h;
@@ -3081,13 +3147,210 @@ document.addEventListener("change", e => {
 });
 
 /* ============ Postura e Altro ============ */
+/* ============ collo, spalla, ginocchio: valutazione e routine ============ */
+// Fonti: collo Blanpied 2017 (JOSPT) e Grieve's cap. 41; spalla Grieve's cap. 50.1-50.2 e Kibler 2013; ginocchio Crossley 2016 e Grieve's cap. 48.2.
+// Scelte dell'app (dette nelle pagine): esercizi di ogni livello, dosi, livello di partenza e progressione. Le fonti non indicano una dose
+// ottimale (Grieve's cap. 31, 41, 50.2; Kibler 2013: forse molte ripetizioni con carico basso).
+const REG = {
+  collo:{n:"Dolore al collo", r:"collo", intro:"Domande per escludere i casi da far vedere subito a un medico e per capire che tipo di dolore al collo hai. Ne esce una routine di esercizi per collo e spalle.",
+    red:[["trauma","Il dolore è iniziato con un trauma (caduta, incidente, colpo) e hai 65 anni o più, o il trauma è stato forte (caduta da più di un metro o da 5 gradini, incidente veloce, tuffo), o hai formicolii alle braccia?",1],
+      ["vasi","Dolore al collo o mal di testa improvviso e fortissimo, mai provato prima, con vista doppia, difficoltà a parlare o a deglutire, o svenimenti?",1],
+      ["midollo","Formicolii o debolezza a entrambe le braccia o anche alle gambe, mani goffe, equilibrio peggiorato, disturbi di vescica o intestino?",1],
+      ["petto","Dolore al petto o fiato corto?",1],
+      ["sforzo","Mal di testa che peggiora con gli sforzi, come tossire o spingere?"],
+      ["generale","Febbre, perdita di peso senza volerlo, o un tumore presente o passato?"],
+      ["capogiri","Capogiri o sensazione di instabilità insieme al dolore al collo?"]],
+    redSrc:"Blanpied 2017 (JOSPT): esclusione di patologie gravi e regola canadese per i traumi; Grieve's, cap. 41 (segni vascolari) e cap. 32.1 (capogiri: prima escludere le cause non cervicali).",
+    q:[["colpo","È iniziato dopo un colpo di frusta (per esempio un tamponamento)?"],["testa","Hai mal di testa che parte dal collo e peggiora con i suoi movimenti o con certe posizioni?"],["braccio","Il dolore scende nel braccio, con formicolii o intorpidimento?"],["acuto","Il collo fa male anche da fermo, o già a metà dei movimenti?"]],
+    qSrc:"Le quattro categorie della linea guida JOSPT sul dolore al collo (Blanpied 2017): mobilità, colpo di frusta, mal di testa, dolore al braccio. Il dolore a riposo o a metà movimento indica un collo più irritabile.",
+    notes:q => [
+      q.colpo === "s" && ["Dopo un colpo di frusta","Di solito il recupero arriva entro 2-3 mesi. Resta attivo e muovi il collo dove non fa male; il collare non serve.","Blanpied 2017"],
+      q.testa === "s" && ["Mal di testa dal collo","Aiutano gli esercizi per i flessori profondi e la forza di collo e spalle. L'auto-mobilizzazione (self-SNAG) si impara con un fisioterapista.","Blanpied 2017"],
+      q.braccio === "s" && ["Dolore al braccio","Evita le posizioni che aumentano formicolii o dolore al braccio. Se peggiorano o compare debolezza, rivolgiti al medico.","Blanpied 2017"],
+      ["Per tutti","Esercizi diversi (leggeri o di forza) riducono il dolore in modo simile. Non serve correggere la postura per stare meglio; aiuta anche muoversi di più ogni giorno (bici, scale, camminate).","Grieve's, cap. 41; Blanpied 2017"]].filter(Boolean),
+    start:q => q.acuto === "s" ? 0 : 1,
+    lv:[[["romCollo",1,5],["neckFlex",2,5],["scapRetr",2,8]],
+        [["romCollo",1,8],["neckFlex",2,8],["stabRitmiche",2,5],["scapRetr",2,10],["extraRotFianco",2,10],["mobToracica",1,8]],
+        [["neckFlexLift",2,5],["estensoriCerv",2,8],["stabRitmiche",2,8],["alzateY",2,10],["extraRotFianco",3,10],["stretchCollo","t",30]]],
+    lvSrc:"Si parte da esercizi leggeri e senza dolore (cenno del capo da sdraiato) e si passa a forza e resistenza di collo e scapole (Grieve's, cap. 41; Blanpied 2017).",
+    pain:"Gli esercizi non devono aumentare il dolore; un leggero fastidio che passa presto va bene.", worse:"Peggio"},
+  spalla:{n:"Dolore alla spalla", r:"spalla", intro:"Domande per escludere i casi da far vedere a un medico o a un fisioterapista. Ne esce una routine progressiva per la spalla dolorosa.",
+    red:[["trauma","Il dolore è iniziato con una caduta o un colpo e non riesci ad alzare il braccio, o la spalla ha una forma diversa?",1],
+      ["infez","Hai febbre o brividi, o la spalla è calda e arrossata?",1],
+      ["notte","Il dolore di notte è continuo e nessuna posizione lo calma?"],
+      ["bilat","Fanno male e sono rigide entrambe le spalle?"],
+      ["generale","Hai perso molto peso senza volerlo, o hai un tumore presente o passato?"]],
+    redSrc:"Grieve's, cap. 50.1: trauma, febbre o brividi, dolore notturno incessante, sintomi alle due spalle, calo di peso. Conta l'insieme più della singola risposta.",
+    q:[["sopra","Fa male alzare il braccio di lato o sopra la testa, soprattutto a metà del movimento?"],["esce","Hai la sensazione che la spalla esca, o si è lussata?"],["rigida","La spalla è rigida in tutte le direzioni, anche quando qualcuno ti muove il braccio?"],["collo","Il dolore parte dal collo e scende nel braccio con formicolii?"],["sport","Fai sport con il braccio sopra la testa e la spalla ruota meno verso l'interno rispetto all'altra?"],["acuto","Fa male anche a riposo o con movimenti piccoli?"]],
+    qSrc:"Il dolore che aumenta a metà dell'elevazione (arco doloroso) è il segno più tipico del dolore della cuffia dei rotatori (Grieve's, cap. 50.2). Instabilità e spalla rigida in tutte le direzioni hanno percorsi diversi, da seguire con un professionista.",
+    stop:q => q.esce === "s" ? "Con una spalla che sembra uscire servono esercizi specifici da impostare con un fisioterapista." : q.rigida === "s" ? "Una spalla rigida in tutte le direzioni va valutata da un medico o da un fisioterapista prima di iniziare." : "",
+    notes:q => [
+      q.collo === "s" && ["Il dolore viene dal collo?","Fai anche la valutazione del collo: il dolore al braccio con formicolii parte spesso da lì.","Grieve's, cap. 50.1"],
+      ["Per tutti","L'esercizio è la cura principale: a un anno e oltre funziona come l'intervento di decompressione. Per ora evita i movimenti che fanno male, poi riprendili a poco a poco. Se dopo alcune settimane non migliora, fatti valutare.","Grieve's, cap. 50.2"],
+      ["Postura e scapole","La forma delle scapole e la postura non sono la causa del dolore: le stesse differenze si vedono in chi non ha dolore.","Kibler 2013; Grieve's, cap. 50.1-50.2"]].filter(Boolean),
+    start:q => q.acuto === "s" ? 0 : 1,
+    extra:q => q.sport === "s" ? [["stretchCross","t",30]] : [],
+    lv:[[["isoRotSpalla",2,5],["elevScap",2,8],["scapRetr",2,8]],
+        [["extraRotFianco",3,10],["elevScap",3,10],["extraRotElastico",3,10],["intraRotElastico",2,10],["plankPlus",2,8]],
+        [["extraRotElastico",3,12],["alzateY",3,10],["alzateProno",3,10],["elevScap",3,12],["rematoreElastico",3,12],["wallSlide",2,8]]],
+    lvSrc:"Esercizi graduati, all'inizio senza dolore e nel range che non fa male: isometrie, poi rotazioni con elastico ed elevazione nel piano scapolare, poi esercizi da prono e su fianco per le scapole (Grieve's, cap. 50.2; Kibler 2013). Allungamento posteriore solo per chi fa sport sopra la testa e ruota meno verso l'interno (Grieve's, cap. 50.4).",
+    pain:"All'inizio senza dolore o con un fastidio lieve che passa presto.", worse:"Peggio"},
+  ginocchio:{n:"Dolore davanti al ginocchio", r:"ginocchio", intro:"Per il dolore intorno o dietro la rotula (dolore femoro-rotuleo). Domande per escludere altri problemi; ne esce una routine per anca e ginocchio.",
+    red:[["trauma","Il dolore è iniziato con una distorsione o un colpo e il ginocchio si è gonfiato subito?",1],
+      ["infez","Il ginocchio è molto gonfio, caldo e arrossato, o hai febbre?",1],
+      ["blocco","Il ginocchio si blocca o cede, o la rotula è uscita di posto?"],
+      ["anca","Hai meno di 16 anni e zoppichi, o hai dolore all'anca o all'inguine?"],
+      ["notte","Il dolore è forte di notte o a riposo?"]],
+    redSrc:"Crossley 2016 (parte 1): la rotula che esce è un problema diverso. Grieve's, cap. 48.2: escludere altre condizioni, nei ragazzi anche problemi dell'anca.",
+    q:[["davanti","Il dolore è intorno o dietro la rotula e aumenta accovacciandoti, facendo le scale, correndo o saltando?"],["seduto","Fa male anche dopo essere stato seduto a lungo con le ginocchia piegate?"],["acuto","Fa male anche camminando in piano?"]],
+    qSrc:"Definizione del dolore femoro-rotuleo: dolore intorno o dietro la rotula con almeno un'attività che carica il ginocchio piegato (Crossley 2016, parte 1). Il test più utile è il dolore nell'accosciata.",
+    notes:q => [
+      q.davanti === "n" && ["Altro tipo di dolore","La routine è pensata per il dolore davanti al ginocchio. Per altri dolori meglio farsi valutare.","Crossley 2016"],
+      ["Per tutti","L'esercizio è l'unica cura raccomandata anche da sola; anca e ginocchio insieme funzionano meglio del solo ginocchio. Ginocchiere e tutori non aggiungono nulla; plantari e taping si valutano con un professionista. Non sempre passa da solo: conta la costanza.","Crossley 2016 (parte 2); Grieve's, cap. 48.2"]].filter(Boolean),
+    start:q => q.acuto === "s" ? 0 : 1,
+    lv:[[["clamshell",2,10],["abdFianco",2,10],["gluteBridge",2,10],["squatParziale",2,8]],
+        [["abdFianco",3,12],["clamshell",3,12],["gluteBridge",3,12],["squatParziale",3,10],["stepUp",3,8]],
+        [["abdFianco",3,15],["gluteBridge",3,12],["stepUp",3,10],["stepDown",3,8],["splitSquatCorpo",3,8]]],
+    lvSrc:"Esercizi per l'anca (abduttori, glutei) e per il ginocchio (squat, gradino), da carico parziale a completo (Crossley 2016; Grieve's, cap. 48.2).",
+    pain:"Durante gli esercizi va bene un dolore fino a 2 su 10; fino a 5 per poco, purché il mattino dopo non sia peggiorato.", worse:"Peggio stamattina"}
+};
+const REG_KEYS = Object.keys(REG);
+function regState(k){ return (S.settings.reg || {})[k] || null; }
+function regOn(k){ const r = regState(k); return !!(r && r.at && !r.stop && r.on); }
+function regItems(k, r){ const R0 = REG[k], lv = Math.min(2, r.lv || 0), st = r.st || 0;
+  return R0.lv[lv].concat(R0.extra ? R0.extra(r.q || {}) : []).map(([ex, a, b]) => ({ex, p:a === "t" ? P.time(2, b, 15) : P.range(a, b + 2*st, b + 2*st, "", 30)})); }
+function buildRegSession(k){ const r = regState(k); return {code:"Reg:" + k, title:"Routine per " + (k === "ginocchio" ? "il ginocchio" : k === "spalla" ? "la spalla" : "il collo"), kind:"post", blocks:regItems(k, r).map(it => ({type:"single", items:[it]}))}; }
+function regDoneOn(k, d){ return Object.values(S.sessions).find(x => x && !x.deleted && x.kind === "post" && x.code === "Reg:" + k && x.date === d); }
+function regLastDone(k){ return Object.values(S.sessions).filter(x => x && !x.deleted && x.kind === "post" && x.code === "Reg:" + k).map(x => x.date).sort().pop() || null; }
+function regNeedsCheck(k){ if(!regOn(k)) return null; const r = regState(k), last = regLastDone(k), t = todayStr(); if(!last || last >= t) return null; if(Object.keys(r.log || {}).some(d => d > last)) return null; return last; }
+// progressione (scelta dell'app): giorno dopo uguale o meglio → +2 ripetizioni (fino a +4); poi due giorni buoni di fila → livello successivo.
+// Peggio → si torna indietro di un passo.
+function regCheck(k, v){ const r = regState(k); if(!r) return; r.log = r.log || {}; r.log[todayStr()] = v;
+  if(v === "w"){ if(r.st > 0) r.st--; else if(r.lv > 0){ r.lv--; r.st = 1; } r.ok = 0; }
+  else if(r.st < 2){ r.st++; r.ok = 0; } else if((r.ok = (r.ok || 0) + 1) >= 2 && r.lv < 2){ r.lv++; r.st = 0; r.ok = 0; }
+  pushMeta(); render(); }
+function regCheckHtml(){ return REG_KEYS.map(k => { const last = regNeedsCheck(k); if(!last) return ""; const R0 = REG[k];
+  return `<div class="o-sec"><div class="o-label">${esc(R0.r[0].toUpperCase() + R0.r.slice(1))}</div><p class="small" style="margin:6px 0 8px">Rispetto a ${last === ymd(new Date(Date.now() - 864e5)) ? "ieri" : esc(fmtDate(last))}, com'è ${k === "collo" ? "il collo" : k === "spalla" ? "la spalla" : "il ginocchio"}?</p>
+    <div class="seg" style="width:100%"><button data-act="regCheck" data-k="${k}" data-v="b" style="flex:1">Meglio</button><button data-act="regCheck" data-k="${k}" data-v="s" style="flex:1">Uguale</button><button data-act="regCheck" data-k="${k}" data-v="w" style="flex:1">${esc(R0.worse)}</button></div></div>`; }).join(""); }
+function regTodayRow(k, t, postDraft){ const code = "Reg:" + k, dr = postDraft && postDraft.code === code; if(!regOn(k) && !dr) return "";
+  const r = regState(k), done = regDoneOn(k, t);
+  return `<button class="o-row" data-act="startReg" data-k="${k}"><span class="dot" style="background:var(--post)"></span><span class="n">${esc(buildRegSession(k).title)}<small>${dr ? "interrotta: tocca per riprendere" : done ? "fatta oggi ✓" : "livello " + ((r.lv || 0) + 1) + " di 3 · " + regItems(k, r).length + " esercizi"}</small></span><span class="p">›</span></button>`; }
+function startReg(k){ const sess = buildRegSession(k), blocks = cloneBlocks(sess.blocks, false);
+  R = {id:uid(), date:todayStr(), pos:null, code:sess.code, title:sess.title, kind:"post", deload:false, blocks, bi:0, screen:"intro", seq:[], si:0, log:blocks.map(b => b.items.map(() => ({sets:[]}))), restEnd:null, startedAt:Date.now(), notes:"", warm:{}};
+  initAudio(); saveDraft(); openRunner(); }
+// ---- pagina della valutazione ----
+let RK = "collo", RA = null; // regione aperta e bozza della valutazione
+function regStart(k){ const old = regState(k); RK = k; RA = {step:0, red:[], q:old && old.at ? {...(old.q || {})} : {}}; view = "regione"; render(); window.scrollTo(0,0); }
+function regFromDraft(){ const old = regState(RK) || {}, R0 = REG[RK], q = {...RA.q};
+  const b = {at:todayStr(), red:RA.red.slice(), q, stop:false, on:true, log:old.log || {}, ok:0};
+  b.lv = old.at && !old.stop && old.lv != null ? old.lv : R0.start(q); b.st = old.at && !old.stop ? (old.st || 0) : 0; b.out = R0.stop ? R0.stop(q) : "";
+  if(b.out) b.on = false; return b; }
+function renderRegione(){ const R0 = REG[RK], r = regState(RK);
+  if(!RA){ if(!r || !r.at) return `<div class="o-sec first"><p>Nessuna valutazione.</p><button class="btn primary" data-act="regStart" data-k="${RK}">Inizia</button></div>`; return regResultHtml(r, false); }
+  const steps = ["intro","red","q","fine"], k = steps[Math.min(RA.step, 3)];
+  let h = `<div class="row between" style="margin-top:10px">${RA.step ? `<button class="btn ghost sm" data-act="raPrev" style="padding-left:0">‹ Passo precedente</button>` : "<span></span>"}<span class="tiny muted">Passo ${RA.step + 1} di 4</span></div>`;
+  if(k === "intro") h += `<div class="o-sec first"><div class="o-label">${esc(R0.n)}</div><p style="margin-top:8px">${esc(R0.intro)}</p><p class="small muted keep">Non è una diagnosi e non sostituisce la visita di un professionista.</p></div>`;
+  else if(k === "red") h += `<div class="o-sec first"><div class="o-label">Prima di tutto</div><p class="small" style="margin-top:6px">Segna quello che ti riguarda.</p>
+    <div class="o-list">${R0.red.map(([id, l]) => `<label class="switch"><input type="checkbox" data-rared="${id}" ${RA.red.includes(id) ? "checked" : ""}><span>${esc(l)}</span></label>`).join("")}</div><p class="small muted">${esc(R0.redSrc)}</p></div>`;
+  else if(k === "q") h += `<div class="o-sec first"><div class="o-label">Domande</div><div class="stack" style="margin-top:10px">${R0.q.map(([id, l]) => `<div class="stack-sm"><span class="small">${esc(l)}</span>${yn("rq." + id, RA.q[id])}</div>`).join("")}</div><p class="small muted">${esc(R0.qSrc)}</p></div>`;
+  else return h + regResultHtml(regFromDraft(), true);
+  const redStop = k === "red" && RA.red.length;
+  h += `<div class="row" style="margin-top:14px;gap:8px"><button class="btn primary big" data-act="${redStop ? "raStop" : "raNext"}">${k === "intro" ? "Inizia" : "Avanti"}</button></div>`;
+  return h; }
+function regResultHtml(b, draft){ const R0 = REG[RK];
+  if(b.stop){ const urg = R0.red.some(([id, , u]) => u && b.red.includes(id));
+    return `<div class="o-sec first"><div class="o-label">Prima dal medico</div><p style="margin-top:8px">${urg ? "Quello che hai segnato va visto subito: vai al pronto soccorso o chiama un medico." : "Hai segnato uno o più segnali da far valutare a un medico prima di iniziare."} Quando hai il via libera, rifai la valutazione.</p>
+      <div class="row" style="margin-top:12px;gap:8px"><button class="btn" data-act="regStart" data-k="${RK}">Rifai la valutazione</button><button class="btn ghost" data-act="regClose">Chiudi</button></div></div>`; }
+  let h = "";
+  if(b.out) h += `<div class="o-sec first"><div class="o-label">Da un professionista</div><p style="margin-top:8px">${esc(b.out)}</p></div>`;
+  else { { const N = R0.notes(b.q || {}); h += `<div class="o-sec first"><div class="o-label">Cosa sapere</div>${N.map(([t, x]) => `<p class="small" style="margin-top:8px"><b>${esc(t)}.</b> ${esc(x)}</p>`).join("")}<p class="small muted">${esc([...new Set(N.map(n => n[2]))].join("; "))}.</p></div>`; }
+    h += `<div class="o-sec"><div class="o-label">Routine</div><p class="small" style="margin-top:6px">Livello ${(b.lv || 0) + 1} di 3, 3-5 volte a settimana.</p><ul class="exlist">${regItems(RK, b).map(it => { const ex = EX[it.ex]; return `<li><button class="exrow" data-act="exInfo" data-k="${it.ex}"><span class="gdot" style="background:var(--post)"></span><span class="t"><span class="n">${esc(ex.n)}</span><span class="p">${esc(shortP(it.p, ex))}</span></span><span class="chev">›</span></button></li>`; }).join("")}</ul>
+      <p class="small" style="margin-top:8px"><b>Dolore:</b> ${esc(R0.pain)}</p>
+      <p class="small muted">${esc(R0.lvSrc)} Esercizi di ogni livello, dosi, frequenza e progressione sono scelte dell'app: le fonti non indicano una dose ottimale. Il giorno dopo la routine l'app chiede come va: se va uguale o meglio aggiunge 2 ripetizioni (fino a +4), poi passa al livello successivo; se va peggio torna indietro di un passo.</p></div>`; }
+  if(draft) h += `<div class="row" style="margin-top:14px;gap:8px"><button class="btn primary big" data-act="raSave">${b.out ? "Salva" : "Salva e usa questa routine"}</button></div>`;
+  else h += `<div class="row" style="margin-top:14px;gap:8px;flex-wrap:wrap"><button class="btn" data-act="regStart" data-k="${RK}">Rifai la valutazione</button>${b.on ? `<button class="btn ghost" data-act="regOff" style="color:var(--danger)">Togli la routine</button>` : !b.out ? `<button class="btn ghost" data-act="regOnAgain">Riattiva la routine</button>` : ""}</div>`;
+  return h; }
+function regAct(a, d){
+  switch(a){
+    case "regOpen": RK = d.k; RA = null; view = "regione"; render(); window.scrollTo(0,0); return true;
+    case "regStart": regStart(d.k || RK); return true;
+    case "regClose": RA = null; view = "postura"; render(); window.scrollTo(0,0); return true;
+    case "raNext": RA.step++; render(); window.scrollTo(0,0); return true;
+    case "raPrev": RA.step = Math.max(0, RA.step - 1); render(); window.scrollTo(0,0); return true;
+    case "raStop": { S.settings.reg = S.settings.reg || {}; const old = regState(RK) || {}; S.settings.reg[RK] = {...old, at:todayStr(), red:RA.red.slice(), stop:true, on:false}; RA = null; pushMeta(); render(); window.scrollTo(0,0); return true; }
+    case "raSave": S.settings.reg = S.settings.reg || {}; S.settings.reg[RK] = regFromDraft(); RA = null; pushMeta(); view = "postura"; render(); window.scrollTo(0,0); return true;
+    case "regOff": if(confirm("Togliere la routine? La valutazione resta salvata.")){ regState(RK).on = false; pushMeta(); render(); } return true;
+    case "regOnAgain": regState(RK).on = true; pushMeta(); render(); return true;
+    case "regCheck": regCheck(d.k, d.v); return true;
+    case "startReg": { const dr = loadDraft(); if(dr && dr.kind === "post" && dr.code === "Reg:" + d.k) resumeSession(); else if(dr) alert("C'è un'altra seduta interrotta: finiscila o eliminala prima."); else startReg(d.k); return true; }
+  }
+  if(a === "baSet" && d.k.startsWith("rq.")){ const id = d.k.slice(3); RA.q[id] = RA.q[id] === d.v ? undefined : d.v; render(); return true; }
+  return false; }
+document.addEventListener("change", e => { const r = e.target.closest("[data-rared]"); if(r && RA){ const id = r.dataset.rared; RA.red = r.checked ? [...new Set(RA.red.concat([id]))] : RA.red.filter(x => x !== id); render(); } });
+
+/* ============ piede: Foot Posture Index (FPI-6) ============ */
+// Redmond 2006/2008 (valori normali: adulti da +1 a +7, dai 60 anni da +1 a +8); versione italiana Loreti 2023 (descrizioni e categorie).
+const FPI = [
+  ["Testa dell'astragalo", "Con pollice e indice ai due lati della caviglia, davanti ai malleoli: senti la sporgenza dell'osso?", ["si sente fuori, non dentro","si sente fuori, appena dentro","uguale dai due lati","appena fuori, si sente dentro","non si sente fuori, si sente dentro"], true],
+  ["Curve del malleolo esterno", "Da dietro: confronta la curva sopra il malleolo esterno con quella sotto.", ["curva sotto piatta o in fuori","curva sotto più piatta di quella sopra","curve uguali","curva sotto più incavata","curva sotto molto più incavata"], true],
+  ["Tallone visto da dietro", "Da dietro, in linea con il piede: il tallone è dritto o inclinato?", ["inclinato in fuori, oltre 5° (appoggio sul bordo esterno)","inclinato in fuori, meno di 5°","verticale","inclinato in dentro, meno di 5°","inclinato in dentro, oltre 5° (appoggio sul bordo interno)"]],
+  ["Zona sotto il malleolo interno", "Di lato, dall'interno: la zona davanti e sotto il malleolo interno.", ["molto incavata","un po' incavata","piatta","un po' sporgente","molto sporgente"]],
+  ["Arco interno", "Di lato, dall'interno: forma e altezza dell'arco (conta più la forma dell'altezza).", ["alto, ad angolo acuto verso il tallone","abbastanza alto, un po' acuto","normale, curva uniforme","abbassato, piatto al centro","molto basso, quasi a terra"]],
+  ["Avampiede visto da dietro", "Da dietro, in linea con il tallone: quante dita si vedono ai lati?", ["nessun dito fuori, si vedono dentro","più dita dentro che fuori","uguali","più dita fuori che dentro","nessun dito dentro, si vedono fuori"]]
+];
+let FP = null; // bozza: {dx:[..6], sx:[..6], side}
+function fpiCat(t){ return t >= 10 ? "molto pronato" : t >= 6 ? "pronato" : t >= 0 ? "nella media" : t >= -4 ? "supinato" : "molto supinato"; }
+function fpiTot(a){ const v = (a || []).filter(x => x != null); return v.length ? {t:v.reduce((s, x) => s + x, 0), n:v.length} : null; }
+function renderPiede(){
+  const hist = S.settings.fpi || [], age = ageNow(), hi = age && age >= 60 ? 8 : 7;
+  const line = (lab, a) => { const T = fpiTot(a); return T ? `<div class="o-row" style="cursor:default"><span class="n">${lab}<small>${T.n < 6 ? `su ${T.n} criteri di 6 · ` : ""}${esc(fpiCat(T.t))}</small></span><span class="p">${T.t > 0 ? "+" : ""}${T.t}</span></div>` : ""; };
+  if(!FP){ const last = hist[hist.length - 1];
+    let h = `<div class="o-sec first"><div class="o-label">Postura del piede (FPI-6)</div><p style="margin-top:8px">Sei osservazioni del piede in piedi, da fare con l'aiuto di un'altra persona o con delle foto. Il punteggio va da −12 (piede molto supinato) a +12 (molto pronato).</p>
+      <p class="small muted">Foot Posture Index (Redmond 2006; versione italiana Loreti 2023). Valori normali negli adulti: da +1 a +${hi}, con un piede leggermente pronato come caso più comune (Redmond 2008${hi === 8 ? ", dai 60 anni" : ""}). Descrive il piede, non è una diagnosi: il legame con dolori e infortuni non è dimostrato, e per il mal di schiena i plantari non sono raccomandati (NICE NG59).</p></div>`;
+    if(last) h += `<div class="o-sec"><div class="o-label">Ultima valutazione · ${esc(fmtDate(last.d))}</div><div class="o-list">${line("Piede destro", last.dx)}${line("Piede sinistro", last.sx)}</div>
+      ${hist.length > 1 ? `<p class="small" style="margin-top:6px">Prima: ${hist.slice(0, -1).reverse().slice(0, 4).map(x => { const a = fpiTot(x.dx), b = fpiTot(x.sx); return esc(fmtDate(x.d)) + " " + [a ? "dx " + (a.t > 0 ? "+" : "") + a.t : "", b ? "sx " + (b.t > 0 ? "+" : "") + b.t : ""].filter(Boolean).join(", "); }).join(" · ")}</p>` : ""}</div>`;
+    h += `<div class="row" style="margin-top:14px"><button class="btn primary big" data-act="fpStart">${last ? "Nuova valutazione" : "Inizia"}</button></div>`;
+    return h; }
+  const side = FP.side, cur = FP[side];
+  let h = `<div class="o-sec first"><div class="o-label">Come si fa</div><p class="small" style="margin-top:6px">Scalzo, fai qualche passo sul posto e fermati come ti viene, braccia lungo i fianchi, sguardo avanti. Resta fermo: l'altra persona ti gira intorno e guarda.</p></div>
+    <div class="seg" style="width:100%;margin-top:10px"><button data-act="fpSide" data-v="dx" aria-pressed="${side === "dx"}" style="flex:1">Piede destro</button><button data-act="fpSide" data-v="sx" aria-pressed="${side === "sx"}" style="flex:1">Piede sinistro</button></div>`;
+  h += FPI.map(([t, how, opts, unk], i) => `<div class="o-sec"><div class="o-label">${i + 1}. ${esc(t)}</div><p class="small" style="margin:6px 0 8px">${esc(how)}</p>
+    <div class="o-list">${opts.map((o, j) => `<label class="switch"><input type="radio" name="fp${i}" data-fp="${i}" data-v="${j - 2}" ${cur[i] === j - 2 ? "checked" : ""}><span><b>${j - 2 > 0 ? "+" : ""}${j - 2}</b> · ${esc(o)}</span></label>`).join("")}${unk ? `<label class="switch"><input type="radio" name="fp${i}" data-fp="${i}" data-v="x" ${cur[i] == null ? "checked" : ""}><span>Non so</span></label>` : ""}</div>
+    ${i === 1 ? `<p class="small muted">Con caviglia gonfia o molto tessuto adiposo la curva non si valuta bene: meglio «non so» (Loreti 2023).</p>` : i === 3 ? `<p class="small muted">È il criterio meno affidabile (Loreti 2023).</p>` : ""}</div>`).join("");
+  const a = fpiTot(FP.dx), b = fpiTot(FP.sx);
+  h += `<div class="o-sec"><div class="o-label">Punteggio</div><div class="o-list">${line("Piede destro", FP.dx) || `<p class="small muted keep">Destro: nessun criterio segnato.</p>`}${line("Piede sinistro", FP.sx) || `<p class="small muted keep">Sinistro: nessun criterio segnato.</p>`}</div>
+    <p class="small muted">Categorie: da +10 molto pronato, da +6 a +9 pronato, da 0 a +5 nella media, da −1 a −4 supinato, da −5 in giù molto supinato (Loreti 2023). Il manuale consiglia di fare pratica su almeno 30 valutazioni prima di usarlo in clinica: da solo i risultati sono indicativi.</p></div>
+    <div class="row" style="margin-top:14px;gap:8px"><button class="btn primary big" data-act="fpSave" ${a || b ? "" : "disabled"}>Salva</button><button class="btn ghost" data-act="fpCancel">Annulla</button></div>`;
+  return h; }
+function fpAct(a, d){
+  switch(a){
+    case "fpOpen": FP = null; view = "piede"; render(); window.scrollTo(0,0); return true;
+    case "fpStart": FP = {side:"dx", dx:[null,null,null,null,null,null], sx:[null,null,null,null,null,null]}; render(); window.scrollTo(0,0); return true;
+    case "fpSide": FP.side = d.v; render(); return true;
+    case "fpCancel": FP = null; render(); window.scrollTo(0,0); return true;
+    case "fpSave": S.settings.fpi = (S.settings.fpi || []).filter(x => x.d !== todayStr()).concat([{d:todayStr(), dx:FP.dx.slice(), sx:FP.sx.slice()}]); FP = null; pushMeta(); render(); window.scrollTo(0,0); return true;
+    case "fpClose": FP = null; view = "postura"; render(); window.scrollTo(0,0); return true;
+  }
+  return false; }
+document.addEventListener("change", e => { const r = e.target.closest("[data-fp]"); if(r && FP){ FP[FP.side][Number(r.dataset.fp)] = r.dataset.v === "x" ? null : Number(r.dataset.v); render(); } });
+
 function renderPostura(){
   const t = todayStr(), bk = backState(), dr = loadDraft(), postDraft = dr && dr.kind === "post" ? dr : null;
-  let h = `<div class="o-sec first"><div class="o-label">Schiena</div><div class="o-list">
+  const regRow = k => { const r = regState(k), R0 = REG[k];
+    return `<button class="o-row" data-act="${r && r.at ? "regOpen" : "regStart"}" data-k="${k}"><span class="dot" style="background:var(--post)"></span><span class="n">${esc(R0.n)}<small>${r && r.at ? (r.stop ? "prima dal medico" : r.out ? "da un professionista" : regOn(k) ? "valutazione del " + esc(fmtDate(r.at)) : "routine tolta") : "domande e routine"}</small></span><span class="p">›</span></button>${regTodayRow(k, t, postDraft)}`; };
+  let h = `<div class="o-sec first"><div class="o-label">Esercizi per il dolore</div><div class="o-list">
     <button class="o-row" data-act="${bk && bk.at ? "backOpen" : "backStart"}"><span class="dot" style="background:var(--post)"></span><span class="n">Mal di schiena<small>${bk && bk.at ? (bk.stop ? "prima dal medico" : backOn() ? "valutazione del " + esc(fmtDate(bk.at)) : "routine tolta") : "valutazione guidata e routine (McGill)"}</small></span><span class="p">›</span></button>
-    ${backTodayRow(t, postDraft)}</div></div>`;
-  if(postureHomeOn() || (postDraft && postDraft.code !== "Back")) h += `<div class="o-sec"><div class="o-label">Routine posturale</div><div class="o-list"><button class="o-row" data-act="startPost"><span class="dot" style="background:var(--post)"></span><span class="n">Routine posturale a casa<small>${postDraft && postDraft.code !== "Back" ? "interrotta: tocca per riprendere" : postureOn(t) ? "fatta oggi ✓" : esc(postureConds().filter(k => POSTURE[k].home.length).map(k => POSTURE[k].n.toLowerCase()).join(", "))}</small></span><span class="p">›</span></button></div></div>`;
+    ${backTodayRow(t, postDraft)}${REG_KEYS.map(regRow).join("")}</div>
+    <p class="small muted">Valutazioni con domande sui segnali d'allarme e routine progressive. Non sono diagnosi.</p></div>`;
+  const fp = (S.settings.fpi || []).slice(-1)[0], fd = fp && fpiTot(fp.dx), fs = fp && fpiTot(fp.sx), sg = x => (x.t > 0 ? "+" : "") + x.t;
+  h += `<div class="o-sec"><div class="o-label">Piede</div><div class="o-list"><button class="o-row" data-act="fpOpen"><span class="dot" style="background:var(--post)"></span><span class="n">Postura del piede (FPI-6)<small>${fp ? esc(fmtDate(fp.d)) + " · " + [fd ? "dx " + sg(fd) : "", fs ? "sx " + sg(fs) : ""].filter(Boolean).join(", ") : "valutazione con l'aiuto di un'altra persona"}</small></span><span class="p">›</span></button></div></div>`;
+  if(postureHomeOn() || (postDraft && postDraft.code === "Post")) h += `<div class="o-sec"><div class="o-label">Routine posturale</div><div class="o-list"><button class="o-row" data-act="startPost"><span class="dot" style="background:var(--post)"></span><span class="n">Routine posturale a casa<small>${postDraft && postDraft.code === "Post" ? "interrotta: tocca per riprendere" : postureOn(t) ? "fatta oggi ✓" : esc(postureConds().filter(k => POSTURE[k].home.length).map(k => POSTURE[k].n.toLowerCase()).join(", "))}</small></span><span class="p">›</span></button></div></div>`;
   h += postureSettingsHtml();
+  h += `<div class="o-sec"><div class="o-label">Da sapere sulla postura</div><ul class="small" style="margin:6px 0 0;padding-left:18px">
+    <li>Non esiste una postura giusta per tutti: le differenze fra le persone sono normali.</li>
+    <li>Non è dimostrato che la forma della schiena o una postura causino dolore: molte persone con curve «storte» non hanno dolore.</li>
+    <li>Più che stare dritti conta cambiare spesso posizione. Stare seduti non è pericoloso.</li></ul>
+    <p class="small muted">Slater 2019 (JOSPT); Swain 2020 (revisione di 41 revisioni: nessun consenso sul fatto che posture o carichi causino il mal di schiena); Christensen 2008 (nessuna prova forte di legame fra curve della colonna e dolore); <i>Grieve's</i>, cap. 4. Anche Kendall osserva che molte posture «scorrette» non danno dolore e che conta di più riuscire a cambiare posizione.</p></div>`;
   return h;
 }
 function renderAltro(){
@@ -4539,10 +4802,10 @@ function runDayHtml(ds){
 }
 /* ============ azioni ============ */
 function act(a, d, e){
-  if(backAct(a, d, e)) return;
+  if(regAct(a, d) || fpAct(a, d) || backAct(a, d, e)) return;
   switch(a){
     case "start": { closeSheet(); const dr = loadDraft(); if(dr && dr.kind !== "post") resumeSession(); else if(!dr || confirm("C'è una routine posturale interrotta: se inizi la palestra viene eliminata. Continuare?")) startSession(); break; }
-    case "startPost": { const dr = loadDraft(); if(dr && dr.kind === "post" && dr.code === "Back") alert("C'è la routine per la schiena interrotta: finiscila o eliminala prima."); else if(dr && dr.kind === "post") resumeSession(); else if(dr) alert("C'è un allenamento di palestra in corso: finiscilo o eliminalo prima di iniziare la routine posturale."); else startPosture(); break; }
+    case "startPost": { const dr = loadDraft(); if(dr && dr.kind === "post" && dr.code !== "Post") alert("C'è un'altra routine interrotta: finiscila o eliminala prima."); else if(dr && dr.kind === "post") resumeSession(); else if(dr) alert("C'è un allenamento di palestra in corso: finiscilo o eliminalo prima di iniziare la routine posturale."); else startPosture(); break; }
     case "resume": resumeSession(); break;
     case "askDiscard": showSheet(`<div class="grab"></div><div class="stack"><h2>Eliminare l'allenamento in corso?</h2><p class="small muted">Le serie registrate finora vanno perse e la seduta non viene salvata. Il programma resta alla stessa seduta.</p><div class="row" style="gap:10px"><button class="btn" data-act="closeSheet" style="flex:1">Annulla</button><button class="btn" data-act="discardDraft" style="flex:1;background:var(--danger);color:#fff">Elimina</button></div></div>`); break;
     case "discardDraft": clearDraft(); R = null; try{ window.Android && Android.cancelAlarm(); }catch(err){} closeSheet(); render(); break;
