@@ -1,3 +1,6 @@
+Novità della 2.4.1
+- Aggiornamenti: se il download diretto non riesce l'app riprova da un secondo indirizzo di GitHub, mostra il motivo dell'errore e offre «Scarica dal browser»
+
 Novità della 2.4.0
 - Crea il tuo piano: 4 passi (obiettivo e livello, settimana, priorità e limiti, proposta), anche al primo avvio e da Impostazioni
 - Il tuo piano (in Piano): sedute modificabili, con serie, ripetizioni, margine e recupero da cambiare, esercizi da aggiungere, togliere e riordinare. L'app avvisa quando esci dalle indicazioni del libro, ma non blocca

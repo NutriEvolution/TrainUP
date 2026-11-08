@@ -5813,9 +5813,10 @@ initSync();
     U.msg = info.error ? "Controllo non riuscito: sei connesso a internet?" : (info.available ? "" : "Hai già l'ultima versione.");
     render();
   };
-  window.onUpdateProgress = function(p){
+  window.onUpdateProgress = function(p, why){
+    U.fail = p === -1;
     if(p === -2) U.msg = "Consenti a TrainUP di installare app, poi torna qui e tocca di nuovo Aggiorna.";
-    else if(p === -1) U.msg = "Download non riuscito. Riprova.";
+    else if(p === -1) U.msg = "Download non riuscito" + (why ? " (" + why + ")" : "") + ". Puoi scaricarlo dal browser e installarlo: i dati restano.";
     U.progress = p >= 0 && p < 100 ? p : null;
     if(p === 100) U.msg = "Download completato: conferma l'installazione.";
     render();
@@ -5829,8 +5830,10 @@ initSync();
       ${i.notes ? `<p class="small muted" style="white-space:pre-line;margin:0">${esc(i.notes.slice(0, 400))}</p>` : ""}
       ${pr != null ? `<div class="updbar"><i style="width:${pr}%"></i></div><span class="small muted">Download ${pr}%</span>`
         : `<button class="btn primary" data-aact="install">Aggiorna ora</button>`}
-      ${U.msg ? `<span class="small muted">${esc(U.msg)}</span>` : ""}</div>`;
+      ${U.msg ? `<span class="small muted">${esc(U.msg)}</span>` : ""}${U.fail ? browserBtn() : ""}</div>`;
   };
+  const RELEASES = "https://github.com/NutriEvolution/TrainUP/releases/latest";
+  function browserBtn(){ return `<button class="btn" data-aact="browser">Scarica dal browser</button>`; }
   function checkNow(){ U.checking = true; U.msg = ""; render(); A.checkUpdate(); }
 
   // --- backup dei dati ---
@@ -5888,7 +5891,7 @@ initSync();
       ${i && i.available ? `<div class="o-row" style="cursor:default"><span class="n">Disponibile</span><span class="p"><b style="color:var(--ink)">${esc(i.version)}</b></span></div>` : ""}</div>
       <button class="btn" data-aact="${i && i.available ? "install" : "check"}" ${U.checking ? "disabled" : ""} style="margin-top:8px">${U.checking ? "Controllo…" : i && i.available ? "Aggiorna ora" : "Cerca aggiornamenti"}</button>
       ${U.progress != null ? `<div class="updbar" style="margin-top:8px"><i style="width:${U.progress}%"></i></div>` : ""}
-      ${U.msg ? `<p class="small muted" style="margin-top:6px">${esc(U.msg)}</p>` : ""}
+      ${U.msg ? `<p class="small muted" style="margin-top:6px">${esc(U.msg)}</p>` : ""}${U.fail ? browserBtn() : ""}
       <div class="o-label" style="margin-top:18px">Backup</div>
       <div class="o-list" style="margin-top:4px">
         <button class="o-row" data-aact="autoDir"><span class="n">Automatico<small>${autoDir ? esc(autoDir) + " · ultimi " + AUTO_KEEP : "Scegli una cartella del telefono"}</small></span><span class="p">${autoDir ? (autoLast ? esc(when(autoLast)) : "attivo") : "spento"} ›</span></button>
@@ -5920,7 +5923,8 @@ initSync();
     const b = e.target.closest("[data-aact]"); if(!b) return;
     const a = b.dataset.aact;
     if(a === "check") checkNow();
-    else if(a === "install" && U.info && U.info.url){ U.msg = ""; U.progress = 0; render(); A.installUpdate(U.info.url); }
+    else if(a === "install" && U.info && U.info.url){ U.msg = ""; U.fail = false; U.progress = 0; render(); A.installUpdate(U.info.url); }
+    else if(a === "browser"){ const u = (U.info && U.info.page) || RELEASES; if(A.openExternal) A.openExternal(/^https:\/\/github\.com\/NutriEvolution\/TrainUP\//i.test(u) ? u : RELEASES); }
     else if(a === "export") exportBackup();
     else if(a === "import"){ if(confirm("Ripristinare il backup? I dati attuali verranno sostituiti.")) A.openFile(); }
     else if(a === "importOnb") A.openFile();

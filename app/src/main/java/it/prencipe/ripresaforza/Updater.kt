@@ -20,7 +20,8 @@ object Updater {
   private fun urlAmmesso(u: URL, primo: Boolean): Boolean {
     if (u.protocol != "https") return false
     val h = u.host.lowercase()
-    return if (primo) h == "github.com" && u.path.lowercase().startsWith("/${REPO.lowercase()}/releases/download/")
+    return if (primo) (h == "github.com" && u.path.lowercase().startsWith("/${REPO.lowercase()}/releases/download/")) ||
+      (h == "api.github.com" && u.path.lowercase().startsWith("/repos/${REPO.lowercase()}/releases/assets/"))
     else h == "github.com" || h.endsWith(".githubusercontent.com")
   }
 
@@ -60,6 +61,9 @@ object Updater {
     return false
   }
 
+  // Indirizzo dell'APK attraverso le API di GitHub: seconda strada se il link diretto non scarica
+  @Volatile private var apiUrl = ""
+
   fun check(act: MainActivity) = Thread {
     val out = JSONObject()
     try {
@@ -73,12 +77,13 @@ object Updater {
       var url = ""
       if (assets != null) for (i in 0 until assets.length()) {
         val a = assets.getJSONObject(i)
-        if (a.optString("name").endsWith(".apk")) { url = a.optString("browser_download_url"); break }
+        if (a.optString("name").endsWith(".apk")) { url = a.optString("browser_download_url"); apiUrl = a.optString("url"); break }
       }
       out.put("available", url.isNotEmpty() && newer(tag, BuildConfig.VERSION_NAME))
       out.put("version", tag.trimStart('v'))
       out.put("notes", j.optString("body"))
       out.put("url", url)
+      out.put("page", j.optString("html_url"))
       out.put("current", BuildConfig.VERSION_NAME)
     } catch (e: Exception) {
       out.put("available", false); out.put("error", e.message ?: "errore"); out.put("current", BuildConfig.VERSION_NAME)
@@ -97,27 +102,13 @@ object Updater {
       }
       val dir = File(act.cacheDir, "updates").apply { mkdirs(); listFiles()?.forEach { it.delete() } }
       val f = File(dir, "update.apk")
-      var u = URL(url); var c: HttpURLConnection
-      if (!urlAmmesso(u, true)) throw SecurityException("indirizzo non ammesso")
-      var hops = 0
-      while (true) { // segue i redirect di GitHub
-        c = u.openConnection() as HttpURLConnection
-        c.instanceFollowRedirects = false; c.connectTimeout = 15000; c.readTimeout = 30000
-        val code = c.responseCode
-        if (code in 300..399 && hops++ < 5) { u = URL(u, c.getHeaderField("Location")); if (!urlAmmesso(u, false)) throw SecurityException("reindirizzamento non ammesso"); continue }
-        if (code != 200) throw Exception("HTTP $code")
-        break
+      var motivo = ""
+      var ok = false
+      for (start in listOf(url, apiUrl).filter { it.isNotEmpty() }.distinct()) {
+        try { scarica(act, start, f); ok = true; break }
+        catch (e: Exception) { motivo = e.message ?: e.javaClass.simpleName; f.delete() }
       }
-      val total = c.contentLengthLong
-      var done = 0L; var last = -1
-      c.inputStream.use { inp -> f.outputStream().use { o ->
-        val buf = ByteArray(64 * 1024)
-        while (true) {
-          val n = inp.read(buf); if (n < 0) break
-          o.write(buf, 0, n); done += n
-          if (total > 0) { val p = (done * 100 / total).toInt(); if (p != last) { last = p; act.js("window.onUpdateProgress && window.onUpdateProgress($p)") } }
-        }
-      } }
+      if (!ok) { act.js("window.onUpdateProgress && window.onUpdateProgress(-1, ${JSONObject.quote(motivo)})"); return@Thread }
       val errore = apkValido(act, f)
       if (errore != null) { f.delete(); act.js("window.onUpdateRejected && window.onUpdateRejected(${JSONObject.quote(errore)})"); return@Thread }
       val uri = FileProvider.getUriForFile(act, "${act.packageName}.files", f)
@@ -127,7 +118,34 @@ object Updater {
       }
       act.js("window.onUpdateProgress && window.onUpdateProgress(100)")
     } catch (e: Exception) {
-      act.js("window.onUpdateProgress && window.onUpdateProgress(-1)")
+      act.js("window.onUpdateProgress && window.onUpdateProgress(-1, ${JSONObject.quote("installazione: " + (e.message ?: e.javaClass.simpleName))})")
     }
   }.start()
+
+  private fun scarica(act: MainActivity, start: String, f: File) {
+    var u = URL(start); var c: HttpURLConnection
+    if (!urlAmmesso(u, true)) throw SecurityException("indirizzo non ammesso: ${u.host}")
+    var hops = 0
+    while (true) { // segue i redirect di GitHub
+      c = u.openConnection() as HttpURLConnection
+      c.instanceFollowRedirects = false; c.connectTimeout = 20000; c.readTimeout = 60000
+      c.setRequestProperty("User-Agent", "TrainUP-Android")
+      if (u.host == "api.github.com") c.setRequestProperty("Accept", "application/octet-stream")
+      val code = c.responseCode
+      if (code in 300..399 && hops++ < 5) { u = URL(u, c.getHeaderField("Location")); if (!urlAmmesso(u, false)) throw SecurityException("reindirizzamento non ammesso: ${u.host}"); continue }
+      if (code != 200) throw Exception("HTTP $code da ${u.host}")
+      break
+    }
+    val total = c.contentLengthLong
+    var done = 0L; var last = -1
+    c.inputStream.use { inp -> f.outputStream().use { o ->
+      val buf = ByteArray(64 * 1024)
+      while (true) {
+        val n = inp.read(buf); if (n < 0) break
+        o.write(buf, 0, n); done += n
+        if (total > 0) { val p = minOf(99, (done * 100 / total).toInt()); if (p != last) { last = p; act.js("window.onUpdateProgress && window.onUpdateProgress($p)") } }
+      }
+    } }
+    if (total > 0 && done != total) throw Exception("file incompleto ($done di $total byte)")
+  }
 }
