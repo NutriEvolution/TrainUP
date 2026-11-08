@@ -35,10 +35,13 @@
     const rn = $("#runner");
     if(rn && !rn.hidden){ act("exitRunner", {}, null); return true; }
     if(view === "impostazioni"){ view = setPrev || "oggi"; render(); window.scrollTo(0,0); return true; }
-    if(view === "guida" || view === "timer"){ view = "altro"; render(); window.scrollTo(0,0); return true; }
+    if(view === "guida" || view === "piani"){ view = "impostazioni"; render(); window.scrollTo(0,0); return true; }
+    if(view === "timer"){ view = "oggi"; render(); window.scrollTo(0,0); return true; }
+    if(view === "seduta"){ act("closeSeduta", {}, null); return true; }
+    if(view === "crea"){ act("creaBack", {}, null); return true; }
     if(["regione","piede","testa"].includes(view)){ view = "postura"; render(); window.scrollTo(0,0); return true; }
     if(view === "schiena"){ if(BA && BA.step > 0){ BA.step--; render(); } else { BA = null; view = "postura"; render(); } window.scrollTo(0,0); return true; }
-    if(view === "piano" && planOpen){ planOpen = null; render(); window.scrollTo(0,0); return true; }
+    if(view === "piano" && planOpen){ act("closePlan", {}, null); return true; }
     if(view !== "oggi"){ view = "oggi"; planOpen = null; weekDraft = null; render(); window.scrollTo(0,0); return true; }
     return false;
   };
