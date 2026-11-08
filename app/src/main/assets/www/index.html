@@ -203,6 +203,7 @@ p{margin:0}
 .wz-days button{flex:1;height:44px;border-radius:22px;border:1px solid var(--line);background:var(--surface);font:inherit;font-weight:700;color:var(--ink);cursor:pointer}
 .wz-days button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .wz-plan .o-stats{border-top:1px solid var(--line);padding-top:12px;margin-top:14px}
+.wk-in{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
 .wz-foot{margin-top:auto;padding-top:20px;display:flex;flex-direction:column;gap:6px}
 /* segmenti */
 .seg{display:flex;background:var(--surface2);border-radius:12px;padding:3px;gap:2px}
@@ -2245,9 +2246,9 @@ function renderPiano(){
     if(f) return f();
     planOpen = null;
   }
-  return (genOn() ? myPlanHtml().replace('o-sec first', 'o-sec first') : "") + weekPlannerHtml().replace('o-sec first', genOn() ? 'o-sec' : 'o-sec first') + calHtml() + plansListHtml();
+  return (genOn() ? myPlanHtml() : weekPlannerHtml()) + calHtml() + plansListHtml();
 }
-function planDaysRow(days){ return `<button class="o-row" data-act="goWeek"><span class="n">Giorni: ${days.slice().sort((a,b) => a-b).map(i => DOW_N[i]).join(", ")}<small>Si cambiano in Piano → La mia settimana</small></span><span class="p">›</span></button>`; }
+function planDaysRow(days){ return `<button class="o-row" data-act="goWeek"><span class="n">Giorni: ${days.slice().sort((a,b) => a-b).map(i => DOW_N[i]).join(", ")}<small>Si cambiano in Piano</small></span><span class="p">›</span></button>`; }
 function openDay(ds){
   const t = todayStr();
   const done = sessionOn(ds), pl = !!S.planned[ds], po = postureOn(ds);
@@ -2833,7 +2834,7 @@ function renderGenProgramma(){
       <p class="tiny muted" style="margin-top:6px">RPE = sforzo da 1 a 10: RPE 7 vuol dire che te ne restavano circa 3. Durate scelte dall'app dentro gli intervalli del libro (volume 6-12 settimane, carico 4-8, picco 2-4). Helms e colleghi, tabelle 7.11-7.13.</p>` : ""}
     ${st ? `<p class="small" style="margin-top:8px">Cosa aspettarti nella fase di volume: ${GEN_E1RM[S.settings.level || "ripresa"]} (pp. 117-118).</p>` + genMockHtml() : ""}
     ${gd.length < 2 ? `<p class="small" style="color:var(--warn)">Il libro indica almeno 2 sedute a settimana: con meno giorni l'app usa 2 sedute a corpo intero.</p>` : ""}
-    <div class="o-list">${gd.length ? planDaysRow(gd) : `<button class="o-row" data-act="goWeek"><span class="n">Nessun giorno scelto<small>Sceglili in Piano → La mia settimana</small></span><span class="p">›</span></button>`}</div></div>`;
+    <div class="o-list">${gd.length ? planDaysRow(gd) : `<button class="o-row" data-act="goWeek"><span class="n">Nessun giorno scelto<small>Sceglili in Piano</small></span><span class="p">›</span></button>`}</div></div>`;
   h += genLevelHtml();
   h += genSplitHtml(n, st ? st.sec : V) + (st ? "" : genSpecHtml(V));
   h += `<div class="o-sec"><div class="o-label">Tempo e volume</div><div class="o-seg" style="margin-top:8px">${GEN_VOL.map(([v, l]) => `<button class="${V === v ? "on" : ""}" data-act="genVol" data-v="${v}" ${allowed.some(a => a[0] === v) ? "" : "disabled"}>${l}</button>`).join("")}</div>
@@ -2861,7 +2862,7 @@ function renderFsProgramma(){
     <p class="small" style="margin-top:10px">Adesso: <b>${esc(posLabel(pos))}</b>. Ogni allenamento completato fa passare alla seduta successiva, qualunque sia il giorno.</p>
     ${noBar ? `<div class="hint warn small">Servono bilanciere, rack e panca: a casa senza questi attrezzi gli esercizi verrebbero sostituiti e i pesi del programma non avrebbero senso.</div>` : ""}
     ${gd.length !== 4 ? `<p class="small" style="color:var(--warn)">Il programma del libro è su 4 giorni (lunedì, martedì, giovedì, venerdì)${gd.length ? `; tu ne hai ${gd.length}: le 4 sedute si susseguono comunque in ordine, quindi una settimana del programma dura ${gd.length > 4 ? "meno" : "più"} di 7 giorni` : ""}.</p>` : ""}
-    <div class="o-list">${gd.length ? planDaysRow(gd) : `<button class="o-row" data-act="goWeek"><span class="n">Nessun giorno scelto<small>Sceglili in Piano → La mia settimana</small></span><span class="p">›</span></button>`}</div></div>`;
+    <div class="o-list">${gd.length ? planDaysRow(gd) : `<button class="o-row" data-act="goWeek"><span class="n">Nessun giorno scelto<small>Sceglili in Piano</small></span><span class="p">›</span></button>`}</div></div>`;
   h += `<div class="o-sec"><div class="o-label">Alzate</div><div class="o-list">${[leg, "panca", "stacco"].map(l => { const st = fsState(l, c);
     return `<div class="o-row" style="cursor:default"><span class="n">${esc(EX[l].n)}<small>${l === "stacco" ? "5×5" : phN(st)}${st.rm ? " · massimale " + fmtKg(st.rm.kg) + " kg (" + esc(st.rm.why) + ")" : " · massimale non noto"}</small></span><span class="p num">${st.kg != null ? fmtKg(st.kg) + " kg" : "—"}</span></div>`; }).join("")}</div>
     <p class="tiny muted" style="margin-top:6px">A destra il peso del prossimo "schema".</p></div>`;
@@ -2897,7 +2898,7 @@ function renderPalestraProgramma(){
     <div class="o-stats"><div><b>${pos.week}</b><span>settimana di ${WEEKS}</span></div><div><b>${pos.slot+1}/${slotsInWeek(pos.week, s)}</b><span>seduta</span></div><div><b>${gd.length || "—"}</b><span>giorni</span></div></div>
     <p class="small" style="margin-top:10px">Adesso: <b>${esc(posLabel(pos))}</b>. Ogni allenamento completato fa passare alla seduta successiva, qualunque sia il giorno: se salti un giorno non perdi niente.</p>
     <p class="tiny muted">Più di 2 settimane di stop: ripeti la settimana precedente. Più di 5 settimane: si riparte dalla Fase 1, settimana 3. Dopo la settimana 19 riparte la Fase 2 con un nuovo ciclo.</p>
-    <div class="o-list">${gd.length ? planDaysRow(gd) : `<button class="o-row" data-act="goWeek"><span class="n">Nessun giorno scelto<small>Sceglili in Piano → La mia settimana</small></span><span class="p">›</span></button>`}</div></div>`;
+    <div class="o-list">${gd.length ? planDaysRow(gd) : `<button class="o-row" data-act="goWeek"><span class="n">Nessun giorno scelto<small>Sceglili in Piano</small></span><span class="p">›</span></button>`}</div></div>`;
   h += `<div class="o-sec"><div class="o-label">Opzioni</div>${coreSwitchHtml()}
     <div class="o-list"><button class="o-row" data-act="openLevel"><span class="n">Livello<small>${esc(LEVELS[s.level || "ripresa"].n) + (s.level === "allenato" ? (s.startFrom === "f3" ? " · parti dalla Fase 3" : " · parti dalla Fase 2") : "")}</small></span><span class="p">›</span></button></div>
     <div class="field" style="margin-top:10px"><label for="setLeg">Esercizio principale per le gambe</label>
@@ -3762,16 +3763,18 @@ function myPlanHtml(){ // in Piano: il programma su misura come si vede e si mod
   const cw = genCurWeek(), wk = genWeek(false, cw), vol = genVolume(wk), types = genSplit(genDays()), n = genEditCount(), gd = gymWeekDays();
   GEN_NOED = true; let vol0; try{ vol0 = genVolume(genWeek(false, cw)); } finally { GEN_NOED = false; }
   const goal = genGoal(), st = goal === "massa" ? null : genStrength(cw);
-  let h = `<div class="o-sec first"><div class="o-head"><span class="o-label">Il tuo piano</span>${n ? `<span class="tag ed">${n === 1 ? "1 modifica tua" : n + " modifiche tue"}</span>` : ""}</div>
+  const wkEdit = wkOpen || !!weekDraft;
+  let h = `<div class="o-sec first"><div class="o-head"><span class="o-label">Il tuo piano</span>${n ? `<span class="tag ed">${n === 1 ? "1 modifica tua" : n + " modifiche tue"}</span>` : ""}<button class="rn-link" data-act="wkOpen">${wkEdit ? "Chiudi" : "Cambia i giorni"}</button></div>
     <p class="o-sub">Su misura, ${esc(GEN_GOALS.find(g => g[0] === goal)[1].toLowerCase())}${st ? `, ${esc(GEN_PH[st.ph.k].toLowerCase())} ${st.ph.i} di ${st.ph.n}` : ""}. Tocca una seduta per cambiarla.</p>
-    ${gd.length ? weekStitchHtml(genWeekCells(wk, gd, types), "openSeduta") : `<div class="o-list">${wk.map((x, i) => `<button class="o-row" data-act="openSeduta" data-v="${i}"><span class="n">Seduta ${x.code} · ${esc(x.title)}</span><span class="p">›</span></button>`).join("")}</div>`}</div>`;
+    ${gd.length ? weekStitchHtml(genWeekCells(wk, gd, types), "openSeduta") : `<div class="o-list">${wk.map((x, i) => `<button class="o-row" data-act="openSeduta" data-v="${i}"><span class="n">Seduta ${x.code} · ${esc(x.title)}</span><span class="p">›</span></button>`).join("")}</div>`}
+    ${wkEdit ? weekPlannerHtml().replace('<div class="o-sec first" id="settimana">', '<div class="wk-in" id="settimana">').replace(/<span class="o-label">La mia settimana<\/span>/, '<span class="small muted">Giorni di tutti gli sport</span>') : ""}</div>`;
   h += `<div class="o-sec"><div class="o-head"><span class="o-label">Serie a settimana per muscolo</span><span class="r">${goal === "massa" ? "fascia del libro" : "proposta della fase"}</span></div>
     <div class="o-list tapes">${Object.keys(GEN_MUS).map(m => tapeHtml(m, vol[m], genBand(m), vol0[m])).join("")}<div class="scale"><span>0</span><span>6</span><span>12</span><span>18</span><span>24</span></div></div>
     <p class="tiny muted" style="margin-top:6px">${goal === "massa" ? "La fascia verde è l'intervallo del libro per il volume scelto (tabella 7.4)" : "Il segno verde è il volume dei complementari proposto per questa fase (tabelle 7.11-7.13)"}; le serie dei muscoli aiutati contano a metà (tabella 7.17). In arancione solo i muscoli che le tue modifiche hanno portato fuori dalla fascia.</p></div>`;
   if(n) h += `<div class="o-sec" style="padding-top:0"><button class="btn ghost sm" data-act="genEdResetAll" style="color:var(--danger);padding-left:0">Ripristina tutte le sedute proposte</button></div>`;
   return h;
 }
-let sedSlot = 0, sedEx = null, sedAddM = null;
+let sedSlot = 0, sedEx = null, sedAddM = null, wkOpen = false;
 function sedCtx(){ const cw = genCurWeek(), wk = genWeek(false, cw), types = genSplit(genDays()), i = Math.min(sedSlot, wk.length - 1); return {cw, wk, types, i, x:wk[i], key:genEdKey(types, i)}; }
 function sedRx(it){ const p = it.p; return `${p.sets} × ${p.rmin === p.rmax ? p.rmin : p.rmin + "-" + p.rmax}${p.buf ? " · " + p.buf + " in canna" : ""} · ${restShort(p)}`; }
 function sedFinal(code, ex){ return (S.settings.swaps || {})[slotKey("gen", code, ex)] || ex; }
@@ -3819,10 +3822,11 @@ function sedAddHtml(){
     <div class="o-list">${GEN_ADD[m].concat(mine).filter(k => EX[k]).map(k => `<button class="o-row" data-act="sedAddEx" data-v="${k}" data-m="${m}" ${have.has(k) ? "disabled" : ""}><span class="dot" style="background:${grp(k).c}"></span><span class="n">${esc(EX[k].n)}<small>${have.has(k) ? "già nella seduta" : esc(GEN_TY_N[genTy(k)])}</small></span><span class="p">+</span></button>`).join("")}</div>
     <p class="tiny muted">Parte con 3 serie, ripetizioni e margine del libro per il suo tipo (tabella 7.7); poi li cambi toccandolo.</p></div>`;
 }
-const SED_ACTS = new Set(["openSeduta","closeSeduta","sedEx","sedAdd","sedAddM","sedAddEx","sedDel","sedMove","sedReset","genEdResetAll","sedSet"]);
+const SED_ACTS = new Set(["wkOpen","openSeduta","closeSeduta","sedEx","sedAdd","sedAddM","sedAddEx","sedDel","sedMove","sedReset","genEdResetAll","sedSet"]);
 function sedAct(a, d){
   if(!SED_ACTS.has(a)) return false;
   const c = sedCtx();
+  if(a === "wkOpen"){ wkOpen = !(wkOpen || weekDraft); if(!wkOpen) weekDraft = null; render(); return true; }
   if(a === "openSeduta"){ sedSlot = Number(d.v); view = "seduta"; render(); window.scrollTo(0,0); return true; }
   if(a === "closeSeduta"){ view = "piano"; render(); window.scrollTo(0,0); return true; }
   if(a === "sedEx"){ sedEx = d.v; showSheet(sedExHtml()); return true; }
@@ -5067,7 +5071,7 @@ function runSetupSheet(){
   if(P.race && d.raceDate){ const st = (() => { const x = parseYmd(mondayStr(d.raceDate)); x.setDate(x.getDate() - 7*(P.weeks.length-1)); return ymd(x); })(); const w = Math.floor(daysBetween(st, t)/7); startInfo = st > t ? `Il piano parte ${fmtDate(st)}.` : w >= P.weeks.length ? "La data è già passata." : `Mancano ${P.weeks.length - w} settimane: il piano parte dalla settimana ${w+1}.`; }
   return `<div class="grab"></div><div class="stack"><div class="row between"><h2>${esc(P.n)}</h2><button class="btn icon ghost" data-act="runPlans" aria-label="Indietro">‹</button></div>
     <p class="small muted">${esc(P.d)}</p>
-    <p class="small">${P.days.join(" o ")} giorni a settimana. Proposta: <b>${d.days.slice().sort((x, y) => x-y).map(i => DOW_N[i]).join(", ")}</b>; si cambiano in Piano → La mia settimana. Le sedute più dure vanno lontane tra loro e il lungo nell'ultimo giorno.</p>
+    <p class="small">${P.days.join(" o ")} giorni a settimana. Proposta: <b>${d.days.slice().sort((x, y) => x-y).map(i => DOW_N[i]).join(", ")}</b>; si cambiano in Piano. Le sedute più dure vanno lontane tra loro e il lungo nell'ultimo giorno.</p>
     ${P.race ? `<label class="bf-in"><span>Data della gara (facoltativa)</span><span class="bf-f"><input type="date" id="rsRace" value="${esc(d.raceDate || "")}"></span></label>${startInfo ? `<p class="tiny muted">${esc(startInfo)}</p>` : ""}` : ""}
     ${!(P.race && d.raceDate) ? `<div><div class="o-label" style="margin-bottom:6px">Inizio</div><div class="o-seg">${[[thisMon,"Questa settimana"],[nextMon,"Lunedì prossimo"]].map(([v, l]) => `<button class="${d.start === v ? "on" : ""}" data-act="runStartWk" data-v="${v}">${l}</button>`).join("")}</div></div>` : ""}
     <button class="btn primary big" data-act="runConfirm" ${ok ? "" : "disabled"}>Usa questo piano</button></div>`;
@@ -5293,7 +5297,7 @@ function vbSetupSheet(){
     <p class="small muted">10 settimane di salti (pliometria) e agilità per la pallavolo, da fare oltre agli allenamenti di squadra o alla palestra.</p>
     <div><div class="o-label" style="margin-bottom:6px">Esperienza con i salti</div><div class="o-seg">${Object.entries(VB_LV).map(([k, x]) => `<button class="${d.level === k ? "on" : ""}" data-act="vbLv" data-v="${k}">${x.n}</button>`).join("")}</div><p class="tiny muted">${esc(VB_LV[d.level].d)}.${d.level === "principiante" ? " Niente salti ad alta intensità: al loro posto le versioni medie." : ""}</p></div>
     <div><div class="o-label" style="margin-bottom:6px">Periodo</div><div class="o-seg">${[[false,"Fuori stagione"],[true,"In stagione"]].map(([v, l]) => `<button class="${!!d.season === v ? "on" : ""}" data-act="vbSeason" data-v="${v ? 1 : 0}">${l}</button>`).join("")}</div><p class="tiny muted">${d.season ? "Con le partite: una seduta a settimana (NSCA, esempio del football americano in stagione)." : "Senza partite: due sedute a settimana."}</p></div>
-    <p class="small">${d.season ? "Una seduta" : "Due sedute"} a settimana, con 48-72 ore in mezzo. I giorni si scelgono in Piano → La mia settimana.</p>
+    <p class="small">${d.season ? "Una seduta" : "Due sedute"} a settimana, con 48-72 ore in mezzo. I giorni si scelgono in Piano.</p>
     <label class="switch"><input type="checkbox" id="vbBall" ${d.ball !== false ? "checked" : ""}><span><b>Ho una palla medica</b><br><span class="small muted">Per i lanci a fine seduta (1-3 kg)</span></span></label>
     ${(() => { const w = latestWeight(); return w && w > 100 ? `<div class="hint warn small">Sopra i 100 kg il manuale sconsiglia volumi alti e salti ad alta intensità: il programma usa le versioni medie.</div>` : ""; })()}
     <div class="hint small">Prima di iniziare: devi stare 30 secondi su una gamba senza perdere l'equilibrio, e negli atterraggi le ginocchia non devono cadere verso l'interno.</div>
@@ -5475,7 +5479,7 @@ function bkSetupSheet(){
     <div class="bf-grid">${d.power ? `<label class="bf-in"><span>FTP, se la conosci</span><span class="bf-f"><input type="text" inputmode="numeric" id="bkFtp" value="${d.ftp || ""}"><em>W</em></span></label>` : ""}
       <label class="bf-in"><span>FC di soglia, se la conosci</span><span class="bf-f"><input type="text" inputmode="numeric" id="bkFthr" value="${d.fthr || ""}"><em>bpm</em></span></label></div>
     <p class="tiny muted">Se non le conosci, nella settimana 5 c'è il test e i valori si aggiornano da soli; fino ad allora le sedute si fanno a fatica percepita.</p>
-    <p class="small">Da 3 a 5 uscite a settimana: i giorni si scelgono in Piano → La mia settimana.</p>
+    <p class="small">Da 3 a 5 uscite a settimana: i giorni si scelgono in Piano.</p>
     <button class="btn primary big" data-act="bkConfirm">Inizia ${dowOf(todayStr()) <= 1 ? "questa settimana" : "lunedì prossimo"}</button></div>`;
 }
 function bkZonesSvg(){ // grafico dei livelli dalla Tabella 3.1
@@ -5689,12 +5693,12 @@ function act(a, d, e){
     case "dlAns": { const b = document.querySelectorAll("#sheet [data-dl]"); const yes = [...b].filter(x => x.checked).length; $("#dlOut").innerHTML = yes >= 2 ? `<b>Sì a ${yes} domande:</b> il libro suggerisce di valutare una settimana di scarico: se la fai, attiva l'interruttore "Settimana di scarico" nelle sedute di questa settimana.` : `<b>Sì a ${yes} ${yes === 1 ? "domanda" : "domande"}:</b> vai avanti normalmente.`; break; }
     case "openPlan": planFrom = view === "piani" ? "piani" : null; planOpen = d.v; view = "piano"; render(); window.scrollTo(0,0); break;
     case "closePlan": planOpen = null; if(planFrom){ view = planSports().length > 1 ? "piani" : "impostazioni"; planFrom = null; } render(); window.scrollTo(0,0); break;
-    case "goWeek": closeSheet(); view = "piano"; planOpen = null; render(); window.scrollTo(0,0); break;
+    case "goWeek": closeSheet(); view = "piano"; planOpen = null; wkOpen = true; render(); window.scrollTo(0,0); break;
     case "wkTog": { if(!weekDraft) weekDraft = JSON.parse(JSON.stringify(weekSaved())); const v = Number(d.v); let a = weekDraft[d.k]; a = a.includes(v) ? a.filter(x => x !== v) : a.concat([v]); if(d.k === "vb"){ const max = vbCfg().season ? 1 : 2; if(a.length > max) a = a.slice(-max); } weekDraft[d.k] = a; render(); break; }
     case "setPrio": S.settings.combo = {...(S.settings.combo || {}), priority:d.v}; weekDraft = null; pushMeta(); render(); break;
     case "wkPropose": { if(!weekDraft) weekDraft = JSON.parse(JSON.stringify(weekSaved())); const P = RUN_PLANS[runCfg().plan]; const g = weekDraft.priority === "corsa" ? 2 : 3; let r = weekDraft.run.length || 3; r = Math.min(Math.max(r, P.days[0]), P.days[P.days.length-1]); if(weekDraft.priority === "palestra" && P.days[0] <= 3) r = Math.min(r, 3); const x = comboPropose(g, r, weekDraft.priority); weekDraft.gym = x.gymDays; weekDraft.run = x.runDays; render(); break; }
     case "wkCancel": weekDraft = null; render(); break;
-    case "wkSave": if(!weekDraft) weekDraft = JSON.parse(JSON.stringify(weekSaved())); if(weekErrors(weekDraft).length) break; weekSave(); render(); break;
+    case "wkSave": if(!weekDraft) weekDraft = JSON.parse(JSON.stringify(weekSaved())); if(weekErrors(weekDraft).length) break; weekSave(); wkOpen = false; render(); break;
     case "goSwaps": planOpen = "palestra"; view = "piano"; render(); setTimeout(() => { const el = $("#cambiati"); if(el) el.scrollIntoView({behavior:"smooth", block:"start"}); }, 50); break;
     case "vbSetup": { const c = vbCfg() || {}; vbDraft = {level:c.level || "principiante", season:!!c.season, days:(c.days || [1,4]).slice(), ball:c.ball}; showSheet(vbSetupSheet()); break; }
     case "vbLv": vbDraft.level = d.v; vbDraft.ball = $("#vbBall").checked; showSheet(vbSetupSheet()); break;

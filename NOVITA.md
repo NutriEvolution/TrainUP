@@ -1,3 +1,6 @@
+Novità della 2.4.2
+- Piano: «La mia settimana» non è più ripetuta sotto «Il tuo piano»; i giorni si cambiano da «Cambia i giorni»
+
 Novità della 2.4.1
 - Aggiornamenti: se il download diretto non riesce l'app riprova da un secondo indirizzo di GitHub, mostra il motivo dell'errore e offre «Scarica dal browser»
 
