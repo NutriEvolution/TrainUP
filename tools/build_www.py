@@ -14,8 +14,7 @@ fonts = """<style>
 @font-face{font-family:"Karla";src:url("fonts/karla-latin-500-normal.woff2") format("woff2");font-weight:500;font-display:swap}
 @font-face{font-family:"Karla";src:url("fonts/karla-latin-600-normal.woff2") format("woff2");font-weight:600;font-display:swap}
 @font-face{font-family:"Karla";src:url("fonts/karla-latin-700-normal.woff2") format("woff2");font-weight:700;font-display:swap}
-@font-face{font-family:"Fraunces";src:url("fonts/fraunces-latin-500-normal.woff2") format("woff2");font-weight:500;font-display:swap}
-@font-face{font-family:"Fraunces";src:url("fonts/fraunces-latin-600-normal.woff2") format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Archivo";src:url("fonts/archivo-latin-wdth-normal.woff2") format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
 </style>
 """
 i = src.index('<div id="app">')

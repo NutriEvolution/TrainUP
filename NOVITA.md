@@ -1,3 +1,10 @@
+Novità della 2.5.0
+- Nuovo aspetto: carattere sportivo per titoli e numeri, verde più acceso, tema scuro e chiaro. In Impostazioni → Aspetto scegli chiaro, scuro o come il telefono
+- Oggi: la settimana in alto, la seduta in un riquadro compatto, i numeri della settimana. Toccando Inizia scegli riscaldamento, parte posturale, allungamento e scarico solo per quella seduta
+- Allenamento: tutte le serie dell'esercizio in una tabella con accanto la volta scorsa; il recupero è una barra in basso; «Scaletta» per cambiare l'ordine degli esercizi
+- Fine seduta: durata, serie, kg sollevati, record del giorno, serie per muscolo e «Com'è andata?»
+- Progressi: settimane di fila e calendario del mese. Corpo: un riquadro per ogni zona con il livello. Scheda dell'esercizio con ultimo peso, massimale stimato e grafico
+
 Novità della 2.4.2
 - Piano: «La mia settimana» non è più ripetuta sotto «Il tuo piano»; i giorni si cambiano da «Cambia i giorni»
 

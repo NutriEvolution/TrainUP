@@ -215,6 +215,21 @@ class MainActivity : ComponentActivity() {
 
     @JavascriptInterface fun installUpdate(url: String) { Updater.download(this@MainActivity, url) }
 
+    // Barre di sistema del colore del tema scelto nell'app (chiaro, scuro o come il telefono)
+    @JavascriptInterface fun setBars(dark: Boolean) = runOnUiThread {
+      try {
+        val c = android.graphics.Color.parseColor(if (dark) "#0F1513" else "#F2F4F3")
+        window.statusBarColor = c; window.navigationBarColor = c
+        window.decorView.setBackgroundColor(c)
+        @Suppress("DEPRECATION")
+        run {
+          var f = window.decorView.systemUiVisibility
+          val light = android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or (if (android.os.Build.VERSION.SDK_INT >= 26) android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR else 0)
+          f = if (dark) f and light.inv() else f or light
+          window.decorView.systemUiVisibility = f
+        }
+      } catch (_: Exception) {}
+    }
     @JavascriptInterface fun openExternal(url: String) = runOnUiThread { this@MainActivity.openExternal(url) }
 
     @JavascriptInterface fun mediaList(ex: String): String = Media.list(this@MainActivity, ex)
