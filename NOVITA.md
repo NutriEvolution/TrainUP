@@ -1,3 +1,7 @@
+Novità della 2.5.2
+- Impostazioni divise in sezioni che si aprono una alla volta: Profilo, Sport e luoghi, Durante l'allenamento, Aspetto, Aggiornamenti e backup
+- Piano: «Cambia i giorni» è ora un pulsante sotto la settimana, sempre visibile
+
 Novità della 2.5.1
 - Meno calendari doppi: tolti «Prossimi giorni» da Oggi (resta la settimana in alto; nei giorni di riposo una riga con il prossimo allenamento) e il calendario del mese da Progressi (resta quello in Piano)
 

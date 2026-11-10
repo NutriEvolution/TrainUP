@@ -498,7 +498,7 @@ details.wk[open] summary::after{transform:rotate(-135deg)}
 .hbtn{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;margin-left:8px;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--muted);font:700 11.5px/1 inherit;letter-spacing:0;vertical-align:1px;cursor:pointer;padding:0}
 .hx-open .hbtn{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .o-sec:not(.hx-open) .xh{display:none}
-.o-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.o-head{display:flex;align-items:baseline;justify-content:space-between;gap:6px 10px;flex-wrap:wrap}
 .o-head .r{font-size:13px;color:var(--muted)}
 .o-hello h1{font-size:30px;line-height:1.12;margin-top:6px}
 .o-today{display:flex;gap:16px;align-items:flex-start;margin-top:12px}
@@ -2041,10 +2041,11 @@ function render(){
   if(view === "altro") view = "impostazioni";
   extendGym();
   const body = {oggi:renderOggi, piano:renderPiano, progressi:renderProgressi, guida:renderGuida, impostazioni:renderImpostazioni, schiena:renderSchiena, regione:renderRegione, piede:renderPiede, postura:renderPostura, timer:renderTimer, testa:renderTesta, piani:renderPiani, crea:renderCrea, seduta:renderSeduta}[view]();
-  const title = {impostazioni:"Impostazioni", piani:"I miei piani", crea:"", seduta:"", schiena:"Schiena", regione:REG[RK].r[0].toUpperCase() + REG[RK].r.slice(1), piede:"Piede", guida:"Guida", timer:"Timer", testa:"Testa di profilo"}[view] || (view === "piano" && planOpen ? PLAN_N[planOpen] : (TABS.find(t => t[0] === view) || [0, ""])[1]);
-  const backAct = {impostazioni:"closeSettings", schiena:"backClose", regione:"regClose", piede:"fpClose", guida:"backSettings", piani:"backSettings", timer:"goOggi", seduta:"closeSeduta", crea:"creaBack"}[view] || (view === "piano" && planOpen ? "closePlan" : "");
+  if(view !== "impostazioni") setSub = null;
+  const title = {impostazioni:setSub ? SET_SUBS[setSub] : "Impostazioni", piani:"I miei piani", crea:"", seduta:"", schiena:"Schiena", regione:REG[RK].r[0].toUpperCase() + REG[RK].r.slice(1), piede:"Piede", guida:"Guida", timer:"Timer", testa:"Testa di profilo"}[view] || (view === "piano" && planOpen ? PLAN_N[planOpen] : (TABS.find(t => t[0] === view) || [0, ""])[1]);
+  const backAct = {impostazioni:setSub ? "setSubClose" : "closeSettings", schiena:"backClose", regione:"regClose", piede:"fpClose", guida:"backSettings", piani:"backSettings", timer:"goOggi", seduta:"closeSeduta", crea:"creaBack"}[view] || (view === "piano" && planOpen ? "closePlan" : "");
   const navOn = TAB_OF[view] || view;
-  const back = backAct ? `<button class="btn ghost sm" data-act="${backAct}" style="padding-left:0;margin-bottom:-6px">‹ ${backAct === "closePlan" ? (planFrom ? "I miei piani" : "Piano") : backAct === "backSettings" ? "Impostazioni" : backAct === "goOggi" ? "Oggi" : backAct === "closeSeduta" ? "Il tuo piano" : ["backClose","regClose","fpClose"].includes(backAct) ? "Corpo" : "Indietro"}</button>` : "";
+  const back = backAct ? `<button class="btn ghost sm" data-act="${backAct}" style="padding-left:0;margin-bottom:-6px">‹ ${backAct === "closePlan" ? (planFrom ? "I miei piani" : "Piano") : backAct === "backSettings" || backAct === "setSubClose" ? "Impostazioni" : backAct === "goOggi" ? "Oggi" : backAct === "closeSeduta" ? "Il tuo piano" : ["backClose","regClose","fpClose"].includes(backAct) ? "Corpo" : "Indietro"}</button>` : "";
   $("#app").innerHTML = `<div class="wrap"><header class="top"><div class="brand">${svgI.omino.replace("<svg ", '<svg class="om" ')}<span>TrainUP</span></div><button class="avbtn" data-act="openSettings" aria-label="Impostazioni">${avatarHtml()}</button><span hidden><span id="syncDot" class="dot"></span><span id="syncTxt"></span></span></header>${view === "oggi" ? "" : back + (title ? `<h1 class="ltitle">${esc(title)}</h1>` : "")}${body}</div>
   ${view === "crea" ? "" : `<nav class="nav" aria-label="Sezioni">${TABS.map(([v,l]) => `<button data-nav="${v}" ${navOn===v ? 'aria-current="page"' : ""}>${svgI[v]}<span>${l}</span></button>`).join("")}</nav>`}`;
   setSync(sync.state);
@@ -3251,30 +3252,49 @@ function renderFonti(){
 
 /* ============ Impostazioni ============ */
 let setPrev = "oggi";
+// Impostazioni a due livelli: la pagina principale elenca le sezioni, ognuna si apre da sola
+let setSub = null;
+const SET_SUBS = {profilo:"Profilo", sport:"Sport e luoghi", allenamento:"Durante l'allenamento", aspetto:"Aspetto", dati:"Aggiornamenti e backup"};
 function renderImpostazioni(){
   const s = S.settings, p = S.profile || {}, a = ageNow(), acts = s.activities || ["palestra"];
   const row = (act, n, sub, extra="") => `<button class="o-row" data-act="${act}" ${extra}><span class="n">${n}<small>${sub}</small></span><span class="p">›</span></button>`;
   const sw = (key, n, sub, on) => `<label class="switch"><input type="checkbox" data-set="${key}" ${on ? "checked" : ""}><span><b>${n}</b><br><span class="small muted">${sub}</span></span></label>`;
   let h = "";
-  const PL = planSports(), pnames = PL.map(k => PLAN_N[k].toLowerCase()).join(", ");
-  h += `<div class="o-sec first me">${avatarHtml(true)}<div><b>${esc(s.name || "Il tuo profilo")}</b><span class="small muted">${esc([p.sex === "F" ? "donna" : p.sex === "M" ? "uomo" : "", a ? a + " anni" : "", p.height ? p.height + " cm" : ""].filter(Boolean).join(", ") || "Aggiungi nome, età e altezza qui sotto")}</span></div></div>`;
-  h += `<div class="o-sec"><div class="o-list">${PL.length ? row("goPiani", PL.length > 1 ? "I miei piani" : "Il mio piano", esc(pnames.replace(/^./, c => c.toUpperCase()))) : ""}
-    ${gymOn() ? row("creaStart", "Crea il piano da capo", "Obiettivo, settimana, priorità") : ""}</div></div>`;
-  h += `<div class="o-sec"><div class="o-label">Tu</div>
+  if(setSub === "profilo"){
+  h += `<div class="o-sec first">
     <div class="field" style="margin-top:10px"><label for="setName">Nome (per il saluto nella home)</label><input id="setName" type="text" data-set="name" value="${esc(s.name || "")}" placeholder="Facoltativo" autocomplete="given-name"></div>
     <div class="o-list">${row("editProfile", "Profilo", esc([p.sex === "F" ? "donna" : p.sex === "M" ? "uomo" : "", a ? a + " anni" : "", p.height ? p.height + " cm" : ""].filter(Boolean).join(" · ") || "sesso, età, altezza"))}</div></div>`;
-  h += `<div class="o-sec"><div class="o-label">Cosa pratichi</div><div class="o-list">${ACTIVITIES.filter(([k]) => k !== "combinato").map(([k, l]) => `<label class="switch"><input type="checkbox" data-actv="${k}" ${acts.includes(k) ? "checked" : ""}><span><b>${l}</b></span></label>`).join("")}</div>
+    return h; }
+  if(setSub === "sport"){
+  h += `<div class="o-sec first"><div class="o-label">Cosa pratichi</div><div class="o-list">${ACTIVITIES.filter(([k]) => k !== "combinato").map(([k, l]) => `<label class="switch"><input type="checkbox" data-actv="${k}" ${acts.includes(k) ? "checked" : ""}><span><b>${l}</b></span></label>`).join("")}</div>
     <p class="tiny muted" style="margin-top:6px">Togliere un'attività la nasconde da Oggi e da Piano; piani e storico restano. Giorni e opzioni dei piani sono in Piano.</p></div>`;
   if(gymOn()) h += `<div class="o-sec"><div class="o-label">Dove ti alleni</div><div class="o-seg" style="margin-top:8px">${[["palestra","In palestra"],["casa","A casa"]].map(([k, l]) => `<button class="${(s.where || "palestra") === k ? "on" : ""}" data-act="setWhere" data-v="${k}">${l}</button>`).join("")}</div>
     ${s.where === "casa" ? `<p class="small muted">Cosa hai a casa? Gli esercizi che richiedono macchine o attrezzi che non hai vengono sostituiti con un esercizio simile (senza manubri, per esempio, split squat e affondi a corpo libero); gli esercizi posturali che richiedono un attrezzo che non hai vengono tolti.</p><div class="o-list">${EQUIP.map(([k, l]) => `<label class="switch"><input type="checkbox" data-equip="${k}" ${(s.equip||[]).includes(k) ? "checked" : ""}><span><b>${l}</b></span></label>`).join("")}</div>
       <p class="tiny muted" style="margin-top:6px">Con gli elastici la forza cresce in modo simile ai pesi (Lopes 2019; ACSM 2026); piegamenti e split squat hanno dato risultati simili a panca e squat (Calatayud 2015, Kikuchi 2017, Speirs 2016). Le altre sostituzioni sono scelte dell'app; con gli elastici il peso non si registra. Dettagli in Guida → Perché così.</p>` : ""}</div>`;
-  h += `<div class="o-sec"><div class="o-label">Durante l'allenamento</div>${sw("sound", "Suono e vibrazione", "Fine del recupero, minuti degli EMOM, cambi di passo nella corsa", !!s.sound)}</div>`;
-  h += `<div class="o-sec"><div class="o-label">Aspetto</div><div class="seg" style="margin-top:10px">${[["auto","Come il telefono"],["light","Chiaro"],["dark","Scuro"]].map(([k, l]) => `<button data-act="setTheme" data-v="${k}" aria-pressed="${(s.theme || "auto") === k}">${l}</button>`).join("")}</div></div>`;
+    return h; }
+  if(setSub === "allenamento"){
+  h += `<div class="o-sec first"><div class="o-list">${sw("sound", "Suono e vibrazione", "Fine del recupero, minuti degli EMOM, cambi di passo nella corsa", !!s.sound)}</div></div>`;
+    return h; }
+  if(setSub === "aspetto"){
+  h += `<div class="o-sec first"><div class="o-label">Tema</div><div class="seg" style="margin-top:10px">${[["auto","Come il telefono"],["light","Chiaro"],["dark","Scuro"]].map(([k, l]) => `<button data-act="setTheme" data-v="${k}" aria-pressed="${(s.theme || "auto") === k}">${l}</button>`).join("")}</div></div>`;
+    return h; }
+  if(setSub === "dati"){
+  h += `<div class="o-sec first" id="appDati"><div class="o-label">App e dati</div><p class="small muted" style="margin-top:8px">Nella versione per il browser aggiornamenti e backup non sono disponibili.</p></div>`;
+    return h; }
+  const PL = planSports(), pnames = PL.map(k => PLAN_N[k].toLowerCase()).join(", ");
+  h += `<div class="o-sec first me">${avatarHtml(true)}<div><b>${esc(s.name || "Il tuo profilo")}</b><span class="small muted">${esc([p.sex === "F" ? "donna" : p.sex === "M" ? "uomo" : "", a ? a + " anni" : "", p.height ? p.height + " cm" : ""].filter(Boolean).join(", ") || "Aggiungi nome, età e altezza qui sotto")}</span></div></div>`;
+  h += `<div class="o-sec"><div class="o-list">${PL.length ? row("goPiani", PL.length > 1 ? "I miei piani" : "Il mio piano", esc(pnames.replace(/^./, c => c.toUpperCase()))) : ""}
+    ${gymOn() ? row("creaStart", "Crea il piano da capo", "Obiettivo, settimana, priorità") : ""}</div></div>`;
+  const TH = {auto:"Come il telefono", light:"Chiaro", dark:"Scuro"}, sub = (k, d) => row("setSubOpen", SET_SUBS[k], d, `data-v="${k}"`);
+  h += `<div class="o-sec"><div class="o-label">Impostazioni</div><div class="o-list">
+    ${sub("profilo", esc([s.name, p.sex === "F" ? "donna" : p.sex === "M" ? "uomo" : "", a ? a + " anni" : "", p.height ? p.height + " cm" : ""].filter(Boolean).join(", ") || "Nome, sesso, età, altezza"))}
+    ${sub("sport", esc(ACTIVITIES.filter(([k]) => acts.includes(k) && k !== "combinato").map(([k, l]) => l.replace(/ \(.*\)/, "")).join(", ") || "Nessuno") + (gymOn() ? (s.where === "casa" ? " · a casa" : " · in palestra") : ""))}
+    ${sub("allenamento", s.sound ? "Suono e vibrazione attivi" : "Suono e vibrazione spenti")}
+    ${sub("aspetto", TH[s.theme || "auto"])}
+    ${sub("dati", window.__upd && __upd.info && __upd.info.available ? `<span style="color:var(--accent-text);font-weight:600">Nuova versione ${esc(__upd.info.version)} disponibile</span>` : "Versione, backup, figure dei manuali")}</div></div>`;
   h += `<div class="o-sec"><div class="o-label">Aiuto</div><div class="o-list">${row("goGuidaTab", "Guida ed esercizi", "Come si fanno, glossario", 'data-v="esercizi"')}${row("goGuidaTab", "Perché funziona così", "Le regole dei piani, spiegate", 'data-v="perche"')}${row("goGuidaTab", "Fonti", "Libri, studi e scelte dell'app", 'data-v="fonti"')}</div></div>`;
-  h += `<div class="o-sec" id="appDati"><div class="o-label">App e dati</div><p class="small muted" style="margin-top:8px">Nella versione per il browser aggiornamenti e backup non sono disponibili.</p></div>`;
   return h;
 }
-
 function postureSettingsHtml(){
   const s = S.settings, sel = s.postureConds || [];
   return `<div class="o-sec" id="posturaSet"><div class="o-label">Esercizi per l'aspetto della postura</div>
@@ -3917,9 +3937,10 @@ function myPlanHtml(){ // in Piano: il programma su misura come si vede e si mod
   GEN_NOED = true; let vol0; try{ vol0 = genVolume(genWeek(false, cw)); } finally { GEN_NOED = false; }
   const goal = genGoal(), st = goal === "massa" ? null : genStrength(cw);
   const wkEdit = wkOpen || !!weekDraft;
-  let h = `<div class="o-sec first"><div class="o-head"><span class="o-label">Il tuo piano</span>${n ? `<span class="tag ed">${n === 1 ? "1 modifica tua" : n + " modifiche tue"}</span>` : ""}<button class="rn-link" data-act="wkOpen">${wkEdit ? "Chiudi" : "Cambia i giorni"}</button></div>
+  let h = `<div class="o-sec first"><div class="o-head"><span class="o-label">Il tuo piano</span>${n ? `<span class="tag ed">${n === 1 ? "1 modifica tua" : n + " modifiche tue"}</span>` : ""}</div>
     <p class="o-sub">Su misura, ${esc(GEN_GOALS.find(g => g[0] === goal)[1].toLowerCase())}${st ? `, ${esc(GEN_PH[st.ph.k].toLowerCase())} ${st.ph.i} di ${st.ph.n}` : ""}. Tocca una seduta per cambiarla.</p>
     ${gd.length ? weekStitchHtml(genWeekCells(wk, gd, types), "openSeduta") : `<div class="o-list">${wk.map((x, i) => `<button class="o-row" data-act="openSeduta" data-v="${i}"><span class="n">Seduta ${x.code} · ${esc(x.title)}</span><span class="p">›</span></button>`).join("")}</div>`}
+    <button class="btn sm" data-act="wkOpen" style="margin-top:12px">${wkEdit ? "Chiudi i giorni" : "Cambia i giorni"}</button>
     ${wkEdit ? weekPlannerHtml().replace('<div class="o-sec first" id="settimana">', '<div class="wk-in" id="settimana">').replace(/<span class="o-label">La mia settimana<\/span>/, '<span class="small muted">Giorni di tutti gli sport</span>') : ""}</div>`;
   h += `<div class="o-sec"><div class="o-head"><span class="o-label">Serie a settimana per muscolo</span><span class="r">${goal === "massa" ? "fascia del libro" : "proposta della fase"}</span></div>
     <div class="o-list tapes">${Object.keys(GEN_MUS).map(m => tapeHtml(m, vol[m], genBand(m), vol0[m])).join("")}<div class="scale"><span>0</span><span>6</span><span>12</span><span>18</span><span>24</span></div></div>
@@ -5883,6 +5904,8 @@ function act(a, d, e){
     case "openSettings": if(view !== "impostazioni"){ setPrev = view; view = "impostazioni"; render(); window.scrollTo(0,0); } break;
     case "exTab": exTab = d.v; exSheet(d.k, mediaSheet && mediaSheet.slot); break;
     case "goGuida": view = "guida"; render(); window.scrollTo(0,0); break;
+    case "setSubOpen": setSub = d.v; render(); window.scrollTo(0,0); break;
+    case "setSubClose": setSub = null; render(); window.scrollTo(0,0); break;
     case "setTheme": S.settings.theme = d.v; pushMeta(); applyTheme(); render(); break;
     case "goGuidaTab": guideTab = d.v; view = "guida"; render(); window.scrollTo(0,0); break;
     case "goAltro": case "backSettings": view = "impostazioni"; planOpen = null; planFrom = null; render(); window.scrollTo(0,0); break;
@@ -6012,6 +6035,7 @@ initSync();
     const rn = $("#runner");
     if(rn && !rn.hidden){ act("exitRunner", {}, null); return true; }
     if(view === "impostazioni"){ view = setPrev || "oggi"; render(); window.scrollTo(0,0); return true; }
+    if(view === "impostazioni" && typeof setSub !== "undefined" && setSub){ setSub = null; render(); window.scrollTo(0,0); return true; }
     if(view === "guida" || view === "piani"){ view = "impostazioni"; render(); window.scrollTo(0,0); return true; }
     if(view === "timer"){ view = "oggi"; render(); window.scrollTo(0,0); return true; }
     if(view === "seduta"){ act("closeSeduta", {}, null); return true; }
@@ -6096,6 +6120,7 @@ initSync();
   const _imp = renderImpostazioni;
   renderImpostazioni = function(){
     const h = _imp.apply(this, arguments);
+    if(typeof setSub !== "undefined" && setSub !== "dati") return h; // la sezione App e dati ha la sua pagina
     const i = U.info, ver = A.version();
     let last = 0; try{ last = Number(localStorage.getItem(LASTB) || 0); }catch(e){}
     const days = last ? Math.floor((Date.now() - last) / 864e5) : null;

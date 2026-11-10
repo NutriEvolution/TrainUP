@@ -35,6 +35,7 @@
     const rn = $("#runner");
     if(rn && !rn.hidden){ act("exitRunner", {}, null); return true; }
     if(view === "impostazioni"){ view = setPrev || "oggi"; render(); window.scrollTo(0,0); return true; }
+    if(view === "impostazioni" && typeof setSub !== "undefined" && setSub){ setSub = null; render(); window.scrollTo(0,0); return true; }
     if(view === "guida" || view === "piani"){ view = "impostazioni"; render(); window.scrollTo(0,0); return true; }
     if(view === "timer"){ view = "oggi"; render(); window.scrollTo(0,0); return true; }
     if(view === "seduta"){ act("closeSeduta", {}, null); return true; }
@@ -119,6 +120,7 @@
   const _imp = renderImpostazioni;
   renderImpostazioni = function(){
     const h = _imp.apply(this, arguments);
+    if(typeof setSub !== "undefined" && setSub !== "dati") return h; // la sezione App e dati ha la sua pagina
     const i = U.info, ver = A.version();
     let last = 0; try{ last = Number(localStorage.getItem(LASTB) || 0); }catch(e){}
     const days = last ? Math.floor((Date.now() - last) / 864e5) : null;
