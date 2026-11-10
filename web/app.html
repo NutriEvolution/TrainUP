@@ -2206,6 +2206,7 @@ function renderOggi(){
       <div class="row" style="justify-content:center;gap:4px;margin-top:6px"><button class="btn ghost sm" data-act="postRestart">Ricomincia da capo</button><button class="btn ghost sm" data-act="askDiscardPost" style="color:var(--danger)">Elimina</button></div></div>`; }
   if(!anyToday){
     h += `<div class="o-sec"><div class="o-head"><span class="o-label">Oggi</span><span class="r">giorno di riposo</span></div>
+      ${next.length ? `<div class="o-list"><button class="o-row" data-act="openDay" data-d="${next[0].ds}"><span class="dot" style="background:${next[0].c}"></span><span class="n">Prossimo: ${esc(next[0].n)}<small>${esc(whenLbl(t, next[0].ds))}</small></span><span class="p">›</span></button></div>` : ""}
       ${!next.length ? `<p class="o-sub" style="margin-top:8px">Nessun allenamento in programma: scegli i giorni in Piano.</p><button class="btn" data-act="goWeek" style="margin-top:10px">Scegli i giorni</button>` : ""}
       ${gymOn() ? `<button class="btn ghost sm" data-act="trainToday" style="display:block;margin-top:${next.length ? 6 : 10}px;padding-left:0">Allenati in palestra oggi lo stesso</button>` : ""}</div>`;
   }
@@ -2216,7 +2217,6 @@ function renderOggi(){
   h += bkTodayHtml(t);
   { const wk = weekNumbers(); h += `<div class="o-sec"><div class="o-label">Questa settimana</div><div class="kp"><div><b>${wk.done}${wk.planned ? `<i> / ${wk.planned}</i>` : ""}</b><span>sedute</span></div><div><b>${wk.sets}</b><span>serie fatte</span></div><div><b>${wk.streak}</b><span>${wk.streak === 1 ? "settimana di fila" : "settimane di fila"}</span></div></div></div>`; }
   h += `<div class="o-sec"><div class="qk"><button data-act="goTimer">${svgI.timer}<span>Timer</span></button><button data-act="bodyAdd">${svgI.peso}<span>Peso</span></button></div></div>`;
-  if(next.length) h += `<div class="o-sec"><div class="o-label">Prossimi giorni</div><div class="o-list">${next.map(x => `<button class="o-row" data-act="openDay" data-d="${x.ds}"><span class="dot" style="background:${x.c}"></span><span class="n">${esc(x.n)}<small>${esc(whenLbl(t, x.ds))} · ${esc(x.sub)}</small></span><span class="p">›</span></button>`).join("")}</div></div>`;
   return h;
 }
 
@@ -2548,7 +2548,6 @@ function renderAllenamento(){
   const gain = gains.length ? gains.reduce((a,b)=>a+b,0)/gains.length : null;
   let h = `<div class="o-seg">${[["4w","4 settimane"],["3m","3 mesi"],["all","Tutto"]].map(([k,l]) => `<button class="${progPeriod===k?"on":""}" data-act="progPeriod" data-v="${k}">${l}</button>`).join("")}</div>`;
   h += `<div class="o-sec first" style="padding-top:12px"><div class="kp" style="margin-top:0"><div><b>${inP.length}</b><span>allenamenti</span></div><div><b>${weekNumbers().streak}</b><span>settimane di fila</span></div><div><b style="${gain != null && gain > 0 ? "color:var(--accent-text)" : ""}">${gain == null ? "—" : (gain >= 0 ? "+" : "") + Math.round(gain*100) + "%"}</b><span>forza stimata</span></div></div>${pct == null ? "" : `<p class="tiny muted" style="margin-top:8px">Giorni di palestra in programma fatti: ${pct}%.</p>`}</div>`;
-  h += monthHeatHtml(t);
   // massimale stimato
   if(!progLift || !lifts.some(x => x.k === progLift)) progLift = (lifts.find(x => x.pts.length >= 2) || lifts[0] || {}).k || null;
   h += `<div class="o-sec"><div class="o-head"><span class="o-label">Massimale stimato</span><span class="r">dai test e dalle serie</span></div>`;

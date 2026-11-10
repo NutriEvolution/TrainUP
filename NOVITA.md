@@ -1,3 +1,6 @@
+Novità della 2.5.1
+- Meno calendari doppi: tolti «Prossimi giorni» da Oggi (resta la settimana in alto; nei giorni di riposo una riga con il prossimo allenamento) e il calendario del mese da Progressi (resta quello in Piano)
+
 Novità della 2.5.0
 - Nuovo aspetto: carattere sportivo per titoli e numeri, verde più acceso, tema scuro e chiaro. In Impostazioni → Aspetto scegli chiaro, scuro o come il telefono
 - Oggi: la settimana in alto, la seduta in un riquadro compatto, i numeri della settimana. Toccando Inizia scegli riscaldamento, parte posturale, allungamento e scarico solo per quella seduta
